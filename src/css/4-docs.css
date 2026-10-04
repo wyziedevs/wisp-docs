@@ -272,10 +272,15 @@
 }
 
 /* Heading links: a link icon on hover, a check once the address is copied. */
+.doc :is(h2, h3) {
+  position: relative;
+}
+
+/* The link sits left of the heading: hanging in the margin where there is room, inline before it on a phone. */
 .doc .anchor {
   display: inline-flex;
   align-items: center;
-  margin-left: 0.5rem;
+  margin-right: 0.5rem;
   color: var(--ash);
   font-size: 0.7em;
   opacity: 0;
@@ -299,6 +304,17 @@
   --ico: var(--i-check);
   color: var(--good);
   animation: pop 300ms var(--ease);
+}
+
+@media (min-width: 48rem) {
+  .doc .anchor {
+    position: absolute;
+    right: 100%;
+    inset-block: 0;
+    height: 1em;
+    margin-block: auto;
+    margin-right: 0.375rem;
+  }
 }
 
 @media (hover: none) {

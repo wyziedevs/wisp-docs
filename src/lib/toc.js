@@ -23,7 +23,7 @@ export function anchors(root, say) {
         }, () => {})
       })
     }
-    h.append(a)
+    h.prepend(a)
   }
 }
 
