@@ -19,6 +19,8 @@ Agents (`wisp mcp`, `wisp update-docs`) and editors (`wisp lsp`): [design-editor
 
 `wisp new [name]` asks where the app goes, which template (Demo: home page with a counter, an about page and Wisple, a word game on form actions; Minimal: one page, a layout and an error page), whether to add Tailwind, whether to create a git repo (yes unless the app lands inside one, like `cargo new`), and whether to download and compile dependencies now. Prompts are plain lines on std, not a cursor menu.
 
+<div class="table-wrap">
+
 | Flag | Answers |
 |---|---|
 | `--template` | which template |
@@ -26,6 +28,8 @@ Agents (`wisp mcp`, `wisp update-docs`) and editors (`wisp lsp`): [design-editor
 | `--[no-]git` | git repo |
 | `--[no-]install` | fetch and compile now |
 | `--yes` | all defaults (also when there is no terminal) |
+
+</div>
 
 - Never writes into a directory with anything in it. Refuses a name Cargo would reject or that collides with Wisp's crates (`build`, `deps`, `test`, `wisp`...).
 - An app created inside another Cargo workspace gets an empty `[workspace]` table, so it builds alone.
@@ -47,12 +51,16 @@ One std-only process. `wisp dev [--port <n> | --port=<n> | -p <n>]`; anything el
 
 ### CSS Tools
 
+<div class="table-wrap">
+
 | Setup | What runs |
 |---|---|
 | `src/app.css` imports Tailwind | Tailwind standalone `--watch` into `.wisp/app.css` |
 | `src/app.scss` exists | Dart Sass (standalone, pinned in `~/.wisp/bin`, `$WISP_SASS` overrides) `--watch` |
 | a `postcss.config.*` | the tool writes `.wisp/pre.css`; the app's `node_modules/postcss-cli` (run by `node`, no npx) `--watch` makes `.wisp/app.css` of it (or of a plain `src/app.css`) |
 | none | `src/app.css` served as written |
+
+</div>
 
 A watcher makes the first build itself; adding or removing `src/app.scss` or a `postcss.config.*` replaces the watchers. `wisp build` runs each once, minified (`--minify`, `--style=compressed`).
 

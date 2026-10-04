@@ -18,6 +18,8 @@ Method and the five-feature table: [Tokens](/docs/tokens).
 
 Estimated tokens (files):
 
+<div class="table-wrap">
+
 | Framework | counter | todo | api | blog | total |
 |---|---:|---:|---:|---:|---:|
 | **Wisp** | **44** (1) | **191** (1) | **59** (1) | **292** (4) | **586** |
@@ -28,6 +30,8 @@ Estimated tokens (files):
 | FastAPI | 123 (1) | 408 (2) | 494 (1) | 446 (4) | 1471 |
 | Rails | 132 (3) | 340 (5) | 132 (4) | 357 (7) | 961 |
 | Rails, api by hand | 132 (3) | 340 (5) | 357 (4) | 357 (7) | 1186 |
+
+</div>
 
 Wisp is the shortest on every app, and in all 39% shorter than the next (Rails with its scaffold). The api is a type: Rails' scaffold is the only other that comes close, with a generator command, a model, a route and a controller to edit. Characters / 4 ranks them the same way (Wisp 346, Rails 726, SvelteKit 959).
 

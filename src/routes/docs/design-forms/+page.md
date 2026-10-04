@@ -47,6 +47,8 @@ On that 422 page:
 
 Browser-side checks come from the same rules (`wisp_build::rules::Native`). A field that an action of the page reads gets, as static text, only attributes the server also checks:
 
+<div class="table-wrap">
+
 | Attribute | Added when |
 |---|---|
 | `required` | blank is refused (struct field, number, `Email`, `Image`, text whose rules refuse it) |
@@ -54,6 +56,8 @@ Browser-side checks come from the same rules (`wisp_build::rules::Native`). A fi
 | `minlength` | `min_len` (UTF-16 units are never fewer than characters) |
 | `pattern="[\s\S]{0,N}"` | max length (`maxlength` would count an emoji twice) |
 | `min` / `max` | `type="number"` input |
+
+</div>
 
 A textarea gets only `required` (line breaks are sent as two characters). The server still checks everything.
 
@@ -110,6 +114,8 @@ Wisp draws a few things from one design system: Kinetrix's roles and values (dar
 
 Styles live in `crates/wisp/src/client/tokens.css` (the one source of tokens), `ui.css` (buttons), `error.css` and `dialog.css` (dev only). All are `--wisp-*` tokens and `.wisp-*` classes, so they never touch app CSS.
 
+<div class="table-wrap">
+
 | Piece | What it is |
 |---|---|
 | Error page | For apps without `+error.wisp`. Status and one line (status name, or the error's message when it says more), centered, dark tokens, styles inlined. No links or buttons; write a `+error.wisp` for those. Errors for endpoints and API clients are JSON (see [api](/docs/api)). |
@@ -118,3 +124,5 @@ Styles live in `crates/wisp/src/client/tokens.css` (the one source of tokens), `
 | Build error dialog (dev) | Title, one sentence on where to look (`src/routes/+page.rs, line 7.`), then the error in a code block with Copy. Lives in a shadow root off `<html>`, so app CSS and morphs cannot touch it. Closes when the next build succeeds. |
 | Rebuild bar | A two-pixel accent line across the top once a rebuild has taken 200 ms. |
 | Terminal | Every status line has a mark and words: `✓` done (green), `!` needs a look (yellow), `✗` failed (red), `›` under way and `~` changed (dim). Violet is only for what can be typed. A failure is a sentence, then the reason or fix indented under it. |
+
+</div>

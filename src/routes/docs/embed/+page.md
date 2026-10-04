@@ -36,6 +36,8 @@ fn counter() {
 }
 ```
 
+<div class="table-wrap">
+
 | Method | What it does |
 |---|---|
 | `get(path)` | GET |
@@ -43,6 +45,8 @@ fn counter() {
 | `send(req)` | any request |
 | `next_chunk(&mut reply)` | next chunk of a stream |
 | `cookie(name)` | a stored cookie |
+
+</div>
 
 More in AGENTS.md and api.md. Nothing upgrades in process, so `Response::websocket` is 501: test WebSockets against the running server (`tests/app/tests/http.rs` uses a `TcpStream`).
 

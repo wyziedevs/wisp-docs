@@ -264,11 +264,15 @@ This writes one release binary, `target/release/guestbook`, with the styles and 
 
 Pick the build that fits your host:
 
+<div class="table-wrap">
+
 | You have | Run |
 |---|---|
 | A VPS or server | `wisp build`, then `wisp service install` |
 | A container host | `wisp build --docker` |
 | Cloudflare, Deno, Vercel, Netlify or Lambda | `wisp build --target <host>` |
+
+</div>
 
 A guestbook has a form, so it needs a server: `wisp build --static` suits pages with no actions. On a host with no disk, tables are memory, so use a database store there. See [Deploying](/docs/deploy) and [Edge and serverless targets](/docs/deploy-targets).
 

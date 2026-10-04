@@ -7,6 +7,8 @@ order: 19
 
 All build-time, a const or a cold path: a request that uses none of them runs no code for them (`on_driver` and `dispatch` in `http.rs` only gained const-gated branches).
 
+<div class="table-wrap">
+
 | Feature | How |
 |---|---|
 | Base path | `WISP_BASE=/app` |
@@ -26,6 +28,8 @@ All build-time, a const or a cold path: a request that uses none of them runs no
 | Slots | `@name` folders |
 | Intercepting routes | `(.)`, `(..)`, `(...)` in a slot |
 | Version skew | `<meta name="wisp-build">`, `wisp:stale` |
+
+</div>
 
 ## Base Path
 

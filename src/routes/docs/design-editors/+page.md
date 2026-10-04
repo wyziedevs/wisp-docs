@@ -23,6 +23,8 @@ Every app is written with `AGENTS.md`, the whole reference in one short page, an
 
 A Model Context Protocol server over stdio (JSON-RPC 2.0, a message a line, `wisp_shared::json`), for the app in the current folder:
 
+<div class="table-wrap">
+
 | Tool | Answers |
 |---|---|
 | `wisp_docs(topic)` | the AGENTS.md or docs sections about the topic; no topic lists them |
@@ -30,6 +32,8 @@ A Model Context Protocol server over stdio (JSON-RPC 2.0, a message a line, `wis
 | `wisp_routes()` | each route's pattern, folder, params, page, actions and endpoints |
 | `wisp_components()` | each component's name, file and props (type, default) |
 | `wisp_new_route(path, kind)` | writes `+page.wisp` (default), `+layout.wisp`, `+error.wisp` or `+server.rs`; never overwrites |
+
+</div>
 
 Setup, in the app's folder:
 
@@ -41,6 +45,8 @@ Setup, in the app's folder:
 
 A language server over stdio, in the CLI: JSON-RPC framed by hand, `wisp_shared::json` for parsing, no new dependency. Each file's app is the nearest folder above it with `Cargo.toml` and `build.rs`.
 
+<div class="table-wrap">
+
 | Feature | What it does |
 |---|---|
 | Problems | On open and every change the buffer goes through the build's own parser and checks (`wisp_build::ide::check_file`: `---` block, template, component props against `src/components` as last read). On open and save the whole app is checked from disk as `wisp check` does, and its problem shows in its file, open or not. One problem per file (the compiler stops at the first). A panic in a request is answered as an error; the server goes on. |
@@ -48,6 +54,8 @@ A language server over stdio, in the CLI: JSON-RPC framed by hand, `wisp_shared:
 | Go to definition | `<Card>` to its file, `'$lib/x.js'` to `src/lib/x.js`, a literal `href="/x"` to the route's `+page.wisp` (or `+page.rs`, `+server.rs`) |
 | Completion | Components (with required props), props, directives, `on:` events and modifiers, `{#...}` / `{:#...}` blocks, route paths in `href` |
 | Formatting | `fmt.rs` on the buffer, one edit of the whole text (none when formatted) |
+
+</div>
 
 Follow-up: cheap Rust checks inside the `---` block (rust-analyzer covers `.rs` files only).
 

@@ -131,13 +131,11 @@ let edit = match cx.path() {
 <script>
   import { afterNavigate } from 'wisp'
   import { spy } from '$lib/toc.js'
-  import { wrapTables } from '$lib/tables.js'
 
   let doc, copied, useful
 
   // Headings have ids from the build; this adds the link icon that copies one.
   function build() {
-    wrapTables(doc)
     for (const h of doc.querySelectorAll('h2[id], h3[id]')) {
       if (h.querySelector('.anchor')) continue
       const a = document.createElement('a')

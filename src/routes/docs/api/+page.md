@@ -57,6 +57,8 @@ struct Note {
 }
 ```
 
+<div class="table-wrap">
+
 | Request | Answer |
 |---|---|
 | `GET /api/notes` | rows by id: `[{"id":1,"title":"Tea","done":false}]` |
@@ -66,10 +68,14 @@ struct Note {
 | `PATCH /api/notes/1` | body's members replace the row's (`null` empties an `Option`); result must pass (422) |
 | `DELETE /api/notes/1` | 204 or 404 |
 
+</div>
+
 - `Rest` = `Json` + `FromJson` + a table `Note::table()` other routes read too.
 - A handler the file writes (`fn delete(id: u64)`) replaces that one; `fn before(cx: &mut Cx)` runs before each.
 - A field left out of a request: `bool` false, `Vec` `[]`, `Option` None; others required.
 - `created_at`/`updated_at` are set by Wisp (RFC 3339 `String`, or whole seconds in a number).
+
+<div class="table-wrap">
 
 | `#[rest(...)]` | Does |
 |---|---|
@@ -80,7 +86,11 @@ struct Note {
 | `ids = "random"` | uncountable random ids below 2^53 |
 | `memory` | memory only |
 
+</div>
+
 ### Queries
+
+<div class="table-wrap">
 
 | Query | Gives |
 |---|---|
@@ -91,6 +101,8 @@ struct Note {
 | `?limit=20&after=40` | 20 rows after id 40 (stable cursor) |
 | `?limit=20&offset=40` | skip 40 (for a sorted list) |
 | `?fields=title,done` | only those and `id` (a single row too) |
+
+</div>
 
 - An unknown field is a 400 listing the known ones.
 - `x-total-count` has the match count; `link: <…?limit=20&after=60>; rel="next"` the next page; `accept: application/x-ndjson` gives a line per row.

@@ -23,6 +23,8 @@ order: 16
 
 All from the environment. Strict: one that is set but invalid stops the server with a message, never a silent default. `HOST` takes an IP or a name (`localhost`). A port in use, or one needing privileges, fails with what to do.
 
+<div class="table-wrap">
+
 | Setting | What it does |
 |---|---|
 | `PORT`, `HOST` | Where to listen: 3000, on 127.0.0.1 in dev and 0.0.0.0 otherwise |
@@ -35,6 +37,8 @@ All from the environment. Strict: one that is set but invalid stops the server w
 | `WISP_CLIENT_IP_HEADER` | Header the proxy puts the client's address in, for `cx.client_ip()` |
 | `WISP_MAX_CONNS` | Open connections, WebSockets included, before new ones get a 503; 10000 by default, 0 for no cap |
 | `WISP_IO` | Linux: `epoll` for an epoll per worker instead of io_uring; `uring` to fail at start, saying why, where io_uring does not work |
+
+</div>
 
 Behind a proxy:
 
@@ -70,6 +74,8 @@ The io_uring and epoll drivers are the `unsafe` modules of a native build (ring 
 - Requests are parsed in place (`httparse`) and recorded in `Cx` as byte spans into its buffer, so `Cx` has no lifetime and handlers take `&mut Cx`.
 - `Date` is cached per thread, reformatted once a second.
 
+<div class="table-wrap">
+
 | Limit | Value |
 |---|---|
 | Headers | 16 KB, 100 headers |
@@ -79,6 +85,8 @@ The io_uring and epoll drivers are the `unsafe` modules of a native build (ring 
 | Client taking a response | 30 s for any of it |
 | Body buffer | grows as it arrives, at most 1 MB ahead; a large `Content-Length` alone allocates nothing |
 | Out of descriptors | accepting pauses 50 ms at a time, logged once a second |
+
+</div>
 
 - A refused request is answered, the sending side closed, and what the client still sends is read and dropped for up to 2 s (and 1 MB), so the close does not reset the connection before the client reads why.
 - On the wire: HTTP/1.1 without `Host`, or any request with two, is 400 (RFC 9112 section 3.2). An absolute-form target (`GET http://host/x`, as a proxy sends) is its path with its host as `Host` (3.2.2). `Expect: 100-continue` is answered only to HTTP/1.1.
@@ -99,6 +107,8 @@ Off by default; the `h2` feature compiles it (nothing of it otherwise). A connec
 
 The built-in server is one front end. `respond` decides an answer as a `Reply { status, headers, body }`; the HTTP/1.1 writer adds `content-length`, `date` and `connection`. Everything else calls the same code, with the same parser and limits ([embed](/docs/embed), [deploy](/docs/deploy)):
 
+<div class="table-wrap">
+
 | Entry | What it is |
 |---|---|
 | `wisp::prepare::<A>()` | runs `init`, sets what a request needs |
@@ -108,6 +118,8 @@ The built-in server is one front end. `respond` decides an answer as a `Reply { 
 | `wisp::tower::service::<A>()` (feature `tower`) | a `tower::Service` |
 | `wisp build --static` | runs `handle` for each page, writes files |
 | `wisp build --target` | compiles the same code to WebAssembly (`crates/wisp/src/edge.rs`) with a small JS bridge, no wasm-bindgen |
+
+</div>
 
 Edge detail: the app marks a path `const` when its answer cannot change (a baked page, a trailing-slash redirect), in an app with no `before`, `after` or `reroute` hook, when it read no header but `if-none-match` and `x-wisp-error` and had no query. The bridge's web `fetch` keeps the first answer and its 304 and replays them (GET, HEAD, `if-none-match`) without entering the wasm. `tests/platform/tests/fast.rs` pins them to native's.
 

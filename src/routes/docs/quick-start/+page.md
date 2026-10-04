@@ -187,12 +187,16 @@ wisp build      # one release binary
 
 Pick the build for your host:
 
+<div class="table-wrap">
+
 | You have | Run |
 |---|---|
 | A VPS or server | `wisp build`, then `wisp service install` to keep it running |
 | A container host | `wisp build --docker` |
 | A static host | `wisp build --static` (pages with forms need a server) |
 | Cloudflare, Deno, Vercel, Netlify or Lambda | `wisp build --target <host>` |
+
+</div>
 
 `wisp deploy init <host>` writes a GitHub Actions workflow or the host's config. An app that signs cookies needs `WISP_SECRET` set to 32 or more random characters on every host. See [Deploying](/docs/deploy).
 

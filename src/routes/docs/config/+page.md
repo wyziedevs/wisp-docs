@@ -9,6 +9,8 @@ order: 82
 
 A `const` in a page's `---` block, `+page.rs`, `+server.rs` or a layout. The build reads them; nothing runs per request that you did not ask for.
 
+<div class="table-wrap">
+
 | Knob | What it does |
 |---|---|
 | `const CACHE: u32 = 60;` | keep a GET's answer 60 s per worker (ETag, 304); never with cookies or `authorization`; not in dev |
@@ -26,9 +28,13 @@ A `const` in a page's `---` block, `+page.rs`, `+server.rs` or a layout. The bui
 | `const BODY_LIMIT: usize = 20 * wisp::MB;` | largest body the route takes (413 past it; 1 MB) |
 | `const RUNTIME: wisp::Runtime = wisp::Runtime::Edge;` | on `--target vercel` or `netlify`, also an edge function |
 
+</div>
+
 ## [package.metadata.wisp]
 
 Lists of strings in `Cargo.toml`, checked and baked at build.
+
+<div class="table-wrap">
 
 | Key | What it does |
 |---|---|
@@ -40,7 +46,11 @@ Lists of strings in `Cargo.toml`, checked and baked at build.
 | `use = [...]` | plugin crates the build loads |
 | `extends = ["../base"]` | layers: an app's layout, components and static files under yours |
 
+</div>
+
 ## Cargo Features
+
+<div class="table-wrap">
 
 | Feature | What it does |
 |---|---|
@@ -53,7 +63,11 @@ Lists of strings in `Cargo.toml`, checked and baked at build.
 | `types` (wisp) | used by `wisp check --types`; never in a served build |
 | `avif` (wisp-cli) | AVIF widths for images in `wisp build`, beside WebP |
 
+</div>
+
 ## Smaller Public Types
+
+<div class="table-wrap">
 
 | Name | What it is |
 |---|---|
@@ -65,5 +79,7 @@ Lists of strings in `Cargo.toml`, checked and baked at build.
 | `AsDate` | what `format_date` takes: epoch seconds, `"2026-10-04"` or `(y, m, d)` |
 | `Resource` | the trait `#[derive(Rest)]` implements |
 | `ClientModule`, `ExportRoute` | made by the generated code; apps do not write them |
+
+</div>
 
 `wisp::native_name("fr")` is a locale's name in its own language (`Français`).

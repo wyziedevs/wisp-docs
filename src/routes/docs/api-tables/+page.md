@@ -8,11 +8,15 @@ order: 44
 ## Storage
 Saved before memory changes, read at first use: a log file per table (`note.log`, a line per change, a cut line dropped on read, rewritten whole at twice its rows) in `WISP_DATA`.
 
+<div class="table-wrap">
+
 | Setting | Meaning |
 |---|---|
 | `WISP_DATA` | Data folder: `.wisp/data` in dev, `data` in release, `/data` in the `--docker` image. |
 | `WISP_DATA=off` | Memory (tests, edge). |
 | `WISP_FSYNC` | `second` (default), `always`, `off`. |
+
+</div>
 
 Tables hold every row in memory; for larger data or database-side queries write the handlers.
 

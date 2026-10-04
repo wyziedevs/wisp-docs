@@ -7,6 +7,8 @@ order: 60
 
 Run `wisp build`, copy the binary, run it. Pick the build for your host:
 
+<div class="table-wrap">
+
 | You have | Use |
 |---|---|
 | VPS or server | `wisp build`; `wisp service install` keeps it running |
@@ -15,16 +17,22 @@ Run `wisp build`, copy the binary, run it. Pick the build for your host:
 | Edge or serverless (Cloudflare, Deno Deploy, Vercel, Netlify, Amplify, Firebase, Azure Static Web Apps) | `wisp build --target <host>` ([targets](/docs/deploy-targets)) |
 | AWS Lambda / Bun | `--target lambda` / `--target bun` |
 
+</div>
+
 An app that signs cookies needs `WISP_SECRET` (32+ random characters) on every host. Logs, metrics and traces: [Observe](/docs/deploy-observe).
 
 A plain `wisp build` inside a host's CI picks the target from its variables and says so: `WORKERS_CI` or `CF_PAGES` (cloudflare), `VERCEL` (output in `.vercel/output`), `NETLIFY`, `DENO_DEPLOYMENT_ID` (deno), `AWS_APP_ID` (node). `--target native` forces the plain binary.
 
 `wisp deploy init <host>` writes a config:
 
+<div class="table-wrap">
+
 | Host | Writes |
 |---|---|
 | `cloudflare`, `deno`, `vercel`, `netlify`, `lambda`, `fly`, `pages` | `.github/workflows/deploy.yml`: build and deploy on push to `main`; line 1 names the secrets; `--force` replaces it |
 | `fly`, `render`, `railway` | that host's config, and a Dockerfile if none |
+
+</div>
 
 ## Binary
 
@@ -74,12 +82,16 @@ let post = db::post(&slug).await?;
 
 `wisp build`, then `wisp service install` (as root or administrator) runs the release binary from the app folder as an OS service that starts at boot. Then `start`, `stop`, `status`, `uninstall`.
 
+<div class="table-wrap">
+
 | Option | What it does |
 |---|---|
 | `--user <name>` | run as that user |
 | `--port <n>` | listen port |
 | `--name <service>` | service name (default: the package name) |
 | `--dry-run` | print what would be written and run, change nothing |
+
+</div>
 
 - Linux: `/etc/systemd/system/<name>.service` with `Restart=on-failure`, `EnvironmentFile=-/etc/<name>.env` (made 0600 if missing: put `WISP_SECRET` there), `WorkingDirectory`, `LimitNOFILE=1048576`, `User=` when given, and `AmbientCapabilities=CAP_NET_BIND_SERVICE` for `--port` below 1024. Then `daemon-reload`, `enable`, `start`. The `--user` must read the app folder.
 - macOS: `/Library/LaunchDaemons/wisp.<name>.plist`, loaded with `launchctl`.

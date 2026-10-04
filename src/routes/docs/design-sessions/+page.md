@@ -23,6 +23,8 @@ let me = cx.user()?;                      // members' page: signed-in row or red
 - `cx.delete_cookie(name)` removes one.
 - `cx.set_cookie_with(name, value, CookieOptions { ... })`:
 
+<div class="table-wrap">
+
 | Field | Meaning |
 |---|---|
 | `max_age` | `None` ends it with the browser |
@@ -30,6 +32,8 @@ let me = cx.user()?;                      // members' page: signed-in row or red
 | `same_site` | `Lax`, `Strict`, `None` |
 | `path`, `domain` | scope |
 | `signed` | sign it |
+
+</div>
 
 - `Secure` is added when the request came over HTTPS through a proxy (`x-forwarded-proto: https`) or `ORIGIN` is `https://`, and always with `SameSite=None` (browsers require it).
 - `#[derive(Cookie)]` puts a struct in one cookie via `Display` and `FromStr`: fields in order, separated by `|`, each escaped (`42|cranesloth|pi`). A fieldless enum is its variant name. The derive reads only type and field names, no `syn`. The value is visitor input: check rules beyond field types after reading (Wisple's `Game::valid`).
@@ -43,6 +47,8 @@ let me = cx.user()?;                      // members' page: signed-in row or red
 
 ## Signing In
 
+<div class="table-wrap">
+
 | Call | What it does |
 |---|---|
 | `cx.signup(row).await?` | for a `#[model]` with a `hash` field and `email` or `name` (an `Account`): hashes the password in `row.hash`, refuses a taken name with a 422, signs in |
@@ -53,6 +59,8 @@ let me = cx.user()?;                      // members' page: signed-in row or red
 | `cx.signed_in().ok()` | asks without redirecting |
 | `cx.user()?` | the row itself, same way |
 | `cx.sign_out()` | ends it |
+
+</div>
 
 - `user`, `login` and `signup` take the users table for you: the lone `Table` of a model with a `Password` field in `src/db.rs`, else the one `wisp::users(&db::USERS)` names in `init` (the build adds it; `&USERS` first still works, and is how a second table is used).
 - The page at `/login` is the convention; `wisp::sign_in_page("/enter")` in `init` names another.

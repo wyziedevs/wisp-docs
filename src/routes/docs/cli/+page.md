@@ -9,6 +9,8 @@ order: 80
 
 ## Commands
 
+<div class="table-wrap">
+
 | Command | What it does |
 |---|---|
 | `wisp new [name]` | create an app; asks a few questions, the options below answer them |
@@ -43,7 +45,11 @@ order: 80
 | `wisp mcp` | docs, routes, components and checks for AI agents (MCP, stdio) |
 | `wisp --help` | this list (`-h`, `help`) |
 
+</div>
+
 ## Options for Wisp New
+
+<div class="table-wrap">
 
 | Option | What it does |
 |---|---|
@@ -52,6 +58,8 @@ order: 80
 | `--git`, `--no-git` | create a git repository, or not |
 | `--install`, `--no-install` | download and compile dependencies now, or later |
 | `-y, --yes` | take the defaults for anything not given |
+
+</div>
 
 ## CLI Older than the App
 

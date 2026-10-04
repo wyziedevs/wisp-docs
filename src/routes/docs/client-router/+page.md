@@ -31,6 +31,8 @@ replaceState('', { tab: 3 })         // this entry's state ('' keeps the URL)
 
 Hooks from `'wisp'` return an unsubscribe:
 
+<div class="table-wrap">
+
 | Hook | Does |
 |---|---|
 | `beforeNavigate(({ from, to, pop, cancel }) => ..)` | Before leaving; `cancel()` does not stop back/forward. |
@@ -39,6 +41,8 @@ Hooks from `'wisp'` return an unsubscribe:
 | `preloadData(url)`, `preloadCode(url)` | Fetch ahead. |
 | `invalidateAll()` | Rerun every load. |
 | `updated.value` | A newer wisp.js or build exists. |
+
+</div>
 
 `+page.js` `load` gets `depends(key)` (a `fetch`ed URL counts); `invalidate('key')` reruns only those loads, no page request.
 

@@ -7,6 +7,8 @@ order: 64
 
 All off until set. They work in the binary, Docker and Lambda, with no app code.
 
+<div class="table-wrap">
+
 | Env var | What it does |
 |---|---|
 | `WISP_LOG=json` | a JSON line per request on stdout (`off` default) |
@@ -16,6 +18,8 @@ All off until set. They work in the binary, Docker and Lambda, with no app code.
 | `OTEL_SERVICE_NAME` | service name on spans |
 | `OTEL_EXPORTER_OTLP_HEADERS` | `api-key=…,x=…` |
 | `OTEL_BSP_SCHEDULE_DELAY` | batch delay in ms (5000) |
+
+</div>
 
 ## Logs
 
@@ -31,6 +35,8 @@ All off until set. They work in the binary, Docker and Lambda, with no app code.
 
 Wrong or missing key: 401. `METRICS_KEY` unset: 404. Prometheus scrape config: `metrics_path: /_wisp/metrics`, `authorization: { credentials: <key> }`.
 
+<div class="table-wrap">
+
 | Metric | Notes |
 |---|---|
 | `wisp_requests_total{route, status}` | status class like `2xx`; `route=""` if none matched |
@@ -38,6 +44,8 @@ Wrong or missing key: 401. `METRICS_KEY` unset: 404. Prometheus scrape config: `
 | `wisp_requests_in_flight` | gauge |
 | `wisp_uptime_seconds` | gauge |
 | `process_resident_memory_bytes` | Linux only |
+
+</div>
 
 ## Traces
 

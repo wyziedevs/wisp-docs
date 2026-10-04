@@ -19,6 +19,8 @@ Most app code is written by AI, so an app's cost is measured in tokens, and keep
 
 `cargo run -p wisp-tokens` counts them (method below, in `bench/tokens/src/main.rs`, with characters / 4 beside it). A `@feature NAME` comment says whose its lines are; a file without one, as a generator writes it, is not counted, nor the `[package]` table `cargo new` writes. The Wisp app builds with the workspace, and its tests check each feature.
 
+<div class="table-wrap">
+
 | Stack | list | form | api | layout | search | data | setup | total | chars / 4 | files |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | **Wisp** | 58 | 89 | 31 | 60 | 111 | 115 | 0 | **464** | 283 | 6 |
@@ -26,6 +28,8 @@ Most app code is written by AI, so an app's cost is measured in tokens, and keep
 | Next.js 15 | 107 | 439 | 44 | 108 | 241 | 71 | 0 | 1010 | 725 | 8 |
 | Axum 0.8 + askama | 145 | 553 | 29 | 104 | 217 | 123 | 285 | 1456 | 1020 | 7 |
 | Actix Web 4 + tera | 164 | 565 | 46 | 104 | 237 | 123 | 292 | 1531 | 1061 | 7 |
+
+</div>
 
 Wisp's `data` is longer than JavaScript's: a Rust type with its fields' types and `pub`s. Everything else is shorter, the form most of all. Of what is left, 60 tokens are file paths, 115 the Rust type and data, and the rest is markup every stack writes.
 

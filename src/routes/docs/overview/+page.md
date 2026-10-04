@@ -7,6 +7,8 @@ order: 3
 
 Wisp is the framework for the AI age: ultra fast to run, cheap in AI tokens to write, durable, and flexible.
 
+<div class="table-wrap">
+
 | Area | What you get |
 |---|---|
 | Reactivity | `$state`, `$derived`, `$effect` in a plain `<script>`, no build step. Islands (`client:visible`, `client:idle`, `client:media`) load code when needed. Components ship no JavaScript by default. Hot reload keeps `$state`; markup edits show in under 100 ms. |
@@ -16,6 +18,8 @@ Wisp is the framework for the AI age: ultra fast to run, cheap in AI tokens to w
 | Styling | Scoped CSS in a `<style>` block, Tailwind and Sass built in. |
 | Tooling | `wisp lsp` with a VS Code extension, plus Zed, tree-sitter and Prettier. `wisp fmt`, `wisp check`, `wisp test`, `wisp test --browser`. Devtools on `Alt+Shift+W`. |
 | Deploy | One binary, `--docker`, `--static`, or `--target cloudflare\|deno\|vercel\|netlify\|node\|bun\|lambda`. `wisp deploy init <host>` writes a GitHub Actions workflow or a Fly, Render or Railway config. |
+
+</div>
 
 ## Speed
 

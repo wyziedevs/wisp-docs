@@ -36,6 +36,8 @@ A write redraws only the bindings that read what changed (no virtual DOM); the s
 </script>
 ```
 
+<div class="table-wrap">
+
 | Rune | Meaning |
 |---|---|
 | `let x = $state(v)` | Deep state (a plain `let x = v` is the same). |
@@ -51,6 +53,8 @@ A write redraws only the bindings that read what changed (no virtual DOM); the s
 | `$inspect(a, b)` | Logs on change; gone in release. |
 | `$cart` | Store `cart`'s `.value`, tracked; `$cart = x` sets it. |
 
+</div>
+
 - A class's `$state`/`$derived` fields make its instances state. `untrack(fn)` reads untracked. A misplaced rune is a build error.
 - Deep state tracks plain objects, arrays, maps, sets and such classes; for a `Date` or other instance assign again (`d = d`).
 - `x === e` redraws only where the answer changes (`class:on="selected === row.id"` redraws two rows).
@@ -58,12 +62,16 @@ A write redraws only the bindings that read what changed (no virtual DOM); the s
 ## TypeScript
 `<script lang="ts">`, `src/lib/*.ts` (`'$lib/x'`) and `+page.ts`. Types are stripped in place (lines and columns stay); no compiler. Code-producing TS is a build error saying what to write:
 
+<div class="table-wrap">
+
 | Not allowed | Write |
 |---|---|
 | `enum Color { Red }` | `const Color = { Red: 'red' } as const` |
 | `namespace` | a module |
 | `constructor(private x: number)` | `x: number; constructor(x: number) { this.x = x }` |
 | `import fs = require('fs')` | `import fs from 'fs'` |
+
+</div>
 
 `wisp check --types` also type-checks with the app's TypeScript (`npm install -D typescript`, or `WISP_TSC` naming a `tsc`; else skipped). Server values are typed by Rust (`Vec<Item>` is `Item[]`, a `#[derive(Json)]` type an interface; hand-written `Json` is `unknown`).
 
@@ -79,6 +87,8 @@ A write redraws only the bindings that read what changed (no virtual DOM); the s
 `t('cart.items', n)` or `t('hi', { name, count: n })` in a script or directive, no import; keys checked at build; the page sends only the messages its scripts use. `src/lib` code can't call `t`. Message files: [/docs/design](/docs/design).
 
 ## Directives
+
+<div class="table-wrap">
 
 | Syntax | Meaning |
 |---|---|
@@ -101,6 +111,8 @@ A write redraws only the bindings that read what changed (no virtual DOM); the s
 | `use:tip="'Hello'"` | Calls `tip(el, 'Hello')` and its `update` on change; may return a cleanup or `{ update, destroy }`. |
 | `use:portal="'#modal'"` | Move the element there (bare: `<body>`). |
 | `animate:flip` | Animate moves in a keyed `{:#each}`. |
+
+</div>
 
 ```html
 <input bind:value="query" on:keydown.enter="search" on:keydown.escape="query = ''">

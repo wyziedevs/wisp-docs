@@ -38,6 +38,8 @@ fn before(cx: &mut Cx) -> Result<()> {
 
 ## Values
 
+<div class="table-wrap">
+
 | API | What it does |
 |---|---|
 | `wisp::provide(value)` | makes a value (pool, client) available everywhere as `wisp::state::<T>()`; a never-provided type panics with its name (found by the first request) |
@@ -52,6 +54,8 @@ fn before(cx: &mut Cx) -> Result<()> {
 | `cx.delete_cookie(name)` | removes a cookie |
 | `cx.flash("Saved")` | message for the next page (after a `redirect`, say); its `load` reads it once with `cx.flashed()` |
 | `cx.after(\|\| ...)` | runs once the handler is through, on the connection's thread when next free (`wisp::spawn`, then a yield): a log line, a `revalidate_tag`. Costs nothing on a request that does not call it. At the edge it is `wisp::spawn`, so the host keeps the instance alive (`waitUntil` on Cloudflare) |
+
+</div>
 
 `Table` methods: `add(todo)` returns the id; `get(id)`, `all()`, `find(|t| ...)` return copies as `Row { id, value }` (reads as its value: `{todo}`, `todo.title`, `todo.id`); `update(id, |t| t.done = true)`; `remove(id)`.
 

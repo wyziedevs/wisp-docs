@@ -60,6 +60,8 @@ Speed is never traded away for convenience. How it is measured, and how to run t
 
 Code written by a model is paid for by the token, so we count them. The same five features, a list page, a contact form, a JSON endpoint, a layout and a live search, written as a complete app in each stack:
 
+<div class="table-wrap">
+
 | Stack | Tokens | Files |
 |---|---:|---:|
 | **Wisp** | **464** | 6 |
@@ -67,6 +69,8 @@ Code written by a model is paid for by the token, so we count them. The same fiv
 | Next.js | 1010 | 8 |
 | Axum + askama | 1456 | 7 |
 | Actix + tera | 1531 | 7 |
+
+</div>
 
 A bigger app, with sign up and in, a posts table, uploads, live refresh and a component, is 995 tokens in Wisp, 3473 in SvelteKit and 3331 in Next.js. The numbers come from `cargo run -p wisp-tokens`, which counts every hand-written file and its path with a byte-pair style estimate. The [Tokens](/docs/tokens) page has the method and the apps, so you can check the count.
 

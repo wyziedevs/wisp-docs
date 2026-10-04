@@ -12,6 +12,8 @@ wisp build --target cloudflare               # dist/cloudflare (--out <folder>)
 
 The app compiles to WebAssembly in a folder with the host's config, an entry file and the static files. No wasm-bindgen or other tool.
 
+<div class="table-wrap">
+
 | Target | For | From `dist/<target>` |
 |---|---|---|
 | `cloudflare` | Workers | `npx wrangler deploy` (secrets: `npx wrangler secret put WISP_SECRET`) |
@@ -23,7 +25,11 @@ The app compiles to WebAssembly in a folder with the host's config, an entry fil
 | `bun` | Bun (`Bun.listen`) | `bun server.mjs` |
 | `lambda` | AWS Lambda | [below](/docs/deploy-targets) |
 
+</div>
+
 Other hosts:
+
+<div class="table-wrap">
 
 | Host | Use |
 |---|---|
@@ -32,6 +38,8 @@ Other hosts:
 | Fly.io | `--docker`, `fly launch`, `fly deploy`, `fly secrets set WISP_SECRET=...` |
 | Railway, Render | `--docker`, point at the repo, set `WISP_SECRET` |
 | Cloud Run | `--docker`, `gcloud run deploy --source .` |
+
+</div>
 
 ## Edge Runtime per Route
 
@@ -78,6 +86,8 @@ aws lambda update-function-code --function-name my-app --zip-file fileb://dist/l
 
 No threads, sockets or files.
 
+<div class="table-wrap">
+
 | Topic | Rule |
 |---|---|
 | Tasks and timers | Use `wisp::spawn` and `wisp::sleep` (they map to the host's task queue and `setTimeout`). `tokio::spawn`, `tokio::time`, sqlx, reqwest and `Response::file_in` answer 500 there; all work in the binary, Docker, Lambda. |
@@ -88,15 +98,21 @@ No threads, sockets or files.
 | Not in the edge build | `wisp::channel`, `wisp::every`, `RateLimit` (it won't compile with them): use the host's queues, cron, rate limiting. |
 | Panics | A panic fails only that request (500). No `Date` header from Wisp. |
 
+</div>
+
 ### Saved Tables
 
 `Rest` and `Table::saved` are per-instance memory unless `WISP_STORE` is set (no app code):
+
+<div class="table-wrap">
 
 | `WISP_STORE` | Store |
 |---|---|
 | `d1:DB` | Cloudflare D1 binding `DB` (`[[d1_databases]]` in wrangler.toml) |
 | `deno-kv` | Deno KV (`deno-kv:<path>` file or URL) |
 | `libsql://name.turso.io` | Turso or any libSQL server over HTTP, with `WISP_STORE_TOKEN` |
+
+</div>
 
 - Each instance reads every row at start (tables must fit in memory).
 - A request's changes are one batch before the answer. A failed batch answers 500 and the next request gets a fresh instance.
@@ -106,11 +122,15 @@ No threads, sockets or files.
 
 `wisp::cron` and `wisp::work` are the same code on every host. `wisp build` reads each `wisp::cron("0 3 * * *", ..)` in `src/` (the schedule must be a string literal) and writes the host's trigger:
 
+<div class="table-wrap">
+
 | Host | Trigger |
 |---|---|
 | Cloudflare | `[triggers] crons` in wrangler.toml |
 | Vercel | `crons` in config.json (Hobby plan: daily only) |
 | Netlify | a scheduled function |
+
+</div>
 
 - A trigger asks the app for `/_wisp/cron/<schedule>` with `Authorization: Bearer $CRON_SECRET`. Set it as a host secret; without it the address is 404.
 - That runs the tasks of the schedule, then every queue's due jobs. An app with `work` gets a trigger each minute.

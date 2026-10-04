@@ -10,6 +10,8 @@ Each param but `cx` is read by name: route param, then form field or JSON object
 
 `body: T` is the whole JSON body:
 
+<div class="table-wrap">
+
 | Sent | Answer |
 |---|---|
 | JSON that is a `T` and passes | handler runs |
@@ -17,6 +19,8 @@ Each param but `cx` is read by name: route param, then form field or JSON object
 | JSON not a `T`, or failing a check | 422, every problem by field |
 | non-JSON `Content-Type` | 415 |
 | no body, `body: Option<T>` | `None` |
+
+</div>
 
 ### `FromJson`
 `#[derive(FromJson)]` reads a struct from an object.
@@ -28,6 +32,8 @@ Each param but `cx` is read by name: route param, then form field or JSON object
 
 ### Checks
 
+<div class="table-wrap">
+
 | Rule | Checks | On |
 |---|---|---|
 | `len = 1..=200` | length or item count (`1..`, `..=200`) | strings, lists |
@@ -35,11 +41,15 @@ Each param but `cx` is read by name: route param, then form field or JSON object
 | `min_len = 1` `max_len = 200` | length or items | strings, lists |
 | `email` | what `<input type="email">` takes (`a@b` too) | strings |
 
+</div>
+
 - `None` passes. Further rules (`url one_of pattern with`): [/docs/data](/docs/data).
 - An unknown rule is a build error listing the valid ones.
 - Own checks: `return invalid("email", "is already taken")` (422); `Error::invalid(..).and(..)` names several fields.
 
 ## Output
+
+<div class="table-wrap">
 
 | Returns | Client gets |
 |---|---|
@@ -49,6 +59,8 @@ Each param but `cx` is read by name: route param, then form field or JSON object
 | `Option<Response>` | it, or 404 |
 | `Option<T>` | JSON, 204 for `Some(())`, 404 for `None` |
 | any of these in a `Result` | same, or the error |
+
+</div>
 
 `Response::created(&v)` is 201; `Response::json_of(&v).with_status(202)`; `.with_header(name, value)` adds a header (also on `Error`). In a page, `cx.set_status(404)` sets the status.
 

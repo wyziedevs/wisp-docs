@@ -9,6 +9,8 @@ Read once at start. Switches take `on`/`off` (also `1`/`0`, `true`/`false`). You
 
 ## Server
 
+<div class="table-wrap">
+
 | Name | What it does |
 |---|---|
 | `HOST`, `PORT` | listen address (`0.0.0.0:3000` in release, `127.0.0.1` in dev) |
@@ -40,9 +42,13 @@ Read once at start. Switches take `on`/`off` (also `1`/`0`, `true`/`false`). You
 | `AWS_LAMBDA_RUNTIME_API` | set by Lambda: the binary answers its runtime API |
 | `WISP_EDITOR`, `EDITOR` | what the dev error dialog's Open runs (`code -g`) |
 
+</div>
+
 `#[derive(Rest)]` bearer tokens and OAuth client ids and secrets are read from the names their attributes give.
 
 ## Logs and Traces
+
+<div class="table-wrap">
 
 | Name | What it does |
 |---|---|
@@ -54,7 +60,11 @@ Read once at start. Switches take `on`/`off` (also `1`/`0`, `true`/`false`). You
 | `OTEL_SERVICE_NAME` | service name on spans |
 | `OTEL_BSP_SCHEDULE_DELAY` | batch delay in ms (5000) |
 
+</div>
+
 ## CLI and Tests
+
+<div class="table-wrap">
 
 | Name | What it does |
 |---|---|
@@ -65,3 +75,5 @@ Read once at start. Switches take `on`/`off` (also `1`/`0`, `true`/`false`). You
 | `WISP_TSC` | the `tsc` for `wisp check --types` |
 | `WISP_BROWSER` | Chrome or Edge for browser tests |
 | `NO_COLOR` | plain CLI output |
+
+</div>

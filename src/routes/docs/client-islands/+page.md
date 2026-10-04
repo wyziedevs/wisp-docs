@@ -84,12 +84,16 @@ esbuild src/widget.js --bundle --minify --format=esm --outfile=static/widget.js 
 ## Third-Party Scripts
 Pick when one loads (`src`, so no code of yours). In the head:
 
+<div class="table-wrap">
+
 | Tag | Loads |
 |---|---|
 | `<script src>` | before interactive |
 | `<script defer src>` | after interactive |
 | `<script src="https://t.example/a.js" type="wisp/idle">` | when the browser is idle (also on a client navigation) |
 | `type="wisp/interaction"` | at the first pointer, key or scroll |
+
+</div>
 
 Other attributes (`async`, `data-*`) are copied.
 
