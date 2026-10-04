@@ -1572,64 +1572,28 @@ pre:focus-within .copy-code,
 .hl-t { color: var(--hl-t); }
 .hl-a { color: var(--hl-a); }
 
-/* Article tables: a framed panel, a quiet header row, lines between rows. A
-   row whose first cell is all bold (the Wisp row) is tinted. */
+/* Article tables fill the column; a wide one scrolls inside its wrapper
+   (added by the layout script) instead of widening the page. */
 .doc table {
-  display: block;
-  width: fit-content;
-  max-width: 100%;
-  margin: 1.5rem 0 2rem;
-  overflow-x: auto;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  border-collapse: separate;
-  border-spacing: 0;
-  background: var(--panel);
+  width: 100%;
+  margin-bottom: 1.5rem;
+  border-collapse: collapse;
   font-size: 0.9375rem;
-  font-variant-numeric: tabular-nums;
-  line-height: 1.55;
 }
 
-.doc :is(th, td) {
-  padding: 0.6875rem 1.25rem 0.6875rem 0;
-  border-bottom: 0;
+.table-wrap {
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
 }
 
-.doc :is(th, td):first-child {
-  padding-left: 1.25rem;
+.table-wrap > table {
+  margin-bottom: 0;
 }
 
-.doc :is(th, td):last-child {
-  padding-right: 1.25rem;
-}
-
-.doc thead th {
-  border-bottom: 1px solid var(--line);
-  background: var(--wash);
-  color: var(--ash);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.doc tbody tr + tr > * {
-  border-top: 1px solid var(--line);
-}
-
-.doc tbody tr {
-  transition: background-color 150ms var(--ease);
-}
-
-.doc tbody tr:hover {
-  background: color-mix(in oklch, var(--accent-soft) 45%, transparent);
-}
-
-.doc tbody tr:has(> :first-child > strong:only-child) {
-  background: var(--accent-soft);
-}
-
-.doc tbody tr:has(> :first-child > strong:only-child) strong {
-  color: var(--accent-ink);
+@media (max-width: 40rem) {
+  .doc :is(th, td) {
+    padding-right: 0.625rem;
+  }
 }
 
 /* The token tally: a bar per stack, Wisp in the accent. */

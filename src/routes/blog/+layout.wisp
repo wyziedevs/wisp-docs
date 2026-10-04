@@ -151,6 +151,7 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
 <script>
   import { afterNavigate } from 'wisp'
   import { spy } from '$lib/toc.js'
+  import { wrapTables } from '$lib/tables.js'
 
   // Filters the list as you type; without JS the form filters on the server.
   function filter(e) {
@@ -181,6 +182,8 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
   let off = null
   function post() {
     anchors()
+    const article = document.querySelector('.post')
+    if (article) wrapTables(article)
     off?.()
     off = null
     const toc = document.querySelector('.post-toc ul')
