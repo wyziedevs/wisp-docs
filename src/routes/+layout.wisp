@@ -92,6 +92,9 @@ let links = [
     </div>
   </div>
 </header>
+<noscript>
+  <p class="nojs">JavaScript is off, so copy buttons, the theme switch and page ratings are hidden. Enable JavaScript for this site to use them.</p>
+</noscript>
 
 <dialog class="finder" aria-label="Search the Docs" bind:this="dlg">
   <div class="find-bar">

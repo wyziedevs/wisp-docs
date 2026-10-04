@@ -150,6 +150,18 @@ h4 {
   top: 0.75rem;
 }
 
+/* With JavaScript off: what is hidden, and how to get it back. */
+.nojs {
+  margin: 0;
+  padding: 0.625rem var(--gutter);
+  border-bottom: 1px solid var(--line);
+  background: var(--accent-soft);
+  color: var(--ink);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
 .wrap {
   width: min(100%, 76rem);
   margin-inline: auto;
