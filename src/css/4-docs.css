@@ -72,11 +72,10 @@
 }
 
 /* Learn, Reference and Hosting as a segmented control: one soft pill marks the
-   current side. Every tab has the same padding. */
+   current side. The tabs are equal and fill the row. */
 .switch {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.125rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   margin: 0.75rem 0.75rem 0;
   padding: 0.25rem;
   border: 1px solid var(--line);
