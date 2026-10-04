@@ -2,7 +2,7 @@
   <div class="wrap">
     <img class="logo" src="/favicon.svg" alt="" width="132" height="132">
     <h1>Wisp</h1>
-    <p class="sub">A Fast, Fun Web Framework for <em>Rust<svg class="scribble" viewBox="0 0 120 12" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M1 9C20 6.2 44 5.6 66 4.8S104 3 119 1.4C105 6 87 9.8 65 10.6C43 11.4 21 11.8 1 9Z"/></svg></em></p>
+    <p class="sub">A Fast, Fun Web Framework for <em>Rust<svg class="scribble" viewBox="0 0 120 13" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path vector-effect="non-scaling-stroke" d="M2 8.5C22 5.6 47 6.8 70 5C88 3.7 104 4.6 118 2.4"/><path vector-effect="non-scaling-stroke" d="M14 11.2C38 9.4 66 10.2 96 8.6"/></svg></em></p>
     <p class="cta">
       <a class="btn primary" href="/docs/quick-start">Learn Wisp</a>
       <a class="btn" href="/docs/design">API Reference</a>
@@ -161,7 +161,10 @@
     width: calc(100% + 0.1em);
     height: 0.36em;
     overflow: visible;
-    fill: currentColor;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5px;
+    stroke-linecap: round;
     opacity: 0.85;
     pointer-events: none;
   }
