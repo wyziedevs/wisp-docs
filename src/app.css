@@ -2203,12 +2203,12 @@ pre code {
   margin-inline: auto;
 }
 
-/* Closing section: right-aligned, a narrow install box. */
+/* Closing section: centered, a narrow install box. */
 .final .wrap {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  text-align: right;
+  align-items: center;
+  text-align: center;
 }
 
 .final pre {
@@ -2217,5 +2217,72 @@ pre code {
 }
 
 .final .cta {
-  justify-content: flex-end;
+  justify-content: center;
+}
+
+/* Hero install: one box, the command and a copy icon the height of its line. */
+.hero .install {
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--s-3);
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+  padding: 0.8125rem 1.125rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--panel);
+}
+
+.hero .install code {
+  flex: 0 1 auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+
+.copy-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--ash);
+  cursor: pointer;
+  transition: color 150ms;
+}
+
+.copy-icon:hover {
+  color: var(--ink);
+}
+
+.copy-icon:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.copy-icon svg {
+  grid-area: 1 / 1;
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.copy-icon .i-done,
+.copy-icon.done .i-copy {
+  visibility: hidden;
+}
+
+.copy-icon.done .i-done {
+  visibility: visible;
+  color: var(--accent-ink);
 }
