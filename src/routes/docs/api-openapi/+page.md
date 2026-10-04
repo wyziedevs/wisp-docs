@@ -1,6 +1,6 @@
 ---
 title: OpenAPI and Tests
-description: The generated OpenAPI document and docs page, and testing an API.
+description: See how Wisp generates an OpenAPI document and a docs page for your API, produces a TypeScript client, and how to test the API in process or in a browser.
 group: APIs
 order: 43
 ---

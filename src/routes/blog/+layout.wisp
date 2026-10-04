@@ -73,7 +73,7 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
         {#if !tag.is_empty()}<input type="hidden" name="tag" value={tag}>{/if}
         <p class="blog-count" role="status" aria-live="polite">{count(shown.len())}</p>
         <a href="/blog/tags">All Tags</a>
-        <a href="/rss.xml">RSS</a>
+        <a href="/feed.xml">RSS</a>
       </form>
       {#if !tag.is_empty()}
         <p class="blog-tag">Tagged <strong>{tag}</strong> · <a href="/blog">Show All</a></p>

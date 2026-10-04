@@ -1,6 +1,6 @@
 ---
 title: Pages and Templates
-description: A page's Rust block, loads, actions, validation, limits, caching and accessibility lints.
+description: Learn how a Wisp page's Rust block works: signatures and inputs, loads, actions, validation, errors, limits, caching and accessibility lints.
 group: Design
 order: 11
 ---

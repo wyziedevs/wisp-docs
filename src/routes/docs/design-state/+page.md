@@ -1,6 +1,6 @@
 ---
 title: Hooks, State and Streaming
-description: Hooks, per-request state and values, streaming and the await block.
+description: Learn Wisp hooks, per-request state and values, and how to stream a response or a whole page with the {#await} block while sharing state with client code.
 group: Design
 order: 15
 ---

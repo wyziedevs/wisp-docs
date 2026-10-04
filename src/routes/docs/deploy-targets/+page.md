@@ -1,6 +1,6 @@
 ---
 title: Edge and Serverless Targets
-description: Build for Cloudflare, Deno, Vercel, Netlify, Lambda, Bun and more.
+description: Build Wisp for Cloudflare, Deno, Vercel, Netlify, AWS Lambda, Bun and Node, choose an edge runtime per route and see which features work on the edge.
 group: Deploy and Run
 order: 61
 ---

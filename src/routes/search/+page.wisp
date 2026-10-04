@@ -23,7 +23,7 @@ for p in wisp::pages("").iter().chain(wisp::pages("docs").iter()).chain(wisp::pa
 }
 ---
 <head>
-  <title>Search</title>
+  <title>Search the Docs | Wisp Rust Web Framework</title>
   <meta name="robots" content="noindex, follow">
 </head>
 

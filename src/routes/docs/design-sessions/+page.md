@@ -1,6 +1,6 @@
 ---
 title: Cookies and Sign-In
-description: Cookies, signed cookies, sessions, sign-in, password hashing.
+description: Learn how Wisp handles cookies, signed cookies, sessions and sign-in, including signing out everywhere and hashing passwords safely, using small built-in helpers.
 group: Design
 order: 20
 ---

@@ -1,6 +1,6 @@
 ---
 title: Getting Started
-description: Install Wisp, make an app with wisp new, run it with wisp dev and build one binary.
+description: Get started with Wisp: install the CLI, create an app with wisp new, run it with wisp dev, add a page and a form, then check, test and build one binary.
 group: Start
 order: 1
 ---

@@ -1,6 +1,6 @@
 ---
 title: AI Agents and Editors
-description: AGENTS.md, the MCP server, the language server and editor support.
+description: Use Wisp with AI agents and editors through AGENTS.md, the wisp mcp server and the wisp lsp language server, with setup notes for the editors that Wisp supports.
 group: Design
 order: 18
 ---

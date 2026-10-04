@@ -16,13 +16,13 @@ export function flip() {
   } catch (e) {}
 }
 
-// A block that scrolls can be focused (and read as a region); one that fits is left alone.
+// A block or table that scrolls can be focused (and read as a region); one that fits is left alone.
 const fit = (p) => {
   const over = p.scrollWidth > p.clientWidth || p.scrollHeight > p.clientHeight
   if (over) {
     p.tabIndex = 0
     p.setAttribute('role', 'region')
-    p.setAttribute('aria-label', 'Code')
+    p.setAttribute('aria-label', p.tagName === 'PRE' ? 'Code' : 'Table')
   } else {
     p.removeAttribute('tabindex')
     p.removeAttribute('role')
@@ -34,6 +34,7 @@ const watch = new ResizeObserver((list) => list.forEach((e) => fit(e.target)))
 // Every code block gets a copy button and, if it overflows, a focus stop.
 export function blocks() {
   watch.disconnect()
+  for (const t of document.querySelectorAll('.table-wrap, .bench')) watch.observe(t)
   for (const p of document.querySelectorAll('pre')) {
     watch.observe(p)
     if (p.querySelector('.copy-code')) continue

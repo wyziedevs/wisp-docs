@@ -1,6 +1,6 @@
 ---
 title: CLI Reference
-description: Every wisp command, subcommand and flag in one table.
+description: The full reference for the wisp command line tool, listing every command, subcommand and flag in one table, plus the options for wisp new and CLI version notes.
 group: Reference
 order: 80
 ---

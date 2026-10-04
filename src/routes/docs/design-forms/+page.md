@@ -1,6 +1,6 @@
 ---
 title: Actions, Forms and UI
-description: Actions, validation, uploads, wisp.js form handling and the built-in UI.
+description: Handle forms in Wisp with actions and validation, follow the request flow, accept file and image uploads, serve files, and use the built-in UI for common screens.
 group: Design
 order: 14
 ---

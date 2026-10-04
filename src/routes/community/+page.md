@@ -1,6 +1,6 @@
 ---
 title: Community
-description: Where to get help with Wisp, report a bug and contribute to the framework or these docs.
+description: Find out where to get help with Wisp, how to report a bug and how to contribute to the framework or these docs on GitHub, plus the project license.
 ---
 
 Wisp is an open source project, and it lives on GitHub. This page lists the places where work on it happens.

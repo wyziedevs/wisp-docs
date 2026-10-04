@@ -1,6 +1,6 @@
 ---
 title: Tooling, Images and Translations
-description: Recipes, the component kit, images and i18n.
+description: Speed up Wisp work with recipes from wisp add, the component kit from wisp ui add, built-in image handling and translations for apps in more than one language.
 group: Design
 order: 12
 ---

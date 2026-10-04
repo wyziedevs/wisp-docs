@@ -1,6 +1,6 @@
 ---
 title: Browser Code
-description: Scripts, runes, directives and TypeScript in the same .wisp file.
+description: Write browser code in the same .wisp file as your page: scripts, runes, TypeScript, environment variables, translations, directives and event modifiers in Wisp.
 group: Browser Code
 order: 30
 ---

@@ -1,6 +1,6 @@
 ---
 title: Input, Output and Errors
-description: Input, output, errors as JSON, webhooks, idempotent retries and big lists.
+description: Learn how a Wisp API takes JSON input with FromJson and checks, returns output, reports errors as JSON, and handles webhooks, idempotent retries and big lists.
 group: APIs
 order: 41
 ---

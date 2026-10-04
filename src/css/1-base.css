@@ -391,3 +391,23 @@ pre {
 .hits a:hover {
   background: var(--accent-soft);
 }
+
+/* Windows High Contrast: system colors for the icons, a real outline for focus. */
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 2px solid Highlight;
+  }
+
+  svg :is(path, circle, ellipse, rect) {
+    stroke: CanvasText;
+  }
+
+  svg .fill,
+  .ghost .shape {
+    fill: CanvasText;
+  }
+
+  .ghost :is(.eye, .mouth) {
+    fill: Canvas;
+  }
+}

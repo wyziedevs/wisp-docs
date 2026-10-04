@@ -1,0 +1,21 @@
+# Cloudflare Pages headers: the same security headers the Wisp server sends.
+# The script hash is the theme script in src/app.html; change it with that script.
+# cloudflareinsights: the Web Analytics beacon Pages injects.
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-uoCKqZiociVH1lOD5EGScnv8yNoODzeBJu2ao64yf4k=' https://esm.sh https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://esm.sh https://cloudflareinsights.com; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Unversioned names: a week, not forever.
+/vendor/*
+  Cache-Control: public, max-age=604800
+
+/_app/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Only wispweb.dev is indexed.
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex

@@ -1,6 +1,6 @@
 ---
 title: Deploying
-description: Binary, static, prerender, service and Docker.
+description: Deploy a Wisp app as a single binary, a static or SPA site, a prerendered build, a system service or a Docker image, with the steps for each option.
 group: Deploy and Run
 order: 60
 ---

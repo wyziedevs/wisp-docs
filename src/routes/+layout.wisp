@@ -13,7 +13,7 @@ let me = wisp::pages("")
 let title = me.map_or("Wisp", |p| p.title);
 let about = me
     .and_then(|p| p.get("description"))
-    .unwrap_or("A fast, fun web framework for Rust");
+    .unwrap_or("Wisp is a fast, fun web framework for Rust: file routes, .wisp templates compiled to Rust, form actions and one binary to deploy.");
 let reference = me.is_some_and(|p| path.starts_with("/docs") && site::is_reference(p));
 let docs = path == "/docs" || path.starts_with("/docs/");
 let learn = !reference && docs;
@@ -27,14 +27,19 @@ let links = [
 ];
 
 // The page's head: Open Graph, a canonical address and JSON-LD. An error page is not indexed.
-let url = format!("{SITE}{path}");
+// Addresses end in `/`: the static host serves `dir/index.html` there and 308s the bare form.
+let url = if home { format!("{SITE}/") } else { format!("{SITE}{path}/") };
 // Layouts cannot see the status, so a path no page or route answers (a 404) is the error case.
-let indexed = me.is_some() || path == "/demo";
+let indexed = me.is_some();
 let dated = me.and_then(|p| p.get("date"));
 let json = |s: &str| format!("\"{}\"", s.replace('\\', "\\\\").replace('"', "\\\"").replace('\n', " ").replace('<', "\\u003c"));
 let ld = match me {
     _ if !indexed => String::new(),
-    _ if home => SITE_LD.replace('~', SITE),
+    _ if home => format!(
+        "{{\"@context\":\"https://schema.org\",\"@graph\":[{},{{\"@type\":\"SoftwareSourceCode\",\"name\":\"Wisp\",\"description\":{},\"url\":\"{SITE}/\",\"codeRepository\":\"https://github.com/wyziedevs/wisp\",\"programmingLanguage\":\"Rust\",\"license\":\"https://github.com/wyziedevs/wisp/blob/main/LICENSE\",\"author\":{ORG}}}]}}",
+        SITE_LD.replace('~', SITE).replace("\"@context\":\"https://schema.org\",", ""),
+        json(about),
+    ),
     Some(p) if blog && dated.is_some() => format!(
         "{{\"@context\":\"https://schema.org\",\"@type\":\"BlogPosting\",\"headline\":{},\"description\":{},\"url\":{},\"image\":\"{SITE}/og.png\",\"inLanguage\":\"en\",\"datePublished\":{},\"author\":{},\"publisher\":{ORG}}}",
         json(p.title),
@@ -44,16 +49,17 @@ let ld = match me {
         p.get("author").map_or(ORG.to_string(), |a| format!("{{\"@type\":\"Person\",\"name\":{}}}", json(a))),
     ),
     Some(p) if docs => format!(
-        "{{\"@context\":\"https://schema.org\",\"@type\":\"TechArticle\",\"headline\":{},\"description\":{},\"url\":{},\"image\":\"{SITE}/og.png\",\"inLanguage\":\"en\",\"author\":{ORG},\"publisher\":{ORG}}}",
+        "{{\"@context\":\"https://schema.org\",\"@graph\":[{{\"@type\":\"TechArticle\",\"headline\":{},\"description\":{},\"url\":{},\"image\":\"{SITE}/og.png\",\"inLanguage\":\"en\",\"author\":{ORG},\"publisher\":{ORG}}},{{\"@type\":\"BreadcrumbList\",\"itemListElement\":[{{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"{SITE}/\"}},{{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Docs\",\"item\":\"{SITE}/docs/\"}}{}]}}]}}",
         json(p.title),
         json(about),
         json(&url),
+        if path == "/docs" { String::new() } else { format!(",{{\"@type\":\"ListItem\",\"position\":3,\"name\":{},\"item\":{}}}", json(p.title), json(&url)) },
     ),
     _ => String::new(),
 };
 ---
 <head>
-  <title>{if title.starts_with("Wisp") { title.to_string() } else { format!("Wisp: {title}") }}</title>
+  <title>{if home { title.to_string() } else { format!("{title} | Wisp Rust Web Framework") }}</title>
   <meta name="description" content={about}>
   <meta name="author" content="Wyzie LLC">
   {@html wisp::og(title, about, &format!("{SITE}/og.png"))}
@@ -68,7 +74,7 @@ let ld = match me {
   {:else}
     <meta name="robots" content="noindex">
   {/if}
-  <link rel="alternate" type="application/rss+xml" title="Wisp Blog" href="/rss.xml">
+  <link rel="alternate" type="application/rss+xml" title="Wisp Blog" href="/feed.xml">
   {#if !ld.is_empty()}
     {@html format!("<script type=\"application/ld+json\">{ld}</script>")}
   {/if}

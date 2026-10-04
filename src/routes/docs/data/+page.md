@@ -1,6 +1,6 @@
 ---
 title: Data, Files and Jobs
-description: Tables, relay, files, validation rules, jobs, cache and the admin page.
+description: Store and move data in Wisp with tables, relay, file uploads, validation rules, background jobs, a cache and a built-in admin page, all without extra services.
 group: Data and Auth
 order: 50
 ---

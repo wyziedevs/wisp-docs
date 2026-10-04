@@ -1,6 +1,6 @@
 ---
 title: Wisp, a Fast, Fun Web Framework for Rust
-description: A fast, fun web framework for Rust that costs an AI the fewest tokens to write. One page, one binary.
+description: Wisp is a fast, fun web framework for Rust with file routes, templates compiled to Rust and form actions. It ships as one binary and costs an AI few tokens.
 ---
 
 <Hero />

@@ -1,0 +1,21 @@
+# Wisp
+
+> A fast, fun web framework for Rust: file routes, `.wisp` templates compiled to Rust, form actions that work without JavaScript, optional browser reactivity, one binary. Built so apps take as few tokens as possible to write.
+
+AGENTS.md is the complete, compact reference: read it before writing Wisp code. Every app has it (`wisp new` writes it; `wisp update-docs` refreshes it), and `wisp mcp` serves it and the docs to agents as tools. llms-full.txt is AGENTS.md and every doc below in one file.
+
+## Docs
+
+- [AGENTS.md](https://raw.githubusercontent.com/wyziedevs/wisp/main/llms/AGENTS.md): every syntax form, API and gotcha on one page
+- [llms-full.txt](https://raw.githubusercontent.com/wyziedevs/wisp/main/llms/llms-full.txt): AGENTS.md and all the docs, one file
+- [Design](https://wispweb.dev/docs/design): routes, page logic, templates, components, forms, cookies, hooks, runtime, build
+- [Client code](https://wispweb.dev/docs/client): scripts, runes, directives, client blocks, components, stores, router, islands, npm packages
+- [APIs](https://wispweb.dev/docs/api): resources and queries, storage, endpoints, validation, errors, auth, webhooks, rate limits, streams, jobs, OpenAPI
+- [Deploy](https://wispweb.dev/docs/deploy): binary, static, Docker, Cloudflare, Deno, Vercel, Netlify, Node
+- [Embedding and tests](https://wispweb.dev/docs/embed): in-process tests, tower, axum, Lambda
+
+## Optional
+
+- [Website](https://wispweb.dev): overview, quick start and the docs
+- [Token counts](https://wispweb.dev/docs/tokens): the same apps in Wisp and other frameworks
+- [Examples](https://github.com/wyziedevs/wisp/tree/main/examples): demo app, JSON API, Wisp inside axum

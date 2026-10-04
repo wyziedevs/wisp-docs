@@ -1,6 +1,6 @@
 ---
 title: Overview
-description: What Wisp gives you for reactivity, AI tokens, rendering, data, styling, tooling and deploy.
+description: A short overview of what Wisp gives you for speed, reactivity, AI token cost, rendering, data, styling, tooling and deployment, plus the project status today.
 group: Start
 order: 3
 ---

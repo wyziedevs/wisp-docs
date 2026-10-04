@@ -1,6 +1,6 @@
 ---
 title: "Tutorial: Guestbook"
-description: Build a small guestbook app step by step: a route, a form with validation, a saved table, a component, browser state, a test and a deploy.
+description: Build a small guestbook app in Wisp step by step: a route, a form with validation, a saved table, a component, browser state, a test and a deploy.
 group: Start
 order: 6
 ---

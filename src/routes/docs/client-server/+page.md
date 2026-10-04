@@ -1,6 +1,6 @@
 ---
 title: Server Functions and Errors
-description: Remote functions, turning server rendering off, errors and source maps.
+description: Call Rust from the browser with Wisp server functions, turn server rendering off for a page, and see how errors and source maps behave in client code.
 group: Browser Code
 order: 34
 ---

@@ -345,7 +345,7 @@ td:last-child {
   }
 }
 
-:is(.toc, .post-toc) h2 {
+:is(.toc, .post-toc) .toc-head {
   margin: 0 0 0.75rem;
   color: var(--ash);
   font-size: 0.8125rem;

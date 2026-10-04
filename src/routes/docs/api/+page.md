@@ -1,6 +1,6 @@
 ---
 title: APIs and Platforms
-description: JSON endpoints, #[derive(Rest)] resources, queries and hooks.
+description: Build JSON endpoints in Wisp with plain Rust handlers, generate a full REST resource with #[derive(Rest)], and add queries and hooks to shape the API.
 group: APIs
 order: 40
 ---

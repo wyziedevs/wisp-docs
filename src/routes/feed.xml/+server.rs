@@ -8,7 +8,7 @@ fn get() -> Response {
     let mut items = String::new();
     for p in wisp::pages("blog") {
         let Some(date) = p.get("date") else { continue };
-        let link = format!("{SITE}{}", p.path);
+        let link = format!("{SITE}{}/", p.path);
         items.push_str(&format!(
             "<item><title>{}</title><link>{link}</link><guid>{link}</guid><description>{}</description><pubDate>{}</pubDate></item>",
             esc(p.title),
@@ -17,7 +17,7 @@ fn get() -> Response {
         ));
     }
     let xml = format!(
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rss version=\"2.0\"><channel><title>Wisp Blog</title><link>{SITE}/blog</link><description>News and notes from the Wisp project.</description><language>en</language>{items}</channel></rss>\n"
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\"><channel><title>Wisp Blog</title><link>{SITE}/blog/</link><atom:link href=\"{SITE}/feed.xml\" rel=\"self\" type=\"application/rss+xml\"/><description>News and notes from the Wisp project.</description><language>en</language>{items}</channel></rss>\n"
     );
     Response::text(xml).with_header("content-type", "application/rss+xml; charset=utf-8")
 }

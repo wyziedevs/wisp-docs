@@ -1,6 +1,6 @@
 ---
 title: Tokens
-description: What an app costs to write in AI tokens, measured against other stacks.
+description: See what a Wisp app costs to write in AI tokens, counted by wisp-tokens for five features and a real app, and compared with other web stacks and their methods.
 group: Project
 order: 70
 ---

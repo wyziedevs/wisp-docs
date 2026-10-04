@@ -1,6 +1,6 @@
 ---
 title: Client Components and State
-description: Client components, custom elements, state helpers and shared stores.
+description: Build client components in Wisp, register custom elements, and share state with the built-in state helpers and shared stores across a page or an app.
 group: Browser Code
 order: 36
 ---

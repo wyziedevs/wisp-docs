@@ -1,6 +1,6 @@
 ---
 title: The Router and Forms
-description: The router, morphs, snapshots and use:enhance for forms.
+description: Learn how the Wisp client router morphs pages, keeps snapshots and works offline, and how use:enhance and +page.js make forms feel instant in the browser.
 group: Browser Code
 order: 33
 ---

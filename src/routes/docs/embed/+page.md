@@ -1,6 +1,6 @@
 ---
 title: Testing and Mixing with Rust Code
-description: Testing an app in process, WebSockets, and Wisp inside axum, hyper and Lambda.
+description: Test a Wisp app in process, work with WebSockets, and mix Wisp with other Rust code by running it inside axum, hyper or Lambda through the tower feature.
 group: Deploy and Run
 order: 63
 ---

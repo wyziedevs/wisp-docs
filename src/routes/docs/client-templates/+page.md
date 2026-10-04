@@ -1,6 +1,6 @@
 ---
 title: Server Values and Client Blocks
-description: Server values in the browser, {:expr} holes, client blocks, snippets and first paint.
+description: Pass server values into browser code in Wisp, use {:expr} holes and client blocks, special elements, snippets and {:@const}, and keep a fast first paint.
 group: Browser Code
 order: 31
 ---

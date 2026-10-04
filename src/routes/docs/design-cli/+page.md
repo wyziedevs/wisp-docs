@@ -1,6 +1,6 @@
 ---
 title: CLI, Dev Loop and Security
-description: wisp new, the dev loop, fmt, security, CSP and milestones.
+description: How the Wisp CLI works: wisp new, the wisp dev loop with CSS tools, npm imports and template hot swap, wisp fmt, security defaults, CSP, and project milestones.
 group: Design
 order: 17
 ---

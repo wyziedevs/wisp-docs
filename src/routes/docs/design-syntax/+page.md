@@ -1,6 +1,6 @@
 ---
 title: Template Syntax and Styles
-description: Template syntax, escaping, components, snippets and scoped styles in .wisp files.
+description: Learn Wisp template syntax in .wisp files: expressions, escaping and refused places, components, snippets and scoped styles that stay local to one component.
 group: Design
 order: 13
 ---

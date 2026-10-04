@@ -1,6 +1,6 @@
 ---
 title: Serve Extras
-description: Gzip, ranges, security headers, health checks and handler timeouts.
+description: Learn what the Wisp server does for you out of the box: gzip, range requests, security headers, health checks and handler timeouts, and how to tune each one.
 group: Deploy and Run
 order: 62
 ---

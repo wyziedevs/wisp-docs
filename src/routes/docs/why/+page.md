@@ -1,6 +1,6 @@
 ---
 title: Why Wisp
-description: Wisp is fast to run, cheap for an AI to write, and shaped by how the code looks.
+description: Why choose Wisp: it runs fast, costs an AI few tokens to write, and keeps short code that reads like the page, with Rust underneath and one binary to ship.
 group: Start
 order: 2
 ---

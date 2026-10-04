@@ -1,6 +1,6 @@
 ---
 title: Knobs, Features and Settings
-description: The const knobs, Cargo.toml metadata keys, cargo features and the smaller public types.
+description: Reference for Wisp configuration: the const knobs, the package.metadata.wisp keys in Cargo.toml, the cargo features and the smaller public types you may use.
 group: Reference
 order: 82
 ---

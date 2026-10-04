@@ -1,6 +1,6 @@
 ---
 title: Design and Files
-description: Principles, dependency budget, workspace, the files of an app, routes and Markdown pages.
+description: The design of a Wisp app: its files, file based routes, Markdown pages, config rules, core principles, the dependency budget and how the workspace is laid out.
 group: Design
 order: 10
 ---

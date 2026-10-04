@@ -1,6 +1,6 @@
 ---
 title: Runtime and Build
-description: The server, drivers, limits, the single request entry point and what wisp build does.
+description: Understand the Wisp runtime: the server and its settings, I/O drivers, connection limits, HTTP/2, the single request entry point, the App trait and wisp build.
 group: Design
 order: 16
 ---

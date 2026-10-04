@@ -1,6 +1,6 @@
 ---
 title: Quick Start
-description: Most of what you need from Wisp in one page: a page, a component, state, a form with validation, a saved table and a deploy.
+description: A one page quick start for Wisp: create an app, add a page, a component, state and a form with validation, save data in a table, then test, build and deploy.
 group: Start
 order: 5
 ---

@@ -1,6 +1,6 @@
 ---
 title: Logs, Metrics and Traces
-description: JSON request logs, Prometheus metrics and OpenTelemetry traces.
+description: Watch a running Wisp app with JSON request logs, Prometheus metrics and OpenTelemetry traces, and learn how to turn each one on and read the output.
 group: Deploy and Run
 order: 64
 ---

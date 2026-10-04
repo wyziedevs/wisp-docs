@@ -1,6 +1,6 @@
 ---
 title: PWA and the Dev Loop
-description: Installable and offline apps, and the dev loop with hot reload and devtools.
+description: Make a Wisp app installable and usable offline as a PWA, and learn the dev loop with hot reload and the devtools that help while you build the app.
 group: Browser Code
 order: 35
 ---

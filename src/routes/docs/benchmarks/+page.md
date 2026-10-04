@@ -1,6 +1,6 @@
 ---
 title: Benchmarks
-description: What Wisp measures for speed, and how to run the benchmark tools yourself.
+description: See what Wisp measures to prove it is fast and cheap in tokens, and how to run the benchmark tools yourself to check the numbers on your own machine.
 group: Start
 order: 4
 ---

@@ -1,6 +1,6 @@
 ---
 title: Tokens, App by App
-description: Four small apps in Wisp and six other frameworks, with the Wisp versions.
+description: Compare four small apps written in Wisp and six other frameworks by AI token cost, see the results, and read the full Wisp versions of each app.
 group: Project
 order: 71
 ---

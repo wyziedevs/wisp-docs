@@ -1,6 +1,6 @@
 ---
 title: Auth, Limits, Jobs and Config
-description: Auth, rate limits, live updates, background jobs and configuration.
+description: Run a Wisp API in production with auth, rate limits, live updates, background jobs, and configuration for databases and other settings the app needs.
 group: APIs
 order: 42
 ---
