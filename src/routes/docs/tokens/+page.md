@@ -17,7 +17,9 @@ Most app code is written by AI, so an app's cost is measured in tokens, and keep
 - a layout with a nav
 - a live search filtered in the browser
 
-`cargo run -p wisp-tokens` counts them (method below, in `bench/tokens/src/main.rs`, with characters / 4 beside it). A `@feature NAME` comment says whose its lines are; a file without one, as a generator writes it, is not counted, nor the `[package]` table `cargo new` writes. The Wisp app builds with the workspace, and its tests check each feature.
+`cargo run -p wisp-tokens` counts them (method below, in `bench/tokens/src/main.rs`, with characters / 4 beside it). A `@feature NAME` comment says whose its lines are; a file without one, as a generator writes it, is not counted, nor the `[package]` table `cargo new` writes.
+
+The Node apps: Nuxt is file routes, server routes in `server/api` and `useFetch`, the form posting with `$fetch`; Express renders EJS views with a shared header and footer and a small script for the search; React is a Vite app with React Router, `useState` and `fetch`, over a small Express API. Their generated `package.json`, `nuxt.config.ts` and `index.html` are not counted; the proxy line added to `vite.config.js` is. The Wisp app builds with the workspace, and its tests check each feature.
 
 <div class="table-wrap">
 
@@ -26,6 +28,9 @@ Most app code is written by AI, so an app's cost is measured in tokens, and keep
 | **Wisp** | 58 | 89 | 31 | 60 | 111 | 115 | 0 | **464** | 283 | 6 |
 | SvelteKit 2 | 128 | 470 | 57 | 83 | 192 | 72 | 0 | 1002 | 644 | 9 |
 | Next.js 15 | 107 | 439 | 44 | 108 | 241 | 71 | 0 | 1010 | 725 | 8 |
+| Nuxt 4 (Vue) | 96 | 472 | 22 | 96 | 158 | 71 | 0 | 915 | 623 | 8 |
+| React 19 (Vite + Express) | 108 | 560 | 32 | 268 | 191 | 161 | 102 | 1422 | 1023 | 8 |
+| Express 5 + EJS | 128 | 465 | 34 | 116 | 291 | 69 | 95 | 1198 | 724 | 7 |
 | Axum 0.8 + askama | 145 | 553 | 29 | 104 | 217 | 123 | 285 | 1456 | 1020 | 7 |
 | Actix Web 4 + tera | 164 | 565 | 46 | 104 | 237 | 123 | 292 | 1531 | 1061 | 7 |
 

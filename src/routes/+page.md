@@ -111,7 +111,7 @@ Wisp is first on plaintext at 256, 1,024 and 4,096 connections, 1.9 times Actix 
 <div class="wrap">
 <div class="claim wide">
 
-## Make the Same App with Half the Tokens
+## Make the Same App with About Half the Tokens
 
 AI writes most code now, and every token it reads and writes costs time and money. Wisp is built so an app costs the fewest: conventions instead of config, types the compiler infers, and forms that write themselves. The whole reference is one file, [llms.txt and AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md), and `wisp mcp` serves it to coding agents.
 
@@ -204,11 +204,12 @@ The same five features (a list page, a contact form, a JSON endpoint, a layout a
 <table class="tally">
 <thead><tr><th scope="col">Stack</th><th scope="col"><span class="sr">Relative size</span></th><th scope="col" class="num">Tokens</th><th scope="col" class="num">Files</th></tr></thead>
 <tbody>
-<tr class="us"><th scope="row">Wisp</th><td class="meter" aria-hidden="true"><span style="--v: 0.303"></span></td><td class="num">464</td><td class="num">6</td></tr>
-<tr><th scope="row">SvelteKit</th><td class="meter" aria-hidden="true"><span style="--v: 0.654"></span></td><td class="num">1002</td><td class="num">9</td></tr>
-<tr><th scope="row">Next.js</th><td class="meter" aria-hidden="true"><span style="--v: 0.660"></span></td><td class="num">1010</td><td class="num">8</td></tr>
-<tr><th scope="row">Axum + askama</th><td class="meter" aria-hidden="true"><span style="--v: 0.951"></span></td><td class="num">1456</td><td class="num">7</td></tr>
-<tr><th scope="row">Actix + tera</th><td class="meter" aria-hidden="true"><span style="--v: 1.000"></span></td><td class="num">1531</td><td class="num">7</td></tr>
+<tr class="us"><th scope="row">Wisp</th><td class="meter" aria-hidden="true"><span style="--v: 0.326"></span></td><td class="num">464</td><td class="num">6</td></tr>
+<tr><th scope="row">Nuxt (Vue)</th><td class="meter" aria-hidden="true"><span style="--v: 0.643"></span></td><td class="num">915</td><td class="num">8</td></tr>
+<tr><th scope="row">SvelteKit</th><td class="meter" aria-hidden="true"><span style="--v: 0.705"></span></td><td class="num">1002</td><td class="num">9</td></tr>
+<tr><th scope="row">Next.js (React)</th><td class="meter" aria-hidden="true"><span style="--v: 0.710"></span></td><td class="num">1010</td><td class="num">8</td></tr>
+<tr><th scope="row">Express (Node.js)</th><td class="meter" aria-hidden="true"><span style="--v: 0.842"></span></td><td class="num">1198</td><td class="num">7</td></tr>
+<tr><th scope="row">React (Vite + Express)</th><td class="meter" aria-hidden="true"><span style="--v: 1.000"></span></td><td class="num">1422</td><td class="num">8</td></tr>
 </tbody>
 </table>
 
