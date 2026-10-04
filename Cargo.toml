@@ -1,0 +1,23 @@
+[package]
+name = "wisp-docs"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+wisp = { path = "../wisp/crates/wisp" }
+
+[build-dependencies]
+wisp-build = { path = "../wisp/crates/wisp-build" }
+
+# `cargo test --features browser` runs the tests in a headless Chrome or Edge.
+[features]
+browser = ["wisp/browser"]
+
+# Dev builds near release speed, and rebuilds as fast as unoptimized ones.
+[profile.dev]
+debug = "line-tables-only"
+opt-level = 1
+
+[profile.release]
+codegen-units = 1
+lto = "fat"

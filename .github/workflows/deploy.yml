@@ -1,0 +1,47 @@
+# Deploys the docs to Cloudflare Pages on every push to main.
+# Secrets: CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID.
+# Variable (optional): CLOUDFLARE_PAGES_PROJECT (default wisp-docs).
+name: Deploy
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: wisp-docs
+      # The app depends on ../wisp (the sibling checkout workflow).
+      - uses: actions/checkout@v4
+        with:
+          repository: wyziedevs/wisp
+          path: wisp
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            wisp-docs/target
+          key: docs-${{ runner.os }}-${{ hashFiles('wisp-docs/Cargo.lock') }}
+          restore-keys: docs-${{ runner.os }}-
+      - name: Install the wisp CLI
+        run: cargo install --path wisp/crates/wisp-cli --locked
+      - name: Build the static site
+        working-directory: wisp-docs
+        env:
+          SITE_URL: https://wispweb.dev
+        run: wisp build --static
+      - name: Deploy to Cloudflare Pages
+        working-directory: wisp-docs
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx --yes wrangler@4 pages deploy dist --project-name "${{ vars.CLOUDFLARE_PAGES_PROJECT || 'wisp-docs' }}" --branch main

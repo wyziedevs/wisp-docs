@@ -1,0 +1,2 @@
+DM_Sans google 400 500 600 700
+JetBrains_Mono google 400 500 mono
