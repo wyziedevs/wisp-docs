@@ -12,7 +12,7 @@ description: A fast, fun web framework for Rust that costs an AI the fewest toke
 <p>The form writes its own inputs and errors, and a bad value is a 422 that keeps what was typed. The model in <code>src/db.rs</code> is in every route file with no <code>use</code> lines.</p>
 </div>
 
-<Demo>
+<Demo todos={&demo_todos(cx)}>
 
 <div class="pane pane-1">
 
