@@ -1,7 +1,7 @@
 <section class="hero">
   <div class="wrap">
     <h1>A Fast, Fun Web Framework for <em>Rust</em></h1>
-    <p class="lede">Pages that read like HTML, compile to one fast binary, and take an AI half the tokens to write.</p>
+    <p class="lede">The fastest full stack web framework for anything.</p>
     <div class="install">
       <code id="install-cmd"><span class="prompt" aria-hidden="true">$</span> cargo install --git https://wisp.ar0.eu wisp-cli</code>
       <button
