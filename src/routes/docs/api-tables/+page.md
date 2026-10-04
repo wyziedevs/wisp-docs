@@ -41,3 +41,5 @@ E.g. over `Mutex<rusqlite::Connection>` (`create table if not exists {table} (id
 {#each posts as post}<p>{post.title}</p>{/each}
 {#if let Some(href) = posts.next}<a {href}>Older</a>{/if}
 ```
+
+`{@pager posts}` writes both links. `TABLE.add_unless(|t| t.slug == slug, value)` keeps `value` only if no row is taken (checked locked); `None` if one is.

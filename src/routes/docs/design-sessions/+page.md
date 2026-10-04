@@ -19,7 +19,7 @@ let me = cx.user()?;                      // members' page: signed-in row or red
 
 - `cx.set_cookie(name, value)`: site-wide, 400 days, `HttpOnly`, `SameSite=Lax`. The value is any `Display`; an empty one deletes it.
 - `cx.cookie(name)` reads within the same request, so the `load` after an action sees what the action stored.
-- `cx.cookie_or(name, default)` parses as any `FromStr`.
+- `cx.cookie_or(name, default)` parses as any `FromStr`; `cx.signed_cookie_or(name, default)` the same for signed ones.
 - `cx.delete_cookie(name)` removes one.
 - `cx.set_cookie_with(name, value, CookieOptions { ... })`:
 

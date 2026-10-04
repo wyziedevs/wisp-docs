@@ -19,8 +19,9 @@ pub static USERS: Table<User> = Table::saved("users")
 
 - `set(id, v) -> Option<()>` replaces a row; `clear()` takes every row out (ids are not given again).
 - `unique`: `by(&email)` finds the row without a scan. `try_add`, `try_set` and `try_update` return a 422 on the field (`email: is taken`), for an action to return with `?`. `add`, `set` and `update` panic (a 500) instead. Use `try_update` to change a unique field.
+- On a `#[model]` field: `#[unique]` is the same as `.unique(..)`; `#[json(default)]` or `#[json(default = expr)]` fills a field old rows lack; `#[json(was = "old")]` reads it under its old name.
 - `migrate(|v: &mut Value| ..)` runs on each stored row's JSON when it is read (at load, and by `WISP_STORE_POLL`), before it becomes the type.
-- `live()`: after each change, `wisp::channel(name).send("change")`, only when someone listens. A page listens with `listen('/users/events', invalidate)` and a `+server.rs` of `wisp::channel("users").events()`.
+- `live()`: after each change, `wisp::channel(name).send("change")`, only when someone listens. A page listens with `listen('/users/events', invalidate)` and a `+server.rs` of `wisp::channel("users").events()`. A page that names a live table's static rows refreshes itself through `/_wisp/live/<name>`.
 - Several servers on one store: a `Store` may answer `changes(table, since)`, and with `WISP_STORE_POLL=5` (seconds) every table follows it.
 - Tables are whole in memory: the store's size is the RAM bound.
 

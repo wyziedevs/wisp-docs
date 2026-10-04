@@ -50,7 +50,9 @@ Each param but `cx` is read by name: route param, then form field or JSON object
 | `Option<T>` | JSON, 204 for `Some(())`, 404 for `None` |
 | any of these in a `Result` | same, or the error |
 
-`Response::created(&v)` is 201; `Response::json_of(&v).with_status(202)`.
+`Response::created(&v)` is 201; `Response::json_of(&v).with_status(202)`; `.with_header(name, value)` adds a header (also on `Error`). In a page, `cx.set_status(404)` sets the status.
+
+Query: `cx.query("q")`, `cx.query_or("page", 1)` (parsed, else the default), `cx.query_string()` (raw, no `?`). `cx.request_id()` is the request's id, sent back as `x-request-id`.
 
 ## Errors are JSON
 An error is JSON (else the app's `+error.wisp`, else Wisp's default page) when the request:

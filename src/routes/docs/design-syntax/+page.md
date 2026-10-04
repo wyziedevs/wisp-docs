@@ -43,7 +43,7 @@ Syntax | Compiles to
 `{#if c}…{:else if c}…{:else}…{/if}` | `if`/`else`; `if let` works
 `{#each e as pat[, i]}…{:else}…{/each}` | `for`; a plain place like `data.posts` is borrowed
 `{#match e}{:case pat}…{/match}` | `match`; a plain place is borrowed
-`{#await f}…{:then v}…{:catch e}…{/await}` | Page streams `v` or `e` later ([Streaming a page](/docs/design-state#streaming-a-page-await))
+`{#await f}…{:then v}…{:catch e}…{/await}` | Page streams `v` or `e` later ([Streaming a page](/docs/design-state))
 `{@render children()}` or `<slot />` | Layout or component slot
 `{#snippet row(item, i)}…{/snippet}` | Markup to render later, here or in a component
 `{@render row(x, 0)}` | Renders a snippet

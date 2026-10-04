@@ -21,7 +21,7 @@ The app compiles to WebAssembly in a folder with the host's config, an entry fil
 | `netlify` | Netlify | `npx netlify deploy --prod` |
 | `node` | Amplify, Firebase, Azure, Stormkit, Zeabur, any Node host | `npm start` |
 | `bun` | Bun (`Bun.listen`) | `bun server.mjs` |
-| `lambda` | AWS Lambda | [below](#aws-lambda) |
+| `lambda` | AWS Lambda | [below](/docs/deploy-targets) |
 
 Other hosts:
 
