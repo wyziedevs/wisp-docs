@@ -2,3 +2,4 @@
 /.wisp
 /data
 /dist
+/static/search-index.json

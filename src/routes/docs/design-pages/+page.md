@@ -1,8 +1,8 @@
 ---
-title: Page logic
-description: A page's Rust block, loads, actions and how the markup reads them.
+title: Pages and templates
+description: A page's Rust block, loads, actions, validation, limits, caching and accessibility lints.
 group: Design
-order: 12
+order: 11
 ---
 
 A page's Rust goes at the top of its `.wisp`, between two `---` lines:
@@ -22,31 +22,6 @@ async fn like(id: i64) {
 <form method="post" action="?/like"><button name="id" value={post.id}>Like</button></form>
 ```
 
-- The block holds items (`fn`, `struct`, `use`, `static`, `const`, `impl`,
-  `#[action]`s...), which go in the page's module, and statements, which
-  are its load: they run for each request, before the markup renders, and
-  the markup reads their names (`post`). They run in an `async` function
-  that returns a `Result`, so `.await`, `?`, `return redirect("/")` and
-  `return error(404, "…")` work in them. `cx` is there (`&mut Cx`), and each
-  route parameter the file names is a local: `slug: String` for `[slug]`
-  and `[...rest]`, `id: u64` for `[id=int]`, `Option<String>` (or
-  `Option<u64>`) for `[[lang]]`. A page with no Rust at all reads them too:
-  `<h1>{slug}</h1>`.
-- The markup also sees `cx` (`&Cx`) in any page, layout or error page:
-  `{cx.path()}`, `value={cx.input("email")}`.
-- A `+page.rs` beside the `.wisp` is the other way to write the same page:
-  a `load` that returns a `Data` struct (whose fields the markup reads by
-  name), and the actions. A block may also hold exactly what a `+page.rs`
-  would, `fn load` and `struct Data` included, but not a `fn load` and
-  statements, and a page cannot have both a block and a `+page.rs`: the
-  build says which line to move. A `+layout.wisp` takes a block the same
-  way; its statements run while the layout renders, so they take `cx` as
-  `&Cx` and cannot await or use `?` (a `+layout.rs` `load` can). Components
-  and error pages take none.
-- Build and type errors in a block point at the `.wisp` file and line. A
-  block's text is part of the file's shape: editing it compiles again, while
-  editing the markup still swaps in without a compile.
-
 ```rust
 // The same page as src/routes/blog/[slug]/+page.rs:
 struct Data {
@@ -59,150 +34,109 @@ async fn load(slug: String) -> Result<Data> {
 }
 ```
 
-- A route file needs no `use` lines and no `pub`. Wisp includes it into a
-  module of its own with `wisp::prelude` in scope (`Cx`, `Response`,
-  `Result`, `error`, `redirect`, `#[action]`, the derives, ...), and its
-  template is compiled inside that module, so it reads private types and
-  fields. `pub` still works, and so do `use` lines (an explicit
-  `use wisp::prelude::*` replaces the one Wisp adds), and `//!` docs and
-  `#![…]` attributes at the top of the file. Files with CRLF line endings
-  or a byte order mark build the same as any other.
-- `load` is found by name, actions by the `#[action]` marker. Nothing else in the
-  file is reachable from HTTP. This is deliberate: a helper function must
-  never become an endpoint by accident.
-- Signatures are as short as the function allows. `load`, actions and
-  `+server.rs` endpoints may be `fn` or `async fn`; take `cx: &mut Cx`,
-  `cx: &Cx` or no `cx`; and return their value (`Data`, `()`, `Response`)
-  either plain or in a `Result` (`Result` alone is `Result<()>`). The build
-  reads which from the signature and generates the matching call; rustc
-  checks the types. An `#[action]` whose body uses `cx` without taking it
-  gets it (`#[action]` adds `cx: &mut Cx`), so a counter's action is
-  `#[action] fn increment() { cx.set_cookie("n", n + 1) }`.
-- Every other parameter is an input, read from the request by its name: a
-  route parameter of that name first, then the form a POST, PUT or PATCH
-  sends, then the URL's query. The type says how. `T` must be there and be
-  a `T` (any `FromStr`): missing is a 400 that says which field (a 422 by
-  it from a JSON body, and a body that is not JSON a 400 that says where),
-  sent but not a `T` a 422 by the field (a 400 from the query), and a route
-  parameter that is not one a 404. `Option<T>` is `None` when
-  it is missing or blank, `bool` is a checkbox (sent at all, and not
-  `false`, `off` or `0`), `Vec<T>` is every value of a repeated field, and
-  `&str` borrows a `String`. So `fn load(slug: String)`,
-  `fn load(q: Option<String>, page: Option<u32>)` and
-  `#[action] fn add(text: String, done: bool)` need no `cx` at all.
-  `cx.form()` still reads anything else, files too, and `cx.input(name)`
-  finds any one by name the same way (in a block's statements, say).
-- `fn entries() -> Vec<…>` in a page under `[params]` lists the pages
-  `wisp build --static` writes (see [deploy.md](/docs/deploy)).
-- The build checks, against the file, that `load` returns `Data` (plain or
-  in a `Result`), that every parameter but `cx` has a plain name, and that
-  `#[action]` (by any path, `wisp::action` too) marks only top-level
-  functions of a page.
-- Errors: `?` on any `std::error::Error` gives a 500 (details only in dev).
-  `return error(404, "…")` stops with that status and message, and
-  `return redirect("/…")` with a 303; both are `Err`s, so they end a
-  function that returns a `Result`. `Error::new(status, "…")` is the error
-  itself, and `Error::redirect(status, "/…")` takes another status. Before
-  `error()` returned the `Result`, code wrote `Err(error(..))`: that is now
-  a `Result` inside an `Err`, so the build stops with the line and says to
-  write `return error(..)` (or `Error::new` where an `Error` is wanted, as
-  in `ok_or` and `map_err`).
-  `Option::or_404()` is the common shortcut.
-- An action returns nothing (or `Result<()>`), and then the page renders. It
-  may instead return a `Response` (a CSV export, a file), sent in place of
-  the page, or an `Option<Response>` to do that only sometimes.
-- A form that fails validation: the action returns `invalid(field,
-  problem)`, and the page renders again, as a 422, with the form still
-  there: each of its inputs shows what was typed and what is wrong with it
-  (see [Actions](/docs/design-forms#actions-and-wispjs)); a parameter whose type does not
-  parse (`email: Email`, `age: u8`) is the same 422 by field; an action
-  written without `->` returns `Result`, so it may end in `redirect(..)`;
-  `{cx.problem(field)}` places one field's message elsewhere, and
-  `cx.input(field)` reads what was sent. (Any
-  other error from an action shows the error page.)
+## The block
 
-  ```html
-  ---
-  #[action]
-  fn signup(name: String, email: Email) {
-      if name.trim().is_empty() {
-          return invalid("name", "Tell us your name");
-      }
-      redirect("/welcome")
-  }
-  ---
-  <form action="?/signup">
-    <input name="name">
-    <input name="email">
-  </form>
-  ```
+- Items (`fn`, `struct`, `use`, `static`, `const`, `impl`, `#[action]`...) go in the page's module. Statements are its load: they run per request before the markup renders, and the markup reads their names (`post`).
+- Statements run in an `async` function returning a `Result`: `.await`, `?`, `return redirect("/")`, `return error(404, "…")` work. `cx` is `&mut Cx`. Each route param is a local: `slug: String` for `[slug]` and `[...rest]`, `id: u64` for `[id=int]`, `Option<String>` (or `Option<u64>`) for `[[lang]]`. A page with no Rust reads them too: `<h1>{slug}</h1>`.
+- Markup in any page, layout or error page sees `cx` (`&Cx`): `{cx.path()}`, `value={cx.input("email")}`.
+- `+page.rs` is the other way: `load` returning a `Data` struct (markup reads its fields by name), plus actions. A block may hold exactly what a `+page.rs` would (`fn load` and `struct Data` included), but not a `fn load` and statements; a page cannot have both a block and a `+page.rs` (the build says which line to move).
+- `+layout.wisp` takes a block too; its statements run while the layout renders, take `cx` as `&Cx`, and cannot await or use `?` (a `+layout.rs` `load` can). Components and error pages take none.
+- Errors in a block point at the `.wisp` file and line. Editing a block compiles again; editing markup still swaps in without a compile.
+- A route file needs no `use` and no `pub`: it is included in its own module with `wisp::prelude` in scope (`Cx`, `Response`, `Result`, `error`, `redirect`, `#[action]`, the derives...), and its template is compiled inside it, so it reads private types and fields. `pub`, `use` (an explicit `use wisp::prelude::*` replaces Wisp's), `//!` docs and `#![…]` attributes still work. CRLF and byte order marks are fine.
+- `load` is found by name, actions by `#[action]`; nothing else is reachable from HTTP, so a helper never becomes an endpoint by accident.
+- `fn entries() -> Vec<…>` in a page under `[params]` lists the pages `wisp build --static` writes ([deploy](/docs/deploy)).
+- The build checks that `load` returns `Data` (plain or in a `Result`), that every parameter but `cx` has a plain name, and that `#[action]` (by any path, `wisp::action` too) marks only top-level functions of a page.
 
-  For more than a message, `cx.fail(status, value)` keeps any value for the
-  load, which takes it with `cx.take()`.
-- `const BODY_LIMIT: usize = 20 * wisp::MB;` in a page or a
-  `+server.rs` sets the largest body that route takes (the default is 1 MB,
-  or `WISP_BODY_LIMIT`). A larger one is refused with a 413 as soon as its
-  head arrives. The build checks that it is a `usize`, set once per route,
-  and not in a layout, where it would do nothing.
-- `const CACHE: u32 = 60;` in a page or a `+server.rs` keeps what a GET
-  answers, as the bytes sent, for 60 seconds: a news page that changes a
-  few times a minute renders once a minute per worker instead of once a
-  request (Next.js calls it `revalidate`). The rules, which make it safe to
-  add to any page that reads only its URL:
-  - Each worker thread keeps its own, by `Host`, path and query, with no
-    lock. A new process (a deploy) starts with none; a write does not clear
-    it (it is kept for its time, like any cache).
-  - A request with a `cookie` or `authorization` header is answered by a
-    render, and nothing is kept from it: its cookie could make the page its
-    own. `const CACHE_PUBLIC: u32 = 60;` instead shares the kept answer with
-    those requests too, for a page that is the same for everyone.
-  - Only a 200 is kept, and never one that sets a cookie or has a
-    `cache-control` of `private` or `no-store`: a page can make one answer
-    its own that way. What the page or endpoint set in headers is kept with
-    it.
-  - `before` in `src/hooks.rs` and a `+server.rs`'s `before` still run on
-    every request, before the answer is looked for, so a guard or a header
-    they set applies as ever.
-  - A kept answer has an ETag: a client that sends it back gets a 304.
-  - A page that reads a header (`accept-language`, a custom one) varies by
-    it: do not `CACHE` it. Dev mode keeps nothing. At most 8 MB of answers
-    a worker; past that the stale ones go, and a flood of new query strings
-    costs renders, never memory.
+## Signatures and inputs
 
-  The build checks that it is a `const` `u32`, one of the two names, set
-  once per route, and not in a layout.
-- Three more consts beside `CACHE`, none costing a request that does not use
-  them (they fold away; the hit path is the same code):
-  - `const CACHE_STALE: u32 = 600;` is stale-while-revalidate: for 600 s
-    after the answer is old, it is still sent at once, and the first request
-    that finds it so makes a new one in the background (the app's own
-    `handle`, as a GET from peer port 0, which a client never has), so no
-    visitor waits for a render and a burst makes one. Single-flight per
-    worker: workers do not share what they keep, so each refreshes for
-    itself, once. A refresh that errors keeps the old answer and is tried
-    again by the next request, until the window ends.
-  - `const CACHE_TAGS: &[&str] = &["posts"];`, or `cx.cache_tag("post-7")`
-    in a handler, names what is kept. `wisp::revalidate_tag("posts")` drops
-    every answer under it on every worker before it next answers from what
-    it keeps (as `uncache` does for paths). Each worker has a tag-to-keys
-    index written only when a tagged answer is kept and when a tag is
-    dropped; a lookup never touches it.
-  - Draft mode: `cx.enter_draft()` (call it from an endpoint of your own
-    that checks who may; `cx.exit_draft()` ends it) sets the signed cookie
-    `wisp-draft`, and `cx.draft()` says whether the request has it. For a
-    `CACHE_PUBLIC` route a draft request is never answered from what is
-    kept, nor is its answer kept: the check runs only on that route's hit
-    branch, behind "has a cookie", in a cold function. A `CACHE` route
-    already renders for any request with a cookie. A page the build baked
-    whole reads nothing of the request, so it has no draft.
-- A page that reads nothing of the request needs no `CACHE`: when it and
-  its layouts have no load, statements or `+page.js`, and every hole in them
-  is a literal or a component's prop given as one (`<Card title="Hi" />`,
-  `{#if featured}` on a flag), the build writes the whole response into the
-  binary (see [Build](/docs/design-build#build)).
-- A `+server.rs` method answers with the `Response` it returns; with any
-  other value, that value as JSON (`#[derive(Json)]`); with nothing, a 204.
-  An `Option<Response>` that is `None` is a 404. `body: T` (a type other
-  than a string) is the JSON body read as a `FromJson` type, and an error
-  on a request under `/api`, or one that sent or asks for JSON, is answered
-  as JSON: see [api.md](/docs/api).
+- `load`, actions and `+server.rs` endpoints may be `fn` or `async fn`; take `cx: &mut Cx`, `cx: &Cx` or none; return their value (`Data`, `()`, `Response`) plain or in a `Result` (`Result` alone is `Result<()>`). The build reads which from the signature; rustc checks types.
+- An `#[action]` whose body uses `cx` without taking it gets `cx: &mut Cx`: `#[action] fn increment() { cx.set_cookie("n", n + 1) }`.
+- Every other parameter is an input, read by name: route param first, then the form of a POST, PUT or PATCH, then the URL query.
+
+Type | Behavior
+---|---
+`T` (any `FromStr`) | Required. Missing: 400 naming the field (422 from a JSON body; a non-JSON body is a 400 saying where). Sent but not a `T`: 422 by field (400 from the query). A route param that is not one: 404
+`Option<T>` | `None` when missing or blank
+`bool` | Checkbox: sent at all and not `false`, `off` or `0`
+`Vec<T>` | Every value of a repeated field
+`&str` | Borrows a `String`
+
+So `fn load(q: Option<String>, page: Option<u32>)` and `#[action] fn add(text: String, done: bool)` need no `cx`. `cx.form()` reads anything else, files too; `cx.input(name)` finds one by name the same way (in a block's statements, say).
+
+## Errors, actions, validation
+
+- `?` on any `std::error::Error` is a 500 (details only in dev). `return error(404, "…")` stops with that status and message; `return redirect("/…")` is a 303. Both are `Err`s, so they end a function returning a `Result`. `Error::new(status, "…")` is the error itself (for `ok_or`, `map_err`); `Error::redirect(status, "/…")` takes another status. `Err(error(..))` is a build error telling you to write `return error(..)`. `Option::or_404()` is the shortcut.
+- An action returns nothing (or `Result<()>`) and the page renders; or a `Response` (CSV, a file) sent instead of the page; or an `Option<Response>` to do that sometimes.
+- Validation: the action returns `invalid(field, problem)`; the page renders again as a 422 with the form still there, each input showing what was typed and what is wrong ([Actions](/docs/design-forms#actions)). A param that does not parse (`email: Email`, `age: u8`) is the same 422 by field. An action written without `->` returns `Result`, so it may end in `redirect(..)`. `{cx.problem(field)}` places one message elsewhere; `cx.input(field)` reads what was sent. Any other error shows the error page. For more than a message, `cx.fail(status, value)` keeps a value for the load, which takes it with `cx.take()`.
+
+```html
+---
+#[action]
+fn signup(name: String, email: Email) {
+    if name.trim().is_empty() {
+        return invalid("name", "Tell us your name");
+    }
+    redirect("/welcome")
+}
+---
+<form action="?/signup">
+  <input name="name">
+  <input name="email">
+</form>
+```
+
+- `+server.rs` method: the `Response` it returns; any other value as JSON (`#[derive(Json)]`); nothing is a 204; `Option<Response>` `None` is a 404. `body: T` (not a string) is the JSON body read as a `FromJson` type. An error on a request under `/api`, or one that sent or asks for JSON, is answered as JSON ([api](/docs/api)).
+
+## Limits and caching
+
+`const BODY_LIMIT: usize = 20 * wisp::MB;` in a page or `+server.rs`: largest body the route takes (default 1 MB, or `WISP_BODY_LIMIT`); larger is a 413 as soon as its head arrives.
+
+`const CACHE: u32 = 60;` in a page or `+server.rs` keeps a GET's answer, as the bytes sent, for 60 seconds (Next.js: `revalidate`). Safe on any page that reads only its URL:
+
+- Per worker thread, by `Host`, path and query, no lock. A new process starts with none; a write does not clear it.
+- A request with a `cookie` or `authorization` header is rendered and nothing is kept from it. `const CACHE_PUBLIC: u32 = 60;` shares the kept answer with those requests too, for pages the same for everyone.
+- Only a 200 is kept, never one that sets a cookie or has `cache-control` of `private` or `no-store`. The page's headers are kept with it.
+- `before` in `src/hooks.rs` and a `+server.rs`'s `before` run on every request, before the lookup.
+- A kept answer has an ETag; a client sending it back gets a 304.
+- A page that reads a header (`accept-language`, a custom one) varies by it: do not `CACHE` it. Dev keeps nothing. At most 8 MB per worker; past that stale ones go, so a flood of query strings costs renders, never memory.
+
+Three more consts cost nothing for requests that do not use them (they fold away):
+
+Name | What it does
+---|---
+`const CACHE_STALE: u32 = 600;` | Stale-while-revalidate: for 600 s after the answer is old it is still sent at once, and the first request finding it so refreshes it in the background (the app's own `handle`, as a GET from peer port 0, which a client never has). Single-flight per worker. A failed refresh keeps the old answer and is retried by the next request until the window ends
+`const CACHE_TAGS: &[&str] = &["posts"];` or `cx.cache_tag("post-7")` | Names what is kept. `wisp::revalidate_tag("posts")` drops every answer under it on every worker before it next answers (as `uncache` does for paths). A tag-to-keys index is written only when a tagged answer is kept or a tag dropped; lookups never touch it
+Draft mode | `cx.enter_draft()` (from your own endpoint that checks who may; `cx.exit_draft()` ends it) sets the signed cookie `wisp-draft`; `cx.draft()` reports it. On a `CACHE_PUBLIC` route a draft request is never answered from, nor stored in, the cache (checked only on the hit branch, behind "has a cookie", in a cold function). A `CACHE` route already renders for any cookie. A baked page has no draft
+
+The build checks that each is a `const` `u32` of one of the names, set once per route, not in a layout (`BODY_LIMIT`: a `usize`, same rules).
+
+A page reading nothing of the request needs no `CACHE`: when it and its layouts have no load, statements or `+page.js`, and every hole is a literal or a component prop given as one (`<Card title="Hi" />`, `{#if featured}` on a flag), the build writes the whole response into the binary ([Build](/docs/design-runtime#what-wisp-build-does)).
+
+## Accessibility
+
+The parser lints each template. `wisp check`, `wisp dev` (each build and template swap) and `wisp build` print warnings (`! src/routes/+page.wisp:4: <img> has no alt: … (a11y-img-alt)`); `cargo build` prints `cargo::warning`s. They never stop a build. `<!-- wisp-ignore a11y-img-alt -->` on the line before an element silences that lint (several names may follow). A value set by an expression (`alt={x}`, `:alt="x"`, `{...attrs}`) counts as set.
+
+Name | Warns about
+---|---
+`img-alt` | `<img>` without `alt` (`alt=""` is fine)
+`click-events` | `on:click` on a non-interactive element (not a custom element like `<sl-button>`) without both a `role` and a key handler (`on:keydown`)
+`input-label` | `<input>`, `<select>`, `<textarea>` with no wrapping `<label>`, no `id` (for `<label for>`), no `aria-label`/`aria-labelledby`/`title` (hidden and button types exempt)
+`link-name` | `<a href>` with no text, `<img alt>`, `aria-label` or `title`
+`label-control` | `<label>` with no `for` and no control inside
+`anchor-href` | `<a>` without `href`, or `href="#"`
+`autofocus` | `autofocus`
+`heading-order` | a heading more than one level below the one before it in the file
+`button-name` | `<button>` with no text, `aria-label`, `aria-labelledby` or `title`
+`tabindex` | `tabindex` above 0
+`aria-attr` | an `aria-*` name ARIA does not have
+
+Client API (`beforeNavigate`, `afterNavigate`, `onNavigate`, `preloadData`, `preloadCode`, `invalidate(key)`, `updated`) and link attributes `data-wisp-noscroll`, `-keepfocus`, `-replacestate` live in wisp.js and live.js only: `wisp:navigate` is cancelable, `wisp:leave` collects what `onNavigate` waits for, `wisp:preload` reuses the hover prefetch, `updated` is set when a fetched page names another `wisp.js?v=`. `depends` is in the browser's `+page.js` `load` (the server renders pages whole, nothing to skip). Nothing is added to a request.
+
+The rest is CSS, the client script and the starters, adding nothing to a request:
+
+- A navigation moves focus to the `<h1>` and says the title in an `aria-live` region.
+- View transitions and `--change` (every component's transition time) go to nothing under `prefers-reduced-motion`; `tokens.css` turns lines and quiet text up under `prefers-contrast: more`.
+- Starters carry a skip link (`.skip`, `<main id="main">`), `:focus-visible` rings, 44px buttons on coarse pointers, `forced-colors` borders, `viewport-fit=cover` with `env(safe-area-inset-*)`, `100dvh`, fluid `clamp()` tokens (`--wisp-step-0..3`, `--wisp-space-s..xl`).
+- `Dialog` and `Menu` are native `<dialog>` and popover (focus trap, Escape, focus returned); `Input`, `Textarea`, `Select` set `aria-invalid` and `aria-describedby` from `problem`/`hint`; `Card` answers its own width with `@container`. Phones: [client](/docs/client-router#phones-and-offline).
+
+Template syntax, components, snippets and scoped styles: [Template syntax and styles](/docs/design-syntax).

@@ -36,16 +36,19 @@ fn counter() {
 }
 ```
 
-`get`, `post_form(target, &[(name, value)])`, `send(req)`,
-`next_chunk(&mut reply)` (streams), `cookie(name)`; more in AGENTS.md and
-api.md. Nothing upgrades in process, so `Response::websocket` is 501: test
-WebSockets against the running server (`tests/app/tests/http.rs` uses a
-`TcpStream`).
+| Method | What it does |
+|---|---|
+| `get(path)` | GET |
+| `post_form(target, &[(name, value)])` | form POST |
+| `send(req)` | any request |
+| `next_chunk(&mut reply)` | next chunk of a stream |
+| `cookie(name)` | a stored cookie |
+
+More in AGENTS.md and api.md. Nothing upgrades in process, so `Response::websocket` is 501: test WebSockets against the running server (`tests/app/tests/http.rs` uses a `TcpStream`).
 
 ## WebSockets
 
-A `+server.rs` upgrades with `Response::websocket`; the connection closes
-when the handler returns:
+A `+server.rs` upgrades with `Response::websocket`; the connection closes when the handler returns.
 
 ```rust
 // src/routes/ws/+server.rs
@@ -59,23 +62,15 @@ fn get() -> Response {
 }
 ```
 
-- `ws.recv()` is the next `wisp::Message` (`Text`/`Binary`; `msg.text()`,
-  `msg.bytes()`), or `None` once the client closed or went, or the server
-  stops. Pings are answered, fragments joined.
-- `ws.send(msg)` fails once closed: stop. `recv` and `send` can overlap
-  (`tokio::select!`, or `wisp::spawn` a sender with `ws.clone()`).
-- While `recv` waits, a client quiet for 30 s is pinged and for 60 s closed
-  (1001); `WISP_WS_IDLE` sets the 60 (seconds; `0` never). A send-only
-  handler isn't timed (a client that stops reading fails `send`).
-- A message is at most the route's `BODY_LIMIT` (1 MB default), else close
-  1009. `before` runs first (cookies, hooks). A page on another site is 403
-  as for a cross-site form (`Origin` must name the host, or `ORIGIN` when
-  set); a non-upgrade request gets 426.
-- Only the built-in server upgrades; `tower`, edge targets and the test
-  client answer 501.
+- `ws.recv()` is the next `wisp::Message` (`Text`/`Binary`; `msg.text()`, `msg.bytes()`), or `None` once the client closed or went, or the server stops. Pings are answered, fragments joined.
+- `ws.send(msg)` fails once closed: stop. `recv` and `send` can overlap (`tokio::select!`, or `wisp::spawn` a sender with `ws.clone()`).
+- While `recv` waits, a client quiet for 30 s is pinged and for 60 s closed (1001). `WISP_WS_IDLE` sets the 60 (seconds; `0` never). A send-only handler isn't timed (a client that stops reading fails `send`).
+- A message is at most the route's `BODY_LIMIT` (1 MB default), else close 1009.
+- `before` runs first (cookies, hooks).
+- A page on another site is 403 as for a cross-site form (`Origin` must name the host, or `ORIGIN` when set). A non-upgrade request gets 426.
+- Only the built-in server upgrades; `tower`, edge targets and the test client answer 501.
 
-Browser side: `new WebSocket(`${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/ws`)`
-with `onmessage`, `onopen`, `onclose`.
+Browser side: `new WebSocket(`${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/ws`)` with `onmessage`, `onopen`, `onclose`.
 
 ## The `tower` feature
 
@@ -116,8 +111,7 @@ hyper_util::server::conn::auto::Builder::new(hyper_util::rt::TokioExecutor::new(
     .await?;
 ```
 
-Lambda with a `main` of your own (`--target lambda` needs no code;
-`WISP_SECRET` in the function's environment):
+Lambda with a `main` of your own (`--target lambda` needs no code; put `WISP_SECRET` in the function's environment):
 
 ```rust
 wisp::app!();
@@ -128,10 +122,9 @@ async fn main() -> Result<(), lambda_http::Error> {
 }
 ```
 
-axum inside Wisp: send paths to an axum `Router` from `before` (or a
-catch-all `+server.rs`). `before` may return `Result<Option<Response>>`
-(`Some` answers instead of the route); `async fn before` takes every route
-off the no-wait fast path:
+### axum inside Wisp
+
+Send paths to an axum `Router` from `before` (or a catch-all `+server.rs`). `before` may return `Result<Option<Response>>` (`Some` answers instead of the route). `async fn before` takes every route off the no-wait fast path.
 
 ```rust
 // src/hooks.rs

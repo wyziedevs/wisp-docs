@@ -1,213 +1,126 @@
 ---
-title: The CLI and the dev loop
-description: wisp new, the dev loop, AI agents support and editors.
+title: CLI, dev loop and security
+description: wisp new, the dev loop, fmt, security, CSP and milestones.
 group: Design
-order: 23
+order: 17
 ---
+
+```bash
+wisp new my-app     # prompts, or flags
+cd my-app
+wisp dev            # hot swap, live errors
+wisp fmt            # format .wisp files
+wisp build          # release binary
+```
+
+Agents (`wisp mcp`, `wisp update-docs`) and editors (`wisp lsp`): [design-editors](/docs/design-editors).
 
 ## `wisp new`
 
-`wisp new [name]` asks where the app goes, which template (Demo: a home page
-with a counter, an about page and Wisple, a word game built on form actions;
-Minimal: one page, a layout and an error page), whether to add Tailwind,
-whether to create a git repository (yes unless the app lands inside one, like
-`cargo new`), and whether to download and compile dependencies now. Every
-question has a flag (`--template`, `--[no-]tailwind`, `--[no-]git`,
-`--[no-]install`); `--yes`, or no terminal to ask on, takes the defaults.
-The prompts are plain lines on std, not a cursor-driven menu.
+`wisp new [name]` asks where the app goes, which template (Demo: home page with a counter, an about page and Wisple, a word game on form actions; Minimal: one page, a layout and an error page), whether to add Tailwind, whether to create a git repo (yes unless the app lands inside one, like `cargo new`), and whether to download and compile dependencies now. Prompts are plain lines on std, not a cursor menu.
 
-It never writes into a directory that has anything in it, and refuses a
-name Cargo would reject or that would collide with Wisp's own crates
-(`build`, `deps`, `test`, `wisp`...). An app created inside another Cargo
-workspace gets an empty `[workspace]` table, so it builds on its own.
-
-Until Wisp is on crates.io, apps depend on it by path when `wisp` was built
-from a clone (`cargo install --path crates/wisp-cli`), so changes to Wisp
-reach them at once, and on https://github.com/wyziedevs/wisp when it was
-installed with `cargo install --git`.
-
-The demo template is `examples/demo` itself, read with `include_str!`, so the
-two cannot drift. A published crate has no `examples` beside it, so build.rs
-copies them into `crates/wisp-cli/templates/vendor` whenever they are there
-and differ (a build in the repo refreshes it; commit the result), and a build
-without them reads that copy. With Tailwind, the template's styles go in `@layer base`
-after the import, so utility classes still win over them.
-
-## AI agents
-
-Every app is written with AGENTS.md, the whole reference in one short page,
-and a pointer to it for each agent that reads a file of its own:
-`CLAUDE.md`, `.github/copilot-instructions.md` and `.cursor/rules/wisp.mdc`.
-The app's AGENTS.md is the repository's (embedded at build time through
-the vendor copy, so it never drifts) less its part for work on Wisp, and
-ends with a line after which the app's own notes go. `wisp update-docs`
-brings it up to the installed Wisp, keeping those notes, and writes any
-pointer file that is missing (one that is there is the app's).
-
-Every Rust and HTML snippet in AGENTS.md is in `tests/agents`, an app in
-the workspace, so building the workspace compiles them; its test fails
-when one is missing there. `llms.txt` (llmstxt.org) links the docs, and
-`llms-full.txt` is AGENTS.md and the client, api, deploy and embed docs in one file, written by a
-wisp-cli test that fails when it was stale.
-
-`wisp mcp` is a Model Context Protocol server over stdio (JSON-RPC 2.0, a
-message a line, `wisp_shared::json`), for the app in the current folder:
-
-| Tool | Answers |
+| Flag | Answers |
 |---|---|
-| `wisp_docs(topic)` | the AGENTS.md or docs sections about the topic; no topic lists them |
-| `wisp_check()` | `{"ok":true}` or `{"ok":false,"errors":[{file,line,col,message}]}` |
-| `wisp_routes()` | each route's pattern, folder, params, page, actions and endpoints |
-| `wisp_components()` | each component's name, file and props (type, default) |
-| `wisp_new_route(path, kind)` | writes `+page.wisp` (default), `+layout.wisp`, `+error.wisp` or `+server.rs`; never overwrites |
+| `--template` | which template |
+| `--[no-]tailwind` | Tailwind |
+| `--[no-]git` | git repo |
+| `--[no-]install` | fetch and compile now |
+| `--yes` | all defaults (also when there is no terminal) |
 
-Setup, in the app's folder:
+- Never writes into a directory with anything in it. Refuses a name Cargo would reject or that collides with Wisp's crates (`build`, `deps`, `test`, `wisp`...).
+- An app created inside another Cargo workspace gets an empty `[workspace]` table, so it builds alone.
+- Until Wisp is on crates.io, apps depend on it by path when `wisp` was built from a clone (`cargo install --path crates/wisp-cli`; changes reach them at once), and on https://github.com/wyziedevs/wisp when installed with `cargo install --git`.
+- The demo template is `examples/demo`, read with `include_str!`, so they cannot drift. A published crate has no `examples`, so build.rs copies them to `crates/wisp-cli/templates/vendor` whenever they are there and differ (a build in the repo refreshes it; commit the result); a build without them reads that copy.
+- With Tailwind, the template's styles go in `@layer base` after the import, so utilities still win.
 
-- Claude Code: `claude mcp add wisp -- wisp mcp`
-- Cursor: `.cursor/mcp.json` with
-  `{"mcpServers":{"wisp":{"command":"wisp","args":["mcp"]}}}`
-- VS Code: `code --add-mcp '{"name":"wisp","command":"wisp","args":["mcp"]}'`,
-  or `.vscode/mcp.json` with
-  `{"servers":{"wisp":{"type":"stdio","command":"wisp","args":["mcp"]}}}`
+## `wisp dev`
 
-## Dev loop
+One std-only process. `wisp dev [--port <n> | --port=<n> | -p <n>]`; anything else is an error with the usage.
 
-`wisp dev` is one std-only process:
+- **Watching.** Polls mtimes of `src/`, `static/`, `Cargo.toml`, `build.rs`, `package.json` and `postcss.config.*` every 50 ms (no `notify`). Editors' swap, backup and lock files are ignored; a burst of changes settles for at most a second.
+- **Port.** The app gets `HOST=127.0.0.1` unless `HOST` is set; the printed address is the one shown and used for hot swaps (port 0 works). A port in use moves the first start to the next free one, up to 20 more (the app binds it itself, `WISP_PORT_TRIES`, so nothing can take it between), with a line saying so. `wisp build` servers never move.
+- **Build and restart.** Builds with `cargo build`, copies the exe to `.wisp/run/` (so the next build can overwrite the original while the old server serves), restarts it. Ready when the app prints its `listening on` line: the CLI reads the app's stdout rather than polling (a refused connect takes 2 s on Windows). Output is read as bytes until the pipe closes, so a non-UTF-8 line never cuts the app off.
+- **Children die with the CLI.** The app's stdin is a pipe the CLI holds; when it closes (however `wisp dev` ends, even `kill -9`) the app exits (`exit_with_parent`), freeing the port. A CSS watcher runs under `wisp __child <exe> <args...>`, which kills the tool then.
+- **Reload.** Serves a Server-Sent Events stream on its own port. Browsers stay connected across restarts and are told to morph/reload once the new app is ready.
+- **Output.** Cargo progress on the first build, then one line per change (`~ src/routes/+page.wisp  swapped in 0ms`, `✓ Rebuilt in 0.3s`). Compiler errors have paths relative to the app and no generated module names (`Data`, not `page_3::Data`). An error rustc finds in template-generated code is retold against the template's line; an action that returns a value is caught before compiling, against `+page.rs`.
+- **Request log.** The app logs each request in dev (`GET /nope  404  0.1ms`, yellow 4xx, red 5xx) and a handler's panic once, with where. Release builds log only 5xx.
 
-- Polls `src/`, `static/`, `Cargo.toml`, `build.rs`, `package.json` and
-  `postcss.config.*` mtimes every 50 ms (no `notify`). Editors' swap, backup and lock files
-  are ignored, and a burst of changes settles for at most a second.
-- `wisp dev [--port <n> | --port=<n> | -p <n>]`; anything else is an error
-  with the usage. The app gets `HOST=127.0.0.1` unless `HOST` is set, and the
-  address it prints is the one shown and used for hot swaps (port 0 works).
-  A port in use moves the first start on to the next free one, up to 20 more
-  (the app binds it itself, `WISP_PORT_TRIES`, so nothing can take it between),
-  with a line saying so; `wisp build` servers never move.
-- Runs Tailwind standalone `--watch` into `.wisp/app.css` if `src/app.css`
-  imports Tailwind, or Dart Sass (standalone, pinned in `~/.wisp/bin`,
-  `$WISP_SASS` overrides) `--watch` if `src/app.scss` exists; with a
-  `postcss.config.*`, the tool writes `.wisp/pre.css` and the app's
-  `node_modules/postcss-cli` (run by `node`, no npx) `--watch` makes
-  `.wisp/app.css` of it (or of a plain `src/app.css`). Otherwise
-  `src/app.css` is served as written. A watcher makes the first build
-  itself; adding or removing `src/app.scss` or a `postcss.config.*`
-  replaces the watchers. `wisp build` runs each once, minified
-  (`--minify`, `--style=compressed`).
-- Every child of `wisp dev` dies when its stdin, a pipe `wisp dev` holds,
-  closes: however `wisp dev` ends, even killed, the system closes it. The
-  app exits by itself (`exit_with_parent`); a CSS watcher runs under
-  `wisp __child <exe> <args…>`, which kills the tool at that point.
-- Bare imports (`'canvas-confetti'`) are npm packages: `package.json`
-  pins them to exact versions (`wisp add`), dev imports
-  `https://esm.sh/pkg@v?target=es2022`, and a release build serves
-  `.wisp/npm`, which `wisp build` fills from esm.sh before compiling: the
-  modules `wisp check` finds imported and what they import, a level at a
-  time, 16 at once, only those not there yet. Each is saved with its
-  imports pointed at `/_app/c/npm/`, and an import of esm.sh's re-export
-  stub at the module it re-exports. The build embeds the files
-  (`include_str!`); their paths name their versions, so they are cached
-  for good without a `?v=`.
-- Builds with `cargo build`, copies the exe to `.wisp/run/` (so the next build can
-  overwrite the original while the old server keeps serving), then restarts it.
-  The app is ready when it prints its `listening on` line; the CLI reads the
-  app's stdout rather than polling the port (a refused connect takes 2 s to
-  fail on Windows). Output is read as bytes until the pipe closes, so a line
-  that is not UTF-8 never cuts the app off. The app's stdin is a pipe the
-  CLI holds: if the CLI dies, even by `kill -9`, the app sees it close and
-  exits, freeing the port.
-- Serves a Server-Sent Events stream on its own port. Browsers stay connected
-  across app restarts and are told to morph/reload once the new app is ready.
-- Shows only what matters: cargo's progress on the first build, then one line
-  per change (`~ src/routes/+page.wisp  swapped in 0ms`, `✓ Rebuilt in
-  0.3s`). Compiler errors come through with paths relative to the app and
-  without the generated modules' names (`Data`, not `page_3::Data`). An error
-  rustc finds in generated code that came from a template is retold against
-  the template's own line, and an action that returns a value is caught
-  before compiling, against `+page.rs`.
-- The app logs each request under those lines in dev (`GET /nope  404
-  0.1ms`, yellow for a 4xx, red for a 5xx), and a handler's panic once, with
-  where it happened. Release builds log only 5xx errors.
+### CSS tools
 
-Template hot swap: in debug builds every static HTML chunk of every template is
-read through a table (`wisp::dev::chunk`) instead of being a literal. On a
-`.wisp` save the CLI re-parses the file; if its *shape* (holes, blocks,
-expressions, everything except static text) is unchanged, it POSTs the new
-chunks to the app (`/_wisp/dev/swap`, loopback only) and the browser morphs.
-No compile. If the shape changed, it is a normal rebuild. Release builds have
-no table: chunks are literals.
+| Setup | What runs |
+|---|---|
+| `src/app.css` imports Tailwind | Tailwind standalone `--watch` into `.wisp/app.css` |
+| `src/app.scss` exists | Dart Sass (standalone, pinned in `~/.wisp/bin`, `$WISP_SASS` overrides) `--watch` |
+| a `postcss.config.*` | the tool writes `.wisp/pre.css`; the app's `node_modules/postcss-cli` (run by `node`, no npx) `--watch` makes `.wisp/app.css` of it (or of a plain `src/app.css`) |
+| none | `src/app.css` served as written |
 
-Rust build tuning shipped in the app template: `debug = "line-tables-only"`,
-dependencies at `opt-level = 1`.
+A watcher makes the first build itself; adding or removing `src/app.scss` or a `postcss.config.*` replaces the watchers. `wisp build` runs each once, minified (`--minify`, `--style=compressed`).
 
-Targets: markup edit → visible < 100 ms. Rust edit → visible ≤ 3 s (small app).
-Measured on the demo (Windows, Ryzen 7800X3D): a text edit is swapped in under
-1 ms and served about 85 ms after the save (mostly the 50 ms poll); an
-expression or `.rs` edit rebuilds and restarts in 0.3 s.
+### npm imports
 
-`wisp fmt [paths]` formats `.wisp` files (`--check` lists the unformatted
-and fails; `wisp check` warns of them): the element tree and template blocks
-two spaces a level, attribute values double-quoted, a start tag that begins
-its line on one line or, past 100 columns, an attribute a line; the `---`
-block through rustfmt inside a wrapper fn, with the edition of the nearest
-`Cargo.toml` (the workspace's when inherited; 2024 without one), as
-`cargo fmt` would; `<script>`
-re-indented only; `<style>` a declaration a line when it has no strings,
-comments or `url(`. Text, holes, `<pre>` and `<textarea>` are never touched.
-Markup that does not balance, or that would not parse to the same template,
-is left as written; formatting twice equals formatting once.
-`wisp fmt --stdin [path]` formats stdin to stdout (`path` for the edition),
-for editors and `editors/prettier-plugin-wisp`.
+Bare imports (`'canvas-confetti'`) are npm packages. `package.json` pins exact versions (`wisp add`). Dev imports `https://esm.sh/pkg@v?target=es2022`. A release build serves `.wisp/npm`, which `wisp build` fills from esm.sh before compiling: the modules `wisp check` finds imported and what they import, a level at a time, 16 at once, only those missing. Each is saved with imports pointed at `/_app/c/npm/`, and an import of esm.sh's re-export stub at the module it re-exports. The build embeds the files (`include_str!`); paths name versions, so they are cached for good without `?v=`.
 
-## Editors
+### Template hot swap
 
-`wisp lsp` is a language server over stdio, in the CLI: JSON-RPC framed by
-hand, `wisp_shared::json` for parsing, no new dependency. Each file's app is
-the nearest folder above it with `Cargo.toml` and `build.rs`.
+In debug builds every static HTML chunk of every template is read through a table (`wisp::dev::chunk`) instead of being a literal. On a `.wisp` save the CLI re-parses the file. If its shape (holes, blocks, expressions, everything except static text) is unchanged, it POSTs the new chunks to the app (`/_wisp/dev/swap`, loopback only) and the browser morphs: no compile. If the shape changed, it is a normal rebuild. Release builds have no table.
 
-- Problems: on open and every change, the buffer goes through the build's own
-  parser and checks (`wisp_build::ide::check_file`: `---` block, template,
-  component props against `src/components` as last read). On open and save,
-  the whole app is checked from disk as `wisp check` does, and its problem
-  shows in its file, open or not. One problem per file, as the compiler stops
-  at the first. A panic in a request is answered as an error; the server
-  goes on.
-- Hover: a component's `{@props}`, a prop's type and default, directive and
-  block docs, a route param's type, the `const` knobs (`CACHE`, `RATE_LIMIT`,
-  `SSR`, ...), `<form fields>`, `action="?/x"`, `use:enhance` and the
-  `data-wisp-*` attributes (tables in `lsp.rs`; a test fails when the
-  reference shows one they lack). Rust items carry `///` docs
-  (`#![deny(missing_docs)]` in `wisp`) for rust-analyzer.
-- Go to definition: `<Card>` → its file, `'$lib/x.js'` → `src/lib/x.js`, a
-  literal `href="/x"` → the route's `+page.wisp` (or `+page.rs`, `+server.rs`).
-- Completion: components (with their required props), props, directives,
-  `on:` events and modifiers, `{#…}` / `{:#…}` blocks, route paths in `href`.
-- Formatting: `fmt.rs` on the buffer, answered as one edit of the whole
-  text (none when it is formatted).
+- App template build tuning: `debug = "line-tables-only"`, dependencies at `opt-level = 1`.
+- Targets: markup edit visible < 100 ms; Rust edit visible within 3 s (small app). Measured on the demo (Windows, Ryzen 7800X3D): a text edit swaps in under 1 ms and is served about 85 ms after the save (mostly the 50 ms poll); an expression or `.rs` edit rebuilds and restarts in 0.3 s.
 
-`editors/vscode` is a small extension: a TextMate grammar (HTML; Rust in the
-block and `{…}`; JavaScript in `<script>`, directive values and `{:…}`; CSS in
-`<style>`), snippets, format on save, **Wisp: Restart server**, and a client
-(`vscode-languageclient`) that starts `wisp lsp`.
+## `wisp fmt`
 
-`editors/tree-sitter-wisp` is a tree-sitter grammar with the same embedding
-through injections, no external scanner: flat tags (markup that does not
-balance still parses), nested template blocks, code left whole. Neovim,
-Helix and Zed (`editors/zed`) use it; `editors/README.md` has each editor's
-setup, JetBrains, Sublime and Emacs included.
+`wisp fmt [paths]` formats `.wisp` files. `--check` lists the unformatted and fails (`wisp check` warns of them). `wisp fmt --stdin [path]` formats stdin to stdout (`path` for the edition), for editors and `editors/prettier-plugin-wisp`.
 
-Follow-up: cheap Rust checks inside the `---` block (rust-analyzer covers
-`.rs` files only).
+- Element tree and template blocks: two spaces a level. Attribute values double-quoted. A start tag that begins its line goes on one line or, past 100 columns, an attribute a line.
+- The `---` block goes through rustfmt inside a wrapper fn, with the edition of the nearest `Cargo.toml` (the workspace's when inherited; 2024 without one), as `cargo fmt` would.
+- `<script>` is re-indented only. `<style>` gets a declaration a line when it has no strings, comments or `url(`.
+- Text, holes, `<pre>` and `<textarea>` are never touched.
+- Markup that does not balance, or would not parse to the same template, is left as written. Formatting twice equals formatting once.
 
 ## CLI older than the app
 
-When the installed `wisp` is older than the app's `wisp` crate, the app commands print a warning on stderr (the CLI's stamp against the app's) before they run. In a terminal it asks `Continue anyway? [y/N]`, and the default, N, exits with 1. In CI or a pipe it prints the warning and continues. `WISP_NO_UPDATE_CHECK=1` silences it. Without git, the stamp check stays silent.
-
-To fix it, update the CLI:
+When the installed `wisp` is older than the app's `wisp` crate (the CLI's stamp against the app's), app commands print a warning on stderr first. In a terminal it asks `Continue anyway? [y/N]`; the default N exits with 1. In CI or a pipe it warns and continues. `WISP_NO_UPDATE_CHECK=1` silences it. Without git, the stamp check stays silent.
 
 ```bash
-cargo install wisp-cli --force
-cargo install --path <checkout>/crates/wisp-cli --force
+cargo install wisp-cli --force                           # registry install
+cargo install --path <checkout>/crates/wisp-cli --force  # path checkout
 ```
 
-The first is for a registry install, the second for a path checkout of Wisp.
+## Security
 
+- **Escaping.** On by default; `{@html}` is the only raw output. Component props are typed Rust values, escaped where shown like any other.
+- **Actions.** Opt-in (`#[action]`), same-origin checked, only form fields: no client-supplied type names or serialized state (Livewire CVE-2025-54068 class).
+- **Signed cookies.** The signature binds the cookie's name and value, compared in constant time. `WISP_SECRET` under 32 characters stops the server at start.
+- **Dev endpoints.** Only in debug builds, only answering loopback peers (behind a proxy on the same machine every peer is loopback: never serve a debug build). Dev mode on a non-loopback address says so at start.
+- **Live URL attributes** (`href={:x}`, `:src="x"`) block `javascript:` and `vbscript:` on the server's first paint and in the browser, as `href={x}` does. URL attributes whose scheme an expression decides are checked where they end: `javascript:` never reaches a page. wisp.js never follows a `javascript:` redirect or `goto`, and saves a posted form's attachment instead of opening it as a page of this site.
+- **Limits.** Request size and time limits as in [design-runtime](/docs/design-runtime); no request smuggling surface (strict chunked parsing, CL+TE rejected).
+- **Connections.** At most `WISP_MAX_CONNS` (10000) open, WebSockets included; past it a new one gets a 503 and is closed before it costs a task.
+- **CSP.** Pages and error pages carry a `content-security-policy` (below).
+- **Tests.** `examples/demo/tests/http.rs` runs the demo's binary and sends malformed, oversized, smuggling and cross-site requests, path traversal attempts and junk cookies, checking every answer and that the server keeps answering. `tests/app` uses what the demo does not (hooks, state, components, uploads, signed cookies, chunked bodies, body limits, streamed responses); its `tests/http.rs` checks each on the wire.
+
+### Content Security Policy
+
+Every page and error page (rendered, baked or kept by `CACHE`) gets:
+
+```
+content-security-policy: default-src 'self'; script-src 'self' 'sha256-…';
+  style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;
+  connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+```
+
+- Wisp's own scripts are files (`wisp.js`, `live.js`, modules under `/_app/c/`); its JSON data block runs nothing.
+- The only inline scripts are the app's (`<script defer>...</script>` in a template, or in `src/app.html`). No hole can go in one, so the build hashes each and `script-src` lists the hashes. An inline script edited in dev takes a build, for its hash.
+- No nonce: the header is one string made after `init`, so a page costs one more header line, a baked or `CACHE` page stays bytes made before, and scripts wisp.js runs after a navigation pass (a nonce would be the first page's).
+- Dev mode adds `https://esm.sh` (npm modules) to `script-src` and `connect-src`, and `wisp dev`'s reload events to `connect-src`.
+- `wisp::csp("img-src 'self' https://cdn.example; font-src https://f.example")` in `init`: each directive replaces the default of its name, or is added. `script-src` keeps the hashes (unless it has `'unsafe-inline'`, which a hash would turn off). `wisp::csp_off()` sends none, for an app that sets its own.
+- Not covered: endpoints and `Response::html` (not pages), `/_wisp/docs`, and `wisp build --static` (files have no headers; the host sets them). A script put in by `{@html}` or an `onclick="..."` attribute does not run; use a file, or `on:click`.
+
+## Non-goals and milestones
+
+No homegrown auth, ORM or job system, now or later. Wisp gives the tools (cookies, sessions, the `Store` trait, hooks, `wisp::spawn` from `init`) and the app builds on them. Integrations wire in existing, maintained crates (a recipe in `add/`; `wisp add sqlite` scaffolds the glue). Also out: Windows services. (HTTP/2 in process is the opt-in `h2` feature: h2c only.)
+
+1. **Core**: routes, layouts, templates, load, actions, errors, static files, `wisp.js` morph, `wisp dev` with hot swap. (current)
+2. **Measure**: dev-loop timings; req/s and latency vs ASP.NET Core Minimal APIs on the same machine.
+3. **Flexible**: hooks, state, components, uploads, signed cookies, streaming, body limits, proxies. (done)
+   **Reactive and everywhere**: client scripts, router, tower, static export, Docker, edge targets. (done)
+4. **v0.2**: behaviors, link boosting, docs site built with Wisp.

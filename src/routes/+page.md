@@ -13,50 +13,42 @@ description: A fast, fun web framework for Rust that costs an AI the fewest toke
 
 ```html
 ---
-#[model]
-struct Todo {
-    #[validate(len = 1..=100)]
-    text: String,
-}
-
-static TODOS: Table<Todo> = Table::saved();
-
 #[action]
 fn add(todo: Todo) {
     TODOS.add(todo);
 }
-
-let count = TODOS.len();
 ---
-<title>Todos ({count})</title>
-
+<title>Todos ({TODOS.len()})</title>
 <form action="?/add" fields><button>Add</button></form>
+{#each TODOS.all() as todo}
+  <p>{todo.text}</p>
+{/each}
+```
 
-<table>
-  {#each TODOS.all() as todo}
-    <tr><td>{todo.id}</td><td>{todo.text}</td></tr>
-  {/each}
-</table>
+<figcaption>src/db.rs, in every route file with no use lines</figcaption>
+
+```rust
+#[model]
+pub struct Todo {
+    #[validate(len = 1..=100)]
+    text: String,
+}
+pub static TODOS: Table<Todo> = Table::saved();
 ```
 
 </figure>
 <figure class="file">
-<figcaption>The same app</figcaption>
+<figcaption>The files that matter</figcaption>
 
 ```text
-my-app/
-  Cargo.toml
-  src/
-    main.rs
-    app.css
-    routes/
-      +layout.wisp
-      +page.wisp
-  static/
-    favicon.svg
+Cargo.toml
+src/
+  db.rs
+  routes/
+    +page.wisp
 ```
 
-<p class="note">That page is a saved table, a validated form action, a form and a list. The form writes its own inputs, shows its errors and keeps what was typed.</p>
+<p class="note">A validated form action, the form with its inputs and errors, and a list. A bad value is a 422 that keeps what was typed.</p>
 
 </figure>
 </div>

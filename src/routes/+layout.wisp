@@ -2,7 +2,7 @@
 const SITE: &str = "https://wispweb.dev";
 
 let home = cx.path() == "/";
-let docs = cx.path().starts_with("/docs");
+let docs = cx.path() == "/docs" || cx.path().starts_with("/docs/");
 let me = wisp::pages("")
     .iter()
     .chain(wisp::pages("docs").iter())
@@ -42,8 +42,7 @@ let about = me
     </a>
     <nav aria-label="Site">
       <a href="/docs" aria-current={docs.then_some("page")}>Docs</a>
-      <a href="/docs/overview">Overview</a>
-      <a href="https://github.com/wyziedevs/wisp">GitHub</a>
+      <a href="https://github.com/wyziedevs/wisp" target="_blank" rel="noopener">GitHub</a>
     </nav>
   </div>
 </header>
@@ -56,7 +55,6 @@ let about = me
     <ul>
       <li><a href="/docs">Docs</a></li>
       <li><a href="https://github.com/wyziedevs/wisp">Wisp on GitHub</a></li>
-      <li><a href="https://github.com/wyziedevs/wisp-docs">Docs on GitHub</a></li>
     </ul>
   </div>
 </footer>

@@ -21,3 +21,16 @@ opt-level = 1
 [profile.release]
 codegen-units = 1
 lto = "fat"
+
+[package.metadata.wisp]
+redirects = [
+  "/docs/design-app /docs/design 301",
+  "/docs/design-templates /docs/design-syntax 301",
+  "/docs/design-images /docs/design-tooling 301",
+  "/docs/design-i18n /docs/design-tooling 301",
+  "/docs/design-ui /docs/design-forms 301",
+  "/docs/design-parity /docs/design-features 301",
+  "/docs/design-build /docs/design-runtime 301",
+  "/docs/design-security /docs/design-cli 301",
+  "/docs/plan /docs/overview 301",
+]
