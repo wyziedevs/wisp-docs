@@ -2189,8 +2189,17 @@ pre code {
   padding-inline: 0;
 }
 
-/* The token table block sits centered under the code panels. */
-.cheap .claim:has(table) {
+/* The token table sits centered under the code panels; its text stays left. */
+.cheap .claim.wide:has(table) {
+  max-width: none;
+}
+
+.cheap .claim.wide:has(table) > :not(table) {
+  max-width: var(--prose);
+}
+
+.cheap .claim.wide:has(table) table {
+  width: min(100%, 50rem);
   margin-inline: auto;
 }
 
