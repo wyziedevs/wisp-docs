@@ -221,19 +221,6 @@ h4 {
     translate 120ms var(--ease);
 }
 
-/* A raised key: a solid edge underneath, pushed flat when pressed. */
-.btn,
-.demo button {
-  --edge: var(--line-strong);
-  box-shadow: 0 3px 0 var(--edge);
-}
-
-.btn:active,
-.demo button:active {
-  box-shadow: 0 0 0 var(--edge);
-  translate: 0 3px;
-}
-
 .btn:hover {
   color: var(--ink);
   border-color: var(--ash);
@@ -252,10 +239,6 @@ h4 {
   color: var(--on-accent);
 }
 
-.icon:active {
-  scale: 0.96;
-}
-
 .cta {
   display: flex;
   flex-wrap: wrap;
@@ -269,12 +252,6 @@ h4 {
   height: 1em;
   margin-left: 0.45em;
   --ico: var(--i-right);
-  transition: translate 200ms var(--ease);
-}
-
-.cta .btn.primary:hover::after,
-.cta .btn.primary:focus-visible::after {
-  translate: 3px 0;
 }
 
 
