@@ -136,7 +136,7 @@ fn default(#[validate(len = 1..=50)] name: String, email: Email) {
 </div>
 </figure>
 <figure class="cmp">
-<figcaption>SvelteKit: the same form, 470 tokens</figcaption>
+<figcaption>SvelteKit: the same form, 425 tokens</figcaption>
 <div class="file tabbed">
 <div class="tabs" role="radiogroup" aria-label="SvelteKit files">
 <input class="sr" type="radio" name="sk-file" id="sk-server" checked>
@@ -149,18 +149,14 @@ fn default(#[validate(len = 1..=50)] name: String, email: Email) {
 ```js
 import { fail, redirect } from '@sveltejs/kit';
 
-const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 export const actions = {
   default: async ({ request }) => {
-    const form = await request.formData();
-    const name = String(form.get('name') ?? '');
-    const email = String(form.get('email') ?? '');
+    const form = Object.fromEntries(await request.formData());
     const errors = {};
-    if (name.length < 1 || name.length > 50) errors.name = 'Name must be 1 to 50 characters';
-    if (!EMAIL.test(email)) errors.email = 'Enter a valid email';
-    if (errors.name || errors.email) return fail(422, { name, email, errors });
-    console.log(`${name} <${email}>`);
+    if (!form.name || form.name.length > 50) errors.name = 'must have 1 to 50 characters';
+    if (!/^\S+@\S+\.\S+$/.test(form.email)) errors.email = 'must be an email address';
+    if (Object.keys(errors).length) return fail(422, { ...form, errors });
+    console.log(`${form.name} <${form.email}>`);
     redirect(303, '/');
   }
 };
@@ -197,12 +193,12 @@ The same five features (a list page, a contact form, a JSON endpoint, a layout a
 <table class="tally">
 <thead><tr><th scope="col">Stack</th><th scope="col"><span class="sr">Relative size</span></th><th scope="col" class="num">Tokens</th><th scope="col" class="num">Files</th></tr></thead>
 <tbody>
-<tr class="us"><th scope="row">Wisp</th><td class="meter" aria-hidden="true"><span style="--v: 0.326"></span></td><td class="num">464</td><td class="num">6</td></tr>
-<tr><th scope="row">Nuxt (Vue)</th><td class="meter" aria-hidden="true"><span style="--v: 0.643"></span></td><td class="num">915</td><td class="num">8</td></tr>
-<tr><th scope="row">SvelteKit</th><td class="meter" aria-hidden="true"><span style="--v: 0.705"></span></td><td class="num">1002</td><td class="num">9</td></tr>
-<tr><th scope="row">Next.js (React)</th><td class="meter" aria-hidden="true"><span style="--v: 0.710"></span></td><td class="num">1010</td><td class="num">8</td></tr>
-<tr><th scope="row">Express (Node.js)</th><td class="meter" aria-hidden="true"><span style="--v: 0.842"></span></td><td class="num">1198</td><td class="num">7</td></tr>
-<tr><th scope="row">React (Vite + Express)</th><td class="meter" aria-hidden="true"><span style="--v: 1.000"></span></td><td class="num">1422</td><td class="num">8</td></tr>
+<tr class="us"><th scope="row">Wisp</th><td class="meter" aria-hidden="true"><span style="--v: 0.336"></span></td><td class="num">464</td><td class="num">6</td></tr>
+<tr><th scope="row">Nuxt (Vue)</th><td class="meter" aria-hidden="true"><span style="--v: 0.631"></span></td><td class="num">872</td><td class="num">8</td></tr>
+<tr><th scope="row">SvelteKit</th><td class="meter" aria-hidden="true"><span style="--v: 0.692"></span></td><td class="num">957</td><td class="num">9</td></tr>
+<tr><th scope="row">Next.js (React)</th><td class="meter" aria-hidden="true"><span style="--v: 0.703"></span></td><td class="num">971</td><td class="num">8</td></tr>
+<tr><th scope="row">Express (Node.js)</th><td class="meter" aria-hidden="true"><span style="--v: 0.836"></span></td><td class="num">1156</td><td class="num">7</td></tr>
+<tr><th scope="row">React (Vite + Express)</th><td class="meter" aria-hidden="true"><span style="--v: 1.000"></span></td><td class="num">1382</td><td class="num">8</td></tr>
 </tbody>
 </table>
 
