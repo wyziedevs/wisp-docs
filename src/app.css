@@ -1772,11 +1772,11 @@ pre code {
   }
 }
 
-/* Tables with many columns scroll inside the column instead of spilling out of it. */
+/* Tables fill the column; only a phone scrolls them (see the 40rem rule). */
 .doc table:has(th:nth-child(4)),
 .cheap table:has(th:nth-child(4)) {
-  display: block;
-  overflow-x: auto;
+  display: table;
+  width: 100%;
 }
 
 .doc table:has(th:nth-child(4)) td:first-child,
@@ -2104,5 +2104,65 @@ pre code {
 @media (max-width: 52rem) {
   .cheap .pair {
     grid-template-columns: minmax(0, 36rem);
+  }
+}
+
+/* ---- Wider reading column --------------------------------------------- */
+
+:root {
+  --prose: 78ch;
+}
+
+.docs {
+  width: min(100%, 92rem);
+}
+
+.doc > :not(pre):not(table):not(.pager):not(.edit):not(h1):not(h2):not(h3):not(h4) {
+  max-width: 84ch;
+}
+
+@media (min-width: 78rem) {
+  .docs {
+    grid-template-columns: 15rem minmax(0, 1fr) 13rem;
+  }
+}
+
+/* Phones scroll a wide table inside the column. */
+@media (max-width: 40rem) {
+  .doc table,
+  .cheap table {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
+/* ---- Sidebar: the search stays put, only the page list scrolls --------- */
+
+@media (min-width: 60rem) {
+  .side {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding-right: 0;
+    scrollbar-gutter: auto;
+  }
+
+  .side .find {
+    flex: none;
+    margin: 0 0 var(--s-3);
+    padding-right: 0.75rem;
+  }
+
+  .side .menu {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+    padding-right: 0.75rem;
+  }
+
+  .side .results {
+    max-height: 50vh;
+    overflow-y: auto;
   }
 }

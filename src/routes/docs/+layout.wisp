@@ -29,30 +29,30 @@ let edit = match cx.path() {
 ---
 <div class="docs">
   <aside class="side" aria-label="Documentation">
+    <div class="find">
+      <label class="sr" for="search">Search the docs</label>
+      <input
+        id="search"
+        type="search"
+        placeholder="Search the docs"
+        autocomplete="off"
+        spellcheck="false"
+        role="combobox"
+        aria-expanded="false"
+        aria-controls="search-results"
+        aria-autocomplete="list"
+        bind:this="filter">
+      <p class="sr" role="status" aria-live="polite" bind:this="status"></p>
+      <ul
+        id="search-results"
+        class="results"
+        role="listbox"
+        aria-label="Search results"
+        hidden
+        bind:this="results"></ul>
+    </div>
     <details class="menu">
       <summary>Menu</summary>
-      <div class="find">
-        <label class="sr" for="search">Search the docs</label>
-        <input
-          id="search"
-          type="search"
-          placeholder="Search the docs"
-          autocomplete="off"
-          spellcheck="false"
-          role="combobox"
-          aria-expanded="false"
-          aria-controls="search-results"
-          aria-autocomplete="list"
-          bind:this="filter">
-        <p class="sr" role="status" aria-live="polite" bind:this="status"></p>
-        <ul
-          id="search-results"
-          class="results"
-          role="listbox"
-          aria-label="Search results"
-          hidden
-          bind:this="results"></ul>
-      </div>
       <nav aria-label="Docs pages" bind:this="menu">
         {#each groups as (name, list)}
           <h2 class="group">{name}</h2>
