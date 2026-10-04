@@ -580,6 +580,14 @@ h4 {
   color: var(--ash);
 }
 
+.foot .maker a {
+  color: var(--slate);
+}
+
+.foot .maker a:hover {
+  color: var(--accent-ink);
+}
+
 .foot h2 {
   margin: 0 0 0.75rem;
   color: var(--ink);

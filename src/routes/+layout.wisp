@@ -31,6 +31,7 @@ let links = [
 ---
 <head>
   <meta name="description" content={about}>
+  <meta name="author" content="Wyzie LLC">
   {@html wisp::og(title, about, &format!("{SITE}/og.png"))}
   <link rel="canonical" href={format!("{SITE}{}", path)}>
   <meta name="twitter:card" content="summary_large_image">
@@ -122,6 +123,7 @@ let links = [
     <div class="mark">
       <a class="brand" href="/"><img src="/favicon.svg" alt="" width="28" height="28"> Wisp</a>
       <p>A fast, fun web framework for Rust.</p>
+      <p class="maker">Made by <a href="https://wyzie.io">Wyzie LLC</a></p>
     </div>
     <nav aria-label="Learn">
       <h2>Learn</h2>
