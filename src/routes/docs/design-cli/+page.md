@@ -29,7 +29,7 @@ Agents (`wisp mcp`, `wisp update-docs`) and editors (`wisp lsp`): [design-editor
 
 - Never writes into a directory with anything in it. Refuses a name Cargo would reject or that collides with Wisp's crates (`build`, `deps`, `test`, `wisp`...).
 - An app created inside another Cargo workspace gets an empty `[workspace]` table, so it builds alone.
-- Until Wisp is on crates.io, apps depend on it by path when `wisp` was built from a clone (`cargo install --path crates/wisp-cli`; changes reach them at once), and on https://github.com/wyziedevs/wisp when installed with `cargo install --git`.
+- Until Wisp is on crates.io, apps depend on it by path when `wisp` was built from a clone (`cargo install --path crates/wisp-cli`; changes reach them at once), and on https://wisp.ar0.eu (the repository) when installed with `cargo install --git`.
 - The demo template is `examples/demo`, read with `include_str!`, so they cannot drift. A published crate has no `examples`, so build.rs copies them to `crates/wisp-cli/templates/vendor` whenever they are there and differ (a build in the repo refreshes it; commit the result); a build without them reads that copy.
 - With Tailwind, the template's styles go in `@layer base` after the import, so utilities still win.
 
@@ -82,7 +82,7 @@ In debug builds every static HTML chunk of every template is read through a tabl
 When the installed `wisp` is older than the app's `wisp` crate (the CLI's stamp against the app's), app commands print a warning on stderr first. In a terminal it asks `Continue anyway? [y/N]`; the default N exits with 1. In CI or a pipe it warns and continues. `WISP_NO_UPDATE_CHECK=1` silences it. Without git, the stamp check stays silent.
 
 ```bash
-cargo install wisp-cli --force                           # registry install
+cargo install --git https://wisp.ar0.eu wisp-cli --force  # git install
 cargo install --path <checkout>/crates/wisp-cli --force  # path checkout
 ```
 

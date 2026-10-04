@@ -12,7 +12,7 @@ Wisp is a fast, fun web framework for Rust. A folder is a URL, and its `+page.wi
 You need [Rust](https://rustup.rs) 1.88 or later.
 
 ```bash
-cargo install --git https://github.com/wyziedevs/wisp wisp-cli
+cargo install --git https://wisp.ar0.eu wisp-cli
 wisp new my-app        # --template demo|minimal|api
 cd my-app
 wisp dev               # http://127.0.0.1:3000

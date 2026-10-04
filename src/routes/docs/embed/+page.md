@@ -77,7 +77,7 @@ Browser side: `new WebSocket(`${location.protocol === 'https:' ? 'wss' : 'ws'}:/
 Wisp becomes a `tower::Service`; the default build keeps its two deps.
 
 ```toml
-wisp = { git = "https://github.com/wyziedevs/wisp", features = ["tower"] }
+wisp = { git = "https://wisp.ar0.eu", features = ["tower"] }
 ```
 
 ```rust
