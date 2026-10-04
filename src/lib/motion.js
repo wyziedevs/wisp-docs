@@ -146,14 +146,18 @@ export function motion() {
     undo.push(() => gsap.set(wrap, { clearProps: 'opacity,transform' }))
   }
 
-  async function scan() {
+  // `again`: the same page drawn anew (a form posted and the page came back): what
+  // already arrived stays as it is, nothing rises, counts or unrolls a second time.
+  async function scan(again = false) {
     stop()
     if (calm.matches || !(await boot())) return
     document.documentElement.classList.add('gsap')
-    reveal()
-    rows()
-    unroll()
-    hosts()
+    if (!again) {
+      reveal()
+      rows()
+      unroll()
+      hosts()
+    }
     scribble()
     drift()
   }

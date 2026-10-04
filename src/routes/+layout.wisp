@@ -225,7 +225,7 @@ let ld = match me {
     blocks()
     demo()
     find?.close()
-    move.scan()
+    move.scan(path(from) === path(to))
     document.querySelector('.mnav')?.removeAttribute('open')
     if (path(from) !== path(to)) spirit?.play('hop')
   })
