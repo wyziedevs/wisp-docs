@@ -42,6 +42,7 @@
   --edge: color-mix(in oklch, var(--accent) 30%, var(--line));
   border-color: var(--edge);
   background: var(--tint);
+  color: color-mix(in oklab, var(--tone) 14%, var(--ink));
 }
 
 .callout.pitfall {
@@ -67,19 +68,19 @@
 }
 
 .callout :not(pre) > code {
-  background: color-mix(in oklch, var(--tone) 16%, transparent);
-  color: color-mix(in oklch, var(--tone) 55%, var(--ink));
+  background: color-mix(in oklab, var(--tone) 16%, transparent);
+  color: color-mix(in oklab, var(--tone) 55%, var(--ink));
 }
 
 .callout a {
   color: var(--tone);
-  text-decoration-color: color-mix(in oklch, var(--tone) 45%, transparent);
+  text-decoration-color: color-mix(in oklab, var(--tone) 45%, transparent);
 }
 
 .callout pre {
   margin: 0.75rem 0 0;
   border-color: var(--edge);
-  background: color-mix(in oklch, var(--tone) 8%, var(--code));
+  background: color-mix(in oklab, var(--tone) 8%, var(--code));
 }
 
 .callout pre::before {

@@ -5,9 +5,9 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
-@media (min-width: 62rem) {
+@media (min-width: 48rem) {
   .docs {
-    grid-template-columns: 17.5rem minmax(0, 1fr);
+    grid-template-columns: 15rem minmax(0, 1fr);
   }
 }
 
@@ -21,7 +21,7 @@
   border-bottom: 1px solid var(--line);
 }
 
-@media (min-width: 62rem) {
+@media (min-width: 48rem) {
   .side {
     position: sticky;
     top: var(--head);
@@ -48,7 +48,7 @@
   list-style: none;
 }
 
-@media (min-width: 62rem) {
+@media (min-width: 48rem) {
   .menu > summary {
     display: none;
   }
