@@ -24,6 +24,7 @@ fn remove(id: u64) { /* ... */ }
 ## Actions
 
 - `action="?/like"` posts to the `like` action and adds `method="post"` when missing.
+- A form that posts to `?/name` needs `#[action] fn name` in the same page: the build says so when it is missing (a layout or component may post to the page that uses it, so only a page's own markup is checked).
 - A form with no `action` (and `method="post"`) posts to `default`.
 - `<button action="?/remove&id={todo.id}">` outside a form becomes its own `<form method="post"><button formaction="...">`. Works without JS.
 - Query parameters in an action URL are read like form fields (`id` above is `id: u64`).

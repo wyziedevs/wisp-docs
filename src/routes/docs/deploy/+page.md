@@ -47,7 +47,7 @@ wisp = { version = "..", features = ["h2"] }
 
 ## Static and SPA
 
-`wisp build --static [--out site]` writes `dist/`: every parameterless page as `about/index.html`, plus `static/` and the `/_app` files (`.map`s with `--sourcemap`). A `[params]` route lists its pages:
+`wisp build --static [--out site]` writes `dist/`: every parameterless page as `about/index.html`, plus `static/` and the `/_app` files (`.map`s with `--sourcemap`). Forms need a server: the export warns for each page with actions, and for each exported page whose HTML holds a form that posts (`method="post"`, `action="?/name"`), whichever page its action is on. A `[params]` route lists its pages:
 
 ```html
 <!-- src/routes/blog/[slug]/+page.wisp (or its +page.rs) -->
