@@ -77,6 +77,7 @@ let post = db::post(&slug).await?;
 - Before that (`cargo run`, other targets) each worker keeps the first render.
 - One render serves all, so `cx` in statements, markup or `load` is a build error. Its layouts render once, as for a request without cookies.
 - `--static` prerenders every page.
+- Under the hood the build calls `wisp::prerender` on the app; you never call it yourself.
 
 ## Service
 

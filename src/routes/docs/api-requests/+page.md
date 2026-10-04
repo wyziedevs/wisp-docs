@@ -62,7 +62,7 @@ Each param but `cx` is read by name: route param, then form field or JSON object
 
 </div>
 
-`Response::created(&v)` is 201; `Response::json_of(&v).with_status(202)`; `.with_header(name, value)` adds a header (also on `Error`, and `cx.set_header` in a page). A single-valued one (`content-type`, `cache-control`, `location`, `etag`, any case) replaces what was set before instead of going out twice: `Response::text(xml).with_header("content-type", "application/rss+xml")` sends one `content-type`. `content-length` and `transfer-encoding` are the server's and are left out. In a page, `cx.set_status(404)` sets the status.
+`Response::created(&v)` is 201; `Response::json_of(&v).with_status(202)`; `.with_header(name, value)` adds a header (also on `Error`, and `cx.set_header` in a page). A single-valued one (`content-type`, `cache-control`, `location`, `etag`, any case) replaces what was set before instead of going out twice: `Response::text(xml).with_header("content-type", "application/rss+xml")` sends one `content-type`. `content-length` and `transfer-encoding` are the server's and are left out. `Response::text` and its kin take a `String` or a `&str` (the `IntoText` trait); anything else is a compile error. In a page, `cx.set_status(404)` sets the status.
 
 Query: `cx.query("q")`, `cx.query_or("page", 1)` (parsed, else the default), `cx.query_string()` (raw, no `?`). `cx.request_id()` is the request's id, sent back as `x-request-id`.
 
