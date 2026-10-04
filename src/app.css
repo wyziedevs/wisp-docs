@@ -2188,3 +2188,8 @@ pre code {
 .toc h2 {
   padding-inline: 0;
 }
+
+/* The token table block sits centered under the code panels. */
+.cheap .claim:has(table) {
+  margin-inline: auto;
+}
