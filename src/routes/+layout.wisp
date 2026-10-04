@@ -41,7 +41,7 @@ let ld = match me {
         json(about),
     ),
     Some(p) if blog && dated.is_some() => format!(
-        "{{\"@context\":\"https://schema.org\",\"@type\":\"BlogPosting\",\"headline\":{},\"description\":{},\"url\":{},\"image\":\"{SITE}/og.png\",\"inLanguage\":\"en\",\"datePublished\":{},\"author\":{},\"publisher\":{ORG}}}",
+        "{{\"@context\":\"https://schema.org\",\"@type\":\"BlogPosting\",\"headline\":{},\"description\":{},\"url\":{},\"image\":\"{SITE}/og.png?v=2\",\"inLanguage\":\"en\",\"datePublished\":{},\"author\":{},\"publisher\":{ORG}}}",
         json(p.title),
         json(about),
         json(&url),
@@ -49,7 +49,7 @@ let ld = match me {
         p.get("author").map_or(ORG.to_string(), |a| format!("{{\"@type\":\"Person\",\"name\":{}}}", json(a))),
     ),
     Some(p) if docs => format!(
-        "{{\"@context\":\"https://schema.org\",\"@graph\":[{{\"@type\":\"TechArticle\",\"headline\":{},\"description\":{},\"url\":{},\"image\":\"{SITE}/og.png\",\"inLanguage\":\"en\",\"author\":{ORG},\"publisher\":{ORG}}},{{\"@type\":\"BreadcrumbList\",\"itemListElement\":[{{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"{SITE}/\"}},{{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Docs\",\"item\":\"{SITE}/docs/\"}}{}]}}]}}",
+        "{{\"@context\":\"https://schema.org\",\"@graph\":[{{\"@type\":\"TechArticle\",\"headline\":{},\"description\":{},\"url\":{},\"image\":\"{SITE}/og.png?v=2\",\"inLanguage\":\"en\",\"author\":{ORG},\"publisher\":{ORG}}},{{\"@type\":\"BreadcrumbList\",\"itemListElement\":[{{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"{SITE}/\"}},{{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Docs\",\"item\":\"{SITE}/docs/\"}}{}]}}]}}",
         json(p.title),
         json(about),
         json(&url),
@@ -62,7 +62,7 @@ let ld = match me {
   <title>{if home { title.to_string() } else { format!("{title} | Wisp Rust Web Framework") }}</title>
   <meta name="description" content={about}>
   <meta name="author" content="Wyzie LLC">
-  {@html wisp::og(title, about, &format!("{SITE}/og.png"))}
+  {@html wisp::og(title, about, &format!("{SITE}/og.png?v=2"))}
   <meta property="og:type" content={if blog && dated.is_some() { "article" } else { "website" }}>
   <meta property="og:site_name" content="Wisp">
   <meta property="og:image:width" content="1200">
