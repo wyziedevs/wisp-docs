@@ -1,7 +1,5 @@
 ---
 const SITE: &str = "https://wispweb.dev";
-// The wisp crate's version, from ../wisp/Cargo.toml ([workspace.package]).
-const VERSION: &str = "v0.1.0";
 // The docs groups that make up Reference; every other group is Learn.
 const REFERENCE: &[&str] = &["Reference", "Design"];
 
@@ -58,7 +56,6 @@ let links = [
       </span>
       <span>Wisp</span>
     </a>
-    <a class="ver" href="https://github.com/wyziedevs/wisp" aria-label={format!("Version {VERSION}")}>{VERSION}</a>
 
     <form class="search" action="/search" role="search" bind:this="bar">
       <label class="sr" for="q">Search</label>
@@ -67,6 +64,7 @@ let links = [
       <kbd class="key" aria-hidden="true"><span bind:this="mod">Ctrl</span> K</kbd>
     </form>
 
+    <div class="end">
     <nav class="links" aria-label="Site">
       {#each links as (href, name, on)}
         <a href={href} aria-current={on.then_some("page")}>{name}</a>
@@ -90,6 +88,7 @@ let links = [
         <a href="https://github.com/wyziedevs/wisp">GitHub</a>
       </nav>
     </details>
+    </div>
   </div>
 </header>
 
