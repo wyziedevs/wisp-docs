@@ -217,7 +217,21 @@ h4 {
   transition:
     background-color var(--t),
     border-color var(--t),
-    scale 120ms var(--ease);
+    box-shadow 120ms var(--ease),
+    translate 120ms var(--ease);
+}
+
+/* A raised key: a solid edge underneath, pushed flat when pressed. */
+.btn,
+.demo button {
+  --edge: var(--line-strong);
+  box-shadow: 0 3px 0 var(--edge);
+}
+
+.btn:active,
+.demo button:active {
+  box-shadow: 0 0 0 var(--edge);
+  translate: 0 3px;
 }
 
 .btn:hover {
@@ -229,6 +243,7 @@ h4 {
   border-color: var(--accent);
   background: var(--accent);
   color: var(--on-accent);
+  --edge: color-mix(in oklab, var(--accent) 62%, black);
 }
 
 .btn.primary:hover {
@@ -237,7 +252,6 @@ h4 {
   color: var(--on-accent);
 }
 
-.btn:active,
 .icon:active {
   scale: 0.96;
 }
@@ -246,7 +260,7 @@ h4 {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.75rem;
+  gap: 1rem 0.75rem;
   padding-top: 1rem;
 }
 

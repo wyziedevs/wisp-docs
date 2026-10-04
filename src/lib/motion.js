@@ -1,5 +1,5 @@
 // GSAP motion for the launch pages: sections rise as they scroll in, table rows
-// follow one by one, the call to action leans toward the pointer and Rust is
+// follow one by one and Rust is
 // underlined again on hover. GSAP is vendored in /vendor, loaded after the page
 // is idle and only where motion is welcome. Without it (no JavaScript, reduced
 // motion, a failed load) the page is complete and CSS does the lighter version.
@@ -64,38 +64,13 @@ export function motion() {
     }
   }
 
-  // The hero buttons lean a few pixels toward the pointer.
-  function lean() {
-    if (!fine.matches) return
-    for (const b of document.querySelectorAll('.cta .btn')) {
-      const x = gsap.quickTo(b, 'x', { duration: 0.4, ease: 'power3.out' })
-      const y = gsap.quickTo(b, 'y', { duration: 0.4, ease: 'power3.out' })
-      const move = (e) => {
-        const r = b.getBoundingClientRect()
-        x((e.clientX - (r.left + r.width / 2)) * 0.12)
-        y((e.clientY - (r.top + r.height / 2)) * 0.2)
-      }
-      const rest = () => {
-        x(0)
-        y(0)
-      }
-      b.addEventListener('pointermove', move)
-      b.addEventListener('pointerleave', rest)
-      undo.push(() => {
-        b.removeEventListener('pointermove', move)
-        b.removeEventListener('pointerleave', rest)
-        gsap.set(b, { clearProps: 'x,y' })
-      })
-    }
-  }
-
   // Hovering Rust draws its underline again.
   function scribble() {
     const em = document.querySelector('.hero em')
     if (!em || !fine.matches) return
     const paths = em.querySelectorAll('path')
     const again = () =>
-      gsap.fromTo(paths, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.55, stagger: 0.12, ease: 'power2.out', overwrite: true })
+      gsap.fromTo(paths, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.55, stagger: 0, ease: 'power2.out', overwrite: true })
     em.addEventListener('pointerenter', again)
     undo.push(() => em.removeEventListener('pointerenter', again))
   }
@@ -106,7 +81,6 @@ export function motion() {
     document.documentElement.classList.add('gsap')
     reveal()
     rows()
-    lean()
     scribble()
   }
 
