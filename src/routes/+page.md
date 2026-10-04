@@ -162,7 +162,7 @@ The same five features (a list page, a contact form, a JSON endpoint, a layout a
 | Axum + askama | 1456 | 7 |
 | Actix + tera | 1531 | 7 |
 
-A bigger app, with sign up and in, a posts table, uploads, live refresh and a component, is 995 tokens in Wisp, 3368 in SvelteKit and 3220 in Next.js. The numbers come from `cargo run -p wisp-tokens`, which counts every hand-written file and its path with a byte-pair style estimate; the [Tokens page](/docs/tokens) has the method and the apps.
+A bigger app, with sign up and in, a posts table, uploads, live refresh and a component, is 995 tokens in Wisp, 3473 in SvelteKit and 3331 in Next.js. The numbers come from `cargo run -p wisp-tokens`, which counts every hand-written file and its path with a byte-pair style estimate; the [Tokens page](/docs/tokens) has the method and the apps.
 
 </div>
 </div>
