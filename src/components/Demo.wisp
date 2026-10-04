@@ -15,11 +15,12 @@
     <div class="view">
       <h3>Todos ({todos.len()})</h3>
       <form method="post" action="/demo?/add" novalidate>
-        <label for="todo-text">Text</label>
+        <label class="sr" for="todo-text">Text</label>
         <div class="row">
           <input
             id="todo-text"
             name="text"
+            placeholder="Text"
             value={text}
             aria-invalid={if problem.is_empty() { "false" } else { "true" }}
             aria-describedby="todo-problem"
