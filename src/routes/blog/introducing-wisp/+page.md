@@ -65,10 +65,11 @@ Code written by a model is paid for by the token, so we count them. The same fiv
 | Stack | Tokens | Files |
 |---|---:|---:|
 | **Wisp** | **464** | 6 |
+| Nuxt (Vue) | 915 | 8 |
 | SvelteKit | 1002 | 9 |
-| Next.js | 1010 | 8 |
-| Axum + askama | 1456 | 7 |
-| Actix + tera | 1531 | 7 |
+| Next.js (React) | 1010 | 8 |
+| Express (Node.js) | 1198 | 7 |
+| React (Vite + Express) | 1422 | 8 |
 
 </div>
 

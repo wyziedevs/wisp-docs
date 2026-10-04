@@ -44,7 +44,7 @@ Wisp's `data` is longer than JavaScript's: a Rust type with its fields' types an
 
 ## Method
 
-Counted: every file a developer (or an agent) writes by hand, beyond what the framework's generator gives, plus each file's path (writing a file means naming it, so two files cost more than one). Manifests (`Cargo.toml`, `package.json`, `Gemfile`) are left out everywhere. For Rails the generator commands are counted, since the agent must write them, and the lines it adds or changes in generated files. Rails' api is `rails g scaffold` in an `--api` app, which writes the controller; the same api written by hand is the last row.
+Counted: every file a developer (or an agent) writes by hand, beyond what the framework's generator gives, plus each file's path (writing a file means naming it, so two files cost more than one). Manifests (`Cargo.toml`, `package.json`) are left out everywhere.
 
 There is no tokenizer offline, so the count estimates a BPE code tokenizer (cl100k-like):
 
@@ -55,4 +55,4 @@ There is no tokenizer offline, so the count estimates a BPE code tokenizer (cl10
 
 Characters / 4, the usual rule of thumb, ranks the frameworks the same way.
 
-Competitor versions: SvelteKit 2 with Svelte 5 runes and `use:enhance`; Next.js 15 app router with server actions and `useActionState`; Nuxt 3 with server routes and `useFetch`; Axum 0.8 with maud and serde; FastAPI with Jinja2 and pydantic; Rails 8 with Active Record. The Wisp versions are built by a script, so every counted line compiles. The competitors' sources, `count.py` and `verify.py` are kept out of the repository, so its size stays Wisp's own.
+Competitor versions: SvelteKit 2 with Svelte 5 runes and `use:enhance`; Next.js 15 app router with server actions and `useActionState`; Nuxt 4 with server routes and `useFetch`; Express 5 with EJS; React 19 with Vite and an Express API; Axum 0.8 with askama; Actix Web 4 with tera. The Wisp versions are built by a script, so every counted line compiles. Every competitor app's source is in `bench/tokens/apps`.
