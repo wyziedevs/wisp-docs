@@ -2,7 +2,7 @@
 title: Overview
 description: What Wisp gives you for reactivity, AI tokens, rendering, data, styling, tooling and deploy.
 group: Start
-order: 2
+order: 3
 ---
 
 Wisp is the framework for the AI age: ultra fast to run, cheap in AI tokens to write, durable, and flexible.
@@ -49,19 +49,9 @@ Wisp is the framework for the AI age: ultra fast to run, cheap in AI tokens to w
 - One binary, `--docker`, `--static`, or `--target cloudflare|deno|vercel|netlify|node|bun|lambda`.
 - `wisp deploy init <host>` writes a GitHub Actions workflow or a Fly, Render or Railway config.
 
-## Performance
+## Speed
 
-On a server-rendered HTML page (the TechEmpower fortunes test without the database), on a 4-vCPU Linux VPS with 64 connections, from the [bench](https://github.com/wyziedevs/wisp/blob/main/bench/README.md) (2026-09-28):
-
-| Server | req/s | CPU µs/req | Peak MB |
-|---|---:|---:|---:|
-| **Wisp** | 97,502 | 19.8 | 3 |
-| Actix Web | 86,169 | 23.0 | 5 |
-| Axum | 76,818 | 25.6 | 6 |
-| Fastify | 24,576 | 82.0 | 248 |
-| SvelteKit | 2,676 | 758.5 | 494 |
-
-Wisp has no `unsafe` code outside its Linux I/O drivers and the edge exports. The bench README has the method and the full results.
+Zero cost on the request hot path is the first rule. [Benchmarks](/docs/benchmarks) says what is measured and how to run it. Wisp has no `unsafe` code outside its Linux I/O drivers and the edge exports.
 
 ## Docs and links
 

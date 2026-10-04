@@ -14,7 +14,7 @@
   --ink: oklch(0.97 0.004 295);
   --slate: oklch(0.76 0.012 295);
   --ash: oklch(0.67 0.012 295);
-  --accent: oklch(0.68 0.17 295);
+  --accent: #a17ff5;
   --accent-hover: oklch(0.74 0.15 295);
   --on-accent: oklch(0.17 0.02 295);
   --accent-soft: oklch(0.26 0.04 295);
@@ -423,14 +423,14 @@ main.home {
 }
 
 .hero {
-  padding-block: clamp(3.5rem, 9vw, 6.5rem) clamp(2rem, 5vw, 3rem);
+  padding-block: clamp(2rem, 5vw, 3.5rem) 1.5rem;
   text-align: center;
 }
 
 .hero h1 {
   max-width: 17ch;
   margin: 0 auto;
-  font-size: clamp(2.25rem, 1rem + 5vw, 4rem);
+  font-size: clamp(2.25rem, 1rem + 4vw, 3.5rem);
   font-weight: 600;
   line-height: 1.08;
   letter-spacing: -0.03em;
@@ -456,7 +456,7 @@ main.home {
   justify-content: center;
   gap: 0.5rem;
   max-width: 46rem;
-  margin: 2.25rem auto 0;
+  margin: 1.5rem auto 0;
 }
 
 .install code {
@@ -483,6 +483,10 @@ main.home {
   min-width: 6.5rem;
 }
 
+.cta.left {
+  justify-content: flex-start;
+}
+
 .cta {
   display: flex;
   flex-wrap: wrap;
@@ -492,7 +496,21 @@ main.home {
 }
 
 .showcase {
-  padding-block: 1.5rem 3.5rem;
+  padding-block: 0.5rem 2.5rem;
+}
+
+.showcase .pair,
+.cheap .pair {
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+}
+
+.cheap .pair {
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.3fr);
+  margin-block: 2rem;
+}
+
+.showcase pre {
+  font-size: 0.875rem;
 }
 
 .pair {
@@ -530,6 +548,14 @@ main.home {
   padding-block: clamp(2.5rem, 7vw, 4.5rem);
 }
 
+.cheap .claim.wide {
+  max-width: 52rem;
+}
+
+.cheap table {
+  max-width: 28rem;
+}
+
 .split {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
@@ -546,8 +572,7 @@ main.home {
 }
 
 .claim h2,
-.final h2,
-.fast h2 {
+.final h2 {
   margin: 0 0 1rem;
   font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.125rem);
   font-weight: 600;
@@ -606,78 +631,6 @@ main.home {
   color: var(--accent-ink);
 }
 
-.fast .wrap > * + * {
-  margin-top: 1.5rem;
-}
-
-.speed {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
-  gap: 1rem;
-}
-
-.speed figure {
-  margin: 0;
-  padding: 1.25rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  background: var(--panel);
-}
-
-.speed figcaption {
-  margin-bottom: 1rem;
-  color: var(--slate);
-  font-size: 0.9375rem;
-  font-weight: 500;
-}
-
-.bars {
-  display: grid;
-  gap: 0.625rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.bars li {
-  display: grid;
-  grid-template-columns: 8.5rem minmax(0, 1fr) 4.5rem;
-  align-items: center;
-  gap: 0.75rem;
-  font-size: 0.9375rem;
-}
-
-.bars .num {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-.bars .meter {
-  display: block;
-  height: 0.75rem;
-  overflow: hidden;
-  border-radius: 999px;
-  background: var(--panel-2);
-}
-
-.bars .meter::after {
-  content: "";
-  display: block;
-  height: 100%;
-  border-radius: 999px;
-  background: var(--line-strong);
-  transform: scaleX(var(--w));
-  transform-origin: left;
-}
-
-.bars .ours .meter::after {
-  background: var(--accent);
-}
-
-.bars .ours {
-  font-weight: 600;
-}
-
 .final {
   position: relative;
   padding-block: clamp(3rem, 8vw, 6rem);
@@ -696,6 +649,11 @@ main.home {
 }
 
 @media (max-width: 52rem) {
+  .showcase .pair,
+  .cheap .pair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .split {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -704,9 +662,6 @@ main.home {
     order: 0;
   }
 
-  .bars li {
-    grid-template-columns: 6.5rem minmax(0, 1fr) 3.75rem;
-  }
 }
 
 @keyframes fade {
@@ -900,7 +855,8 @@ main.home {
   color: var(--ash);
 }
 
-.doc table {
+.doc table,
+.cheap table {
   display: block;
   max-width: 100%;
   margin: 1.25rem 0;
@@ -911,14 +867,17 @@ main.home {
 }
 
 .doc th,
-.doc td {
+.doc td,
+.cheap th,
+.cheap td {
   padding: 0.5625rem 0.875rem;
   border-bottom: 1px solid var(--line);
   text-align: left;
   vertical-align: top;
 }
 
-.doc th {
+.doc th,
+.cheap th {
   border-bottom-color: var(--line-strong);
   background: var(--panel-2);
   color: var(--slate);
@@ -927,7 +886,9 @@ main.home {
 }
 
 .doc td[align="right"],
-.doc th[align="right"] {
+.doc th[align="right"],
+.cheap td[align="right"],
+.cheap th[align="right"] {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
@@ -1095,4 +1056,9 @@ main.home {
     animation: none !important;
     transition: none !important;
   }
+}
+
+.file .note {
+  margin-inline: 0;
+  text-align: left;
 }

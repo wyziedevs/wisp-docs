@@ -13,8 +13,8 @@ order: 21
   runtime with its own I/O driver, and the main thread accepting connections
   and handing them out in turn. A connection lives on one thread, so the
   request path never wakes another thread. A multi-thread tokio runtime
-  funnels every socket event through one driver; measured, it left more than
-  half the cores idle at under half the throughput (bench/README.md). The
+  funnels every socket event through one driver, which left cores idle when measured
+  (bench/README.md). The
   tradeoff: no work stealing, so a handler that blocks its thread stalls that
   thread's connections. Dev builds log any handler that holds its thread for
   100 ms or more in one go, with what to use instead.
@@ -86,10 +86,7 @@ order: 21
   build: the ring's setup, the memory it shares with the kernel, and the
   socket calls std has no word for, each block with why it holds. An earlier io_uring
   prototype, which waited in `io_uring_enter` and had no deferred task work,
-  measured level with plain tokio (bench/README.md). On Windows (a
-  development platform for Wisp apps) tokio waits on sockets through AFD
-  polls, which costs about 3 µs a request more than a completion port
-  would; not worth `unsafe`.
+  measured level with plain tokio (bench/README.md).
 - `wisp::serve::<App>(addr)` is the async form, for apps that must own their
   runtime. It runs until its future is dropped.
 - One task per connection. `Cx` owns the connection's read buffer; the task also

@@ -1,7 +1,7 @@
 <section class="hero">
   <div class="wrap">
     <h1>A fast, fun web framework for <em>Rust</em></h1>
-    <p class="lede">File routes, forms that work without JavaScript, reactivity in the same file, and one binary to deploy.</p>
+    <p class="lede">Built to run fast, and to cost an AI the fewest tokens to write.</p>
     <div class="install">
       <code id="install-cmd"><span class="prompt" aria-hidden="true">$</span> cargo install --git https://github.com/wyziedevs/wisp wisp-cli</code>
       <button class="copy" type="button" on:click="copy()"><span aria-live="polite">{:label}</span></button>

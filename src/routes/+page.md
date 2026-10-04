@@ -1,7 +1,6 @@
 ---
 title: Wisp, a fast, fun web framework for Rust
-description: A fast, fun web framework for Rust. File routes, .wisp templates compiled to Rust, form actions, one binary.
-noindex: false
+description: A fast, fun web framework for Rust that costs an AI the fewest tokens to write. One page, one binary.
 ---
 
 <Hero />
@@ -10,23 +9,18 @@ noindex: false
 <div class="wrap">
 <div class="pair">
 <figure class="file">
-<figcaption>src/db.rs</figcaption>
-
-```rust
-#[model]
-pub struct Todo {
-    #[validate(len = 1..=100)]
-    text: String,
-}
-pub static TODOS: Table<Todo> = Table::saved();
-```
-
-</figure>
-<figure class="file">
 <figcaption>src/routes/+page.wisp</figcaption>
 
 ```html
 ---
+#[model]
+struct Todo {
+    #[validate(len = 1..=100)]
+    text: String,
+}
+
+static TODOS: Table<Todo> = Table::saved();
+
 #[action]
 fn add(todo: Todo) {
     TODOS.add(todo);
@@ -35,34 +29,141 @@ fn add(todo: Todo) {
 let count = TODOS.len();
 ---
 <title>Todos ({count})</title>
+
 <form action="?/add" fields><button>Add</button></form>
-{#each TODOS.all() as todo}
-  <p>{todo.text}</p>
-{/each}
+
+<table>
+  {#each TODOS.all() as todo}
+    <tr><td>{todo.id}</td><td>{todo.text}</td></tr>
+  {/each}
+</table>
+```
+
+</figure>
+<figure class="file">
+<figcaption>The same app</figcaption>
+
+```text
+my-app/
+  Cargo.toml
+  src/
+    main.rs
+    app.css
+    routes/
+      +layout.wisp
+      +page.wisp
+  static/
+    favicon.svg
+```
+
+<p class="note">That page is a saved table, a validated form action, a form and a list. The form writes its own inputs, shows its errors and keeps what was typed.</p>
+
+</figure>
+</div>
+</div>
+</section>
+
+<section class="band" id="fast">
+<div class="wrap">
+<div class="claim wide">
+
+## Nothing extra on the hot path
+
+A route pays only for the features it uses, and a change that touches the request path is checked by an instructions-per-request A/B before it lands. Wisp's first rule is that speed is never traded away for convenience.
+
+<p class="cta left"><a class="btn" href="/docs/benchmarks">How speed is measured</a></p>
+
+</div>
+</div>
+</section>
+
+<section class="band cheap" id="cheap">
+<div class="wrap">
+<div class="claim wide">
+
+## An AI writes the same app in half the tokens
+
+AI writes most code now, and every token it reads and writes costs time and money. Wisp is built so an app costs the fewest: conventions instead of config, types the compiler infers, and forms that write themselves. The whole reference is one file, [llms.txt and AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md), and `wisp mcp` serves it to coding agents.
+
+</div>
+
+<div class="pair">
+<figure class="file">
+<figcaption>Wisp: a contact form that validates, 89 tokens</figcaption>
+
+```html
+---
+fn default(#[validate(len = 1..=50)] name: String, email: Email) {
+    eprintln!("{name} <{email}>");
+    redirect("/")
+}
+---
+<title>Contact</title>
+<form fields><button>Send</button></form>
+```
+
+</figure>
+<figure class="file">
+<figcaption>SvelteKit: the same form, 396 tokens</figcaption>
+
+```js
+// +page.server.js
+import { fail, redirect } from '@sveltejs/kit';
+
+export const actions = {
+  default: async ({ request }) => {
+    const form = await request.formData();
+    const name = String(form.get('name') ?? '');
+    const email = String(form.get('email') ?? '');
+    const errors = {};
+    if (name.length < 1 || name.length > 50) errors.name = 'Name must be 1 to 50 characters';
+    if (!email.includes('@')) errors.email = 'Enter a valid email';
+    if (errors.name || errors.email) return fail(422, { name, email, errors });
+    console.log(`${name} <${email}>`);
+    redirect(303, '/');
+  }
+};
+```
+
+```html
+<!-- +page.svelte -->
+<script>
+  import { enhance } from '$app/forms';
+  let { form } = $props();
+</script>
+
+<svelte:head><title>Contact</title></svelte:head>
+<form method="POST" use:enhance>
+  <input name="name" value={form?.name ?? ''} />
+  {#if form?.errors?.name}<p>{form.errors.name}</p>{/if}
+  <input name="email" value={form?.email ?? ''} />
+  {#if form?.errors?.email}<p>{form.errors.email}</p>{/if}
+  <button>Send</button>
+</form>
 ```
 
 </figure>
 </div>
-<p class="note">A model, a saved table, a validated form action and a list. No imports, no router file, no handler wiring.</p>
+
+<div class="claim wide">
+
+The same five features (a list page, a contact form, a JSON endpoint, a layout and a live search) written as a complete app in each stack:
+
+| Stack | Tokens | Files |
+|---|---:|---:|
+| **Wisp** | **464** | 6 |
+| SvelteKit | 928 | 9 |
+| Next.js | 934 | 8 |
+| Axum + askama | 1330 | 7 |
+| Actix + tera | 1457 | 7 |
+
+A bigger app, with sign up and in, a posts table, uploads, live refresh and a component, is 995 tokens in Wisp, 3368 in SvelteKit and 3220 in Next.js. The numbers come from `cargo run -p wisp-tokens`, which counts every hand-written file and its path with a byte-pair style estimate; the [Tokens page](/docs/tokens) has the method and the apps.
+
+</div>
 </div>
 </section>
 
-<Band id="routes" title="Files are routes" lead="A folder is a URL, and its +page.wisp is the page. Brackets make parameters, groups stay out of the address, and a +server.rs next to a page is an endpoint.">
-
-```text
-src/routes/
-  +layout.wisp          wraps every page
-  +page.wisp            /
-  blog/
-    +page.wisp          /blog
-    [slug]/+page.wisp   /blog/hello
-  api/notes/+server.rs  /api/notes
-  docs/intro/+page.md   /docs/intro
-```
-
-</Band>
-
-<Band id="forms" flip title="Forms that work without JavaScript" lead="A form posts to an action. A bad value is a 422 that shows each problem beside its input and keeps what was typed. Turn JavaScript off and it still works; leave it on and the page morphs instead of reloading.">
+<Band id="forms" title="Forms that work without JavaScript" lead="A form posts to an action. A bad value is a 422 that shows each problem beside its input and keeps what was typed. With JavaScript on, the page morphs instead of reloading.">
 
 ```html
 ---
@@ -79,7 +180,7 @@ fn signup(email: Email, #[validate(min_len = 8)] password: Password) {
 
 </Band>
 
-<Band id="reactive" title="Reactivity in the same file" lead="The block is Rust that runs for each request, name is drawn on the server, and the count is JavaScript state in the browser. Turn JavaScript off and the server's HTML still works.">
+<Band id="reactive" flip title="Reactivity in the same file" lead="The block is Rust that runs for each request, name is drawn on the server, and the count is JavaScript state in the browser. Turn JavaScript off and the server's HTML still works.">
 
 ```html
 ---
@@ -96,20 +197,10 @@ let name: String = cx.query_or("name", "world");
 
 </Band>
 
-<Band id="binary" flip title="One binary" lead="Templates compile to plain Rust, and the whole app, styles and static files included, becomes one small binary. Copy it to a server, or let wisp service install keep it running.">
+<Band id="binary" title="One binary, on any host" lead="Templates compile to plain Rust, and the whole app, styles and static files included, becomes one small binary. Every fast path is proven at startup and falls back, and nothing after startup panics. The same app builds as a container, static HTML, or for an edge or serverless host.">
 
 ```bash
 wisp build
-./target/release/my-app
-
-wisp service install
-```
-
-</Band>
-
-<Band id="hosts" title="Host anywhere" lead="The same app builds as a server binary, a container, a folder of static HTML, or for an edge or serverless host. wisp deploy init writes the GitHub Actions workflow.">
-
-```bash
 wisp build --static
 wisp build --docker
 wisp build --target cloudflare
@@ -127,22 +218,6 @@ wisp deploy init cloudflare
 </div>
 </section>
 
-<section class="band fast" id="fast">
-<div class="wrap">
-<div class="claim wide">
-
-## Fast, and cheap to write
-
-On a server-rendered HTML page (the TechEmpower fortunes test without the database) on a 4-vCPU Linux VPS with 64 connections, Wisp serves 97,502 requests a second at 19.8 CPU microseconds each and 3 MB of memory. A whole app takes about half the tokens of SvelteKit or Next.js to write. A bigger one, with sign in, a posts table, uploads and live refresh, is 995 tokens: 3.4x less than SvelteKit and 3.2x less than Next.js.
-
-</div>
-
-<Speed />
-
-<p class="note">Bench of 2026-09-28 and the token counts come from the Wisp repository: <a href="/docs/overview#performance">performance</a> and <a href="/docs/tokens">how tokens are counted</a>.</p>
-</div>
-</section>
-
 <section class="final">
 <div class="wrap">
 
@@ -154,6 +229,6 @@ cd my-app
 wisp dev
 ```
 
-<p class="cta"><a class="btn primary" href="/docs">Read the docs</a> <a class="btn" href="https://github.com/wyziedevs/wisp">Star Wisp on GitHub</a></p>
+<p class="cta"><a class="btn primary" href="/docs">Read the docs</a> <a class="btn" href="https://github.com/wyziedevs/wisp">Wisp on GitHub</a></p>
 </div>
 </section>
