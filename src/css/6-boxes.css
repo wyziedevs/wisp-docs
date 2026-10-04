@@ -35,26 +35,55 @@
   mask: var(--i-note) center / contain no-repeat;
 }
 
-.callout.note {
-  border-color: color-mix(in oklch, var(--accent) 30%, var(--line));
-  background: color-mix(in oklch, var(--accent-soft) 60%, var(--bg));
-}
-
-.callout.note > p:first-child:has(> strong:only-child) {
-  color: var(--accent-ink);
+/* A callout sets its tone; the title, icon, code, links and blocks take it. */
+.callout {
+  --tone: var(--accent-ink);
+  --tint: color-mix(in oklch, var(--accent-soft) 60%, var(--bg));
+  --edge: color-mix(in oklch, var(--accent) 30%, var(--line));
+  border-color: var(--edge);
+  background: var(--tint);
 }
 
 .callout.pitfall {
-  border-color: var(--warn-line);
-  background: var(--warn-soft);
+  --tone: var(--warn);
+  --tint: var(--warn-soft);
+  --edge: var(--warn-line);
 }
 
-.callout.pitfall > p:first-child:has(> strong:only-child) {
-  color: var(--warn);
+.callout > p:first-child:has(> strong:only-child) {
+  color: var(--tone);
 }
 
 .callout.pitfall > p:first-child:has(> strong:only-child)::before {
   mask-image: var(--i-warn);
+}
+
+.callout > p {
+  margin-block: 0 0.75rem;
+}
+
+.callout > :last-child {
+  margin-bottom: 0;
+}
+
+.callout :not(pre) > code {
+  background: color-mix(in oklch, var(--tone) 16%, transparent);
+  color: color-mix(in oklch, var(--tone) 55%, var(--ink));
+}
+
+.callout a {
+  color: var(--tone);
+  text-decoration-color: color-mix(in oklch, var(--tone) 45%, transparent);
+}
+
+.callout pre {
+  margin: 0.75rem 0 0;
+  border-color: var(--edge);
+  background: color-mix(in oklch, var(--tone) 8%, var(--code));
+}
+
+.callout pre::before {
+  border-color: var(--edge);
 }
 
 .deep-dive {
