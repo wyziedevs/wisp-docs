@@ -197,12 +197,12 @@ The same five features (a list page, a contact form, a JSON endpoint, a layout a
 <tr><th scope="row">Nuxt (Vue)</th><td class="meter" aria-hidden="true"><span style="--v: 0.631"></span></td><td class="num">872</td><td class="num">8</td></tr>
 <tr><th scope="row">SvelteKit</th><td class="meter" aria-hidden="true"><span style="--v: 0.692"></span></td><td class="num">957</td><td class="num">9</td></tr>
 <tr><th scope="row">Next.js (React)</th><td class="meter" aria-hidden="true"><span style="--v: 0.703"></span></td><td class="num">971</td><td class="num">8</td></tr>
-<tr><th scope="row">Express (Node.js)</th><td class="meter" aria-hidden="true"><span style="--v: 0.836"></span></td><td class="num">1156</td><td class="num">7</td></tr>
-<tr><th scope="row">React (Vite + Express)</th><td class="meter" aria-hidden="true"><span style="--v: 1.000"></span></td><td class="num">1382</td><td class="num">8</td></tr>
+<tr><th scope="row">Express (Node.js)</th><td class="meter" aria-hidden="true"><span style="--v: 0.836"></span></td><td class="num">1,156</td><td class="num">7</td></tr>
+<tr><th scope="row">React (Vite + Express)</th><td class="meter" aria-hidden="true"><span style="--v: 1.000"></span></td><td class="num">1,382</td><td class="num">8</td></tr>
 </tbody>
 </table>
 
-A bigger app, with sign up and in, a posts table, uploads, live refresh and a component, is 995 tokens in Wisp, 3473 in SvelteKit and 3331 in Next.js. The numbers come from `cargo run -p wisp-tokens`, which counts every hand-written file and its path with a byte-pair style estimate; the [Tokens page](/docs/tokens/) has the method and the apps.
+A bigger app, with sign up and in, a posts table, uploads, live refresh and a component, is 995 tokens in Wisp, 3,473 in SvelteKit and 3,331 in Next.js. The numbers come from `cargo run -p wisp-tokens`, which counts every hand-written file and its path with a byte-pair style estimate; the [Tokens page](/docs/tokens/) has the method and the apps.
 
 </div>
 </div>

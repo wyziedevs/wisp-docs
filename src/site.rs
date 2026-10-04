@@ -16,3 +16,8 @@ pub fn is_reference(p: &wisp::MdPage) -> bool {
 pub fn dir(path: &str) -> String {
     if path.ends_with('/') { path.to_string() } else { format!("{path}/") }
 }
+
+/// The request path without its trailing slash (`/docs/cli/` is `/docs/cli`), the form pages are keyed by.
+pub fn bare(path: &str) -> &str {
+    if path.len() > 1 { path.trim_end_matches('/') } else { path }
+}

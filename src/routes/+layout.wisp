@@ -3,7 +3,7 @@ const SITE: &str = "https://wispweb.dev";
 const ORG: &str = r#"{"@type":"Organization","name":"Wyzie LLC","url":"https://wyzie.io"}"#;
 const SITE_LD: &str = r#"{"@context":"https://schema.org","@type":"WebSite","name":"Wisp","url":"~/","potentialAction":{"@type":"SearchAction","target":"~/search?q={search_term_string}","query-input":"required name=search_term_string"}}"#;
 
-let path = cx.path();
+let path = site::bare(cx.path());
 let home = path == "/";
 let me = wisp::pages("")
     .iter()
@@ -96,7 +96,7 @@ let ld = match me {
       <span>Wisp</span>
     </a>
 
-    <form class="search" action="/search" role="search" bind:this="bar">
+    <form class="search" action="/search/" role="search" bind:this="bar">
       <label class="sr" for="q">Search</label>
       <SearchIcon />
       <input id="q" name="q" type="search" placeholder="Search" autocomplete="off" spellcheck="false" bind:this="q">
@@ -211,7 +211,16 @@ let ld = match me {
 
   const flip = () => swap()
 
+  // The phone menu closes on a press outside it and on Escape.
+  const mnav = () => document.querySelector('.mnav')
+  const shut = (e) => {
+    const m = mnav()
+    if (m?.open && (e.type === 'keydown' ? e.key === 'Escape' : !m.contains(e.target))) m.removeAttribute('open')
+  }
+
   onMount(() => {
+    addEventListener('pointerdown', shut)
+    addEventListener('keydown', shut)
     blocks()
     haptics()
     demo()

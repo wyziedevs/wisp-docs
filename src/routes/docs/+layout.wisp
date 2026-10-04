@@ -15,7 +15,7 @@ all.sort_by_key(|p| {
     (lead, order)
 });
 let is_ref: Vec<bool> = all.iter().map(|p| site::is_reference(p)).collect();
-let at = all.iter().position(|p| p.path == cx.path());
+let at = all.iter().position(|p| p.path == site::bare(cx.path()));
 let reference = at.is_some_and(|i| is_ref[i]);
 let kind = if reference { "Reference" } else { "Learn" };
 let list: Vec<_> = all
@@ -30,7 +30,7 @@ let ref_home = all.iter().zip(&is_ref).find(|(_, r)| **r).map_or("/docs", |(p, _
 let mut groups: Vec<(&str, bool, Vec<_>)> = Vec::new();
 for p in &list {
     let g = p.get("group").unwrap_or("Docs");
-    let here = p.path == cx.path();
+    let here = p.path == site::bare(cx.path());
     match groups.last_mut() {
         Some((name, open, items)) if *name == g => {
             *open |= here;
@@ -45,15 +45,15 @@ if let Some(first) = groups.first_mut() {
 }
 let group = at.and_then(|i| all[i].get("group")).unwrap_or("Docs");
 
-let me = list.iter().position(|p| p.path == cx.path());
+let me = list.iter().position(|p| p.path == site::bare(cx.path()));
 let prev = me.and_then(|i| i.checked_sub(1)).map(|i| list[i]);
 let next = me.and_then(|i| list.get(i + 1)).copied();
 let toc: &[(&str, &[(&str, &str, u8)])] = include!(concat!(env!("OUT_DIR"), "/toc.rs"));
 let heads = toc
     .iter()
-    .find(|(p, _)| *p == cx.path())
+    .find(|(p, _)| *p == site::bare(cx.path()))
     .map_or(&[][..], |(_, h)| *h);
-let edit = match cx.path() {
+let edit = match site::bare(cx.path()) {
     "/docs" => "src/routes/docs/+page.md".to_string(),
     p => format!("src/routes{p}/+page.md"),
 };
@@ -72,7 +72,7 @@ let edit = match cx.path() {
             <summary>{name}</summary>
             <ul>
               {#each items as p}
-                <li><a href={site::dir(p.path)} aria-current={(p.path == cx.path()).then_some("page")}>{p.title}</a></li>
+                <li><a href={site::dir(p.path)} aria-current={(p.path == site::bare(cx.path())).then_some("page")}>{p.title}</a></li>
               {/each}
             </ul>
           </details>
@@ -90,7 +90,7 @@ let edit = match cx.path() {
     <h1 class="doc-title">{at.map(|i| all[i].title).unwrap_or("")}</h1>
     <slot />
 
-    <div class="useful" bind:this="useful">
+    <div class="useful">
       <p>Is This Page Useful?</p>
       <button type="button" class="btn" data-v="yes">Yes</button>
       <button type="button" class="btn" data-v="no">No</button>
@@ -112,13 +112,19 @@ let edit = match cx.path() {
   import { afterNavigate } from 'wisp'
   import { reading, path } from '$lib/toc.js'
 
-  let doc, copied, useful
+  let doc, copied
   let off = null
 
   // Heading link icons and the On This Page marker, again for each page.
   function build() {
     off?.()
     off = reading(doc, '.toc ul', (m) => (copied.textContent = m))
+    // A page change can swap the node for a fresh one, so each page's box is wired once.
+    const box = document.querySelector('.useful')
+    if (box && !box.dataset.live) {
+      box.dataset.live = '1'
+      box.addEventListener('click', feedback)
+    }
   }
 
   // Is This Page Useful: a thank you, nothing sent anywhere.
@@ -129,17 +135,18 @@ let edit = match cx.path() {
     p.className = 'thanks'
     p.setAttribute('role', 'status')
     p.textContent = b.dataset.v === 'yes' ? 'Thanks for Letting Us Know' : 'Thanks. An issue on GitHub helps us fix it.'
-    useful.replaceChildren(p)
+    e.currentTarget.replaceChildren(p)
   }
 
   onMount(() => {
     build()
-    useful.addEventListener('click', feedback)
     if (location.hash) document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView()
   })
   // A new page eases in; a hash jump or a form post on the same page does not.
   afterNavigate(({ from, to }) => {
     build()
+    // On a phone the page menu folds away once a page is chosen.
+    if (path(from) !== path(to) && !matchMedia('(min-width: 48rem)').matches) document.querySelector('.menu')?.removeAttribute('open')
     if (path(from) === path(to) || matchMedia('(prefers-reduced-motion: reduce)').matches) return
     doc.animate(
       [{ opacity: 0, translate: '0 6px' }, { opacity: 1, translate: '0 0' }],

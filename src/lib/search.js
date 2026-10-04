@@ -110,6 +110,12 @@ function search(query) {
   return order.flatMap((p) => out.filter((h) => h.e.path === p))
 }
 
+// The hits for a query, for the search page: the same ranking as the box, ten at most.
+export async function results(query) {
+  await load()
+  return index ? search(query) : []
+}
+
 function snippet(text, qs) {
   const low = text.toLowerCase()
   let at = -1
@@ -135,7 +141,7 @@ function mark(el, text, qs) {
 
 // Wires the header form and the results box. els: bar, q, dlg, fq, status,
 // hits, tip. From 48rem the header field is the search box and the results
-// drop below it; on a narrower screen they open as a modal with its own field
+// drop below it (at least 32rem wide, centered); on a narrower screen they open as a modal with its own field
 // (fq). Returns { open, close }.
 export function finder({ bar, q, dlg, fq: modalField, status, hits, tip }) {
   const wide = matchMedia('(min-width: 48rem)')
@@ -219,9 +225,11 @@ export function finder({ bar, q, dlg, fq: modalField, status, hits, tip }) {
   // The results sit under the header field, as wide as it is.
   function place() {
     const r = bar.getBoundingClientRect()
+    const w = Math.min(Math.max(r.width, 32 * 16), innerWidth - 32)
+    const left = Math.min(Math.max(r.left + r.width / 2 - w / 2, 16), innerWidth - 16 - w)
     dlg.style.setProperty('--drop-top', r.bottom + 8 + 'px')
-    dlg.style.setProperty('--drop-left', r.left + 'px')
-    dlg.style.setProperty('--drop-w', r.width + 'px')
+    dlg.style.setProperty('--drop-left', left + 'px')
+    dlg.style.setProperty('--drop-w', w + 'px')
   }
 
   function open(v = '') {
@@ -259,7 +267,7 @@ export function finder({ bar, q, dlg, fq: modalField, status, hits, tip }) {
       e.preventDefault()
       const li = hits.querySelectorAll('[role=option]')[sel < 0 ? 0 : sel]
       if (li) li.querySelector('a').click()
-      else if (fq.value.trim()) location.href = '/search?q=' + encodeURIComponent(fq.value)
+      else if (fq.value.trim()) location.href = '/search/?q=' + encodeURIComponent(fq.value)
       close()
       if (fq === q) q.blur()
     }

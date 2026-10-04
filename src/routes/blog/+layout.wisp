@@ -25,7 +25,7 @@ let tags_of = |p: &wisp::MdPage| -> Vec<&'static str> {
     p.get("tags").unwrap_or("").split(',').map(str::trim).filter(|t| !t.is_empty()).collect()
 };
 
-let path = cx.path();
+let path = site::bare(cx.path());
 let index = path == "/blog";
 let tags_page = path == "/blog/tags";
 let posts: Vec<&wisp::MdPage> = wisp::pages("blog").iter().filter(|p| p.get("date").is_some()).collect();
@@ -75,13 +75,11 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
         <a href="/blog/tags/">All Tags</a>
         <a href="/feed.xml">RSS</a>
       </form>
-      {#if !tag.is_empty()}
-        <p class="blog-tag">Tagged <strong>{tag}</strong> · <a href="/blog/">Show All</a></p>
-      {/if}
+      <p class="blog-tag" hidden={tag.is_empty()}>Tagged <strong>{tag}</strong> · <a href="/blog/">Show All</a></p>
     </header>
     <ul class="posts">
       {#each shown as (p, text)}
-        <li data-text={text}>
+        <li data-text={text} data-tags={tags_of(p).join(",").to_lowercase()}>
           <h2><a href={site::dir(p.path)}>{p.title}</a></h2>
           {#if let Some(d) = p.get("description")}<p>{d}</p>{/if}
           <Meta iso={p.get("date").unwrap_or("")} when={day(p.get("date").unwrap_or(""), true)} author={p.get("author").unwrap_or("")} read={read(p.path)} />
@@ -133,17 +131,37 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
   import { afterNavigate } from 'wisp'
   import { reading } from '$lib/toc.js'
 
-  // Filters the list as you type; without JS the form filters on the server.
-  function filter(e) {
-    const words = e.target.value.trim().toLowerCase()
+  // Shows the posts that hold every word of q and carry the tag. The server
+  // filters the same way for a request; a static host cannot, so the page does.
+  function show(q, tag) {
+    const words = q.trim().toLowerCase()
     let n = 0
     for (const li of document.querySelectorAll('.posts li')) {
-      const hit = !words || li.dataset.text.includes(words)
+      const hit = (!words || li.dataset.text.includes(words)) && (!tag || li.dataset.tags.split(',').includes(tag))
       li.hidden = !hit
       if (hit) n++
     }
     document.querySelector('.blog-count').textContent = n + (n === 1 ? ' post' : ' posts')
     document.querySelector('.blog-none').hidden = n > 0
+  }
+
+  const tagOf = () => (new URLSearchParams(location.search).get('tag') ?? '').toLowerCase()
+
+  function filter(e) {
+    show(e.target.value, tagOf())
+  }
+
+  // The address's ?q= and ?tag= on the list page.
+  function query() {
+    const field = document.getElementById('blog-q')
+    if (!field) return
+    const p = new URLSearchParams(location.search)
+    const tag = p.get('tag') ?? ''
+    const chip = document.querySelector('.blog-tag')
+    chip.hidden = !tag
+    chip.querySelector('strong').textContent = tag
+    field.value = p.get('q') ?? ''
+    show(field.value, tag.toLowerCase())
   }
 
   // Heading anchors on a post, and the On This Page marker, as in the docs.
@@ -155,6 +173,14 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
     if (art) off = reading(art, '.post-toc ul')
   }
 
-  onMount(post)
-  afterNavigate(post)
+  onMount(() => {
+    post()
+    query()
+    // Typing filters in place, so Enter has nothing to submit.
+    document.querySelector('.blog-bar')?.addEventListener('submit', (e) => e.preventDefault())
+  })
+  afterNavigate(() => {
+    post()
+    query()
+  })
 </script>

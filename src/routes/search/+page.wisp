@@ -29,17 +29,49 @@ for p in wisp::pages("").iter().chain(wisp::pages("docs").iter()).chain(wisp::pa
 
 <div class="page narrow">
   <h1>Search</h1>
-  <form class="plain-find" action="/search" role="search">
+  <form class="plain-find" action="/search/" role="search">
     <label class="sr" for="sq">Search the Docs</label>
     <input id="sq" name="q" type="search" value={q} placeholder="Search the Docs">
     <button class="btn primary">Search</button>
   </form>
-  {#if !words.is_empty()}
-    <p class="muted">{found.len()} {if found.len() == 1 { "result" } else { "results" }} for {q}</p>
-    <ul class="found">
-      {#each found as (href, title, about)}
-        <li><a href={href}>{title}</a><span>{about}</span></li>
-      {/each}
-    </ul>
-  {/if}
+  <p class="muted" role="status" aria-live="polite" bind:this="count" data-q={q.trim()} hidden={words.is_empty()}>{if !words.is_empty() { format!("{} {} for {q}", found.len(), if found.len() == 1 { "result" } else { "results" }) } else { String::new() }}</p>
+  <ul class="found" bind:this="list">
+    {#each found as (href, title, about)}
+      <li><a href={href}>{title}</a><span>{about}</span></li>
+    {/each}
+  </ul>
 </div>
+
+<script>
+  import { afterNavigate } from 'wisp'
+  import { results } from '$lib/search.js'
+
+  let count, list
+
+  // A static host cannot run the search for the page, so the page does: the
+  // query in the address is answered from the same index as the header box.
+  async function fill() {
+    const q = new URLSearchParams(location.search).get('q')?.trim() ?? ''
+    const field = document.getElementById('sq')
+    if (!q || count.dataset.q) return // a server already answered
+    field.value = q
+    const hits = await results(q)
+    list.replaceChildren(
+      ...hits.map(({ e }) => {
+        const li = document.createElement('li')
+        const a = document.createElement('a')
+        const span = document.createElement('span')
+        a.href = e.path + (e.id ? '#' + e.id : '')
+        a.textContent = e.heading || e.title
+        span.textContent = e.id ? e.title : e.text
+        li.append(a, span)
+        return li
+      }),
+    )
+    count.textContent = hits.length + (hits.length === 1 ? ' result' : ' results') + ' for ' + q
+    count.hidden = false
+  }
+
+  onMount(fill)
+  afterNavigate(fill)
+</script>
