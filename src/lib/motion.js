@@ -1,6 +1,6 @@
 // GSAP motion: sections, docs blocks and lists rise as they scroll in, table rows
 // follow one by one with their bars growing and numbers counting, code unrolls,
-// the hero ghost leans toward the pointer, the hero drifts away as you scroll
+// the hero drifts away as you scroll
 // and Rust is underlined again on hover. GSAP is vendored in /vendor, loaded after the page
 // is idle and only where motion is welcome. Without it (no JavaScript, reduced
 // motion, a failed load) the page is complete and CSS does the lighter version.
@@ -121,25 +121,6 @@ export function motion() {
     undo.push(() => gsap.set(chips, { clearProps: 'opacity,transform,transition' }))
   }
 
-  // The hero ghost leans toward the pointer.
-  function lean() {
-    const logo = document.querySelector('.hero .logo')
-    if (!logo || !fine.matches) return
-    const x = gsap.quickTo(logo, '--lx', { duration: 0.8, ease: 'power3.out' })
-    const y = gsap.quickTo(logo, '--ly', { duration: 0.8, ease: 'power3.out' })
-    const move = (e) => {
-      const r = logo.getBoundingClientRect()
-      const clamp = gsap.utils.clamp(-1, 1)
-      x(clamp((e.clientX - r.left - r.width / 2) / innerWidth * 2.5))
-      y(clamp((e.clientY - r.top - r.height / 2) / innerHeight * 2.5))
-    }
-    addEventListener('pointermove', move, { passive: true })
-    undo.push(() => {
-      removeEventListener('pointermove', move)
-      gsap.set(logo, { '--lx': 0, '--ly': 0 })
-    })
-  }
-
   // Hovering Rust draws its underline again.
   function scribble() {
     const em = document.querySelector('.hero em')
@@ -173,7 +154,6 @@ export function motion() {
     unroll()
     hosts()
     scribble()
-    lean()
     drift()
   }
 

@@ -1,6 +1,6 @@
 <section class="hero">
   <div class="wrap">
-    <img class="logo" src="/favicon.svg" alt="" width="132" height="132">
+    <div class="stage"><img class="logo" src="/favicon.svg" alt="" width="132" height="132"></div>
     <h1><span class="sr">Wisp</span><span class="word" aria-hidden="true"><span>W</span><span>i</span><span>s</span><span>p</span></span></h1>
     <p class="sub">A Fast, Fun Web Framework for <em>Rust<svg class="scribble" viewBox="0 0 120 21" aria-hidden="true" focusable="false"><path pathLength="1" d="M3 13.5C28 10.4 63 10.9 116 6.2C88 11.8 52 15.6 22 18.6"/></svg></em></p>
     <p class="cta">
@@ -29,11 +29,28 @@
     text-align: center;
   }
 
+  /* The ghost stays put and bounces; a shadow below it shrinks as it rises. */
+  .hero .stage {
+    position: relative;
+    width: clamp(5.5rem, 14vw, 8.25rem);
+    margin: 0 auto 1.5rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .hero .stage::after {
+    content: "";
+    position: absolute;
+    inset: auto 18% 0;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--ink);
+    opacity: 0.16;
+  }
+
   .hero .logo {
     display: block;
-    width: clamp(5.5rem, 14vw, 8.25rem);
+    width: 100%;
     height: auto;
-    margin: 0 auto 1.5rem;
     user-select: none;
     -webkit-user-drag: none;
   }
@@ -175,12 +192,6 @@
     display: inline-block;
   }
 
-  /* The logo leans toward the pointer (motion.js sets --lx and --ly, -1 to 1). */
-  .hero .logo {
-    rotate: calc(var(--lx, 0) * 7deg);
-    translate: calc(var(--lx, 0) * 0.375rem) calc(var(--ly, 0) * 0.25rem);
-  }
-
   @media (prefers-reduced-motion: no-preference) {
     .hero .wrap > * {
       animation: fade 500ms var(--ease) backwards;
@@ -192,11 +203,15 @@
     .hero .wrap > :nth-child(5) { animation-delay: 240ms; }
     .hero .wrap > :nth-child(6) { animation-delay: 300ms; }
 
-    /* The logo floats. */
+    /* The ghost hops, the shadow breathes with it. */
     .hero .logo {
       animation:
         fade 500ms var(--ease) backwards,
-        bob 5s cubic-bezier(0.37, 0, 0.63, 1) 600ms infinite alternate;
+        hop 1.4s cubic-bezier(0.45, 0, 0.55, 1) 600ms infinite alternate;
+    }
+
+    .hero .stage::after {
+      animation: shade 1.4s cubic-bezier(0.45, 0, 0.55, 1) 600ms infinite alternate;
     }
 
     /* Wisp's letters hop up one after another. */
@@ -215,6 +230,19 @@
     /* The pen goes across, then flicks back underneath. */
     .hero .scribble path {
       animation: pen 900ms cubic-bezier(0.65, 0, 0.35, 1) 550ms backwards;
+    }
+  }
+
+  @keyframes hop {
+    to {
+      translate: 0 -0.875rem;
+    }
+  }
+
+  @keyframes shade {
+    to {
+      scale: 0.7 1;
+      opacity: 0.08;
     }
   }
 
