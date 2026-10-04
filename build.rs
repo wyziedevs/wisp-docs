@@ -10,8 +10,10 @@ const TEXT_CAP: usize = 420;
 
 fn main() {
     println!("cargo:rerun-if-changed=src/routes/docs");
+    println!("cargo:rerun-if-changed=src/routes/blog");
     println!("cargo:rerun-if-changed=build.rs");
     index();
+    blog();
     wisp_build::run();
 }
 
@@ -52,6 +54,47 @@ fn index() {
     // Only rewrite on change, so an unchanged index does not retrigger the build.
     if fs::read_to_string("static/search-index.json").ok().as_deref() != Some(&out) {
         let _ = fs::write("static/search-index.json", out);
+    }
+}
+
+/// Each blog post's reading words and h2s for the blog layout:
+/// [(path, words, [(id, text)])]. Words are the prose a reader reads (text
+/// outside code fences, Markdown marks stripped), counted at build time.
+fn blog() {
+    let mut posts = Vec::new();
+    collect(Path::new("src/routes/blog"), &mut posts);
+    posts.sort();
+    let mut out = String::from("&[");
+    for md in posts {
+        let Ok(src) = fs::read_to_string(&md) else { continue };
+        let Some(dir) = md.parent().and_then(|p| p.strip_prefix("src/routes").ok()) else { continue };
+        let path = format!("/{}", dir.to_string_lossy().replace('\\', "/"));
+        let body = src
+            .strip_prefix("---")
+            .and_then(|r| r.split_once("\n---"))
+            .map_or(src.as_str(), |(_, b)| b);
+        let (_, heads) = page(&path, &src);
+        let mut words = 0;
+        let mut fenced = false;
+        for line in body.lines() {
+            if line.trim_start().starts_with("```") {
+                fenced = !fenced;
+            } else if !fenced {
+                words += plain(line.trim_start_matches('#')).split_whitespace().count();
+            }
+        }
+        let _ = write!(out, "({path:?}, {words}, &[");
+        for (id, h, level) in heads {
+            if level == 2 {
+                let _ = write!(out, "({id:?}, {h:?}),");
+            }
+        }
+        out.push_str("]),");
+    }
+    out.push(']');
+    let rs = Path::new(&std::env::var("OUT_DIR").unwrap_or_default()).join("blog.rs");
+    if fs::read_to_string(&rs).ok().as_deref() != Some(&out) {
+        let _ = fs::write(&rs, out);
     }
 }
 

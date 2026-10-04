@@ -3,6 +3,7 @@ title: Introducing Wisp
 description: Wisp is a fast, fun web framework for Rust: file routes, templates compiled to Rust, form actions and one binary. Here is what it is and why we made it.
 date: 2026-10-04
 author: The Wisp Team
+tags: Release, Engineering
 ---
 
 Today we are sharing Wisp, a fast, fun web framework for Rust. A folder is a URL, its `+page.wisp` is the page, and the whole app, styles and static files included, builds to one small binary.

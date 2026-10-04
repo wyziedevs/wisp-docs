@@ -32,6 +32,7 @@ let links = [
   <meta name="author" content="Wyzie LLC">
   {@html wisp::og(title, about, &format!("{SITE}/og.png"))}
   <link rel="canonical" href={format!("{SITE}{}", path)}>
+  <link rel="alternate" type="application/rss+xml" title="Wisp Blog" href="/rss.xml">
   <meta name="twitter:card" content="summary_large_image">
 </head>
 <a class="skip" href="#main">Skip to Content</a>
