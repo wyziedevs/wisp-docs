@@ -1,8 +1,8 @@
 <section class="hero">
   <div class="wrap">
     <img class="logo" src="/favicon.svg" alt="" width="132" height="132">
-    <h1>Wisp</h1>
-    <p class="sub">A Fast, Fun Web Framework for <em>Rust<svg class="scribble" viewBox="0 0 120 13" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path vector-effect="non-scaling-stroke" d="M2 8.5C22 5.6 47 6.8 70 5C88 3.7 104 4.6 118 2.4"/><path vector-effect="non-scaling-stroke" d="M14 11.2C38 9.4 66 10.2 96 8.6"/></svg></em></p>
+    <h1><span class="sr">Wisp</span><span class="word" aria-hidden="true"><span>W</span><span>i</span><span>s</span><span>p</span></span></h1>
+    <p class="sub">A Fast, Fun Web Framework for <em>Rust<svg class="scribble" viewBox="0 0 120 21" aria-hidden="true" focusable="false"><path pathLength="1" d="M3 13.5C28 10.4 63 10.9 116 6.2C88 11.8 52 15.6 22 18.6"/></svg></em></p>
     <p class="cta">
       <a class="btn primary" href="/docs/quick-start">Learn Wisp</a>
       <a class="btn" href="/docs/design">API Reference</a>
@@ -146,7 +146,8 @@
     animation: check 350ms var(--ease) 80ms backwards;
   }
 
-  /* Rust gets a pen stroke: one tapered brush stroke, drawn left to right. */
+  /* Rust gets a marker underline: one stroke across that flicks back beneath,
+     drawn like a pen (the path is pathLength 1, so the dash is the whole line). */
   .hero em {
     position: relative;
     font-style: normal;
@@ -156,17 +157,28 @@
 
   .hero .scribble {
     position: absolute;
-    left: -0.05em;
-    bottom: -0.26em;
-    width: calc(100% + 0.1em);
-    height: 0.36em;
+    left: -0.06em;
+    bottom: -0.34em;
+    width: calc(100% + 0.12em);
+    height: auto;
     overflow: visible;
     fill: none;
     stroke: currentColor;
-    stroke-width: 2.5px;
+    stroke-width: 4.5;
     stroke-linecap: round;
-    opacity: 0.85;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
     pointer-events: none;
+  }
+
+  .hero .word > span {
+    display: inline-block;
+  }
+
+  /* The logo leans toward the pointer (motion.js sets --lx and --ly, -1 to 1). */
+  .hero .logo {
+    rotate: calc(var(--lx, 0) * 7deg);
+    translate: calc(var(--lx, 0) * 0.375rem) calc(var(--ly, 0) * 0.25rem);
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -187,8 +199,36 @@
         bob 5s cubic-bezier(0.37, 0, 0.63, 1) 600ms infinite alternate;
     }
 
-    .hero .scribble {
-      animation: draw 700ms var(--ease) 500ms backwards;
+    /* Wisp's letters hop up one after another. */
+    .hero h1 {
+      animation: none;
+    }
+
+    .hero .word > span {
+      animation: letter 600ms var(--ease) backwards;
+    }
+
+    .hero .word > :nth-child(2) { animation-delay: 50ms; }
+    .hero .word > :nth-child(3) { animation-delay: 100ms; }
+    .hero .word > :nth-child(4) { animation-delay: 150ms; }
+
+    /* The pen goes across, then flicks back underneath. */
+    .hero .scribble path {
+      animation: pen 900ms cubic-bezier(0.65, 0, 0.35, 1) 550ms backwards;
+    }
+  }
+
+  @keyframes letter {
+    from {
+      opacity: 0;
+      translate: 0 0.4em;
+      rotate: -8deg;
+    }
+  }
+
+  @keyframes pen {
+    from {
+      stroke-dashoffset: 1;
     }
   }
 </style>

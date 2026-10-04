@@ -119,11 +119,14 @@ a {
   color: var(--accent-ink);
   text-underline-offset: 0.2em;
   text-decoration-thickness: 1px;
-  transition: color var(--t);
+  transition:
+    color var(--t),
+    text-underline-offset 200ms var(--ease);
 }
 
 a:hover {
   color: var(--accent-hover);
+  text-underline-offset: 0.3em;
 }
 
 :focus-visible {

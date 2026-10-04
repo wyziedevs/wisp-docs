@@ -1,6 +1,7 @@
 // GSAP motion: sections, docs blocks and lists rise as they scroll in, table rows
-// follow one by one, the hero drifts away as you scroll and Rust is
-// underlined again on hover. GSAP is vendored in /vendor, loaded after the page
+// follow one by one with their bars growing and numbers counting, code unrolls,
+// the hero ghost leans toward the pointer, the hero drifts away as you scroll
+// and Rust is underlined again on hover. GSAP is vendored in /vendor, loaded after the page
 // is idle and only where motion is welcome. Without it (no JavaScript, reduced
 // motion, a failed load) the page is complete and CSS does the lighter version.
 const REVEAL = [
@@ -56,25 +57,96 @@ export function motion() {
     })
   }
 
-  // Table rows settle in as their table arrives.
+  // Table rows settle in as their table arrives, the bars grow from zero and
+  // the numbers count up to their value.
   function rows() {
     for (const t of document.querySelectorAll('.tally tbody')) {
+      const bars = t.querySelectorAll('.meter span')
+      const nums = [...t.querySelectorAll('.num')].filter((n) => /^[\d,]+$/.test(n.textContent.trim()))
+      gsap.set(bars, { scaleX: 0, transformOrigin: '0 50%' })
       ScrollTrigger.create({
         trigger: t,
         start: 'top 90%',
         once: true,
-        onEnter: () => gsap.from(t.rows, { opacity: 0, x: -10, duration: 0.5, stagger: 0.045, ease: 'power3.out', clearProps: 'opacity,transform' }),
+        onEnter: () => {
+          gsap.from(t.rows, { opacity: 0, x: -10, duration: 0.5, stagger: 0.045, ease: 'power3.out', clearProps: 'opacity,transform' })
+          gsap.to(bars, { scaleX: 1, duration: 1.1, stagger: 0.06, delay: 0.15, ease: 'expo.out', clearProps: 'transform' })
+          for (const n of nums) count(n)
+        },
+      })
+      undo.push(() => gsap.set(bars, { clearProps: 'transform' }))
+    }
+  }
+
+  function count(n) {
+    const text = n.textContent.trim()
+    const end = +text.replace(/,/g, '')
+    const comma = text.includes(',')
+    const v = { x: 0 }
+    gsap.to(v, {
+      x: end,
+      duration: 1.2,
+      delay: 0.15,
+      ease: 'expo.out',
+      onUpdate: () => (n.textContent = comma ? Math.round(v.x).toLocaleString('en-US') : String(Math.round(v.x))),
+      onComplete: () => (n.textContent = text),
+    })
+    undo.push(() => (n.textContent = text))
+  }
+
+  // Code samples on the home page unroll top to bottom as they arrive.
+  function unroll() {
+    for (const c of document.querySelectorAll('.showcase pre, .band .sample pre, .cmp .scroll')) {
+      ScrollTrigger.create({
+        trigger: c,
+        start: 'top 88%',
+        once: true,
+        onEnter: () => gsap.fromTo(c, { clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0% 0)', duration: 0.9, ease: 'power3.inOut', clearProps: 'clipPath' }),
       })
     }
+  }
+
+  // The host names pop in one by one.
+  function hosts() {
+    const chips = document.querySelectorAll('.hosts > span')
+    if (!chips.length) return
+    // Their hover transition is off while GSAP runs, or the two would fight.
+    gsap.set(chips, { opacity: 0, scale: 0.85, transition: 'none' })
+    ScrollTrigger.create({
+      trigger: '.hosts',
+      start: 'top 92%',
+      once: true,
+      onEnter: () => gsap.to(chips, { opacity: 1, scale: 1, duration: 0.45, stagger: 0.03, ease: 'power3.out', clearProps: 'opacity,transform,transition' }),
+    })
+    undo.push(() => gsap.set(chips, { clearProps: 'opacity,transform,transition' }))
+  }
+
+  // The hero ghost leans toward the pointer.
+  function lean() {
+    const logo = document.querySelector('.hero .logo')
+    if (!logo || !fine.matches) return
+    const x = gsap.quickTo(logo, '--lx', { duration: 0.8, ease: 'power3.out' })
+    const y = gsap.quickTo(logo, '--ly', { duration: 0.8, ease: 'power3.out' })
+    const move = (e) => {
+      const r = logo.getBoundingClientRect()
+      const clamp = gsap.utils.clamp(-1, 1)
+      x(clamp((e.clientX - r.left - r.width / 2) / innerWidth * 2.5))
+      y(clamp((e.clientY - r.top - r.height / 2) / innerHeight * 2.5))
+    }
+    addEventListener('pointermove', move, { passive: true })
+    undo.push(() => {
+      removeEventListener('pointermove', move)
+      gsap.set(logo, { '--lx': 0, '--ly': 0 })
+    })
   }
 
   // Hovering Rust draws its underline again.
   function scribble() {
     const em = document.querySelector('.hero em')
     if (!em || !fine.matches) return
-    const stroke = em.querySelector('svg')
+    const pen = em.querySelector('path')
     const again = () =>
-      gsap.fromTo(stroke, { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.6, ease: 'power2.out', overwrite: true, clearProps: 'clipPath' })
+      gsap.fromTo(pen, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.75, ease: 'power2.inOut', overwrite: true })
     em.addEventListener('pointerenter', again)
     undo.push(() => em.removeEventListener('pointerenter', again))
   }
@@ -98,7 +170,10 @@ export function motion() {
     document.documentElement.classList.add('gsap')
     reveal()
     rows()
+    unroll()
+    hosts()
     scribble()
+    lean()
     drift()
   }
 
