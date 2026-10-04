@@ -68,7 +68,7 @@ A route pays only for the features it uses, and a change that touches the reques
 <div class="wrap">
 <div class="claim wide">
 
-## An AI Writes the Same App in Half the Tokens
+## Make the Same App with Half the Tokens
 
 AI writes most code now, and every token it reads and writes costs time and money. Wisp is built so an app costs the fewest: conventions instead of config, types the compiler infers, and forms that write themselves. The whole reference is one file, [llms.txt and AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md), and `wisp mcp` serves it to coding agents.
 
@@ -96,7 +96,7 @@ fn default(#[validate(len = 1..=50)] name: String, email: Email) {
 </div>
 </figure>
 <figure class="cmp">
-<figcaption>SvelteKit: the same form, 396 tokens</figcaption>
+<figcaption>SvelteKit: the same form, 470 tokens</figcaption>
 <div class="file tabbed">
 <div class="tabs" role="radiogroup" aria-label="SvelteKit files">
 <input class="sr" type="radio" name="sk-file" id="sk-server" checked>
@@ -109,6 +109,8 @@ fn default(#[validate(len = 1..=50)] name: String, email: Email) {
 ```js
 import { fail, redirect } from '@sveltejs/kit';
 
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export const actions = {
   default: async ({ request }) => {
     const form = await request.formData();
@@ -116,7 +118,7 @@ export const actions = {
     const email = String(form.get('email') ?? '');
     const errors = {};
     if (name.length < 1 || name.length > 50) errors.name = 'Name must be 1 to 50 characters';
-    if (!email.includes('@')) errors.email = 'Enter a valid email';
+    if (!EMAIL.test(email)) errors.email = 'Enter a valid email';
     if (errors.name || errors.email) return fail(422, { name, email, errors });
     console.log(`${name} <${email}>`);
     redirect(303, '/');
@@ -135,10 +137,10 @@ export const actions = {
 
 <svelte:head><title>Contact</title></svelte:head>
 <form method="POST" use:enhance>
-  <input name="name" value={form?.name ?? ''} />
-  {#if form?.errors?.name}<p>{form.errors.name}</p>{/if}
-  <input name="email" value={form?.email ?? ''} />
-  {#if form?.errors?.email}<p>{form.errors.email}</p>{/if}
+  <label>Name <input name="name" required minlength="1" maxlength="50" value={form?.name ?? ''} />
+    {#if form?.errors?.name}<small class="problem">{form.errors.name}</small>{/if}</label>
+  <label>Email <input name="email" type="email" required value={form?.email ?? ''} />
+    {#if form?.errors?.email}<small class="problem">{form.errors.email}</small>{/if}</label>
   <button>Send</button>
 </form>
 ```
@@ -155,10 +157,10 @@ The same five features (a list page, a contact form, a JSON endpoint, a layout a
 | Stack | Tokens | Files |
 |---|---:|---:|
 | **Wisp** | **464** | 6 |
-| SvelteKit | 928 | 9 |
-| Next.js | 934 | 8 |
-| Axum + askama | 1330 | 7 |
-| Actix + tera | 1457 | 7 |
+| SvelteKit | 1002 | 9 |
+| Next.js | 1010 | 8 |
+| Axum + askama | 1456 | 7 |
+| Actix + tera | 1531 | 7 |
 
 A bigger app, with sign up and in, a posts table, uploads, live refresh and a component, is 995 tokens in Wisp, 3368 in SvelteKit and 3220 in Next.js. The numbers come from `cargo run -p wisp-tokens`, which counts every hand-written file and its path with a byte-pair style estimate; the [Tokens page](/docs/tokens) has the method and the apps.
 

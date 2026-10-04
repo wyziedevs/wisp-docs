@@ -22,10 +22,10 @@ Most app code is written by AI, so an app's cost is measured in tokens, and keep
 | Stack | list | form | api | layout | search | data | setup | total | chars / 4 | files |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | **Wisp** | 58 | 89 | 31 | 60 | 111 | 115 | 0 | **464** | 283 | 6 |
-| SvelteKit 2 | 128 | 396 | 57 | 83 | 192 | 72 | 0 | 928 | 596 | 9 |
-| Next.js 15 | 107 | 363 | 44 | 108 | 241 | 71 | 0 | 934 | 674 | 8 |
-| Axum 0.8 + askama | 145 | 455 | 29 | 104 | 217 | 123 | 257 | 1330 | 924 | 7 |
-| Actix Web 4 + tera | 164 | 519 | 46 | 104 | 237 | 123 | 264 | 1457 | 994 | 7 |
+| SvelteKit 2 | 128 | 470 | 57 | 83 | 192 | 72 | 0 | 1002 | 644 | 9 |
+| Next.js 15 | 107 | 439 | 44 | 108 | 241 | 71 | 0 | 1010 | 725 | 8 |
+| Axum 0.8 + askama | 145 | 553 | 29 | 104 | 217 | 123 | 285 | 1456 | 1020 | 7 |
+| Actix Web 4 + tera | 164 | 565 | 46 | 104 | 237 | 123 | 292 | 1531 | 1061 | 7 |
 
 Wisp's `data` is longer than JavaScript's: a Rust type with its fields' types and `pub`s. Everything else is shorter, the form most of all. Of what is left, 60 tokens are file paths, 115 the Rust type and data, and the rest is markup every stack writes.
 

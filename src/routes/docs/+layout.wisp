@@ -47,6 +47,7 @@ let edit = match cx.path() {
         aria-controls="search-results"
         aria-autocomplete="list"
         bind:this="filter">
+      <kbd class="key" aria-hidden="true">/</kbd>
       <p class="sr" role="status" aria-live="polite" bind:this="status"></p>
       <ul
         id="search-results"
@@ -103,22 +104,19 @@ let edit = match cx.path() {
 
   let filter, menu, doc, toc, copied
 
-  // Headings have ids from the build; this adds the # link that copies one.
+  // Headings have ids from the build; this adds the link icon that copies one.
   function build() {
     for (const h of doc.querySelectorAll('h2[id], h3[id]')) {
       if (h.querySelector('.anchor')) continue
       const a = document.createElement('a')
       a.className = 'anchor'
       a.href = '#' + h.id
-      a.textContent = '#'
       a.setAttribute('aria-label', 'Link to this section')
       a.addEventListener('click', () => {
         navigator.clipboard?.writeText(location.origin + location.pathname + '#' + h.id).then(() => {
-          a.textContent = '✓'
           a.classList.add('done')
           copied.textContent = 'Link copied'
           setTimeout(() => {
-            a.textContent = '#'
             a.classList.remove('done')
             copied.textContent = ''
           }, 1200)
@@ -469,5 +467,15 @@ let edit = match cx.path() {
     addEventListener('keydown', shortcut)
     results.addEventListener('click', () => setTimeout(clear, 0))
   })
-  afterNavigate(build)
+  // A new page eases in; a hash jump or a form post on the same page does not.
+  const path = (u) => u && new URL(u, location.href).pathname
+  function enter({ from, to }) {
+    build()
+    if (path(from) === path(to) || matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    doc.animate(
+      [{ opacity: 0, translate: '0 6px' }, { opacity: 1, translate: '0 0' }],
+      { duration: 320, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' },
+    )
+  }
+  afterNavigate(enter)
 </script>

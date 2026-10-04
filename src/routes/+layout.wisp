@@ -75,10 +75,14 @@ let about = me
         try {
           await navigator.clipboard.writeText(p.querySelector('code').innerText)
           b.textContent = 'Copied'
+          b.classList.add('done')
         } catch (e) {
           b.textContent = 'Press Ctrl+C'
         }
-        setTimeout(() => (b.textContent = 'Copy'), 1500)
+        setTimeout(() => {
+          b.textContent = 'Copy'
+          b.classList.remove('done')
+        }, 1500)
       })
       p.append(b)
     }
@@ -106,6 +110,33 @@ let about = me
     y = (dy * k).toFixed(3)
   }
 
-  onMount(focusable)
-  afterNavigate(focusable)
+  // The ghost hops when a new page arrives, and says boo when you type it.
+  function play(name) {
+    if (calm.matches || !ghost) return
+    ghost.classList.remove('hop', 'boo')
+    void ghost.offsetWidth
+    ghost.classList.add(name)
+  }
+
+  let typed = ''
+  function boo(e) {
+    if (/^(input|textarea|select)$/i.test(e.target.tagName) || e.target.isContentEditable) return
+    typed = (typed + e.key.toLowerCase()).slice(-3)
+    if (typed === 'boo') play('boo')
+  }
+
+  const path = (u) => u && new URL(u, location.href).pathname
+
+  onMount(() => {
+    focusable()
+    ghost.addEventListener('animationend', (e) => {
+      if (e.animationName === 'hop' || e.animationName === 'boo') ghost.classList.remove('hop', 'boo')
+    })
+    addEventListener('keydown', boo)
+    console.log('%cwispweb.dev is a Wisp app, one Rust binary. Source: https://github.com/wyziedevs/wisp-docs\n%cTry typing boo.', 'color:#a17ff5;font-weight:600', 'color:inherit')
+  })
+  afterNavigate(({ from, to }) => {
+    focusable()
+    if (path(from) !== path(to)) play('hop')
+  })
 </script>

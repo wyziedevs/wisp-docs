@@ -2377,3 +2377,524 @@ pre code {
   color: var(--slate);
   font-size: var(--t-sm);
 }
+
+/* The comparison keeps each line whole, so line counts compare; it scrolls sideways. */
+.pair .scroll {
+  overflow-x: auto;
+}
+
+.pair .scroll pre {
+  width: max-content;
+  min-width: 100%;
+  padding-right: var(--s-4);
+  white-space: pre;
+  overflow-wrap: normal;
+}
+
+/* ---- Delight: small, quick motion where a visitor touches something --------
+   Transform and opacity only, CSS first so it all works without JavaScript,
+   and none of it runs for prefers-reduced-motion. */
+
+@view-transition {
+  navigation: auto;
+}
+
+/* Presses: everything clickable gives a little under the finger. */
+.btn,
+.copy,
+.view button,
+.error .button,
+.pager a {
+  transition:
+    background-color 150ms var(--ease),
+    border-color 150ms var(--ease),
+    color 150ms var(--ease),
+    scale 120ms var(--ease);
+}
+
+.copy-code {
+  transition:
+    opacity 150ms var(--ease),
+    color 150ms var(--ease),
+    border-color 150ms var(--ease),
+    scale 120ms var(--ease);
+}
+
+.btn:active,
+.copy:active,
+.view button:active,
+.error .button:active,
+.copy-code:active {
+  transform: none;
+  scale: 0.96;
+}
+
+.pager a:active {
+  scale: 0.99;
+}
+
+a {
+  transition:
+    color 150ms var(--ease),
+    text-decoration-color 150ms var(--ease);
+}
+
+/* Icons: line SVGs drawn as masks, so they take the text color. */
+:root {
+  --i-right: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E");
+  --i-left: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 12H5M11 6l-6 6 6 6'/%3E%3C/svg%3E");
+  --i-plus: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M12 5v14M5 12h14'/%3E%3C/svg%3E");
+  --i-link: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7'/%3E%3Cpath d='M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7'/%3E%3C/svg%3E");
+  --i-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E");
+}
+
+.cta .btn.primary::after,
+.pager .prev small::before,
+.pager .next small::after,
+.menu summary::after,
+.doc .anchor::before {
+  content: "";
+  display: inline-block;
+  flex: none;
+  width: 1em;
+  height: 1em;
+  background: currentColor;
+  mask: var(--icon) center / contain no-repeat;
+  vertical-align: -0.125em;
+}
+
+/* Call to action: the arrow leans the way you are going. */
+.cta .btn.primary::after {
+  --icon: var(--i-right);
+  margin-left: 0.45em;
+  transition: translate 200ms var(--ease);
+}
+
+.cta .btn.primary:hover::after,
+.cta .btn.primary:focus-visible::after {
+  translate: 3px 0;
+}
+
+/* Hero: lines arrive one after another, Rust gets underlined, a caret waits. */
+.hero h1 em {
+  position: relative;
+  white-space: nowrap;
+}
+
+/* A pen stroke: one quick swoop, thicker in the middle, lifting at the end. */
+.hero h1 em::after {
+  content: "";
+  position: absolute;
+  left: -0.04em;
+  right: -0.06em;
+  bottom: -0.16em;
+  height: 0.26em;
+  background: currentColor;
+  opacity: 0.7;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 14' preserveAspectRatio='none'%3E%3Cpath d='M2.5 9.6C14 8.1 27 7.1 41 6.9C60 6.5 80 7.3 96 6.6C104 6.2 110 5.3 117.5 3.4' fill='none' stroke='black' stroke-width='3.2' stroke-linecap='round'/%3E%3Cpath d='M9 11.2C30 9.6 55 9.2 78 9.3' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' opacity='.7'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+
+.hero .install code::after {
+  content: "";
+  display: inline-block;
+  width: 0.55ch;
+  height: 1.1em;
+  margin-left: 0.4ch;
+  vertical-align: -0.2em;
+  background: var(--accent-ink);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero .wrap > :nth-child(2) { animation-delay: 70ms; }
+  .hero .wrap > :nth-child(3) { animation-delay: 140ms; }
+  .hero .wrap > :nth-child(4) { animation-delay: 210ms; }
+
+  .hero h1 em::after {
+    animation: draw 800ms var(--ease) 450ms backwards;
+  }
+
+  .hero .install code::after {
+    animation: caret 1.06s steps(1) 600ms 7;
+  }
+}
+
+@keyframes draw {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+@keyframes caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Copy icon: the clipboard shrinks away and a check draws itself. */
+.copy-icon {
+  transition:
+    color 150ms var(--ease),
+    scale 120ms var(--ease);
+}
+
+.copy-icon:active {
+  scale: 0.85;
+}
+
+.copy-icon svg {
+  transition:
+    opacity 150ms var(--ease),
+    scale 300ms var(--ease);
+}
+
+.copy-icon .i-done,
+.copy-icon.done .i-copy {
+  visibility: visible;
+  opacity: 0;
+  scale: 0.5;
+}
+
+.copy-icon.done .i-done {
+  opacity: 1;
+  scale: 1;
+}
+
+.copy-icon.done .i-done path {
+  stroke-dasharray: 20;
+  animation: check 350ms var(--ease) 80ms backwards;
+}
+
+@keyframes check {
+  from {
+    stroke-dashoffset: 20;
+  }
+}
+
+/* Code copy and heading links: the confirmation pops. */
+.copy-code.done {
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  animation: pop 300ms var(--ease);
+}
+
+.doc .anchor.done {
+  animation: pop 300ms var(--ease);
+}
+
+@keyframes pop {
+  from {
+    scale: 0.6;
+  }
+}
+
+/* Tabs: the underline grows from the middle, a hover hints at it. */
+.tabs label,
+.tabs .tab {
+  position: relative;
+  border-bottom: 0;
+}
+
+.tabs label::after,
+.tabs .tab::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px 2px 0 0;
+  background: var(--line-strong);
+  scale: 0 1;
+  transition:
+    scale 250ms var(--ease),
+    background-color 150ms var(--ease);
+}
+
+.tabs label:hover::after {
+  scale: 0.4 1;
+}
+
+.tabs .tab::after,
+.tabs input:checked + label::after {
+  background: var(--accent);
+  scale: 1 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tabbed .pane {
+    animation: fade 240ms var(--ease);
+  }
+}
+
+/* Demo: new todos slide in, a bad value shakes its head, the preview is live. */
+.view li {
+  transition:
+    opacity 300ms var(--ease),
+    translate 300ms var(--ease);
+}
+
+@starting-style {
+  .view li {
+    opacity: 0;
+    translate: 0 -0.375rem;
+  }
+}
+
+.view input[aria-invalid="true"] {
+  animation: shake 340ms var(--ease);
+}
+
+@keyframes shake {
+  20% { translate: -4px 0; }
+  40% { translate: 4px 0; }
+  60% { translate: -2px 0; }
+  80% { translate: 2px 0; }
+}
+
+.chrome .url::before {
+  content: "";
+  display: inline-block;
+  width: 0.4375rem;
+  height: 0.4375rem;
+  margin-right: 0.5rem;
+  border-radius: 50%;
+  background: var(--hl-s);
+  vertical-align: 0.0625em;
+  animation: breathe 2.4s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* Launch sections rise into place as they scroll in (CSS only, where supported). */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .band .claim,
+    .band .sample,
+    .pair .cmp,
+    .hosts,
+    .final .wrap > * {
+      animation: rise var(--ease) both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+
+    .pair .cmp + .cmp {
+      animation-range: entry 10% entry 80%;
+    }
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    translate: 0 1.5rem;
+  }
+}
+
+/* Docs: a reading bar under the header, fed by the scroll position. */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .top:has(~ main .docs)::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      height: 2px;
+      background: var(--accent);
+      transform-origin: left;
+      animation: read linear both;
+      animation-timeline: scroll(root);
+    }
+  }
+}
+
+@keyframes read {
+  from {
+    scale: 0 1;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .doc {
+    animation: fade 400ms var(--ease) backwards;
+  }
+}
+
+/* Search: a / key says how to get here, and leaves once you do. */
+.find {
+  position: relative;
+}
+
+.find .key {
+  position: absolute;
+  top: 0.5625rem;
+  right: 0.5rem;
+  display: grid;
+  place-items: center;
+  min-width: 1.375rem;
+  height: 1.375rem;
+  padding: 0 0.3125rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 0.3125rem;
+  color: var(--ash);
+  font: 500 0.75rem/1 var(--mono);
+  pointer-events: none;
+  transition:
+    opacity 150ms var(--ease),
+    scale 150ms var(--ease);
+}
+
+.find input:focus ~ .key,
+.find input:not(:placeholder-shown) ~ .key {
+  opacity: 0;
+  scale: 0.8;
+}
+
+@media (min-width: 60rem) {
+  .side .find .key {
+    right: 1.25rem;
+  }
+}
+
+/* Pager and menu: arrows lean, the plus turns into a cross. */
+.pager .prev small::before,
+.pager .next small::after {
+  transition: translate 200ms var(--ease);
+}
+
+.pager .prev small::before {
+  --icon: var(--i-left);
+  margin-right: 0.375em;
+}
+
+.pager .next small::after {
+  --icon: var(--i-right);
+  margin-left: 0.375em;
+}
+
+.pager .prev:hover small::before {
+  translate: -3px 0;
+}
+
+.pager .next:hover small::after {
+  translate: 3px 0;
+}
+
+.menu summary::after,
+.menu[open] summary::after {
+  --icon: var(--i-plus);
+  content: "";
+  width: 1.125rem;
+  height: 1.125rem;
+  font-size: inherit;
+  transition: rotate 250ms var(--ease);
+}
+
+.menu[open] summary::after {
+  rotate: 45deg;
+}
+
+/* Heading links: a link icon, a check once the address is copied. */
+.doc .anchor {
+  display: inline-flex;
+  align-items: center;
+  height: 1lh;
+  font-size: 0.7em;
+}
+
+.doc .anchor::before {
+  --icon: var(--i-link);
+}
+
+.doc .anchor.done::before {
+  --icon: var(--i-check);
+}
+
+/* The ghost: a hop when a page arrives, and a boo for anyone who types it. */
+.ghost.hop svg {
+  animation: hop 450ms var(--ease);
+}
+
+.ghost.boo svg {
+  animation: boo 800ms var(--ease);
+}
+
+.ghost.boo .eye {
+  animation: wide 800ms var(--ease);
+}
+
+.ghost.boo .mouth {
+  animation: gasp 800ms var(--ease);
+}
+
+@keyframes boo {
+  25% {
+    transform: translateY(-4px) scale(1.3) rotate(-10deg);
+  }
+  55% {
+    transform: translateY(-3px) scale(1.25) rotate(8deg);
+  }
+}
+
+@keyframes wide {
+  20%,
+  70% {
+    transform: scale(1.45);
+  }
+}
+
+@keyframes gasp {
+  20%,
+  70% {
+    transform: scale(1.7, 2.3);
+  }
+}
+
+/* Error page: the ghost floats over its own shadow. */
+.error .float {
+  display: block;
+  margin-inline: auto;
+}
+
+.error .shade {
+  display: block;
+  width: 2.5rem;
+  height: 0.375rem;
+  margin: 0.5rem auto 0;
+  border-radius: 50%;
+  background: var(--line);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .error .float {
+    animation: float 3.2s ease-in-out infinite;
+  }
+
+  .error .shade {
+    animation: shade 3.2s ease-in-out infinite;
+  }
+}
+
+@keyframes float {
+  50% {
+    translate: 0 -0.625rem;
+  }
+}
+
+@keyframes shade {
+  50% {
+    scale: 0.7 1;
+    opacity: 0.6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+}
