@@ -307,7 +307,8 @@ export function finder({ bar, q, dlg, fq: modalField, status, hits, tip }) {
       q.blur()
     } else keys(e)
   })
-  q.addEventListener('blur', () => wide.matches && setTimeout(close, 0))
+  // The dialog takes focus as it opens and the field takes it back; only a blur that stays is a close.
+  q.addEventListener('blur', () => wide.matches && setTimeout(() => document.activeElement !== q && close(), 0))
   fq.addEventListener('input', soon)
   fq.addEventListener('keydown', keys)
   addEventListener('resize', () => dlg.classList.contains('drop') && place())

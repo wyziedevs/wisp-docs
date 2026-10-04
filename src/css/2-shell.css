@@ -80,6 +80,29 @@
   cursor: text;
 }
 
+/* The browser's own clear button, drawn to match the icons. */
+.search input::-webkit-search-cancel-button,
+.find-bar input::-webkit-search-cancel-button {
+  appearance: none;
+  width: 0.875rem;
+  height: 0.875rem;
+  margin: 0 0.125rem 0 0.5rem;
+  background: var(--ash);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E") center / contain no-repeat;
+  cursor: pointer;
+  transition: background-color var(--t);
+}
+
+.search input::-webkit-search-cancel-button:hover,
+.find-bar input::-webkit-search-cancel-button:hover {
+  background: var(--ink);
+}
+
+/* The shortcut hint hides while typing, so the clear button takes its place at the edge. */
+.search input:is(:focus, :not(:placeholder-shown)) {
+  padding-right: 0.875rem;
+}
+
 .search input::placeholder {
   color: var(--ash);
 }
