@@ -5,7 +5,7 @@ group: Start
 order: 4
 ---
 
-Wisp's first rule is zero cost on the request hot path. This page has no numbers, only what is measured and how to run it.
+Wisp's first rule is zero cost on the request hot path. This page is what is measured and how to run it. The measured numbers, losses included, are on the [home page](/#measured) and in [`bench/tfb/RESULTS.md`](https://github.com/wyziedevs/wisp/blob/main/bench/tfb/RESULTS.md).
 
 ```bash
 git clone https://github.com/wyziedevs/wisp

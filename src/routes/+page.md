@@ -63,6 +63,49 @@ A route pays only for the features it uses, and a change that touches the reques
 
 </Claim>
 
+<Claim id="measured">
+
+## Measured, Not Claimed
+
+TechEmpower's plaintext and JSON tests, run with their own load scripts against their reference sources of each framework, on one 4-vCPU VM with the server pinned to 2 cores. Medians of 3 runs of 15 seconds each.
+
+<table class="tally">
+<caption>Plaintext, 256 connections, pipelined</caption>
+<thead><tr><th scope="col">Framework</th><th scope="col"><span class="sr">Relative speed</span></th><th scope="col" class="num">Req/s</th></tr></thead>
+<tbody>
+<tr class="us"><th scope="row">Wisp</th><td class="meter" aria-hidden="true"><span style="--v: 1.000"></span></td><td class="num">1,129,577</td></tr>
+<tr><th scope="row">Actix Web</th><td class="meter" aria-hidden="true"><span style="--v: 0.534"></span></td><td class="num">603,163</td></tr>
+<tr><th scope="row">Axum</th><td class="meter" aria-hidden="true"><span style="--v: 0.245"></span></td><td class="num">276,948</td></tr>
+<tr><th scope="row">Fastify</th><td class="meter" aria-hidden="true"><span style="--v: 0.046"></span></td><td class="num">51,713</td></tr>
+<tr><th scope="row">Express</th><td class="meter" aria-hidden="true"><span style="--v: 0.036"></span></td><td class="num">40,421</td></tr>
+<tr><th scope="row">Hono (Node)</th><td class="meter" aria-hidden="true"><span style="--v: 0.026"></span></td><td class="num">28,966</td></tr>
+<tr><th scope="row">SvelteKit</th><td class="meter" aria-hidden="true"><span style="--v: 0.010"></span></td><td class="num">10,929</td></tr>
+<tr><th scope="row">Hono (Bun)</th><td class="meter" aria-hidden="true"><span style="--v: 0.009"></span></td><td class="num">10,599</td></tr>
+</tbody>
+</table>
+
+<table class="tally">
+<caption>JSON, 64 connections</caption>
+<thead><tr><th scope="col">Framework</th><th scope="col"><span class="sr">Relative speed</span></th><th scope="col" class="num">Req/s</th></tr></thead>
+<tbody>
+<tr class="us"><th scope="row">Wisp</th><td class="meter" aria-hidden="true"><span style="--v: 1.000"></span></td><td class="num">96,089</td></tr>
+<tr><th scope="row">Actix Web</th><td class="meter" aria-hidden="true"><span style="--v: 0.933"></span></td><td class="num">89,648</td></tr>
+<tr><th scope="row">Axum</th><td class="meter" aria-hidden="true"><span style="--v: 0.816"></span></td><td class="num">78,427</td></tr>
+<tr><th scope="row">Hono (Bun)</th><td class="meter" aria-hidden="true"><span style="--v: 0.620"></span></td><td class="num">59,619</td></tr>
+<tr><th scope="row">Fastify</th><td class="meter" aria-hidden="true"><span style="--v: 0.229"></span></td><td class="num">21,965</td></tr>
+<tr><th scope="row">Express</th><td class="meter" aria-hidden="true"><span style="--v: 0.153"></span></td><td class="num">14,746</td></tr>
+<tr><th scope="row">SvelteKit</th><td class="meter" aria-hidden="true"><span style="--v: 0.108"></span></td><td class="num">10,378</td></tr>
+<tr><th scope="row">Hono (Node)</th><td class="meter" aria-hidden="true"><span style="--v: 0.094"></span></td><td class="num">8,988</td></tr>
+<tr><th scope="row">Next.js</th><td class="meter" aria-hidden="true"><span style="--v: 0.016"></span></td><td class="num">1,524</td></tr>
+</tbody>
+</table>
+
+Wisp is first on plaintext at 256, 1,024 and 4,096 connections, 1.9 times Actix Web at 256. On JSON it is first at 3 of 6 levels and within the run-to-run noise of Actix Web and Axum at the rest; Actix Web is ahead at 16 and 256 connections. At 16,384 connections Wisp's default limit of 10,000 refuses the overflow, and most servers collapse there too. Next.js did not complete the plaintext run. This is not an official TechEmpower result: the VM is shared, and the gaps between the Rust servers are about the size of its noise.
+
+<p class="more"><a href="https://github.com/wyziedevs/wisp/blob/main/bench/tfb/RESULTS.md">Every Number, Including the Losses</a> &middot; <a href="/docs/benchmarks">How Speed Is Measured</a></p>
+
+</Claim>
+
 <section class="sec cheap" id="cheap">
 <div class="wrap">
 <div class="claim wide">

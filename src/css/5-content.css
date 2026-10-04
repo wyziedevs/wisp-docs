@@ -136,6 +136,13 @@ pre:focus-within .copy-code,
   font-variant-numeric: tabular-nums;
 }
 
+.tally caption {
+  padding-bottom: 0.5rem;
+  color: var(--ink);
+  font-weight: 700;
+  text-align: left;
+}
+
 .tally th,
 .tally td {
   padding: 0.75rem 0 0.75rem 1rem;
