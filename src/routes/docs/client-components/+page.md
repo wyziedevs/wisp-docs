@@ -1,11 +1,11 @@
 ---
-title: Client components and state
+title: Client Components and State
 description: Client components, custom elements, state helpers and shared stores.
-group: Browser code
+group: Browser Code
 order: 36
 ---
 
-## Client components
+## Client Components
 A component inside a client block, or given `{:…}`, `bind:` or `on:`, is drawn by the browser.
 
 ```html
@@ -36,7 +36,7 @@ A component inside a client block, or given `{:…}`, `bind:` or `on:`, is drawn
 ```
 `<Pill label="new" tone="warm" title="Just in" />` (`title` goes to `rest`).
 
-## Custom elements
+## Custom Elements
 `{@element "x-card"}` first in a component also builds it as a custom element at `/_app/c/el/x-card.js` (AGENTS.md has the form). Any site:
 
 ```html
@@ -49,7 +49,7 @@ A component inside a client block, or given `{:…}`, `bind:` or `on:`, is drawn
 - Markup is browser code and defaults are literals (build errors otherwise); the app still renders `<Card>` server first.
 - The module sends `access-control-allow-origin: *` and loads `live.js`, not `wisp.js`.
 
-## State helpers
+## State Helpers
 In any client script, no imports:
 
 ```js
@@ -68,7 +68,7 @@ const s = spring({ x: 0, y: 0 })                   // s.set({ x: 9, y: 4 }) with
 const [send, receive] = crossfade({ duration: 400 })   // out:send={{ key: id }} in:receive={{ key: id }}
 ```
 
-### Shared state
+### Shared State
 A store outlives components and navigation; put it in `src/lib/`:
 
 ```js

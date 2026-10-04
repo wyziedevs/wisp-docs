@@ -1,5 +1,5 @@
 ---
-title: CLI, dev loop and security
+title: CLI, Dev Loop and Security
 description: wisp new, the dev loop, fmt, security, CSP and milestones.
 group: Design
 order: 17
@@ -45,7 +45,7 @@ One std-only process. `wisp dev [--port <n> | --port=<n> | -p <n>]`; anything el
 - **Output.** Cargo progress on the first build, then one line per change (`~ src/routes/+page.wisp  swapped in 0ms`, `✓ Rebuilt in 0.3s`). Compiler errors have paths relative to the app and no generated module names (`Data`, not `page_3::Data`). An error rustc finds in template-generated code is retold against the template's line; an action that returns a value is caught before compiling, against `+page.rs`.
 - **Request log.** The app logs each request in dev (`GET /nope  404  0.1ms`, yellow 4xx, red 5xx) and a handler's panic once, with where. Release builds log only 5xx.
 
-### CSS tools
+### CSS Tools
 
 | Setup | What runs |
 |---|---|
@@ -56,11 +56,11 @@ One std-only process. `wisp dev [--port <n> | --port=<n> | -p <n>]`; anything el
 
 A watcher makes the first build itself; adding or removing `src/app.scss` or a `postcss.config.*` replaces the watchers. `wisp build` runs each once, minified (`--minify`, `--style=compressed`).
 
-### npm imports
+### npm Imports
 
 Bare imports (`'canvas-confetti'`) are npm packages. `package.json` pins exact versions (`wisp add`). Dev imports `https://esm.sh/pkg@v?target=es2022`. A release build serves `.wisp/npm`, which `wisp build` fills from esm.sh before compiling: the modules `wisp check` finds imported and what they import, a level at a time, 16 at once, only those missing. Each is saved with imports pointed at `/_app/c/npm/`, and an import of esm.sh's re-export stub at the module it re-exports. The build embeds the files (`include_str!`); paths name versions, so they are cached for good without `?v=`.
 
-### Template hot swap
+### Template Hot Swap
 
 In debug builds every static HTML chunk of every template is read through a table (`wisp::dev::chunk`) instead of being a literal. On a `.wisp` save the CLI re-parses the file. If its shape (holes, blocks, expressions, everything except static text) is unchanged, it POSTs the new chunks to the app (`/_wisp/dev/swap`, loopback only) and the browser morphs: no compile. If the shape changed, it is a normal rebuild. Release builds have no table.
 
@@ -77,7 +77,7 @@ In debug builds every static HTML chunk of every template is read through a tabl
 - Text, holes, `<pre>` and `<textarea>` are never touched.
 - Markup that does not balance, or would not parse to the same template, is left as written. Formatting twice equals formatting once.
 
-## CLI older than the app
+## CLI Older than the App
 
 When the installed `wisp` is older than the app's `wisp` crate (the CLI's stamp against the app's), app commands print a warning on stderr first. In a terminal it asks `Continue anyway? [y/N]`; the default N exits with 1. In CI or a pipe it warns and continues. `WISP_NO_UPDATE_CHECK=1` silences it. Without git, the stamp check stays silent.
 
@@ -115,7 +115,7 @@ content-security-policy: default-src 'self'; script-src 'self' 'sha256-…';
 - `wisp::csp("img-src 'self' https://cdn.example; font-src https://f.example")` in `init`: each directive replaces the default of its name, or is added. `script-src` keeps the hashes (unless it has `'unsafe-inline'`, which a hash would turn off). `wisp::csp_off()` sends none, for an app that sets its own.
 - Not covered: endpoints and `Response::html` (not pages), `/_wisp/docs`, and `wisp build --static` (files have no headers; the host sets them). A script put in by `{@html}` or an `onclick="..."` attribute does not run; use a file, or `on:click`.
 
-## Non-goals and milestones
+## Non-Goals and Milestones
 
 No homegrown auth, ORM or job system, now or later. Wisp gives the tools (cookies, sessions, the `Store` trait, hooks, `wisp::spawn` from `init`) and the app builds on them. Integrations wire in existing, maintained crates (a recipe in `add/`; `wisp add sqlite` scaffolds the glue). Also out: Windows services. (HTTP/2 in process is the opt-in `h2` feature: h2c only.)
 

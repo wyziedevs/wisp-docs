@@ -1,11 +1,11 @@
 ---
-title: OpenAPI and tests
+title: OpenAPI and Tests
 description: The generated OpenAPI document and docs page, and testing an API.
 group: APIs
 order: 43
 ---
 
-## OpenAPI and docs page
+## OpenAPI and Docs Page
 The build describes the app as OpenAPI 3.1 at `/_wisp/openapi.json`; `/_wisp/docs` lists it with a try-it form. On in dev, off in release; `WISP_API_DOCS=on|off` overrides. Nothing to annotate:
 
 - Every `+server.rs` endpoint, and a `#[derive(Rest)]` type's routes and its `/[id]`: path, query and header parameters, `body: T` (JSON) or form fields by name and type, what it returns (`Option` adds a 404, `()` a 204), and `default`, 400, 401, 422 error answers (`Error`, and RFC 9457 `Problem`).
@@ -17,7 +17,7 @@ The build describes the app as OpenAPI 3.1 at `/_wisp/openapi.json`; `/_wisp/doc
 
 `wisp openapi` prints the same document, indented (`-o openapi.json` writes it). Commit that file and run `wisp openapi --check` in CI: it fails with the command to run when the file is not what the app describes now.
 
-### TypeScript client
+### TypeScript Client
 Typed, from the same description, no dependencies: `/_wisp/client.ts`, or `wisp build --client ts [--out web/api.ts]`:
 
 ```ts
@@ -50,7 +50,7 @@ fn notes() {
 - `header(name, value)` applies to the next request only (`if-match`, `idempotency-key`).
 - Tables are in memory.
 
-### In a browser
+### In a Browser
 With feature `browser` (new apps have it; `wisp test --browser`) a test drives real headless Chrome or Edge over the DevTools protocol; no Node.
 
 ```rust
@@ -70,7 +70,7 @@ fn counter() {
 - Browser: `$WISP_BROWSER`, else Chrome, Edge, Chromium or Brave; none: `browser!` returns and the test passes, skipped. `wisp::test::browser::<App>()` is an `Option<Browser>`.
 - `--no-sandbox` on Linux.
 
-## Where it runs
+## Where It Runs
 All of this works in the binary, Docker, Lambda and `tower`. JSON, validation, errors, CORS, auth, webhooks and docs work everywhere. The edge (`--target cloudflare` etc.) runs each request in an instance that may be its own:
 
 - `wisp::channel`, `wisp::every`, `RateLimit` are not there; WebSockets answer 501 (use the host's rate limiting).

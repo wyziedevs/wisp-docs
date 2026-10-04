@@ -1,7 +1,7 @@
 ---
-title: Serve extras
+title: Serve Extras
 description: Gzip, ranges, security headers, health checks and handler timeouts.
-group: Deploy and run
+group: Deploy and Run
 order: 62
 ---
 

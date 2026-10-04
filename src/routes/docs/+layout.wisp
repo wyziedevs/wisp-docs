@@ -30,11 +30,11 @@ let edit = match cx.path() {
 <div class="docs">
   <aside class="side" aria-label="Documentation">
     <div class="find">
-      <label class="sr" for="search">Search the docs</label>
+      <label class="sr" for="search">Search the Docs</label>
       <input
         id="search"
         type="search"
-        placeholder="Search the docs"
+        placeholder="Search the Docs"
         autocomplete="off"
         spellcheck="false"
         role="combobox"
@@ -78,7 +78,7 @@ let edit = match cx.path() {
         <a class="next" rel="next" href={p.path}><small>Next</small><span>{p.title}</span></a>
       {/if}
     </nav>
-    <p class="edit"><a href={format!("https://github.com/wyziedevs/wisp-docs/edit/main/{edit}")}>Edit this page on GitHub</a></p>
+    <p class="edit"><a href={format!("https://github.com/wyziedevs/wisp-docs/edit/main/{edit}")}>Edit This Page on GitHub</a></p>
   </article>
 
   <aside class="toc" aria-label="On this page">
@@ -375,9 +375,9 @@ let edit = match cx.path() {
       const li = document.createElement('li')
       li.className = 'none'
       li.setAttribute('role', 'presentation')
-      li.textContent = 'No results'
+      li.textContent = 'No Results'
       results.append(li)
-      status.textContent = 'No results'
+      status.textContent = 'No Results'
       return
     }
     let page = null

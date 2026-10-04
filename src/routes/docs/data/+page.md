@@ -1,7 +1,7 @@
 ---
-title: Data, files and jobs
+title: Data, Files and Jobs
 description: Tables, relay, files, validation rules, jobs, cache and the admin page.
-group: Data and auth
+group: Data and Auth
 order: 50
 ---
 

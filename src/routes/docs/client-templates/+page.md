@@ -1,11 +1,11 @@
 ---
-title: Server values and client blocks
+title: Server Values and Client Blocks
 description: Server values in the browser, {:expr} holes, client blocks, snippets and first paint.
-group: Browser code
+group: Browser Code
 order: 31
 ---
 
-## Server values in the browser
+## Server Values in the Browser
 Any Rust value client code mentions is sent, only the mentioned parts.
 
 ```html
@@ -27,10 +27,10 @@ Any Rust value client code mentions is sent, only the mentioned parts.
 {:#each items.filter((i) => matches(i.name, q)) as item}<p>{:item.name}</p>{:/each}
 ```
 
-## `{:expr}` holes
+## `{:expr}` Holes
 A live JS expression anywhere in markup: `<p>Hi {:name}</p>`, `<p class="card {:mood}" data-id={:item.id}>`, `<a href={:url}>`. Mixing `{…}` and `{:…}` in one attribute value is a build error.
 
-## Client blocks
+## Client Blocks
 
 ```html
 {:#if open}<p>Open</p>{:else if name}<p>{:name}</p>{:else}<p>Closed</p>{:/if}
@@ -55,7 +55,7 @@ A live JS expression anywhere in markup: `<p>Hi {:name}</p>`, `<p class="card {:
 - Also `<template each="item, i in list">` and `<template if="cond">`.
 - The server paints key blocks, an await's pending branch and a try body.
 
-### Special elements
+### Special Elements
 Each takes directives for its target and closes itself:
 
 ```html
@@ -95,7 +95,7 @@ A component the browser draws takes snippets as props, by name (`<List items={:x
 <div>{:@html post.body}</div>
 ```
 
-## First paint
+## First Paint
 The server renders what it can know into the page (it works before JS and without it); the browser takes those nodes over and keeps them live.
 
 - Known: server values, props, Rust loop values; literals (`0 'text' true null [1,2] {id:1}`); script variables first set to those (`let todos = data.todos`); an `{:#each}` item/index inside it; `!`, `&&`, `||`, `.length` of those; a boolean directive like `:hidden="!open"` with `let open = false`.

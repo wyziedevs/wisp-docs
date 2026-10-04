@@ -1,5 +1,5 @@
 ---
-title: Tooling, images and translations
+title: Tooling, Images and Translations
 description: Recipes, the component kit, images and i18n.
 group: Design
 order: 12
@@ -68,7 +68,7 @@ note Wisp builds app.css with Tailwind when it imports it.
 
 Wisp does not ship or maintain integrations: recipes are yours to write, change and share as folders.
 
-## Component kit: `wisp ui add`
+## Component Kit: `wisp ui add`
 
 ```sh
 wisp ui list                     # what there is

@@ -1,5 +1,5 @@
 ---
-title: Template syntax and styles
+title: Template Syntax and Styles
 description: Template syntax, escaping, components, snippets and scoped styles in .wisp files.
 group: Design
 order: 13
@@ -58,7 +58,7 @@ Syntax | Compiles to
 - Braces are Rust on the server; a quoted directive value or `{:expr}` is JavaScript in the browser. No Rust expression goes inside `<script>`: use the Rust name or `data.x` (sent as JSON) there, or `data-*` attributes.
 - A block (and each branch) must begin and end in the same place (text, one tag, one attribute value), or `{x}` after it could be escaped for the wrong place.
 
-### Escaping and refused places
+### Escaping and Refused Places
 
 Escaping covers `& < > " '`, safe in text and quoted attributes; unquoted `attr={…}` is always quoted. The parser tracks where each hole lands and refuses:
 
@@ -124,7 +124,7 @@ Markup a file renders more than once, or gives to a component:
 - A component takes one as a prop of type `Snippet<A, B>` (`Snippet` for none), which is `&dyn Fn(&mut Out, A, B)`: `{row}` or `row={row}` in its tag, or a `{#snippet row(…)}` among its children; it renders with `{@render row(…)}`.
 - `{:@render row(x)}` has the browser draw it: arguments are JavaScript, the body uses its parameters in `{:…}` ([client](/docs/client)). A component the browser draws takes snippets the same way (`<List items={:xs} {row} />`, or `{#snippet row(x)}` among children) and draws one with `{:@render row(x)}` where `row` is a prop. The body is a block before the tag (`Dir::Snip`, which `snip` in extra.js binds), found among the anchors right before the component's own, so no first paint for a component given one.
 
-## Scoped styles
+## Scoped Styles
 
 ```html
 <h1>Hi</h1>

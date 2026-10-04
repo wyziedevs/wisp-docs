@@ -7,7 +7,7 @@ order: 70
 
 Most app code is written by AI, so an app's cost is measured in tokens, and keeping it low is a Wisp principle ([design](/docs/design)). Run `cargo run -q -p wisp-tokens --release` for the numbers. The four-app comparison against six frameworks: [Tokens, app by app](/docs/tokens-apps).
 
-## Five features, counted by `wisp-tokens`
+## Five Features, Counted by `wisp-tokens`
 
 `bench/tokens/apps` holds the same five features as a complete app in each stack:
 
@@ -29,7 +29,7 @@ Most app code is written by AI, so an app's cost is measured in tokens, and keep
 
 Wisp's `data` is longer than JavaScript's: a Rust type with its fields' types and `pub`s. Everything else is shorter, the form most of all. Of what is left, 60 tokens are file paths, 115 the Rust type and data, and the rest is markup every stack writes.
 
-## A real app: auth, CRUD, upload, live, a component
+## A Real App: Auth, CRUD, Upload, Live, a Component
 
 `bench/tokens/real` is sign up and in, a posts table with validation, edit, delete, pages and live refresh, an avatar upload and a toggle component: 10 files, **995** tokens in Wisp, 3.4x less than SvelteKit 3 and 3.2x less than Next.js 15. Its tests check every feature.
 

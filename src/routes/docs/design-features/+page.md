@@ -1,5 +1,5 @@
 ---
-title: Parity features
+title: Parity Features
 description: What a server framework is expected to have, and what Wisp does for each.
 group: Design
 order: 19
@@ -27,7 +27,7 @@ All build-time, a const or a cold path: a request that uses none of them runs no
 | Intercepting routes | `(.)`, `(..)`, `(...)` in a slot |
 | Version skew | `<meta name="wisp-build">`, `wisp:stale` |
 
-## Base path
+## Base Path
 
 `WISP_BASE=/app` (cargo env, or `base = "/app"` under `[package.metadata.wisp]` for `wisp build`; `wisp dev` always serves at `/`) is compiled into `wisp-shared` (`protocol::BASE`, set by a `build.rs`), so every crate sees one const.
 
@@ -43,7 +43,7 @@ All build-time, a const or a cold path: a request that uses none of them runs no
 - `wisp::on_fetch(f)` (once, in `init`) is `handleFetch`: `wisp::fetch` calls it before a request goes out. The edge build's `fetch` does not.
 - No hook is on a path that has none.
 
-## Routing and options
+## Routing and Options
 
 - **Layout reset.** `+page@.wisp` has no layouts above it. `+page@group.wisp` has those down to the `group` (or `(group)`) directory's `+layout.wisp` (`routes.rs`: `Route::page_file`, `layouts`).
 - **Layout options.** `CACHE`/`CACHE_PUBLIC`, `SSR` and `PRERENDER` in a layout apply to its pages (`Project::layout_opts`). The nearest layout wins; a page's own const wins over all. The cache refers to the layout's module in the generated arm, so the request does what a page's own `CACHE` does. A layout's `RATE_LIMIT`, `CORS` and `TIMEOUT` still do nothing and are errors. `trailing_slash` is the app's, not a page's.
@@ -52,14 +52,14 @@ All build-time, a const or a cold path: a request that uses none of them runs no
 - **Typed routes.** The build writes `pub mod routes` (re-exported by `__mods`): a function per route named from its pattern (`/` is `home`, `/blog/[slug]` is `blog_slug`, `_2` for a taken name). Each parameter is `impl Display` (optional ones `Option<..>`), percent-encoded (`rt::path_param`; a rest parameter keeps its `/`).
 - **Named middleware.** `const MIDDLEWARE: &[&str] = &["auth"];` in a page, `+server.rs` or `+layout` is checked against `src/middleware.rs` (a `pub fn` per name) and written by `middleware()` in codegen into the same statements `RATE_LIMIT` and `CORS` make: the page's or layout's `__guard`, the endpoint's `before`. They run first, so no dispatch changed (`http.rs` untouched) and a route naming none has nothing extra. `src/hooks.rs`'s `before` is the global one; `MIDDLEWARE` there is an error.
 
-## Client features
+## Client Features
 
 - **Script strategies.** `<script src type="wisp/idle">` and `wisp/interaction` are inert to the browser (and to the navigation morph, which only re-creates `module`/`javascript` ones). `lazy()` in wisp.js, run by `wake()`, makes the real `<script>` on idle or on the first pointer, key or scroll. Plain `<script src>` and `defer` need no code. About 270 bytes gzipped.
 - **Web vitals.** Opt-in with `<meta name="wisp-vitals" content="/path">`. wisp.js watches LCP, layout shifts and event timing with `PerformanceObserver` and sends one `sendBeacon` on `visibilitychange` hidden. Server side it is an ordinary route. About 430 bytes gzipped.
 - **Loading views.** `+loading.wisp` (a known route file; `Tree::loading` holds its folder's pattern) is read by `loading.rs` and written into the shell's head as `<script type="application/json" id="wisp-loading">[[prefix,html]]`: static bytes in every page of an app that has one, nothing otherwise. It does not run, so no CSP hash. `wait()` in wisp.js, before the fetch of a navigation not fetched ahead and not a pop, finds the deepest prefix that `fit` (the SPA fallback's matcher) accepts and fills `<main>`. Streaming `{#await}` needs none of it (it is for the whole page; a streamed page is read whole by a client navigation). About 290 bytes gzipped.
 - **Version skew.** A release build puts `<meta name="wisp-build" content=ID>` in the shell (a hash of templates and Rust: baked, nothing per request). wisp.js compares it with the page a navigation fetched, as it does `wisp.js?v=` (which only changes with the runtime), and sends `wisp:stale` (the `updated` store).
 
-## Slots and intercepting routes
+## Slots and Intercepting Routes
 
 **Slots (parallel routes).** A `@name` folder with a `+page.wisp` beside a `+layout.wisp` is an ordinary route at `/dir/@name` (no router change) that the layout draws.
 
@@ -75,7 +75,7 @@ All build-time, a const or a cold path: a request that uses none of them runs no
 - The page stays; `history.back()` closes it (the pop morphs the old page's empty slot back). A load of the URL is the route's own page.
 - About 310 bytes gzipped, none of it run on a page with no such element.
 
-## Build tools
+## Build Tools
 
 - **Bundle analyzer.** `wisp build --analyze` (`analyze.rs` in the CLI, `codegen::analyze`) reads the app like a release build, builds nothing, and for each page route sums the files that page loads as served: wisp.js and live.js minified, its templates' modules and static imports, app.css, the `static/` `.wasm` files its JavaScript names. Raw and gzipped, largest first, with the files of the heaviest. Gzip is counted with Wisp's own compressor (fixed Huffman, hash-chain matcher), without writing the bits.
 - **Layers.** `extends = ["../base"]` beside `use` in `[package.metadata.wisp]` (`plugins.rs`): a path or a dependency with an app's layout.

@@ -1,11 +1,11 @@
 ---
-title: Knobs, features and settings
+title: Knobs, Features and Settings
 description: The const knobs, Cargo.toml metadata keys, cargo features and the smaller public types.
 group: Reference
 order: 82
 ---
 
-## const knobs
+## Const Knobs
 
 A `const` in a page's `---` block, `+page.rs`, `+server.rs` or a layout. The build reads them; nothing runs per request that you did not ask for.
 
@@ -40,7 +40,7 @@ Lists of strings in `Cargo.toml`, checked and baked at build.
 | `use = [...]` | plugin crates the build loads |
 | `extends = ["../base"]` | layers: an app's layout, components and static files under yours |
 
-## Cargo features
+## Cargo Features
 
 | Feature | What it does |
 |---|---|
@@ -53,7 +53,7 @@ Lists of strings in `Cargo.toml`, checked and baked at build.
 | `types` (wisp) | used by `wisp check --types`; never in a served build |
 | `avif` (wisp-cli) | AVIF widths for images in `wisp build`, beside WebP |
 
-## Smaller public types
+## Smaller Public Types
 
 | Name | What it is |
 |---|---|

@@ -1,11 +1,11 @@
 ---
-title: Hooks, state and streaming
+title: Hooks, State and Streaming
 description: Hooks, per-request state and values, streaming and the await block.
 group: Design
 order: 15
 ---
 
-## Hooks and state
+## Hooks and State
 
 `src/hooks.rs` holds what runs outside any one route:
 
@@ -73,7 +73,7 @@ fn get() -> Response {
 - `Response::events(|events| ...)` is the same for server-sent events (uncached, unbuffered by proxies). `Sender::event` writes one event whatever lines it has. A page listens with `listen(url, ...)` or `new EventSource(url)`.
 - A send fails once the client has gone, so `?` stops the closure. On server stop, open streams end properly.
 
-## Streaming a page: `{#await}`
+## Streaming a Page: `{#await}`
 
 ```html
 <h1>{user.name}</h1>
@@ -103,7 +103,7 @@ Rules:
 - Only a page's own markup awaits: not a layout, component, error page, snippet, `<head>`, attribute, browser block or another `{#await}`. A page with `CACHE`, or drawn by the browser (`SSR = false`), is a build error. `PRERENDER`, `--static` and `--spa` wait for every answer and write it into the file.
 - Chosen at build, per page. A page without `{#await}` is built and answered as before: one buffered write with `content-length`, no extra branch, nothing in `Out`. Deferred answers wait in a thread-local list only an await page touches.
 
-## Client code
+## Client Code
 
 Browser reactivity is in [client](/docs/client): a bare `<script>` per file, directives (`on:`, `bind:`, `:attr`, `class:`, `use:`, `transition:`), `{:expr}` holes, client `{:#if}` and `{:#each}`, client components, stores, a client router and `use:enhance`.
 

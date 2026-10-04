@@ -1,7 +1,7 @@
 ---
 title: Deploying
 description: Binary, static, prerender, service and Docker.
-group: Deploy and run
+group: Deploy and Run
 order: 60
 ---
 

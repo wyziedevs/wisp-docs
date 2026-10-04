@@ -1,11 +1,11 @@
 ---
-title: The router and forms
+title: The Router and Forms
 description: The router, morphs, snapshots and use:enhance for forms.
-group: Browser code
+group: Browser Code
 order: 33
 ---
 
-## Morphs and the router
+## Morphs and the Router
 Same-origin clicks and back/forward fetch and morph, no full reload. A form action or navigation morphs the page; layouts stay mounted.
 
 ```js
@@ -26,7 +26,7 @@ replaceState('', { tab: 3 })         // this entry's state ('' keeps the URL)
 - `pushState(url, state)` (shallow routing, for tabs and modals) adds an entry at `url` (`''`: this one) and loads nothing; `page.value.state` is reactive (`{}` on other entries). Back/forward restores it with no request; a reload keeps it only at its URL.
 - `document` events: `wisp:navigate wisp:update wisp:goto wisp:refresh wisp:error wisp:push wisp:pop`; forms: `wisp:submit` (cancelable), `wisp:result`.
 
-### Link and navigation options
+### Link and Navigation Options
 `data-wisp-noscroll`, `data-wisp-keepfocus`, `data-wisp-replacestate`, `data-wisp-notransition` (on or around a link) keep scroll, keep focus, replace history, skip the view transition. `goto(url, { noscroll, keepfocus, replace, novt })` does the same.
 
 Hooks from `'wisp'` return an unsubscribe:
@@ -52,7 +52,7 @@ Back, forward and reload restore each changed `<input>`, `<textarea>`, `<select>
 </script>
 ```
 
-### Phones and offline
+### Phones and Offline
 - Pages leave with `pagehide` (back/forward cache; scroll restored).
 - `<body data-wisp-revalidate="30">` refetches data when the tab or network returns (at most every N s, default 30; the morph keeps focus, scroll, typed text).
 - Offline, `<form data-wisp-queue>` (safe to send twice) waits in `sessionStorage`, is sent in order when back, then the page refreshes (`wisp:sent`). Only urlencoded forms queue.

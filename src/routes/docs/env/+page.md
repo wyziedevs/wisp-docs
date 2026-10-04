@@ -1,5 +1,5 @@
 ---
-title: Environment variables
+title: Environment Variables
 description: Every environment variable Wisp reads, for the app, the CLI and tests.
 group: Reference
 order: 81
@@ -42,7 +42,7 @@ Read once at start. Switches take `on`/`off` (also `1`/`0`, `true`/`false`). You
 
 `#[derive(Rest)]` bearer tokens and OAuth client ids and secrets are read from the names their attributes give.
 
-## Logs and traces
+## Logs and Traces
 
 | Name | What it does |
 |---|---|
@@ -54,7 +54,7 @@ Read once at start. Switches take `on`/`off` (also `1`/`0`, `true`/`false`). You
 | `OTEL_SERVICE_NAME` | service name on spans |
 | `OTEL_BSP_SCHEDULE_DELAY` | batch delay in ms (5000) |
 
-## CLI and tests
+## CLI and Tests
 
 | Name | What it does |
 |---|---|

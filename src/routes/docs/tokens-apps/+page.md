@@ -1,5 +1,5 @@
 ---
-title: Tokens, app by app
+title: Tokens, App by App
 description: Four small apps in Wisp and six other frameworks, with the Wisp versions.
 group: Project
 order: 71
@@ -7,7 +7,7 @@ order: 71
 
 Method and the five-feature table: [Tokens](/docs/tokens).
 
-## The four apps
+## The Four Apps
 
 - **counter**: a button that counts clicks.
 - **todo**: a list kept in memory, a form that adds an item (1 to 100 characters; otherwise a 422 that shows the problem and keeps what was typed), and a delete button per item.
@@ -39,7 +39,7 @@ What a real API adds in Wisp:
 - a hook such as `fn before_create(note: &mut Note) -> Result { Ok(()) }`: 22 with its body
 - every table in SQLite instead of log files: a `wisp::Store` of 373 (docs/api.md), written once per app
 
-## The Wisp versions
+## The Wisp Versions
 
 ```rust
 // api: src/routes/api/notes/+server.rs

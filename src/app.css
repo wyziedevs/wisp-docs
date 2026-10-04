@@ -2110,15 +2110,15 @@ pre code {
 /* ---- Wider reading column --------------------------------------------- */
 
 :root {
-  --prose: 78ch;
+  --prose: 74ch;
 }
 
 .docs {
-  width: min(100%, 92rem);
+  width: min(100%, 86rem);
 }
 
 .doc > :not(pre):not(table):not(.pager):not(.edit):not(h1):not(h2):not(h3):not(h4) {
-  max-width: 84ch;
+  max-width: 78ch;
 }
 
 @media (min-width: 78rem) {

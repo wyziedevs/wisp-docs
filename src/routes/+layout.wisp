@@ -18,7 +18,7 @@ let about = me
   <link rel="canonical" href={format!("{SITE}{}", cx.path())}>
   <meta name="twitter:card" content="summary_large_image">
 </head>
-<a class="skip" href="#main">Skip to content</a>
+<a class="skip" href="#main">Skip to Content</a>
 <header class="top">
   <div class="bar">
     <a class="brand" href="/" aria-label="Wisp home">

@@ -1,11 +1,11 @@
 ---
-title: PWA and the dev loop
+title: PWA and the Dev Loop
 description: Installable and offline apps, and the dev loop with hot reload and devtools.
-group: Browser code
+group: Browser Code
 order: 35
 ---
 
-## Installable and offline (PWA)
+## Installable and Offline (PWA)
 `src/manifest.json` is served at `/manifest.webmanifest` and linked by every page; nothing is emitted without it.
 
 ```json
@@ -27,7 +27,7 @@ self.addEventListener('install', (e) => {
 })
 ```
 
-## Dev: hot reload
+## Dev: Hot Reload
 `wisp dev` applies a `.wisp` save with no compile when only browser code or static text changed:
 
 - A script or `{:…}` change swaps the file's module (instances rerun it, keeping `$state` by name, focus, selection and field values).

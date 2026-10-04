@@ -1,5 +1,5 @@
 ---
-title: Auth, limits, jobs and config
+title: Auth, Limits, Jobs and Config
 description: Auth, rate limits, live updates, background jobs and configuration.
 group: APIs
 order: 42
@@ -29,7 +29,7 @@ fn before(cx: &mut Cx) -> Result<()> {
 }
 ```
 
-## Rate limits
+## Rate Limits
 
 ```rust
 static LOGINS: RateLimit = RateLimit::per_minute(10);
@@ -44,7 +44,7 @@ fn post(cx: &mut Cx, name: String, password: String) -> Result<()> {
 - Behind a proxy set `WISP_CLIENT_IP_HEADER`.
 - `BODY_LIMIT` caps bodies per route.
 
-## Live updates
+## Live Updates
 
 ```rust
 wisp::channel("notes").send(wisp::to_json(&note));     // anywhere
@@ -56,7 +56,7 @@ fn get() -> Response { wisp::channel("chat").websocket() }     // both ways
 - `subscribe()` (`recv().await`) feeds your own `Response::events` or `websocket`; `connect(&ws)` joins an existing socket.
 - Channels are per process: relay between servers (Redis pub/sub, Postgres `LISTEN`) from a task started in `init`.
 
-## Background jobs
+## Background Jobs
 
 ```rust
 // src/hooks.rs
@@ -69,7 +69,7 @@ fn init() {
 - `wisp::spawn` runs one task. Durable queues, cron: [/docs/data](/docs/data).
 - A health check is a route: `fn get() -> &'static str { "ok" }` (`/_wisp/health` exists).
 
-## Configuration and databases
+## Configuration and Databases
 - `wisp::env("KEY")`: process env, else `.env` in the working directory, read once at start; the process wins; bad lines skipped with a warning; edge: the worker's env, no `.env`.
 - `wisp::env_or("WORKERS", 4)` parses with a default.
 - Read settings once in `init`: `wisp::provide(v)`, then `wisp::state::<T>()` (or `#[derive(Config)]`, AGENTS.md).

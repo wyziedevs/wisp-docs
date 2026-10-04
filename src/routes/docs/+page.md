@@ -1,5 +1,5 @@
 ---
-title: Getting started
+title: Getting Started
 description: Install Wisp, make an app with wisp new, run it with wisp dev and build one binary.
 group: Start
 order: 1
@@ -7,7 +7,7 @@ order: 1
 
 Wisp is a fast, fun web framework for Rust. A folder is a URL, and its `+page.wisp` is the page: an optional block of Rust, then markup. Templates compile to plain Rust, and the app, styles and static files become one small binary.
 
-## Install and run
+## Install and Run
 
 You need [Rust](https://rustup.rs) 1.88 or later.
 
@@ -20,7 +20,7 @@ wisp dev               # http://127.0.0.1:3000
 
 `wisp dev` rebuilds as you edit, hot reload keeps your `$state`, and `Alt+Shift+W` opens the devtools with the routes table.
 
-## A page
+## A Page
 
 `src/routes/+page.wisp`:
 
@@ -39,7 +39,7 @@ let name: String = cx.query_or("name", "world");
 
 The `---` block is Rust that runs per request, `{name}` renders on the server, and `{:count}` is JavaScript state in the browser. With JavaScript off, the server's HTML still works.
 
-## Data and a form
+## Data and a Form
 
 A model lives in `src/db.rs`; its `pub` items are in every route file:
 
@@ -91,7 +91,7 @@ static/                     served at /
 
 Folders: `blog` static, `[slug]` param, `[[lang]]` optional, `[...rest]` rest, `[id=int]` digits, `(group)` not in the URL. More in [Files and routes](/docs/design).
 
-## Check, test, build
+## Check, Test, Build
 
 ```bash
 wisp check      # templates, routes, accessibility lints
@@ -110,7 +110,7 @@ wisp build      # one release binary
 - [Data, files and jobs](/docs/data) and [Auth](/docs/auth).
 - With an AI agent: [AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md), or `wisp mcp` (`claude mcp add wisp -- wisp mcp`).
 
-## All pages
+## All Pages
 
 **Start**
 

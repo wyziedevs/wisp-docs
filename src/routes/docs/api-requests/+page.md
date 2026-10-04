@@ -1,5 +1,5 @@
 ---
-title: Input, output and errors
+title: Input, Output and Errors
 description: Input, output, errors as JSON, webhooks, idempotent retries and big lists.
 group: APIs
 order: 41
@@ -54,7 +54,7 @@ Each param but `cx` is read by name: route param, then form field or JSON object
 
 Query: `cx.query("q")`, `cx.query_or("page", 1)` (parsed, else the default), `cx.query_string()` (raw, no `?`). `cx.request_id()` is the request's id, sent back as `x-request-id`.
 
-## Errors are JSON
+## Errors Are JSON
 An error is JSON (else the app's `+error.wisp`, else Wisp's default page) when the request:
 
 - targets a `+server.rs` (or an unmatched path under a first segment with endpoints and no pages);
@@ -88,10 +88,10 @@ fn post(cx: &mut Cx, body: Value) -> Result {
 - Stripe's `stripe-signature` (`t=…,v1=…`) signs the time too and is refused after five minutes.
 - Other schemes: `wisp::hex(&wisp::hmac_sha256(secret, message))`, `wisp::secure_eq`.
 
-## Idempotent retries
+## Idempotent Retries
 A POST with `Idempotency-Key` retried gets the first answer back with `idempotent-replayed: true`, kept a day per key, path and `authorization`. The same key with another body is 422, one still in progress 409. No header, nothing kept.
 
-## Big lists
+## Big Lists
 
 ```rust
 fn get() -> Response {

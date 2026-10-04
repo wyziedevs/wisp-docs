@@ -1,7 +1,7 @@
 ---
-title: Auth and integrations
+title: Auth and Integrations
 description: Roles, signed tokens, two-factor codes, outbound HTTP, email and OAuth sign-in.
-group: Data and auth
+group: Data and Auth
 order: 51
 ---
 
@@ -24,7 +24,7 @@ fn before(cx: &mut Cx) -> Result {
 
 A preflight is answered with a 204 and the headers, carried as the `Err` that `?` returns. A site not listed gets no `access-control-allow-origin`.
 
-## Signed tokens (reset, verify, magic link)
+## Signed Tokens (Reset, Verify, Magic Link)
 
 ```rust
 let t = wisp::token("reset", &user.id, Duration::from_secs(3600));
@@ -35,7 +35,7 @@ let id: u64 = wisp::untoken("reset", &t)?;   // 400 for any failure, the same on
 - The payload is readable, not forgeable; keep secrets out of it.
 - A token works until it expires: for a reset, put something in it that changes when it is used (the password hash's first bytes) and compare.
 
-## Two-factor codes
+## Two-Factor Codes
 
 ```rust
 let secret = wisp::totp::secret();                       // keep with the user
@@ -87,5 +87,5 @@ Kept safe by:
 - only a provider-verified email returned (match accounts on `id`, not email, unless you want a sign-in to join an existing account);
 - every failure the same 400.
 
-## Not here
+## Not Here
 Distributed `RateLimit` waits for the relay (S2). Automatic `/_wisp/oauth/...` routes need `http.rs`; the two small routes above do the same. SMTP, SES.

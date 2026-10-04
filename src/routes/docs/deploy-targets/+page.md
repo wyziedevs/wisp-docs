@@ -1,7 +1,7 @@
 ---
-title: Edge and serverless targets
+title: Edge and Serverless Targets
 description: Build for Cloudflare, Deno, Vercel, Netlify, Lambda, Bun and more.
-group: Deploy and run
+group: Deploy and Run
 order: 61
 ---
 
@@ -33,7 +33,7 @@ Other hosts:
 | Railway, Render | `--docker`, point at the repo, set `WISP_SECRET` |
 | Cloud Run | `--docker`, `gcloud run deploy --source .` |
 
-## Edge runtime per route
+## Edge Runtime per Route
 
 Vercel and Netlify Edge: add `--edge` (`--target vercel --edge`, `--target netlify --edge`). The wasm app runs as a module (`opt-level = "s"`, for their size limits), and Netlify skips `static/` via `excludedPath`. Edge limits apply.
 
@@ -49,7 +49,7 @@ const RUNTIME: wisp::Runtime = wisp::Runtime::Edge;   // default: Node
 - Other hosts ignore it; `--edge` puts every route there.
 - The build stops, naming the route, if an Edge route uses what WebAssembly lacks (`std::fs`, `std::thread`, `std::process`, `std::net`, websockets).
 
-## Servers on node, bun and local deno
+## Servers on Node, Bun and Local Deno
 
 They read raw sockets and the app's own HTTP/1.1 parser answers (pipelining, keep-alive, chunked bodies, 413, 431 and each route's `BODY_LIMIT`, as the native server has them), with none of the host's per-request objects.
 
@@ -74,7 +74,7 @@ aws lambda update-function-code --function-name my-app --zip-file fileb://dist/l
 - Saved tables go in `/tmp`, per instance: use `wisp::store` for lasting data.
 - The `tower` feature with `lambda_http` also works ([embed](/docs/embed)).
 
-## What works on the edge
+## What Works on the Edge
 
 No threads, sockets or files.
 
@@ -88,7 +88,7 @@ No threads, sockets or files.
 | Not in the edge build | `wisp::channel`, `wisp::every`, `RateLimit` (it won't compile with them): use the host's queues, cron, rate limiting. |
 | Panics | A panic fails only that request (500). No `Date` header from Wisp. |
 
-### Saved tables
+### Saved Tables
 
 `Rest` and `Table::saved` are per-instance memory unless `WISP_STORE` is set (no app code):
 

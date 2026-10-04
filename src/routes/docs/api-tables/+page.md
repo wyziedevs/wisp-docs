@@ -1,5 +1,5 @@
 ---
-title: Where rows are kept
+title: Where Rows Are Kept
 description: Table storage, WISP_DATA, custom stores, the edge and paging.
 group: APIs
 order: 44
@@ -16,7 +16,7 @@ Saved before memory changes, read at first use: a log file per table (`note.log`
 
 Tables hold every row in memory; for larger data or database-side queries write the handlers.
 
-## Any database
+## Any Database
 `wisp::store(Db)` in `init`: implement `wisp::Store`:
 
 - `load(&self, table) -> Result<Vec<(u64, String)>>`: id and JSON of each row.
@@ -28,7 +28,7 @@ E.g. over `Mutex<rusqlite::Connection>` (`create table if not exists {table} (id
 - A POST of an array goes through `save_many(table, &[(id, json)])` (default: each in turn, undoing earlier ones on failure; override with one transaction); failure is a 500 and nothing is kept.
 - On the edge each instance has its own memory: tables are caches; use D1/KV through `wisp::edge::fetch`, or env `WISP_STORE=d1:DB|deno-kv|libsql://…`.
 
-## A page's own table
+## A Page's Own Table
 `static TODOS: Table<Todo> = Table::saved();` (named from the static; `Table::saved("todos")` names it).
 
 - A field added to a saved type must be `Option`, `Vec` or `bool`.

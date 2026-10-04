@@ -15,7 +15,7 @@ cargo run -r -p bench-run -- --paths fortunes
 
 You need Rust. `bench/README.md` lists every option, the frameworks compared, and how each path is checked for identical output before it is measured. Results depend on the machine: read them as a comparison on one machine, not as absolutes.
 
-## What is checked
+## What Is Checked
 
 | Check | What it does |
 |---|---|

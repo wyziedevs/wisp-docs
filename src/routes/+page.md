@@ -1,5 +1,5 @@
 ---
-title: Wisp, a fast, fun web framework for Rust
+title: Wisp, a Fast, Fun Web Framework for Rust
 description: A fast, fun web framework for Rust that costs an AI the fewest tokens to write. One page, one binary.
 ---
 
@@ -54,11 +54,11 @@ pub static TODOS: Table<Todo> = Table::saved();
 <div class="wrap">
 <div class="claim wide">
 
-## Nothing extra on the hot path
+## Nothing Extra on the Hot Path
 
 A route pays only for the features it uses, and a change that touches the request path is checked by an instructions-per-request A/B before it lands. Wisp's first rule is that speed is never traded away for convenience.
 
-<p class="cta left"><a class="btn" href="/docs/benchmarks">How speed is measured</a></p>
+<p class="cta left"><a class="btn" href="/docs/benchmarks">How Speed Is Measured</a></p>
 
 </div>
 </div>
@@ -68,7 +68,7 @@ A route pays only for the features it uses, and a change that touches the reques
 <div class="wrap">
 <div class="claim wide">
 
-## An AI writes the same app in half the tokens
+## An AI Writes the Same App in Half the Tokens
 
 AI writes most code now, and every token it reads and writes costs time and money. Wisp is built so an app costs the fewest: conventions instead of config, types the compiler infers, and forms that write themselves. The whole reference is one file, [llms.txt and AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md), and `wisp mcp` serves it to coding agents.
 
@@ -212,7 +212,7 @@ wisp deploy init cloudflare
 <section class="final">
 <div class="wrap">
 
-## Make something
+## Make Something
 
 ```bash
 wisp new my-app
@@ -220,6 +220,6 @@ cd my-app
 wisp dev
 ```
 
-<p class="cta"><a class="btn primary" href="/docs">Read the docs</a> <a class="btn" href="https://github.com/wyziedevs/wisp">Wisp on GitHub</a></p>
+<p class="cta"><a class="btn primary" href="/docs">Read the Docs</a> <a class="btn" href="https://github.com/wyziedevs/wisp">Wisp on GitHub</a></p>
 </div>
 </section>

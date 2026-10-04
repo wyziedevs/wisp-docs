@@ -1,5 +1,5 @@
 ---
-title: Cookies and sign-in
+title: Cookies and Sign-In
 description: Cookies, signed cookies, sessions, sign-in, password hashing.
 group: Design
 order: 20
@@ -34,14 +34,14 @@ let me = cx.user()?;                      // members' page: signed-in row or red
 - `Secure` is added when the request came over HTTPS through a proxy (`x-forwarded-proto: https`) or `ORIGIN` is `https://`, and always with `SameSite=None` (browsers require it).
 - `#[derive(Cookie)]` puts a struct in one cookie via `Display` and `FromStr`: fields in order, separated by `|`, each escaped (`42|cranesloth|pi`). A fieldless enum is its variant name. The derive reads only type and field names, no `syn`. The value is visitor input: check rules beyond field types after reading (Wisple's `Game::valid`).
 
-## Signed cookies
+## Signed Cookies
 
 - `cx.set_signed_cookie(name, value)` adds an HMAC-SHA256 signature of name and value (`value.signature`), keyed with `WISP_SECRET`.
 - `cx.signed_cookie(name)` returns the value only if the signature holds: a visitor can read it but not forge it, change it, or move it to another cookie name.
 - A release build without `WISP_SECRET` fails the request that signs or checks, saying to set it. Dev builds keep a secret in `.wisp/secret` so sessions survive restarts.
 - Rotate without signing everyone out: move the old secret to `WISP_SECRET_OLD`. Signatures it made still hold (nothing new is signed with it) until removed; 30 days on for sign-ins.
 
-## Signing in
+## Signing In
 
 | Call | What it does |
 |---|---|
@@ -57,7 +57,7 @@ let me = cx.user()?;                      // members' page: signed-in row or red
 - `user`, `login` and `signup` take the users table for you: the lone `Table` of a model with a `Password` field in `src/db.rs`, else the one `wisp::users(&db::USERS)` names in `init` (the build adds it; `&USERS` first still works, and is how a second table is used).
 - The page at `/login` is the convention; `wisp::sign_in_page("/enter")` in `init` names another.
 
-### Sign out everywhere
+### Sign Out Everywhere
 
 A signed session is valid wherever sent, so `cx.sign_out()` cannot end a stolen copy. `wisp::sign_out_everywhere(id)` can:
 

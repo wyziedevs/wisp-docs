@@ -1,5 +1,5 @@
 ---
-title: Actions, forms and UI
+title: Actions, Forms and UI
 description: Actions, validation, uploads, wisp.js form handling and the built-in UI.
 group: Design
 order: 14
@@ -57,7 +57,7 @@ Browser-side checks come from the same rules (`wisp_build::rules::Native`). A fi
 
 A textarea gets only `required` (line breaks are sent as two characters). The server still checks everything.
 
-## Request flow
+## Request Flow
 
 1. Same-origin check: `Origin`, if present, must match `Host` (else 403). Without it, `Sec-Fetch-Site` other than `same-origin` or `none` is 403. A client sending neither (curl) passes.
 2. The action runs. `redirect("/...")` is a 303; other errors go to the error page. For `wisp.js` (requests carry `x-wisp`) a redirect is a 200 with `x-wisp-location` and the script navigates itself (fetch would follow with the post's headers, and not at all to another site).
@@ -75,7 +75,7 @@ A textarea gets only `required` (line breaks are sent as two characters). The se
 - `data-wisp-keep` on an element leaves its children and attributes alone (a map, a rich text editor).
 - A post that redirects loads the page so its scripts run as on any load. A script a morph brings into the same page (inside an `{#if}`) runs once, the first time it appears.
 
-## Forms and files
+## Forms and Files
 
 - `cx.form()` reads urlencoded and multipart bodies (`enctype="multipart/form-data"` for files). Text fields read the same either way.
 - `cx.form().file("photo")` is the file of `<input type="file" name="photo">` (`None` when none): `name` as sent, `content_type`, `bytes`. `files("photo")` is every file of a `multiple` input.
@@ -92,7 +92,7 @@ A textarea gets only `required` (line breaks are sent as two characters). The se
 - Cloning shares the bytes. In a saved table it is a `data:` URL (its JSON).
 - As a response: `fn get(id: u64) -> Option<Image> { USERS.get(id)?.value.avatar }` in `avatars/[id=int]/+server.rs` sends bytes and type with an ETag (304 when matched), `no-cache`, `nosniff`. Any response with an `etag` answers a matching `if-none-match` GET with 304.
 
-### Serving files
+### Serving Files
 
 ```rust
 // [...name]/+server.rs
@@ -104,7 +104,7 @@ async fn get(name: String) -> Result<Response> {
 - `Response::file_in(dir, name)` reads without blocking, typed by extension. A name reaching outside the directory (`..`, absolute path, drive) is a 404, like a missing file. The name may come straight from the URL.
 - `Response::download("report.csv", bytes)` sends bytes the browser saves as that file name.
 
-## Built-in UI
+## Built-In UI
 
 Wisp draws a few things from one design system: Kinetrix's roles and values (dark, as the demo site), Wisp violet (`#896ce0`) as the one accent, only on what is interactive. One-pixel hairlines, two shadow steps, one type scale, one focus ring.
 

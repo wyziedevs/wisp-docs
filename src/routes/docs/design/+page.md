@@ -1,5 +1,5 @@
 ---
-title: Design and files
+title: Design and Files
 description: Principles, dependency budget, workspace, the files of an app, routes and Markdown pages.
 group: Design
 order: 10
@@ -7,7 +7,7 @@ order: 10
 
 Wisp is a fast, fun web framework for Rust: server-rendered HTML, file routes, `.wisp` templates, form actions without a client framework, one binary. This page is the contract for v0; when code and doc disagree, fix one.
 
-## An app
+## An App
 
 ```
 my-app/
@@ -58,11 +58,11 @@ fn matches(s: &str) -> bool {
 - Two routes with the same pattern are a build error. `/about/` redirects (308) to `/about`.
 - Other build errors: a `.wisp`, `page.rs`, `layout.rs` or `server.rs` under `src/routes` without its `+`; a top-level `_app` or `_wisp` directory (Wisp's own); a `(group)` not exactly one name in parentheses; a route deeper than 32 segments. Editor swap and backup files are skipped.
 
-### Trailing slash
+### Trailing Slash
 
 `/about/` gets a 308 to `/about`, query kept. `wisp::trailing_slash(Always)` in `init` flips it (`/about` to `/about/`, GET and HEAD of pages; endpoints and paths with a `.` in the last segment are left alone); `Ignore` serves both. The other form is matched only after no route matched, so the default costs nothing. The build warns of a literal `href="/…"` in a template the setting would redirect.
 
-### Sitemap, robots, feed, og
+### Sitemap, Robots, Feed, Og
 
 `/sitemap.xml` and `/robots.txt` are made from the route tree, answered only for a GET no route and no file matched. A file of the same name in `static/`, or a route, wins.
 
@@ -74,7 +74,7 @@ fn matches(s: &str) -> bool {
 - `wisp::og(title, description, image)` gives escaped Open Graph and Twitter card tags: `{@html wisp::og("Hello", "A first post", "/cover.png")}`.
 - Image `"auto"` with a literal title and description: `wisp build` (`og.rs` in the CLI, drawing in `wisp-shared`'s `og.rs`) writes `static/og/<slug>.svg`, 1200 by 630, with title, description and app name in `src/app.css`'s `--bg`, `--ink`, `--accent` (else Wisp's). It is SVG because nothing in Wisp's dependencies rasterizes, and X and Facebook want PNG: convert in CI (`rsvg-convert -o static/og/x.png static/og/x.svg`, or resvg) and pass `"/og/x.png"`. The opt-in `og-png` feature on `wisp` and `wisp-cli` renders each picture to a PNG with `resvg` (system fonts) and names that. A non-literal title (a database row) needs your own image.
 
-## Markdown pages
+## Markdown Pages
 
 `+page.md` and each `x.md` (a page at `x`) is turned into markup at build time by `pulldown-cmark` (CommonMark, tables, strikethrough, task lists, footnotes), then compiled like a `.wisp` page. The folder's layouts wrap it; with no Rust in it, it is baked.
 
@@ -100,7 +100,7 @@ Text, and a component:
 - Fenced code is highlighted at build time by `wisp-build` (rust, js/ts, html, css, json, bash) as `<span class="hl-k|s|c|n|t|a">` (keyword, string, comment, number, type or tag, attribute) in `<pre><code class="language-x">`. Your CSS colors them; other languages keep the class, unhighlighted.
 - `wisp::pages("blog")` gives a folder's `MdPage`s (`path`, `title`, `get("date")`), newest `date` first: `{#each wisp::pages("blog") as p}<a href={p.path}>{p.title}</a>{/each}`. A `static` slice the build wrote: no I/O, no allocation.
 
-## Config rules
+## Config Rules
 
 `redirects`, `rewrites` and `headers` in `[package.metadata.wisp]` (Cargo.toml) are lists of strings, as Next.js's next.config has them. The build checks and bakes them into tables; the server reaches them only through the consts `App::REDIRECTS`, `REWRITES`, `HEADERS`, so an app with none runs no code for them. A pattern is a route's: text, `[name]`, a last `[...name]`. Anything malformed fails the build, naming the entry.
 
@@ -124,7 +124,7 @@ In order: ultra fast, cheap, durable, flexible; developer happiness last.
 8. **Fast dev loop**: editing markup never waits for `cargo`; editing Rust rebuilds only the app crate.
 9. **Works without JavaScript**: forms and links are real; `wisp.js` enhances, never required.
 
-## Dependency budget
+## Dependency Budget
 
 Crate | Used by | Why
 ---|---|---

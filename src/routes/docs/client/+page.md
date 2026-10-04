@@ -1,7 +1,7 @@
 ---
-title: Browser code
+title: Browser Code
 description: Scripts, runes, directives and TypeScript in the same .wisp file.
-group: Browser code
+group: Browser Code
 order: 30
 ---
 
@@ -14,7 +14,7 @@ Pages work without JavaScript; a script and directives in the same `.wisp` file 
 </script>
 ```
 
-## The script
+## The Script
 A bare `<script>` (no attributes; one per file) works in pages, layouts and components and runs once per place the file is shown. `<script type|src>` stays plain HTML. Errors point at the `.wisp` line.
 
 - Top-level `let`s are state: assigning one, or changing an object, array, `Map` or `Set` in it (`todos.push(t)`, `todo.done = true`), redraws. A `let` set to a string, number or boolean and never assigned is a constant.
@@ -67,7 +67,7 @@ A write redraws only the bindings that read what changed (no virtual DOM); the s
 
 `wisp check --types` also type-checks with the app's TypeScript (`npm install -D typescript`, or `WISP_TSC` naming a `tsc`; else skipped). Server values are typed by Rust (`Vec<Item>` is `Item[]`, a `#[derive(Json)]` type an interface; hand-written `Json` is `unknown`).
 
-## Environment variables
+## Environment Variables
 `env.PUBLIC_NAME` in browser code (script, directive, `src/lib`, `+page.js`) is written in at build (no `env` object exists).
 
 - Values: the build's environment, then `.env` for names it lacks; `wisp dev` rebuilds when `.env` changes.
@@ -109,7 +109,7 @@ A write redraws only the bindings that read what changed (no virtual DOM); the s
 <div on:keydown.ctrl.s.prevent.window="save">…</div>
 ```
 
-### Event modifiers
+### Event Modifiers
 - `.prevent .stop .once .self .capture .passive`
 - `.window`, `.document`: listen there. `.outside`.
 - `.debounce[.300ms]` (default 250 ms).

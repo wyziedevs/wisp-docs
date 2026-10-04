@@ -1,7 +1,7 @@
 ---
-title: Islands and loading
+title: Islands and Loading
 description: Islands, web components, third-party scripts and loading code on demand.
-group: Browser code
+group: Browser Code
 order: 32
 ---
 
@@ -41,7 +41,7 @@ A page ships JS only for files with client code; a component can wait:
 - `client:*` as for any island; children show until it starts. Other attributes (`class`, `id`) go on its `<div>`, which morphs leave alone.
 - The framework must be in `package.json` (else a build error); it loads only on pages with an island of it, one shared copy. A Svelte package must ship compiled JS.
 
-### Web components
+### Web Components
 Import the module, write the tag (Shoelace, Web Awesome `wa-`, Lit). `on:` takes their events (dashes too); `bind:value` listens for `input`.
 
 ```html
@@ -59,7 +59,7 @@ Import the module, write the tag (Shoelace, Web Awesome `wa-`, Lit). `on:` takes
 - Your own with Lit: `wisp add lit`, `customElements.define('hello-tag', class extends LitElement {…})` in a `src/lib` module a script imports.
 - The `click-events` a11y lint skips custom elements.
 
-## Your own bundle (npm UI libraries)
+## Your Own Bundle (npm UI Libraries)
 For a widget `wisp add` cannot serve (React, Svelte, a charting kit): bundle it with your own tool, no Wisp dependency, into `static/`, and mount it from a `use:` action. `data-wisp-keep` stops a morph from touching what the widget draws.
 
 ```sh
@@ -81,7 +81,7 @@ esbuild src/widget.js --bundle --minify --format=esm --outfile=static/widget.js 
 - To share a library between bundles, a `<script type="importmap">` in `src/app.html` maps `"react"` to a file in `static/`.
 - Packages `wisp add` serves need none of this: `<Island of="react:name">`.
 
-## Third-party scripts
+## Third-Party Scripts
 Pick when one loads (`src`, so no code of yours). In the head:
 
 | Tag | Loads |
@@ -93,14 +93,14 @@ Pick when one loads (`src`, so no code of yours). In the head:
 
 Other attributes (`async`, `data-*`) are copied.
 
-## Loading views
+## Loading Views
 `src/routes/blog/+loading.wisp` is static HTML (a `<style>` is fine; no `---` block, holes or components). A client navigation to `/blog` or any page below it shows it in `<main>` the moment the link is followed, until the page arrives and morphs over it (`aria-busy` is set meanwhile).
 
 - The deepest folder that fits wins; `routes/+loading.wisp` is for every page.
 - None for a page already fetched ahead (hover), back or forward, or a full page load.
 - The build writes the views as JSON into the shell's head: an app with no `+loading.wisp` has none of it, and no request is made for one.
 
-## Web vitals
+## Web Vitals
 `<meta name="wisp-vitals" content="/vitals">` (in `src/app.html`) is opt-in: when the page is hidden, wisp.js sends that path one beacon (`sendBeacon`, a POST) of JSON: `{"path":"/x","ttfb":12,"lcp":480.5,"cls":0.02,"inp":64}`.
 
 - Times in ms, `cls` a score; a metric the browser never measured is left out.
@@ -108,7 +108,7 @@ Other attributes (`async`, `data-*`) are copied.
 - Receive it with `vitals/+server.rs`: `fn post(cx: &mut Cx) -> Result<()>` reading `cx.body()`.
 - No page that does not name the tag runs any of it.
 
-## Loading code on demand
+## Loading Code on Demand
 `import()` loads when reached:
 
 ```html

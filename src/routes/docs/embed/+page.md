@@ -1,13 +1,13 @@
 ---
-title: Testing and mixing with Rust code
+title: Testing and Mixing with Rust Code
 description: Testing an app in process, WebSockets, and Wisp inside axum, hyper and Lambda.
-group: Deploy and run
+group: Deploy and Run
 order: 63
 ---
 
 The app is a function from request to reply.
 
-## In process
+## In Process
 
 ```rust
 wisp::prepare::<App>().await?;                        // runs `init`, once
@@ -18,7 +18,7 @@ let reply = wisp::handle::<App>(req).await;           // reply.status, .headers 
 
 Same parser, limits, hooks and CSRF check as the server.
 
-## Testing an app
+## Testing an App
 
 `wisp::test::client` needs no port and keeps cookies like a browser:
 
@@ -72,7 +72,7 @@ fn get() -> Response {
 
 Browser side: `new WebSocket(`${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/ws`)` with `onmessage`, `onopen`, `onclose`.
 
-## The `tower` feature
+## The `tower` Feature
 
 Wisp becomes a `tower::Service`; the default build keeps its two deps.
 
@@ -122,7 +122,7 @@ async fn main() -> Result<(), lambda_http::Error> {
 }
 ```
 
-### axum inside Wisp
+### Axum Inside Wisp
 
 Send paths to an axum `Router` from `before` (or a catch-all `+server.rs`). `before` may return `Result<Option<Response>>` (`Some` answers instead of the route). `async fn before` takes every route off the no-wait fast path.
 

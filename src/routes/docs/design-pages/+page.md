@@ -1,5 +1,5 @@
 ---
-title: Pages and templates
+title: Pages and Templates
 description: A page's Rust block, loads, actions, validation, limits, caching and accessibility lints.
 group: Design
 order: 11
@@ -34,7 +34,7 @@ async fn load(slug: String) -> Result<Data> {
 }
 ```
 
-## The block
+## The Block
 
 - Items (`fn`, `struct`, `use`, `static`, `const`, `impl`, `#[action]`...) go in the page's module. Statements are its load: they run per request before the markup renders, and the markup reads their names (`post`).
 - Statements run in an `async` function returning a `Result`: `.await`, `?`, `return redirect("/")`, `return error(404, "…")` work. `cx` is `&mut Cx`. Each route param is a local: `slug: String` for `[slug]` and `[...rest]`, `id: u64` for `[id=int]`, `Option<String>` (or `Option<u64>`) for `[[lang]]`. A page with no Rust reads them too: `<h1>{slug}</h1>`.
@@ -47,7 +47,7 @@ async fn load(slug: String) -> Result<Data> {
 - `fn entries() -> Vec<…>` in a page under `[params]` lists the pages `wisp build --static` writes ([deploy](/docs/deploy)).
 - The build checks that `load` returns `Data` (plain or in a `Result`), that every parameter but `cx` has a plain name, and that `#[action]` (by any path, `wisp::action` too) marks only top-level functions of a page.
 
-## Signatures and inputs
+## Signatures and Inputs
 
 - `load`, actions and `+server.rs` endpoints may be `fn` or `async fn`; take `cx: &mut Cx`, `cx: &Cx` or none; return their value (`Data`, `()`, `Response`) plain or in a `Result` (`Result` alone is `Result<()>`). The build reads which from the signature; rustc checks types.
 - An `#[action]` whose body uses `cx` without taking it gets `cx: &mut Cx`: `#[action] fn increment() { cx.set_cookie("n", n + 1) }`.
@@ -63,7 +63,7 @@ Type | Behavior
 
 So `fn load(q: Option<String>, page: Option<u32>)` and `#[action] fn add(text: String, done: bool)` need no `cx`. `cx.form()` reads anything else, files too; `cx.input(name)` finds one by name the same way (in a block's statements, say).
 
-## Errors, actions, validation
+## Errors, Actions, Validation
 
 - `?` on any `std::error::Error` is a 500 (details only in dev). `return error(404, "…")` stops with that status and message; `return redirect("/…")` is a 303. Both are `Err`s, so they end a function returning a `Result`. `Error::new(status, "…")` is the error itself (for `ok_or`, `map_err`); `Error::redirect(status, "/…")` takes another status. `Err(error(..))` is a build error telling you to write `return error(..)`. `Option::or_404()` is the shortcut.
 - An action returns nothing (or `Result<()>`) and the page renders; or a `Response` (CSV, a file) sent instead of the page; or an `Option<Response>` to do that sometimes.
@@ -87,7 +87,7 @@ fn signup(name: String, email: Email) {
 
 - `+server.rs` method: the `Response` it returns; any other value as JSON (`#[derive(Json)]`); nothing is a 204; `Option<Response>` `None` is a 404. `body: T` (not a string) is the JSON body read as a `FromJson` type. An error on a request under `/api`, or one that sent or asks for JSON, is answered as JSON ([api](/docs/api)).
 
-## Limits and caching
+## Limits and Caching
 
 `const BODY_LIMIT: usize = 20 * wisp::MB;` in a page or `+server.rs`: largest body the route takes (default 1 MB, or `WISP_BODY_LIMIT`); larger is a 413 as soon as its head arrives.
 

@@ -5,7 +5,7 @@ group: Start
 order: 2
 ---
 
-## Short code that reads like the page
+## Short Code That Reads Like the Page
 
 A folder is a URL, and its `+page.wisp` is the page: a block of Rust that loads data and handles forms, then markup. A model, a saved table, a validated action, a form and a list fit in about twenty lines. No imports (a prelude brings the usual names), no router file, no handler wiring. See [Getting started](/docs).
 
@@ -13,7 +13,7 @@ A folder is a URL, and its `+page.wisp` is the page: a block of Rust that loads 
 
 Zero cost on the request hot path: a route pays only for the features it uses, and a change that touches the path is checked by an instructions-per-request A/B before it lands. See [Benchmarks](/docs/benchmarks).
 
-## Cheap to write
+## Cheap to Write
 
 AI writes most code now, and every token costs time and money. Wisp uses conventions over configuration, types the compiler infers, and forms that write their own inputs and errors.
 

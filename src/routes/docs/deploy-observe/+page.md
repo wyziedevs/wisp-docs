@@ -1,7 +1,7 @@
 ---
-title: Logs, metrics and traces
+title: Logs, Metrics and Traces
 description: JSON request logs, Prometheus metrics and OpenTelemetry traces.
-group: Deploy and run
+group: Deploy and Run
 order: 64
 ---
 

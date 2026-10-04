@@ -1,5 +1,5 @@
 ---
-title: AI agents and editors
+title: AI Agents and Editors
 description: AGENTS.md, the MCP server, the language server and editor support.
 group: Design
 order: 18
@@ -10,7 +10,7 @@ claude mcp add wisp -- wisp mcp    # Claude Code
 wisp update-docs                   # refresh AGENTS.md to the installed Wisp
 ```
 
-## AI agents
+## AI Agents
 
 Every app is written with `AGENTS.md`, the whole reference in one short page, and a pointer to it for each agent that reads a file of its own: `CLAUDE.md`, `.github/copilot-instructions.md`, `.cursor/rules/wisp.mdc`.
 

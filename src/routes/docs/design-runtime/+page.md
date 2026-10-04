@@ -1,5 +1,5 @@
 ---
-title: Runtime and build
+title: Runtime and Build
 description: The server, drivers, limits, the single request entry point and what wisp build does.
 group: Design
 order: 16
@@ -41,7 +41,7 @@ Behind a proxy:
 - Form posts are checked against `Host`, the proxy's `X-Forwarded-Host` (a page on another site cannot set it), or `ORIGIN` when set. The first refused post logs how to fix a proxy that changes `Host`.
 - `cx.client_ip()` trusts only the header `WISP_CLIENT_IP_HEADER` names (for `x-forwarded-for`, the entry the proxy added), else the peer's address.
 
-### I/O drivers
+### I/O Drivers
 
 **io_uring** (Linux 6.1+, `crates/wisp/src/uring.rs`):
 
@@ -62,7 +62,7 @@ Other systems accept on the main thread and hand connections out, on tokio's soc
 
 The io_uring and epoll drivers are the `unsafe` modules of a native build (ring setup, memory shared with the kernel, socket calls std lacks), each block with why it holds. An earlier io_uring prototype that waited in `io_uring_enter` with no deferred task work measured level with plain tokio (bench/README.md).
 
-### Connections and limits
+### Connections and Limits
 
 - One task per connection. `Cx` owns the read buffer; the task also owns a write buffer and an `Out { head, body }` pair of `String`s, all reused across requests.
 - A connection holds them only while it has a request. An idle one (tokio's or epoll's; not yet the ring's), a WebSocket and a streamed response give them back to the thread's pool, so an idle keep-alive connection costs about 4 KB on Windows (task and socket). A wakeup with nothing to read (tokio on Windows reports every new socket readable) gives them back again.
@@ -95,7 +95,7 @@ Off by default; the `h2` feature compiles it (nothing of it otherwise). A connec
 - GOAWAY `ENHANCE_YOUR_CALM` ends the connection on: a reset flood (resets beyond answers + 200), a CONTINUATION flood (64 pieces or 16 KiB), 1000 frames asking no request, an HPACK bomb (decoded list over 16 KiB).
 - No `Upgrade: h2c`, no ALPN: the `tls` feature is the client's (`wisp::fetch`); the server has no TLS.
 
-## One request entry point
+## One Request Entry Point
 
 The built-in server is one front end. `respond` decides an answer as a `Reply { status, headers, body }`; the HTTP/1.1 writer adds `content-length`, `date` and `connection`. Everything else calls the same code, with the same parser and limits ([embed](/docs/embed), [deploy](/docs/deploy)):
 
@@ -111,7 +111,7 @@ The built-in server is one front end. `respond` decides an answer as a `Reply { 
 
 Edge detail: the app marks a path `const` when its answer cannot change (a baked page, a trailing-slash redirect), in an app with no `before`, `after` or `reroute` hook, when it read no header but `if-none-match` and `x-wisp-error` and had no query. The bridge's web `fetch` keeps the first answer and its 304 and replays them (GET, HEAD, `if-none-match`) without entering the wasm. `tests/platform/tests/fast.rs` pins them to native's.
 
-### The `App` trait
+### The `App` Trait
 
 Generated code implements one trait:
 
@@ -134,7 +134,7 @@ Less Rust in templates:
 - An `Option` attribute (`aria-current={current}`) is left out when `None`.
 - `#[derive(Json)]` gives JSON without serde: an endpoint returns the value, or `Response::json_of(&value)`.
 
-## What `wisp build` does
+## What `wisp build` Does
 
 `wisp_build::run()` (in the app's `build.rs`):
 

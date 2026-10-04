@@ -1,5 +1,5 @@
 ---
-title: APIs and platforms
+title: APIs and Platforms
 description: JSON endpoints, #[derive(Rest)] resources, queries and hooks.
 group: APIs
 order: 40
@@ -7,7 +7,7 @@ order: 40
 
 An API is a folder of `+server.rs` files beside pages, one binary. Start one: `wisp new my-api --api`, `wisp dev`, then `/_wisp/docs`. Template: [examples/api](https://github.com/wyziedevs/wisp/tree/main/examples/api).
 
-## An endpoint
+## An Endpoint
 
 ```rust
 // src/routes/api/notes/+server.rs
@@ -31,7 +31,7 @@ fn post(body: NewNote) -> Response {
 - OPTIONS is Wisp's (204 + `Allow`); a method the route lacks is 405 + `Allow`.
 - A handler may also take `cx: &mut Cx` and return `Result<Response>`.
 
-### A folder and its `[id]`
+### A Folder and Its `[id]`
 A handler with a param `id` in a folder whose URL has none answers at `/[id]` below it (`[id=int]` when numeric); `list` is the folder's GET:
 
 ```rust
@@ -45,7 +45,7 @@ fn delete(id: u64) -> Option<()> { db::remove(id) }           // 204, or 404
 
 A folder with its own `[id]` still works; two files answering the same URLs is a build error.
 
-## A resource
+## A Resource
 
 ```rust
 #[derive(Rest)]

@@ -1,5 +1,5 @@
 ---
-title: CLI reference
+title: CLI Reference
 description: Every wisp command, subcommand and flag in one table.
 group: Reference
 order: 80
@@ -43,7 +43,7 @@ order: 80
 | `wisp mcp` | docs, routes, components and checks for AI agents (MCP, stdio) |
 | `wisp --help` | this list (`-h`, `help`) |
 
-## Options for wisp new
+## Options for Wisp New
 
 | Option | What it does |
 |---|---|
@@ -53,6 +53,6 @@ order: 80
 | `--install`, `--no-install` | download and compile dependencies now, or later |
 | `-y, --yes` | take the defaults for anything not given |
 
-## CLI older than the app
+## CLI Older than the App
 
 App commands warn on stderr when the installed `wisp` is older than the app's `wisp` crate, and in a terminal ask before going on. `WISP_NO_UPDATE_CHECK=1` silences it. More: [CLI, dev loop and security](/docs/design-cli).
