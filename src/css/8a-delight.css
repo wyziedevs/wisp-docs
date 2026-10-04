@@ -140,40 +140,6 @@
   position: relative;
 }
 
-/* On This Page: one bar that slides to the section being read (toc.js sets
-   --y and --h; it shows once it has a place). */
-:is(.toc, .post-toc) ul {
-  position: relative;
-}
-
-:is(.toc, .post-toc) ul::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 2px;
-  height: 1px;
-  background: var(--accent);
-  opacity: 0;
-  transform-origin: top;
-  translate: 0 var(--y, 0);
-  scale: 1 var(--h, 1);
-  pointer-events: none;
-}
-
-:is(.toc, .post-toc) ul[data-live]::before {
-  opacity: 1;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  :is(.toc, .post-toc) ul[data-live]::before {
-    transition:
-      translate 260ms var(--ease),
-      scale 260ms var(--ease),
-      opacity 150ms var(--ease);
-  }
-}
-
 /* The copy wash: a flat accent tint that fades out, over the block. */
 pre::after {
   content: "";
