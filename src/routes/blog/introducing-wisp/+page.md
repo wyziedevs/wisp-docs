@@ -36,6 +36,7 @@ fn remove(id: u64) {
     TODOS.remove(id);
 }
 ---
+
 <title>Todos ({TODOS.len()})</title>
 <form action="?/add" fields><button>Add</button></form>
 {#each TODOS.all() as todo}
@@ -98,6 +99,7 @@ Pages work without JavaScript, and behavior lives in the same file as the markup
 ---
 let name: String = cx.query_or("name", "world".to_string());
 ---
+
 <h1>Hello, {name}!</h1>
 
 <button on:click="count++">Clicked {:count} times</button>

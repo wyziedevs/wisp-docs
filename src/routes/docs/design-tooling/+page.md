@@ -28,11 +28,15 @@ pub async fn open() -> Result {
     wisp::provide(Pool::connect(&url).await?);
     Ok(())
 }
-pub fn pool() -> &'static Pool { wisp::state::<Pool>() }
+pub fn pool() -> &'static Pool {
+    wisp::state::<Pool>()
+}
 
 // add/sqlite/src/routes/api/time/+server.rs
 async fn get() -> Result<Response> {
-    let (now,): (String,) = sqlx::query_as("select datetime('now')").fetch_one(pool()).await?;
+    let (now,): (String,) = sqlx::query_as("select datetime('now')")
+        .fetch_one(pool())
+        .await?;
     Ok(Response::text(now))
 }
 ```

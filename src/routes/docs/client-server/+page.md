@@ -15,6 +15,7 @@ fn user(id: u64) -> Result<User> {
     USERS.get(id).map(|r| r.value).or_404()
 }
 ---
+
 <button on:click="user(5).then((u) => (name = u.name))">Load</button>
 <p>{:name}</p>
 <script>

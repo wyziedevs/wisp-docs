@@ -41,6 +41,7 @@ A page is a `.wisp` file. It may start with a block of Rust between two `---` li
 ---
 let name: String = cx.query_or("name", "world".to_string());
 ---
+
 <h1>Hello, {name}!</h1>
 ```
 
@@ -126,6 +127,7 @@ fn sign(entry: Entry) {
     redirect("/")
 }
 ---
+
 <form action="?/sign" fields>
   <button>Sign</button>
 </form>
@@ -155,6 +157,7 @@ Read and change it from any page:
 ---
 let entries = ENTRIES.all();
 ---
+
 <title>Guestbook ({entries.len()})</title>
 {#each entries.iter().rev() as entry}
   <Note name={entry.name.as_str()} message={entry.message.as_str()} />

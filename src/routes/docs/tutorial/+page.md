@@ -84,6 +84,7 @@ fn sign(entry: Entry) {
     redirect("/")
 }
 ---
+
 <title>Guestbook</title>
 
 <h1>Guestbook</h1>
@@ -120,6 +121,7 @@ fn sign(entry: Entry) {
 
 let entries = ENTRIES.all();
 ---
+
 <title>Guestbook ({entries.len()})</title>
 
 <h1>Guestbook</h1>
@@ -382,6 +384,7 @@ Make the folder `src/routes/notes/[id=int]` and put a page in it. A folder named
 ---
 let note = ENTRIES.get(id).or_404()?;
 ---
+
 <title>{note.name}</title>
 
 <h1>{note.name}</h1>

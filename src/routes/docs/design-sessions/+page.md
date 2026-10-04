@@ -6,13 +6,13 @@ order: 20
 ---
 
 ```rust
-cx.set_cookie("theme", "dark");           // 400 days, HttpOnly, SameSite=Lax
+cx.set_cookie("theme", "dark"); // 400 days, HttpOnly, SameSite=Lax
 let theme = cx.cookie_or("theme", "light".to_string());
 
-cx.set_signed_cookie("user", name);       // HMAC-SHA256, needs WISP_SECRET
-let who = cx.signed_cookie("user");       // Some only if the signature holds
+cx.set_signed_cookie("user", name); // HMAC-SHA256, needs WISP_SECRET
+let who = cx.signed_cookie("user"); // Some only if the signature holds
 
-let me = cx.user()?;                      // members' page: signed-in row or redirect
+let me = cx.user()?; // members' page: signed-in row or redirect
 ```
 
 ## Cookies

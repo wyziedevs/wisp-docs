@@ -10,14 +10,14 @@ Beyond `cx.login`, `cx.user` and sessions. Everything here is opt-in: an app tha
 ## Roles and CORS
 
 ```rust
-let admin = cx.need(&USERS, |u| u.admin)?;   // Row<User>
+let admin = cx.need(&USERS, |u| u.admin)?; // Row<User>
 ```
 
 Signed out is `cx.user`'s error (303 to sign in, 401 for a JSON client); signed in but not allowed is a 403.
 
 ```rust
 fn before(cx: &mut Cx) -> Result {
-    cx.cors("*")?;           // or "https://app.example.com https://x.com"
+    cx.cors("*")?; // or "https://app.example.com https://x.com"
     Ok(())
 }
 ```
@@ -28,7 +28,7 @@ A preflight is answered with a 204 and the headers, carried as the `Err` that `?
 
 ```rust
 let t = wisp::token("reset", &user.id, Duration::from_secs(3600));
-let id: u64 = wisp::untoken("reset", &t)?;   // 400 for any failure, the same one
+let id: u64 = wisp::untoken("reset", &t)?; // 400 for any failure, the same one
 ```
 
 - HMAC-SHA256 under `WISP_SECRET` (and `WISP_SECRET_OLD`) over purpose, payload and expiry. A purpose of `""` is none.
@@ -38,10 +38,10 @@ let id: u64 = wisp::untoken("reset", &t)?;   // 400 for any failure, the same on
 ## Two-Factor Codes
 
 ```rust
-let secret = wisp::totp::secret();                       // keep with the user
+let secret = wisp::totp::secret(); // keep with the user
 let uri = wisp::totp::uri("My App", &user.email, &secret); // QR code or text
-wisp::totp::check(&user.totp, &code)                     // ±1 step (30 s)
-wisp::totp::check_step(..)                               // the step, to refuse a replay
+wisp::totp::check(&user.totp, &code) // ±1 step (30 s)
+wisp::totp::check_step(..) // the step, to refuse a replay
 ```
 
 RFC 6238, SHA-1, six digits. Six digits can be guessed: put a `RateLimit` on the check, by user.
@@ -52,7 +52,7 @@ RFC 6238, SHA-1, six digits. Six digits can be guessed: put a `RateLimit` on the
 let mut req = wisp::Request::new("POST", "https://api.example.com/rows");
 req.header("authorization", &format!("Bearer {key}"));
 req.body = json.into_bytes();
-let reply = wisp::fetch(req).await?;      // reply.status, reply.text()
+let reply = wisp::fetch(req).await?; // reply.status, reply.text()
 ```
 
 - `http://` works as is. `https://` needs the `tls` feature (`wisp = { version = "..", features = ["tls"] }`: rustls and the web's root certificates, no OpenSSL).
@@ -67,12 +67,17 @@ Not built in: send mail from an action with `wisp::fetch` or any HTTP client.
 
 ```rust
 // src/routes/auth/github/+server.rs
-fn get(cx: &mut Cx) -> Result { wisp::oauth::github().start(cx) }
+fn get(cx: &mut Cx) -> Result {
+    wisp::oauth::github().start(cx)
+}
 
 // src/routes/auth/github/callback/+server.rs
 async fn get(cx: &mut Cx) -> Result {
-    let who = wisp::oauth::github().finish(cx).await?;   // id, email (verified only), name
-    let id = match USERS.find(|u| u.github == who.id) { Some(u) => u.id, None => /* sign up */ };
+    let who = wisp::oauth::github().finish(cx).await?; // id, email (verified only), name
+    let id = match USERS.find(|u| u.github == who.id) {
+        Some(u) => u.id,
+        None => /* sign up */,
+    };
     cx.sign_in(id);
     redirect("/")
 }

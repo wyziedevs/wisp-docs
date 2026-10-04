@@ -110,8 +110,13 @@ fn get() -> Response {
     Response::ndjson(|out| async move {
         for page in 0.. {
             let rows = db::page(page).await;
-            if rows.is_empty() { break; }
-            for row in rows { out.line(&row).await?; } // stops once the client left
+            if rows.is_empty() {
+                break;
+            }
+            // stops once the client left
+            for row in rows {
+                out.line(&row).await?;
+            }
         }
         Ok(())
     })

@@ -68,7 +68,10 @@ fn entries() -> Vec<&'static str> {
 ```html
 ---
 const PRERENDER: bool = true;
-fn entries() -> Vec<&'static str> { vec!["hello", "second-post"] }  // with [params]
+// with [params]
+fn entries() -> Vec<&'static str> {
+    vec!["hello", "second-post"]
+}
 let post = db::post(&slug).await?;
 ---
 ```

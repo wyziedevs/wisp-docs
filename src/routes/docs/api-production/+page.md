@@ -22,7 +22,9 @@ Guards go in `before` (hooks.rs: every route; `+server.rs`: each handler); hand 
 fn before(cx: &mut Cx) -> Result<()> {
     if cx.path().starts_with("/api/admin/") {
         let user = users::by_token(cx.bearer().unwrap_or("")).or_status(401)?;
-        if !user.admin { return error(403, "Admins only"); }
+        if !user.admin {
+            return error(403, "Admins only");
+        }
         cx.set(user); // a route reads it with cx.get::<User>()
     }
     Ok(())
@@ -47,10 +49,16 @@ fn post(cx: &mut Cx, name: String, password: String) -> Result<()> {
 ## Live Updates
 
 ```rust
-wisp::channel("notes").send(wisp::to_json(&note));     // anywhere
+wisp::channel("notes").send(wisp::to_json(&note)); // anywhere
 
-fn get() -> Response { wisp::channel("notes").events() }       // SSE
-fn get() -> Response { wisp::channel("chat").websocket() }     // both ways
+// SSE
+fn get() -> Response {
+    wisp::channel("notes").events()
+}
+// both ways
+fn get() -> Response {
+    wisp::channel("chat").websocket()
+}
 ```
 
 - `subscribe()` (`recv().await`) feeds your own `Response::events` or `websocket`; `connect(&ws)` joins an existing socket.
@@ -61,7 +69,9 @@ fn get() -> Response { wisp::channel("chat").websocket() }     // both ways
 ```rust
 // src/hooks.rs
 fn init() {
-    wisp::every(Duration::from_secs(3600), || async { db::delete_expired_sessions().await; });
+    wisp::every(Duration::from_secs(3600), || async {
+        db::delete_expired_sessions().await;
+    });
 }
 ```
 
@@ -77,8 +87,8 @@ fn init() {
 No database layer: open in `init`, `provide`, read with `state`.
 
 ```rust
-wisp::provide(sqlx::PgPool::connect(&url).await?)   // in `async fn init`
-wisp::state::<sqlx::PgPool>()                        // in a handler
+wisp::provide(sqlx::PgPool::connect(&url).await?) // in `async fn init`
+wisp::state::<sqlx::PgPool>() // in a handler
 ```
 
 - rusqlite is sync: provide a `Mutex<Connection>`, hold the lock briefly or `spawn_blocking`.

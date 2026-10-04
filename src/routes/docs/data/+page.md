@@ -12,9 +12,9 @@ Everything here is opt-in: an app that uses none of it pays nothing.
 ```rust
 // src/db.rs
 pub static USERS: Table<User> = Table::saved("users")
-    .unique("email", |u: &User| &u.email)   // no two rows share it
-    .migrate(|row| rename(row, "mail", "email"))  // old rows, as they are read
-    .live();                                 // each change is sent on channel "users"
+    .unique("email", |u: &User| &u.email) // no two rows share it
+    .migrate(|row| rename(row, "mail", "email")) // old rows, as they are read
+    .live(); // each change is sent on channel "users"
 ```
 
 - `set(id, v) -> Option<()>` replaces a row; `clear()` takes every row out (ids are not given again).
@@ -37,9 +37,9 @@ pub static USERS: Table<User> = Table::saved("users")
 ```rust
 // init
 wisp::work("mail", |m: Mail| async move { send(&m).await });
-wisp::cron("0 3 * * *", || async { purge().await });  // UTC
+wisp::cron("0 3 * * *", || async { purge().await }); // UTC
 // anywhere
-wisp::queue("mail").push(&Mail { to, body });         // .later(secs, &job)
+wisp::queue("mail").push(&Mail { to, body }); // .later(secs, &job)
 ```
 
 - Jobs live in the saved table `queue-mail`. A failure (`Err` or a panic) is tried again after 4, 8, 16... seconds (an hour at most), five tries; then it stays `dead` with its last error (`queue.dead()`, `queue.retry(id)`).

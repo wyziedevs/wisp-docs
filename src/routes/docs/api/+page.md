@@ -36,11 +36,24 @@ A handler with a param `id` in a folder whose URL has none answers at `/[id]` be
 
 ```rust
 // src/routes/api/notes/+server.rs
-fn list() -> Vec<Note> { db::notes() }                        // GET /api/notes
-fn post(body: New) -> Response { Response::created(&db::add(body)) }
-fn get(id: u64) -> Option<Note> { db::note(id) }              // GET /api/notes/7
-fn patch(id: u64, body: Changes) -> Option<Note> { db::change(id, body) }
-fn delete(id: u64) -> Option<()> { db::remove(id) }           // 204, or 404
+// GET /api/notes
+fn list() -> Vec<Note> {
+    db::notes()
+}
+fn post(body: New) -> Response {
+    Response::created(&db::add(body))
+}
+// GET /api/notes/7
+fn get(id: u64) -> Option<Note> {
+    db::note(id)
+}
+fn patch(id: u64, body: Changes) -> Option<Note> {
+    db::change(id, body)
+}
+// 204, or 404
+fn delete(id: u64) -> Option<()> {
+    db::remove(id)
+}
 ```
 
 A folder with its own `[id]` still works; two files answering the same URLs is a build error.
@@ -114,7 +127,9 @@ struct Note {
 ```rust
 fn before_create(note: &mut Note) -> Result {
     note.title = note.title.trim().to_string();
-    if note.title == "admin" { return invalid("title", "is reserved"); }
+    if note.title == "admin" {
+        return invalid("title", "is reserved");
+    }
     Ok(())
 }
 fn after_update(note: &Row<Note>) {

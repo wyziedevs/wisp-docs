@@ -48,7 +48,7 @@ Vercel and Netlify Edge: add `--edge` (`--target vercel --edge`, `--target netli
 Per route (Vercel, Netlify): a route runs on the edge when its `+page.rs` or `+server.rs` says so; the rest stay on the Node function.
 
 ```rust
-const RUNTIME: wisp::Runtime = wisp::Runtime::Edge;   // default: Node
+const RUNTIME: wisp::Runtime = wisp::Runtime::Edge; // default: Node
 ```
 
 - With any Edge route, `wisp build --target vercel` (or `netlify`) writes both functions from the one app (the edge one at `opt-level = "s"`) and routes each pattern to its own: `edge.func` beside `index.func` in `config.json`, or the edge function's `path` list. `static/` stays the CDN's.
@@ -141,7 +141,10 @@ No threads, sockets or files.
 
 ```rust
 let mut req = wisp::Request::new("POST", "https://api.example.com/rows");
-req.header("authorization", &format!("Bearer {}", wisp::env("API_KEY").unwrap_or_default()));
+req.header(
+    "authorization",
+    &format!("Bearer {}", wisp::env("API_KEY").unwrap_or_default()),
+);
 req.body = json.into_bytes();
 let reply = wisp::edge::fetch(req).await?;
 ```

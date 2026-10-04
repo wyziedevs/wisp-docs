@@ -79,6 +79,7 @@ fn signup(name: String, email: Email) {
     redirect("/welcome")
 }
 ---
+
 <form action="?/signup">
   <input name="name">
   <input name="email">

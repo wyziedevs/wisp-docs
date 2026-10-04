@@ -28,6 +28,7 @@ wisp dev               # http://127.0.0.1:3000
 ---
 let name = cx.query_or("name", "world".to_string());
 ---
+
 <h1>Hello, {name}!</h1>
 
 <button on:click="count++">Clicked {:count} times</button>
@@ -63,6 +64,7 @@ fn add(todo: Todo) {
 
 let count = TODOS.len();
 ---
+
 <title>Todos ({count})</title>
 <form action="?/add" fields><button>Add</button></form>
 {#each TODOS.all() as todo}

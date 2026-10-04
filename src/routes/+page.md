@@ -27,6 +27,7 @@ fn remove(id: u64) {
     TODOS.remove(id);
 }
 ---
+
 <title>Todos ({TODOS.len()})</title>
 <form action="?/add" fields><button>Add</button></form>
 {#each TODOS.all() as todo}
@@ -104,7 +105,7 @@ Wisp is first on plaintext at 256, 1,024 and 4,096 connections, and first on JSO
 <div class="wrap">
 <div class="claim wide">
 
-## Make the Same App with About Half the Tokens
+## Make the Same App with Half the Tokens
 
 AI writes most code now, and every token it reads and writes costs time and money. Wisp is built so an app costs the fewest: conventions instead of config, types the compiler infers, and forms that write themselves. The whole reference is one file, [llms.txt and AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md), and `wisp mcp` serves it to coding agents.
 
@@ -128,6 +129,7 @@ fn default(#[validate(len = 1..=50)] name: String, email: Email) {
     redirect("/")
 }
 ---
+
 <title>Contact</title>
 <form fields><button>Send</button></form>
 ```
@@ -218,6 +220,7 @@ fn signup(email: Email, #[validate(min_len = 8)] password: Password) {
     redirect("/me")
 }
 ---
+
 <form action="?/signup" fields>
   <button>Sign up</button>
 </form>
@@ -231,6 +234,7 @@ fn signup(email: Email, #[validate(min_len = 8)] password: Password) {
 ---
 let name = cx.query_or("name", "world".to_string());
 ---
+
 <h1>Hello, {name}!</h1>
 
 <button on:click="count++">Clicked {:count} times</button>

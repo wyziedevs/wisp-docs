@@ -10,10 +10,10 @@ The app is a function from request to reply.
 ## In Process
 
 ```rust
-wisp::prepare::<App>().await?;                        // runs `init`, once
+wisp::prepare::<App>().await?; // runs `init`, once
 let mut req = wisp::Request::new("GET", "/posts?page=2");
 req.header("accept", "text/html");
-let reply = wisp::handle::<App>(req).await;           // reply.status, .headers (Vec<(name, value)>), .body (wisp::Body)
+let reply = wisp::handle::<App>(req).await; // reply.status, .headers (Vec<(name, value)>), .body (wisp::Body)
 ```
 
 Same parser, limits, hooks and CSRF check as the server.
@@ -59,7 +59,7 @@ A `+server.rs` upgrades with `Response::websocket`; the connection closes when t
 fn get() -> Response {
     Response::websocket(|ws| async move {
         while let Some(msg) = ws.recv().await {
-            ws.send(msg).await?;          // a String is text, a Vec<u8> binary
+            ws.send(msg).await?; // a String is text, a Vec<u8> binary
         }
         Ok(())
     })
@@ -85,7 +85,7 @@ wisp = { git = "https://wisp.ar0.eu", features = ["tower"] }
 ```
 
 ```rust
-let wisp = wisp::tower::service::<App>().await?;   // Service<http::Request<B>>
+let wisp = wisp::tower::service::<App>().await?; // Service<http::Request<B>>
 ```
 
 axum answers its own routes, Wisp the rest (`examples/axum`):
@@ -98,7 +98,10 @@ async fn main() -> std::io::Result<()> {
     let listener = tokio::net::TcpListener::bind(wisp::address()).await?;
     let wisp = wisp::tower::service::<App>().await?;
     let app = axum::Router::new()
-        .route("/api/hello", axum::routing::get(|| async { "hello from axum" }))
+        .route(
+            "/api/hello",
+            axum::routing::get(|| async { "hello from axum" }),
+        )
         .fallback_service(wisp);
     axum::serve(listener, app).await
 }
@@ -134,7 +137,7 @@ Send paths to an axum `Router` from `before` (or a catch-all `+server.rs`). `bef
 // src/hooks.rs
 async fn before(cx: &mut Cx) -> Result<Option<Response>> {
     if cx.path().starts_with("/api") {
-        let mut api = api_router();                      // an axum::Router
+        let mut api = api_router(); // an axum::Router
         return Ok(Some(wisp::tower::call(&mut api, cx).await?));
     }
     Ok(None)

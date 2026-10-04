@@ -15,10 +15,14 @@ order: 14
 
 ```rust
 #[action]
-fn add(#[validate(len = 1..=100)] text: String) { /* ... */ }
+fn add(#[validate(len = 1..=100)] text: String) {
+    /* ... */
+}
 
 #[action]
-fn remove(id: u64) { /* ... */ }
+fn remove(id: u64) {
+    /* ... */
+}
 ```
 
 ## Actions

@@ -25,8 +25,8 @@ order: 13
 {/if}
 
 {#match data.status}
-  {:case Status::Draft} <span>draft</span>
-  {:case Status::Live(date)} <time>{date}</time>
+{:case Status::Draft} <span>draft</span>
+{:case Status::Live(date)} <time>{date}</time>
 {/match}
 
 {@const total = data.posts.len()}
@@ -129,8 +129,12 @@ Markup a file renders more than once, or gives to a component:
 ```html
 <h1>Hi</h1>
 <style>
-  h1, .lead { color: rebeccapurple }
-  :global(body) { margin: 0 }
+  h1, .lead {
+    color: rebeccapurple
+  }
+  :global(body) {
+    margin: 0
+  }
 </style>
 ```
 

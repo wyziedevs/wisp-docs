@@ -56,5 +56,5 @@ Wrong or missing key: 401. `METRICS_KEY` unset: 404. Prometheus scrape config: `
 
 ```rust
 let _s = wisp::span("charge card"); // child span until dropped
-let t = wisp::traceparent();        // Some("00-…-01"): header for a downstream call
+let t = wisp::traceparent(); // Some("00-…-01"): header for a downstream call
 ```

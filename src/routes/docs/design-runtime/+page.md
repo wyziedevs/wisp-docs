@@ -130,7 +130,11 @@ Generated code implements one trait:
 ```rust
 pub trait App: 'static {
     fn init() -> impl Future<Output = Result<()>>;
-    fn handle(route: Option<usize>, cx: &mut Cx, out: &mut Out) -> impl Future<Output = Result<()>> + Send;
+    fn handle(
+        route: Option<usize>,
+        cx: &mut Cx,
+        out: &mut Out,
+    ) -> impl Future<Output = Result<()>> + Send;
     fn body_limit(route: usize) -> Option<usize>;
     // + static tables: shell, assets, templates (dev)
 }

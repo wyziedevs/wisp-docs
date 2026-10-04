@@ -28,7 +28,9 @@ A page ships JS only for files with client code; a component can wait:
 `wisp add react react-dom react-switch` (framework first), then:
 
 ```html
-<Island of="react:react-switch" client:visible
+<Island
+  of="react:react-switch"
+  client:visible
   props={:{ checked: on, onChange: (v) => (on = v) }} />
 <p>{:on ? 'On' : 'Off'}</p>
 <script>
