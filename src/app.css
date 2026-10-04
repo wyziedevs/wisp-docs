@@ -2182,3 +2182,9 @@ pre code {
     scrollbar-gutter: stable;
   }
 }
+
+/* Group titles sit flush; their links indent under them, in both sidebars. */
+.side .group,
+.toc h2 {
+  padding-inline: 0;
+}
