@@ -1,0 +1,239 @@
+/* ---- Teaching blocks, written as raw HTML in Markdown ------------------ */
+
+.callout,
+.deep-dive,
+.learn,
+.recap,
+.challenges {
+  margin: 2rem 0;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+}
+
+.callout > :last-child,
+.deep-dive > :last-child,
+.learn > :last-child,
+.recap > :last-child {
+  margin-bottom: 0;
+}
+
+/* The first line, when it is only bold, is the callout's title. */
+.callout > p:first-child:has(> strong:only-child) {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.callout > p:first-child:has(> strong:only-child)::before {
+  content: "";
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  background: currentColor;
+  mask: var(--i-note) center / contain no-repeat;
+}
+
+.callout.note {
+  border-color: color-mix(in oklch, var(--accent) 30%, var(--line));
+  background: color-mix(in oklch, var(--accent-soft) 60%, var(--bg));
+}
+
+.callout.note > p:first-child:has(> strong:only-child) {
+  color: var(--accent-ink);
+}
+
+.callout.pitfall {
+  border-color: var(--warn-line);
+  background: var(--warn-soft);
+}
+
+.callout.pitfall > p:first-child:has(> strong:only-child) {
+  color: var(--warn);
+}
+
+.callout.pitfall > p:first-child:has(> strong:only-child)::before {
+  mask-image: var(--i-warn);
+}
+
+.deep-dive {
+  padding: 0;
+  background: var(--wash);
+}
+
+.deep-dive > summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.75rem;
+  padding: 1.125rem 1.5rem;
+  font-size: 1.1875rem;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+
+.deep-dive > summary::-webkit-details-marker {
+  display: none;
+}
+
+.deep-dive > summary::before {
+  content: "Deep Dive";
+  flex-basis: 100%;
+  color: var(--accent-ink);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.deep-dive > summary::after {
+  content: "Show Details";
+  margin-left: auto;
+  padding: 0.25rem 0.875rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.deep-dive[open] > summary::after {
+  content: "Hide Details";
+}
+
+.deep-dive[open] {
+  padding-bottom: 1.25rem;
+}
+
+.deep-dive > :not(summary) {
+  margin-inline: 1.5rem;
+}
+
+.learn,
+.recap {
+  background: var(--wash);
+}
+
+.learn::before,
+.recap::before {
+  display: block;
+  margin-bottom: 0.75rem;
+  color: var(--accent-ink);
+  font-size: 1.1875rem;
+  font-weight: 700;
+}
+
+.learn::before {
+  content: "You Will Learn";
+}
+
+.recap::before {
+  content: "Recap";
+}
+
+/* The box's own title, a heading or a bold first line, replaces the default. */
+.learn:has(> :first-child:is(h2, h3, h4))::before,
+.recap:has(> :first-child:is(h2, h3, h4))::before,
+.learn:has(> p:first-child > strong:only-child)::before,
+.recap:has(> p:first-child > strong:only-child)::before {
+  content: none;
+}
+
+.learn > p:first-child > strong:only-child,
+.recap > p:first-child > strong:only-child {
+  color: var(--accent-ink);
+  font-size: 1.1875rem;
+}
+
+.learn > :is(h2, h3, h4):first-child,
+.recap > :is(h2, h3, h4):first-child {
+  margin: 0 0 0.75rem;
+  color: var(--accent-ink);
+  font-size: 1.1875rem;
+}
+
+.learn ul,
+.recap ul {
+  margin-bottom: 0;
+}
+
+.challenges {
+  counter-reset: challenge;
+  padding: 0;
+  overflow: hidden;
+}
+
+.challenges::before {
+  content: "Try Out Some Challenges";
+  display: block;
+  padding: 1.25rem 1.5rem 0.75rem;
+  font-size: 1.3125rem;
+  font-weight: 700;
+}
+
+.challenges > :is(h2, h3):first-child {
+  margin: 0;
+  padding: 1.25rem 1.5rem 0.75rem;
+}
+
+.challenges:has(> :is(h2, h3):first-child)::before {
+  content: none;
+}
+
+.challenge {
+  counter-increment: challenge;
+  border-top: 1px solid var(--line);
+}
+
+.challenge > summary {
+  padding: 1rem 1.5rem;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+
+.challenge > summary::-webkit-details-marker,
+.solution > summary::-webkit-details-marker {
+  display: none;
+}
+
+.challenge > summary::before {
+  content: "Challenge " counter(challenge) ": ";
+  color: var(--accent-ink);
+}
+
+.challenge > summary:hover {
+  background: var(--wash);
+}
+
+.challenge[open] {
+  padding-bottom: 1.25rem;
+  background: var(--wash);
+}
+
+.challenge > :not(summary) {
+  margin-inline: 1.5rem;
+}
+
+.solution > summary {
+  display: inline-flex;
+  margin-bottom: 1rem;
+  padding: 0.375rem 1rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--panel);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+
+.solution[open] > summary {
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.solution > :last-child,
+.challenge > :last-child {
+  margin-bottom: 0;
+}
+

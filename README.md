@@ -10,7 +10,7 @@ src/routes/+layout.wisp          header, footer, meta and Open Graph tags
 src/routes/docs/+layout.wisp     sidebar, filter, table of contents, previous and next
 src/routes/docs/+page.md         Getting started (/docs)
 src/routes/docs/<slug>/+page.md  one docs page each
-src/app.css                      all the styling (light and dark follow the system)
+src/css/*.css                    all the styling, joined in name order (light and dark follow the system)
 static/                          favicon, og.png, fonts
 ```
 

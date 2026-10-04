@@ -1,0 +1,269 @@
+/* Wisp docs. A light near-white wash and a deep slate dark, both tinted
+   toward the violet accent, following the system until a visitor picks one.
+   OKLCH throughout. Motion is a quick ease-out on transform and opacity,
+   and off for prefers-reduced-motion. */
+
+:root {
+  color-scheme: light dark;
+
+  --bg: light-dark(oklch(0.99 0.003 290), oklch(0.215 0.014 285));
+  --wash: light-dark(oklch(0.968 0.007 290), oklch(0.19 0.013 285));
+  --panel: light-dark(oklch(1 0 0), oklch(0.245 0.015 285));
+  --panel-2: light-dark(oklch(0.95 0.009 290), oklch(0.28 0.016 285));
+  --line: light-dark(oklch(0.91 0.01 290), oklch(0.32 0.016 285));
+  --line-strong: light-dark(oklch(0.82 0.014 290), oklch(0.42 0.018 285));
+  --ink: light-dark(oklch(0.21 0.012 285), oklch(0.96 0.005 285));
+  --slate: light-dark(oklch(0.42 0.015 285), oklch(0.8 0.012 285));
+  --ash: light-dark(oklch(0.5 0.015 285), oklch(0.7 0.014 285));
+  --accent: light-dark(oklch(0.52 0.2 295), #a17ff5);
+  --accent-hover: light-dark(oklch(0.45 0.2 295), oklch(0.76 0.14 295));
+  --on-accent: light-dark(oklch(0.99 0.005 295), oklch(0.17 0.02 295));
+  --accent-soft: light-dark(oklch(0.95 0.025 295), oklch(0.3 0.05 295));
+  --accent-ink: light-dark(oklch(0.45 0.19 295), oklch(0.82 0.1 295));
+  --code: light-dark(oklch(0.975 0.005 290), oklch(0.18 0.012 285));
+  --warn: light-dark(oklch(0.5 0.16 35), oklch(0.8 0.11 45));
+  --warn-soft: light-dark(oklch(0.965 0.02 45), oklch(0.27 0.035 40));
+  --warn-line: light-dark(oklch(0.88 0.05 45), oklch(0.4 0.06 40));
+  --good: light-dark(oklch(0.48 0.12 155), oklch(0.8 0.12 155));
+
+  --hl-k: light-dark(oklch(0.48 0.2 300), oklch(0.78 0.14 303));
+  --hl-s: light-dark(oklch(0.45 0.13 155), oklch(0.82 0.12 155));
+  --hl-c: light-dark(oklch(0.52 0.03 285), oklch(0.7 0.035 285));
+  --hl-n: light-dark(oklch(0.5 0.14 60), oklch(0.82 0.12 70));
+  --hl-t: light-dark(oklch(0.46 0.13 235), oklch(0.8 0.1 235));
+  --hl-a: light-dark(oklch(0.46 0.14 20), oklch(0.82 0.1 20));
+
+  --sans: var(--font-dm-sans), "Segoe UI Variable", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono: var(--font-jetbrains-mono), "Cascadia Code", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --radius: 0.5rem;
+  --radius-lg: 1rem;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --gutter: clamp(1rem, 4vw, 2rem);
+  --head: 4rem;
+
+  /* Line icons drawn as masks, so they take the text color. */
+  --i-right: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E");
+  --i-left: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 12H5M11 6l-6 6 6 6'/%3E%3C/svg%3E");
+  --i-down: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  --i-link: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7'/%3E%3Cpath d='M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7'/%3E%3C/svg%3E");
+  --i-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E");
+  --i-note: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 11v5M12 7.5v.5'/%3E%3C/svg%3E");
+  --i-warn: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3.5L2.5 20h19z'/%3E%3Cpath d='M12 10v4.5M12 17.5v.5'/%3E%3C/svg%3E");
+  --i-book: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 5a2 2 0 0 1 2-2h14v15H6a2 2 0 0 0-2 2z'/%3E%3Cpath d='M4 20a2 2 0 0 0 2 2h14v-4'/%3E%3C/svg%3E");
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-padding-top: calc(var(--head) + 1rem);
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 1.0625rem/1.75 var(--sans);
+  text-rendering: optimizeLegibility;
+  overflow-wrap: break-word;
+}
+
+/* The footer sits at the bottom of the screen on a short page. */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+body > main {
+  flex: 1 0 auto;
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+a {
+  color: var(--accent-ink);
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+  transition: color 150ms var(--ease);
+}
+
+a:hover {
+  color: var(--accent-hover);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+::selection {
+  background: var(--accent-soft);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 30;
+  padding: 0.5rem 0.75rem;
+  background: var(--accent);
+  color: var(--on-accent);
+  border-radius: var(--radius);
+}
+
+.skip:focus {
+  top: 0.75rem;
+}
+
+/* With JavaScript off: what is hidden, and how to get it back. */
+.nojs {
+  margin: 0;
+  padding: 0.625rem var(--gutter);
+  border-bottom: 1px solid var(--line);
+  background: var(--accent-soft);
+  color: var(--ink);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.wrap {
+  width: min(100%, 76rem);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.muted {
+  color: var(--ash);
+}
+
+/* ---- Buttons ----------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.5rem 1.375rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--panel);
+  color: var(--ink);
+  font: 600 1rem/1.2 var(--sans);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 150ms var(--ease),
+    border-color 150ms var(--ease),
+    scale 120ms var(--ease);
+}
+
+.btn:hover {
+  color: var(--ink);
+  border-color: var(--ash);
+}
+
+.btn.primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.btn.primary:hover {
+  border-color: var(--accent-hover);
+  background: var(--accent-hover);
+  color: var(--on-accent);
+}
+
+.btn:active,
+.icon:active {
+  scale: 0.96;
+}
+
+.cta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.cta .btn.primary::after {
+  content: "";
+  width: 1em;
+  height: 1em;
+  margin-left: 0.45em;
+  background: currentColor;
+  mask: var(--i-right) center / contain no-repeat;
+  transition: translate 200ms var(--ease);
+}
+
+.cta .btn.primary:hover::after,
+.cta .btn.primary:focus-visible::after {
+  translate: 3px 0;
+}
+
+
+/* ---- Scrollbars: a slim violet thumb on every scroller ----------------- */
+
+:root {
+  --sb-track-color: transparent;
+  --sb-thumb-color: #622cb5;
+  --sb-size: 7px;
+}
+
+*::-webkit-scrollbar {
+  width: var(--sb-size);
+  height: var(--sb-size);
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 6px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 6px;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+    scrollbar-width: thin;
+  }
+}

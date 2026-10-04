@@ -11,10 +11,35 @@ const TEXT_CAP: usize = 420;
 fn main() {
     println!("cargo:rerun-if-changed=src/routes/docs");
     println!("cargo:rerun-if-changed=src/routes/blog");
+    println!("cargo:rerun-if-changed=src/css");
     println!("cargo:rerun-if-changed=build.rs");
+    css();
     index();
     blog();
     wisp_build::run();
+}
+
+/// The stylesheet is `src/css/*.css`, in name order, joined into `.wisp/app.css`,
+/// which the Wisp build serves in place of `src/app.css`.
+fn css() {
+    let mut files: Vec<_> = fs::read_dir("src/css")
+        .into_iter()
+        .flatten()
+        .flatten()
+        .map(|e| e.path())
+        .filter(|p| p.extension().is_some_and(|x| x == "css"))
+        .collect();
+    files.sort();
+    let all: String = files
+        .iter()
+        .filter_map(|f| fs::read_to_string(f).ok())
+        .collect::<Vec<_>>()
+        .join("
+");
+    let _ = fs::create_dir_all(".wisp");
+    if fs::read_to_string(".wisp/app.css").ok().as_deref() != Some(&all) {
+        let _ = fs::write(".wisp/app.css", all);
+    }
 }
 
 fn index() {
