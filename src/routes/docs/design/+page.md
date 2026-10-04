@@ -97,7 +97,7 @@ Text, and a component:
 - `layout` names a component in `src/components` showing the page as its children; it gets each field its `{@props}` declare (`&str`/`String`, `bool`, a number, `Option` of one). A required field the page lacks, or a wrong type, is a build error.
 - `noindex: true` adds `<meta name="robots" content="noindex">`.
 - `{`/`}` in text and code become `&#123;`/`&#125;`, so no hole comes from them; raw HTML (components) is the template's own.
-- Fenced code is highlighted at build time by `wisp-build` (rust, js/ts, html, css, json, bash) as `<span class="hl-k|s|c|n|t|a">` (keyword, string, comment, number, type or tag, attribute) in `<pre><code class="language-x">`. Your CSS colors them; other languages keep the class, unhighlighted.
+- Fenced code is highlighted at build time by `wisp-build` (rust, js/ts, html, wisp, css, json, bash; a `wisp` block, or an `html` one that opens with `---`, shows its Rust block and its `{expressions}` as Rust) as `<span class="hl-k|s|c|n|t|a">` (keyword, string, comment, number, type or tag, attribute) in `<pre><code class="language-x">`. Your CSS colors them; other languages keep the class, unhighlighted.
 - `wisp::pages("blog")` gives a folder's `MdPage`s (`path`, `title`, `get("date")`), newest `date` first: `{#each wisp::pages("blog") as p}<a href={p.path}>{p.title}</a>{/each}`. A `static` slice the build wrote: no I/O, no allocation.
 
 ## Config Rules
