@@ -74,6 +74,32 @@ Theme CSS: copy `cdn/themes/light.css` into `static/` and `<link>` it in
 LitElement {…})` in a `src/lib` module a script imports. The
 `click-events` a11y lint skips custom elements.
 
+## Your own bundle (npm UI libraries)
+
+For a widget `wisp add` cannot serve (React, Svelte, a charting kit): bundle it
+with your own tool, no Wisp dependency, into `static/`, and mount it from a
+`use:` action. `data-wisp-keep` stops a morph from touching what the widget draws.
+
+```sh
+esbuild src/widget.js --bundle --minify --format=esm --outfile=static/widget.js   # or vite build
+```
+
+```html
+<div data-wisp-keep use:widget="{ label }"></div>
+<script>
+  function widget(el, props) {            // mount(el, props), update(props), destroy()
+    let w
+    import('/widget.js').then((m) => (w = m.mount(el, props)))
+    return { update: (p) => w?.update(p), destroy: () => w?.destroy() }
+  }
+</script>
+```
+
+`destroy` runs when the element leaves the page (a navigation or `{:#if}`).
+To share a library between bundles, a `<script type="importmap">` in
+`src/app.html` maps `"react"` to a file in `static/`. Packages `wisp add`
+serves need none of this: `<Island of="react:name">`.
+
 ## Third-party scripts
 
 Pick when one loads (`src`, so no code of yours): in the head, plain

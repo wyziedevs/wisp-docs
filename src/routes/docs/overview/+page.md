@@ -16,7 +16,7 @@ Wisp is the framework for the AI age: ultra fast to run, cheap in AI tokens to w
 - Components are server-rendered and ship no JavaScript by default.
 - Hot reload keeps your `$state`; markup edits show in under 100 ms.
 
-**Built for AI and tokens**
+**AI and tokens**
 
 - [AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md) and [llms-full.txt](https://github.com/wyziedevs/wisp/blob/main/llms/llms-full.txt) hold the whole reference.
 - `wisp mcp` serves the docs to coding agents.

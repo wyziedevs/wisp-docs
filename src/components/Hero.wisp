@@ -1,6 +1,5 @@
 <section class="hero">
   <div class="wrap">
-    <p class="badge">Open source, MIT licensed</p>
     <h1>A fast, fun web framework for <em>Rust</em></h1>
     <p class="lede">File routes, forms that work without JavaScript, reactivity in the same file, and one binary to deploy.</p>
     <div class="install">

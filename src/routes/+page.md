@@ -8,7 +8,6 @@ noindex: false
 
 <section class="showcase">
 <div class="wrap">
-<p class="eyebrow">A whole page</p>
 <div class="pair">
 <figure class="file">
 <figcaption>src/db.rs</figcaption>
@@ -48,7 +47,7 @@ let count = TODOS.len();
 </div>
 </section>
 
-<Band id="routes" kicker="01" title="Files are routes" lead="A folder is a URL, and its +page.wisp is the page. Brackets make parameters, groups stay out of the address, and a +server.rs next to a page is an endpoint.">
+<Band id="routes" title="Files are routes" lead="A folder is a URL, and its +page.wisp is the page. Brackets make parameters, groups stay out of the address, and a +server.rs next to a page is an endpoint.">
 
 ```text
 src/routes/
@@ -63,7 +62,7 @@ src/routes/
 
 </Band>
 
-<Band id="forms" kicker="02" flip title="Forms that work without JavaScript" lead="A form posts to an action. A bad value is a 422 that shows each problem beside its input and keeps what was typed. Turn JavaScript off and it still works; leave it on and the page morphs instead of reloading.">
+<Band id="forms" flip title="Forms that work without JavaScript" lead="A form posts to an action. A bad value is a 422 that shows each problem beside its input and keeps what was typed. Turn JavaScript off and it still works; leave it on and the page morphs instead of reloading.">
 
 ```html
 ---
@@ -80,7 +79,7 @@ fn signup(email: Email, #[validate(min_len = 8)] password: Password) {
 
 </Band>
 
-<Band id="reactive" kicker="03" title="Reactivity in the same file" lead="The block is Rust that runs for each request, name is drawn on the server, and the count is JavaScript state in the browser. Turn JavaScript off and the server's HTML still works.">
+<Band id="reactive" title="Reactivity in the same file" lead="The block is Rust that runs for each request, name is drawn on the server, and the count is JavaScript state in the browser. Turn JavaScript off and the server's HTML still works.">
 
 ```html
 ---
@@ -97,7 +96,7 @@ let name: String = cx.query_or("name", "world");
 
 </Band>
 
-<Band id="binary" kicker="04" flip title="One binary" lead="Templates compile to plain Rust, and the whole app, styles and static files included, becomes one small binary. Copy it to a server, or let wisp service install keep it running.">
+<Band id="binary" flip title="One binary" lead="Templates compile to plain Rust, and the whole app, styles and static files included, becomes one small binary. Copy it to a server, or let wisp service install keep it running.">
 
 ```bash
 wisp build
@@ -108,7 +107,7 @@ wisp service install
 
 </Band>
 
-<Band id="hosts" kicker="05" title="Host anywhere" lead="The same app builds as a server binary, a container, a folder of static HTML, or for an edge or serverless host. wisp deploy init writes the GitHub Actions workflow.">
+<Band id="hosts" title="Host anywhere" lead="The same app builds as a server binary, a container, a folder of static HTML, or for an edge or serverless host. wisp deploy init writes the GitHub Actions workflow.">
 
 ```bash
 wisp build --static

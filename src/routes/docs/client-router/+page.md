@@ -14,7 +14,11 @@ element around it starts it fresh. Layouts stay mounted.
 Same-origin clicks and back/forward fetch and morph, no full reload.
 Prefetch on hover (60 ms) and touch (`data-wisp-preload="off"` opts out).
 Scroll is restored; focus moves to `[autofocus]`; view transitions when
-available. `data-wisp-reload` on a link or parent forces a full load; links
+available (`data-wisp-notransition` on a link, or on `<body>` for the app,
+skips them; reduced motion skips them too). Global stores (`store`,
+`persisted`) are module state: they outlive every navigation. A component
+instance on an element the morph keeps keeps its state; `data-wisp-reset`
+starts it fresh. `data-wisp-reload` on a link or parent forces a full load; links
 with `target`, `download`, `rel="external"` and `/_app/` are left alone.
 
 ```js
@@ -47,7 +51,7 @@ export a script may have:
 </script>
 ```
 
-`data-wisp-noscroll`, `data-wisp-keepfocus`, `data-wisp-replacestate` (on or around a link) keep scroll, keep focus, replace history; `goto(url, { noscroll, keepfocus, replace })` too. Hooks from `'wisp'` return an unsubscribe: `beforeNavigate(({ from, to, pop, cancel }) => ..)`, `afterNavigate`, `onNavigate` (after fetch, before the swap; a returned promise is awaited, a returned function runs after), `preloadData(url)`, `preloadCode(url)`, `invalidateAll()`, `updated.value` (a newer wisp.js or build exists). `cancel()` does not stop back/forward. `+page.js` `load` gets `depends(key)` (a `fetch`ed URL counts); `invalidate('key')` reruns only those loads, no page request.
+`data-wisp-noscroll`, `data-wisp-keepfocus`, `data-wisp-replacestate`, `data-wisp-notransition` (on or around a link) keep scroll, keep focus, replace history, skip the view transition; `goto(url, { noscroll, keepfocus, replace, novt })` too. Hooks from `'wisp'` return an unsubscribe: `beforeNavigate(({ from, to, pop, cancel }) => ..)`, `afterNavigate`, `onNavigate` (after fetch, before the swap; a returned promise is awaited, a returned function runs after), `preloadData(url)`, `preloadCode(url)`, `invalidateAll()`, `updated.value` (a newer wisp.js or build exists). `cancel()` does not stop back/forward. `+page.js` `load` gets `depends(key)` (a `fetch`ed URL counts); `invalidate('key')` reruns only those loads, no page request.
 
 Phones: pages leave with `pagehide` (back/forward cache; scroll restored). `<body data-wisp-revalidate="30">` refetches data when the tab or network returns (at most every N s, default 30; the morph keeps focus, scroll, typed text). Offline, `<form data-wisp-queue>` (safe to send twice) waits in `sessionStorage`, is sent in order when back, then the page refreshes (`wisp:sent`); other forms show "You are offline" and fire `wisp:result` with `error: "offline"`. Only urlencoded forms queue. A navigation focuses the `<h1>` (else `<main>`) and announces the title; view transitions skip under `prefers-reduced-motion`.
 

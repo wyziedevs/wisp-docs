@@ -74,7 +74,7 @@ No homegrown auth, ORM or job system, now or later: Wisp gives the tools
 (cookies, sessions, the `Store` trait, hooks, `wisp::spawn` from `init`)
 and the app builds on them. Integrations wire in existing, maintained
 crates (a recipe in `add/`, `wisp add sqlite`, scaffolds the glue). Also out:
-HTTP/2 in process, Windows services.
+Windows services. (HTTP/2 in process is the opt-in `h2` feature: h2c only.)
 
 ## Milestones
 
