@@ -69,7 +69,8 @@ A route pays only for the features it uses, and a change that touches the reques
 
 TechEmpower's plaintext and JSON tests, run with their own load scripts against their reference sources of each framework, on one 4-vCPU VM with the server pinned to 2 cores. Medians of 3 runs of 15 seconds each.
 
-<table class="tally">
+<div class="benches">
+<div class="bench"><table class="tally">
 <caption>Plaintext, 256 connections, pipelined</caption>
 <thead><tr><th scope="col">Framework</th><th scope="col"><span class="sr">Relative speed</span></th><th scope="col" class="num">Req/s</th></tr></thead>
 <tbody>
@@ -82,9 +83,8 @@ TechEmpower's plaintext and JSON tests, run with their own load scripts against 
 <tr><th scope="row">SvelteKit</th><td class="meter" aria-hidden="true"><span style="--v: 0.010"></span></td><td class="num">10,929</td></tr>
 <tr><th scope="row">Hono (Bun)</th><td class="meter" aria-hidden="true"><span style="--v: 0.009"></span></td><td class="num">10,599</td></tr>
 </tbody>
-</table>
-
-<table class="tally">
+</table></div>
+<div class="bench"><table class="tally">
 <caption>JSON, 64 connections</caption>
 <thead><tr><th scope="col">Framework</th><th scope="col"><span class="sr">Relative speed</span></th><th scope="col" class="num">Req/s</th></tr></thead>
 <tbody>
@@ -98,11 +98,12 @@ TechEmpower's plaintext and JSON tests, run with their own load scripts against 
 <tr><th scope="row">Hono (Node)</th><td class="meter" aria-hidden="true"><span style="--v: 0.094"></span></td><td class="num">8,988</td></tr>
 <tr><th scope="row">Next.js</th><td class="meter" aria-hidden="true"><span style="--v: 0.016"></span></td><td class="num">1,524</td></tr>
 </tbody>
-</table>
+</table></div>
+</div>
 
 Wisp is first on plaintext at 256, 1,024 and 4,096 connections, 1.9 times Actix Web at 256. On JSON it is first at 3 of 6 levels and within the run-to-run noise of Actix Web and Axum at the rest; Actix Web is ahead at 16 and 256 connections. At 16,384 connections Wisp's default limit of 10,000 refuses the overflow, and most servers collapse there too. Next.js did not complete the plaintext run. This is not an official TechEmpower result: the VM is shared, and the gaps between the Rust servers are about the size of its noise.
 
-<p class="more"><a href="https://github.com/wyziedevs/wisp/blob/main/bench/tfb/RESULTS.md">Every Number, Including the Losses</a> &middot; <a href="/docs/benchmarks">How Speed Is Measured</a></p>
+<p class="more"><a href="https://github.com/wyziedevs/wisp/blob/main/bench/tfb/RESULTS.md">Full Results</a></p>
 
 </Claim>
 

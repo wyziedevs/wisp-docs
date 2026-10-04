@@ -393,3 +393,42 @@ td:last-child {
   }
 }
 
+
+/* The speed tables sit side by side, with tight rows; a narrow screen stacks
+   them and each scrolls inside a short box. */
+.benches {
+  display: grid;
+  gap: 0 2rem;
+  margin: 1.5rem 0;
+}
+
+.bench {
+  max-height: 15rem;
+  overflow-y: auto;
+}
+
+.bench .tally {
+  margin: 0;
+}
+
+.bench .tally .num {
+  width: auto;
+  white-space: nowrap;
+}
+
+.bench .tally :is(th, td) {
+  padding-block: 0.1875rem;
+  font-size: var(--fs-sm);
+  line-height: 1.3;
+}
+
+@media (min-width: 48rem) {
+  .benches {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .bench {
+    max-height: none;
+    overflow: visible;
+  }
+}
