@@ -77,6 +77,7 @@ AI writes most code now, and every token it reads and writes costs time and mone
 <div class="pair">
 <figure class="file">
 <figcaption>Wisp: a contact form that validates, 89 tokens</figcaption>
+<div class="scroll" tabindex="0" aria-label="Wisp code">
 
 ```html
 ---
@@ -89,9 +90,11 @@ fn default(#[validate(len = 1..=50)] name: String, email: Email) {
 <form fields><button>Send</button></form>
 ```
 
+</div>
 </figure>
 <figure class="file">
 <figcaption>SvelteKit: the same form, 396 tokens</figcaption>
+<div class="scroll" tabindex="0" aria-label="SvelteKit code, scrollable">
 
 ```js
 // +page.server.js
@@ -129,6 +132,7 @@ export const actions = {
 </form>
 ```
 
+</div>
 </figure>
 </div>
 

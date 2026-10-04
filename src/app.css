@@ -2069,3 +2069,40 @@ pre code {
     padding-right: var(--s-2);
   }
 }
+
+/* ---- Comparison panels: capped width, the code scrolls under a fixed bar ---- */
+
+.cheap .pair {
+  grid-template-columns: repeat(2, minmax(0, 36rem));
+  justify-content: center;
+  align-items: stretch;
+}
+
+.pair .file {
+  display: flex;
+  flex-direction: column;
+}
+
+.pair .scroll {
+  flex: 1;
+  max-height: 24rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.pair .scroll:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+/* The first file's Copy sits in the bar; a later file's sits at its own top. */
+.pair .scroll pre + pre {
+  position: relative;
+  border-top: 1px solid var(--line);
+}
+
+@media (max-width: 52rem) {
+  .cheap .pair {
+    grid-template-columns: minmax(0, 36rem);
+  }
+}
