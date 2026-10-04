@@ -121,7 +121,7 @@ a {
   text-decoration-thickness: 1px;
   transition:
     color var(--t),
-    text-underline-offset 200ms var(--ease);
+    text-underline-offset 150ms ease-out; /* not the long expo tail: the offset snaps to whole pixels, so a tail shows as a late second step */
 }
 
 a:hover {
