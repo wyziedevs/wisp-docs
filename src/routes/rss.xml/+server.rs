@@ -19,9 +19,7 @@ fn get() -> Response {
     let xml = format!(
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rss version=\"2.0\"><channel><title>Wisp Blog</title><link>{SITE}/blog</link><description>News and notes from the Wisp project.</description><language>en</language>{items}</channel></rss>\n"
     );
-    let mut res = Response::text(xml);
-    res.content_type = "application/rss+xml; charset=utf-8".into();
-    res
+    Response::text(xml).with_header("content-type", "application/rss+xml; charset=utf-8")
 }
 
 fn esc(s: &str) -> String {
