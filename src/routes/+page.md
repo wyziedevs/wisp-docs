@@ -157,13 +157,16 @@ export const actions = {
 
 The same five features (a list page, a contact form, a JSON endpoint, a layout and a live search) written as a complete app in each stack:
 
-| Stack | Tokens | Files |
-|---|---:|---:|
-| **Wisp** | **464** | 6 |
-| SvelteKit | 1002 | 9 |
-| Next.js | 1010 | 8 |
-| Axum + askama | 1456 | 7 |
-| Actix + tera | 1531 | 7 |
+<table class="tally">
+<thead><tr><th scope="col">Stack</th><th scope="col"><span class="sr">Relative size</span></th><th scope="col" class="num">Tokens</th><th scope="col" class="num">Files</th></tr></thead>
+<tbody>
+<tr class="us"><th scope="row">Wisp</th><td class="meter" aria-hidden="true"><span style="--v: 0.303"></span></td><td class="num">464</td><td class="num">6</td></tr>
+<tr><th scope="row">SvelteKit</th><td class="meter" aria-hidden="true"><span style="--v: 0.654"></span></td><td class="num">1002</td><td class="num">9</td></tr>
+<tr><th scope="row">Next.js</th><td class="meter" aria-hidden="true"><span style="--v: 0.660"></span></td><td class="num">1010</td><td class="num">8</td></tr>
+<tr><th scope="row">Axum + askama</th><td class="meter" aria-hidden="true"><span style="--v: 0.951"></span></td><td class="num">1456</td><td class="num">7</td></tr>
+<tr><th scope="row">Actix + tera</th><td class="meter" aria-hidden="true"><span style="--v: 1.000"></span></td><td class="num">1531</td><td class="num">7</td></tr>
+</tbody>
+</table>
 
 A bigger app, with sign up and in, a posts table, uploads, live refresh and a component, is 995 tokens in Wisp, 3473 in SvelteKit and 3331 in Next.js. The numbers come from `cargo run -p wisp-tokens`, which counts every hand-written file and its path with a byte-pair style estimate; the [Tokens page](/docs/tokens) has the method and the apps.
 

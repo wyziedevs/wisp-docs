@@ -808,11 +808,11 @@ h4 {
   font-weight: 700;
 }
 
+/* Home sections read as one centered column with left-aligned text. */
 .sec-head,
 .claim.wide {
   max-width: 44rem;
   margin: 0 auto 3rem;
-  text-align: center;
 }
 
 .sec-head p,
@@ -1096,17 +1096,11 @@ h4 {
   overflow: auto;
 }
 
-.cheap table {
-  margin: 1.5rem auto;
-  text-align: left;
-}
-
 .hosts {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   gap: 0.625rem;
-  max-width: 52rem;
+  max-width: 44rem;
   margin-inline: auto;
 }
 
@@ -1123,14 +1117,16 @@ h4 {
   margin-bottom: 2rem;
 }
 
-.final {
-  text-align: center;
+.final .wrap {
+  max-width: 44rem;
 }
 
 .final pre {
-  max-width: 26rem;
-  margin: 0 auto 2rem;
-  text-align: left;
+  margin: 0 0 2rem;
+}
+
+.final .cta {
+  justify-content: flex-start;
 }
 
 /* Launch sections rise into place as they scroll in (CSS only, where supported). */
@@ -1489,6 +1485,8 @@ pre {
   font-size: 0.875rem;
   line-height: 1.7;
   tab-size: 2;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
 }
 
 pre code {
@@ -1516,18 +1514,18 @@ pre code {
   font: 500 0.8125rem/2.5rem var(--sans);
 }
 
-pre:has(> .language-rust)::before { content: "Rust"; }
-pre:has(> .language-html)::before { content: "Template"; }
-pre:has(> .language-wisp)::before { content: "Wisp"; }
-pre:has(> :is(.language-bash, .language-sh, .language-shell, .language-console))::before { content: "Terminal"; }
-pre:has(> :is(.language-js, .language-javascript))::before { content: "JavaScript"; }
-pre:has(> :is(.language-ts, .language-typescript))::before { content: "TypeScript"; }
-pre:has(> .language-toml)::before { content: "TOML"; }
-pre:has(> .language-json)::before { content: "JSON"; }
-pre:has(> .language-css)::before { content: "CSS"; }
-pre:has(> :is(.language-yaml, .language-yml))::before { content: "YAML"; }
-pre:has(> .language-sql)::before { content: "SQL"; }
-pre:has(> .language-text)::before { content: "Text"; }
+:is(.doc, .sample, .final) pre:has(> .language-rust)::before { content: "Rust"; }
+:is(.doc, .sample, .final) pre:has(> .language-html)::before { content: "Template"; }
+:is(.doc, .sample, .final) pre:has(> .language-wisp)::before { content: "Wisp"; }
+:is(.doc, .sample, .final) pre:has(> :is(.language-bash, .language-sh, .language-shell, .language-console))::before { content: "Terminal"; }
+:is(.doc, .sample, .final) pre:has(> :is(.language-js, .language-javascript))::before { content: "JavaScript"; }
+:is(.doc, .sample, .final) pre:has(> :is(.language-ts, .language-typescript))::before { content: "TypeScript"; }
+:is(.doc, .sample, .final) pre:has(> .language-toml)::before { content: "TOML"; }
+:is(.doc, .sample, .final) pre:has(> .language-json)::before { content: "JSON"; }
+:is(.doc, .sample, .final) pre:has(> .language-css)::before { content: "CSS"; }
+:is(.doc, .sample, .final) pre:has(> :is(.language-yaml, .language-yml))::before { content: "YAML"; }
+:is(.doc, .sample, .final) pre:has(> .language-sql)::before { content: "SQL"; }
+:is(.doc, .sample, .final) pre:has(> .language-text)::before { content: "Text"; }
 
 .copy-code {
   position: absolute;
@@ -1572,14 +1570,71 @@ pre:focus-within .copy-code,
 .hl-t { color: var(--hl-t); }
 .hl-a { color: var(--hl-a); }
 
-.doc table,
-.cheap table {
+.doc table {
   display: block;
   max-width: 100%;
   margin-bottom: 1.5rem;
   overflow-x: auto;
   border-collapse: collapse;
   font-size: 0.9375rem;
+}
+
+/* The token tally: a bar per stack, Wisp in the accent. */
+.tally {
+  width: 100%;
+  margin: 2rem 0;
+  border-collapse: collapse;
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.tally th,
+.tally td {
+  padding: 0.75rem 0 0.75rem 1rem;
+  vertical-align: middle;
+}
+
+.tally :is(th, td):first-child {
+  padding-left: 0;
+  white-space: nowrap;
+}
+
+.tally thead th {
+  color: var(--ash);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.tally tbody th {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.tally .num {
+  width: 4.5rem;
+  color: var(--slate);
+  text-align: right;
+}
+
+.tally .meter {
+  width: 100%;
+}
+
+.tally .meter span {
+  display: block;
+  width: calc(var(--v) * 100%);
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--line-strong);
+}
+
+.tally .us :is(th, td) {
+  color: var(--accent-ink);
+  font-weight: 700;
+}
+
+.tally .us .meter span {
+  background: var(--accent);
 }
 
 th,
