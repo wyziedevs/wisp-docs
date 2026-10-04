@@ -48,7 +48,7 @@ Syntax | Compiles to
 `{#snippet row(item, i)}…{/snippet}` | Markup to render later, here or in a component
 `{@render row(x, 0)}` | Renders a snippet
 `<head>…</head>` or `<wisp:head>…</wisp:head>` | Appended to the document head
-`<title>…</title>` at top level | Same as in `<head>` (not an `<svg>`'s)
+`<title>…</title>` at top level | Same as in `<head>` (not an `<svg>`'s). One per page: of a page and its layouts the innermost that writes a `<title>` wins, decided at build time
 `{cx.path()}` | `cx`, the request (`&Cx`), in pages, layouts, error pages
 
 - Expressions are Rust passed to `rustc` verbatim, so type errors are real. Inside `<script>`, `<style>` and HTML comments there are no holes, so CSS and JS braces need no escaping. Comments are stripped.

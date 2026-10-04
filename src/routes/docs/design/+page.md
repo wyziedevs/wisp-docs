@@ -93,7 +93,7 @@ Text, and a component:
 </Card>
 ```
 
-- Front matter is `name: value` lines (quotes optional). `title` (else the first `# heading`) is the `<title>`.
+- Front matter is `name: value` lines (quotes optional). `title` (else the first `# heading`) is the `<title>`, unless a layout above writes one: that layout reads it from `wisp::pages` and can wrap it (`Wisp: {title}`).
 - `layout` names a component in `src/components` showing the page as its children; it gets each field its `{@props}` declare (`&str`/`String`, `bool`, a number, `Option` of one). A required field the page lacks, or a wrong type, is a build error.
 - `noindex: true` adds `<meta name="robots" content="noindex">`.
 - `{`/`}` in text and code become `&#123;`/`&#125;`, so no hole comes from them; raw HTML (components) is the template's own.
