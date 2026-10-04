@@ -1,27 +1,62 @@
 ---
+// The docs groups that make up Reference; every other group is Learn.
+// A page can also say `section: reference` or `section: learn` in its front matter.
+const REFERENCE: &[&str] = &["Reference", "Design"];
+
 let mut all: Vec<_> = wisp::pages("")
     .iter()
     .chain(wisp::pages("docs").iter())
-    .filter(|p| p.path.starts_with("/docs"))
+    .filter(|p| p.path == "/docs" || p.path.starts_with("/docs/"))
     .collect();
+// Quick Start and the Tutorial lead Learn, then front matter `order`.
 all.sort_by_key(|p| {
-    p.get("order")
-        .and_then(|o| o.parse::<u32>().ok())
-        .unwrap_or(999)
+    let lead = match p.path {
+        "/docs/quick-start" => 0,
+        "/docs/tutorial" => 1,
+        _ => 2,
+    };
+    let order = p.get("order").and_then(|o| o.parse::<u32>().ok()).unwrap_or(999);
+    (lead, order)
 });
+let is_ref: Vec<bool> = all
+    .iter()
+    .map(|p| match p.get("section") {
+        Some(s) => s == "reference",
+        None => REFERENCE.contains(&p.get("group").unwrap_or("")),
+    })
+    .collect();
+let at = all.iter().position(|p| p.path == cx.path());
+let reference = at.is_some_and(|i| is_ref[i]);
+let list: Vec<_> = all
+    .iter()
+    .zip(&is_ref)
+    .filter(|(_, r)| **r == reference)
+    .map(|(p, _)| *p)
+    .collect();
+let learn_home = all.iter().zip(&is_ref).find(|(_, r)| !**r).map_or("/docs", |(p, _)| p.path);
+let ref_home = all.iter().zip(&is_ref).find(|(_, r)| **r).map_or("/docs", |(p, _)| p.path);
 
-let mut groups: Vec<(&str, Vec<_>)> = Vec::new();
-for p in &all {
+let mut groups: Vec<(&str, bool, Vec<_>)> = Vec::new();
+for p in &list {
     let g = p.get("group").unwrap_or("Docs");
+    let here = p.path == cx.path();
     match groups.last_mut() {
-        Some((name, list)) if *name == g => list.push(*p),
-        _ => groups.push((g, vec![*p])),
+        Some((name, open, items)) if *name == g => {
+            *open |= here;
+            items.push(*p);
+        }
+        _ => groups.push((g, here, vec![*p])),
     }
 }
+// The first group stays open, as does the one holding this page.
+if let Some(first) = groups.first_mut() {
+    first.1 = true;
+}
+let group = at.and_then(|i| all[i].get("group")).unwrap_or("Docs");
 
-let at = all.iter().position(|p| p.path == cx.path());
-let prev = at.and_then(|i| i.checked_sub(1)).map(|i| all[i]);
-let next = at.and_then(|i| all.get(i + 1)).copied();
+let me = list.iter().position(|p| p.path == cx.path());
+let prev = me.and_then(|i| i.checked_sub(1)).map(|i| list[i]);
+let next = me.and_then(|i| list.get(i + 1)).copied();
 let toc: &[(&str, &[(&str, &str, u8)])] = include!(concat!(env!("OUT_DIR"), "/toc.rs"));
 let heads = toc
     .iter()
@@ -34,39 +69,22 @@ let edit = match cx.path() {
 ---
 <div class="docs">
   <aside class="side" aria-label="Documentation">
-    <div class="find">
-      <label class="sr" for="search">Search the Docs</label>
-      <input
-        id="search"
-        type="search"
-        placeholder="Search the Docs"
-        autocomplete="off"
-        spellcheck="false"
-        role="combobox"
-        aria-expanded="false"
-        aria-controls="search-results"
-        aria-autocomplete="list"
-        bind:this="filter">
-      <kbd class="key" aria-hidden="true">/</kbd>
-      <p class="sr" role="status" aria-live="polite" bind:this="status"></p>
-      <ul
-        id="search-results"
-        class="results"
-        role="listbox"
-        aria-label="Search results"
-        hidden
-        bind:this="results"></ul>
-    </div>
     <details class="menu">
-      <summary>Menu</summary>
-      <nav aria-label="Docs pages" bind:this="menu">
-        {#each groups as (name, list)}
-          <h2 class="group">{name}</h2>
-          <ul>
-            {#each list as p}
-              <li><a href={p.path} data-find={format!("{} {}", p.title, p.get("description").unwrap_or(""))} aria-current={(p.path == cx.path()).then_some("page")}>{p.title}</a></li>
-            {/each}
-          </ul>
+      <summary>{if reference { "Reference" } else { "Learn" }} Menu</summary>
+      <div class="switch" role="list">
+        <a role="listitem" href={learn_home} aria-current={(!reference).then_some("true")}>Learn</a>
+        <a role="listitem" href={ref_home} aria-current={reference.then_some("true")}>Reference</a>
+      </div>
+      <nav aria-label={if reference { "Reference pages" } else { "Learn pages" }}>
+        {#each groups as (name, open, items)}
+          <details class="grp" open={*open}>
+            <summary>{name}</summary>
+            <ul>
+              {#each items as p}
+                <li><a href={p.path} aria-current={(p.path == cx.path()).then_some("page")}>{p.title}</a></li>
+              {/each}
+            </ul>
+          </details>
         {/each}
       </nav>
     </details>
@@ -74,8 +92,19 @@ let edit = match cx.path() {
 
   <article class="doc" bind:this="doc">
     <p class="sr" role="status" aria-live="polite" bind:this="copied"></p>
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href={if reference { ref_home } else { learn_home }}>{if reference { "Reference" } else { "Learn" }}</a>
+      <span>{group}</span>
+    </nav>
     <h1 class="doc-title">{at.map(|i| all[i].title).unwrap_or("")}</h1>
     <slot />
+
+    <div class="useful" bind:this="useful">
+      <p>Is This Page Useful?</p>
+      <button type="button" class="btn" data-v="yes">Yes</button>
+      <button type="button" class="btn" data-v="no">No</button>
+    </div>
+
     <nav class="pager" aria-label="Previous and next">
       {#if let Some(p) = prev}
         <a class="prev" rel="prev" href={p.path}><small>Previous</small><span>{p.title}</span></a>
@@ -84,12 +113,12 @@ let edit = match cx.path() {
         <a class="next" rel="next" href={p.path}><small>Next</small><span>{p.title}</span></a>
       {/if}
     </nav>
-    <p class="edit"><a href={format!("https://github.com/wyziedevs/wisp-docs/edit/main/{edit}")}>Edit This Page on GitHub</a></p>
+    <p class="edit"><a href={format!("https://github.com/wyziedevs/wisp-docs/edit/main/{edit}")}>Edit This Page</a></p>
   </article>
 
   {#if heads.len() > 1}
     <aside class="toc" aria-label="On this page">
-      <h2>Contents</h2>
+      <h2>On This Page</h2>
       <ul>
         {#each heads as (id, text, level)}
           <li class={format!("h{level}")}><a href={format!("#{id}")}>{text}</a></li>
@@ -102,7 +131,7 @@ let edit = match cx.path() {
 <script>
   import { afterNavigate } from 'wisp'
 
-  let filter, menu, doc, toc, copied
+  let doc, copied, useful
 
   // Headings have ids from the build; this adds the link icon that copies one.
   function build() {
@@ -122,20 +151,18 @@ let edit = match cx.path() {
           }, 1200)
         }, () => {})
       })
-      h.prepend(a)
+      h.append(a)
     }
     off?.()
     off = null
-    toc = document.querySelector(".toc ul")
-    if (toc) spy()
+    const toc = document.querySelector('.toc ul')
+    if (toc) spy(toc)
   }
 
-  let seen = null
   let off = null
 
-  function spy() {
-    seen?.disconnect()
-    off?.()
+  // The On This Page list marks the section being read.
+  function spy(toc) {
     const links = new Map([...toc.querySelectorAll('a')].map((a) => [a.hash.slice(1), a]))
     const heads = [...links.keys()].map((id) => document.getElementById(id)).filter(Boolean)
     let current = null
@@ -148,27 +175,23 @@ let edit = match cx.path() {
       current = id
       for (const [k, a] of links) {
         if (k === id) {
-          if (a.getAttribute('aria-current') !== 'true') a.setAttribute('aria-current', 'true')
+          a.setAttribute('aria-current', 'true')
           const box = toc.parentElement
           if (box.scrollHeight > box.clientHeight) a.scrollIntoView({ block: 'nearest' })
-        } else if (a.hasAttribute('aria-current')) a.removeAttribute('aria-current')
+        } else a.removeAttribute('aria-current')
       }
     }
 
     function pick() {
       frame = 0
       if (locked || !heads.length) return
-      const atEnd = innerHeight + scrollY >= document.documentElement.scrollHeight - 4
-      if (atEnd) return mark(heads[heads.length - 1].id)
-      const line = 96
+      if (innerHeight + scrollY >= document.documentElement.scrollHeight - 4) return mark(heads[heads.length - 1].id)
       let last = heads[0]
-      for (const h of heads) if (h.getBoundingClientRect().top <= line) last = h
+      for (const h of heads) if (h.getBoundingClientRect().top <= 96) last = h
       mark(last.id)
     }
 
-    function queue() {
-      if (!frame) frame = requestAnimationFrame(pick)
-    }
+    const queue = () => frame || (frame = requestAnimationFrame(pick))
 
     function unlock() {
       if (!locked) return
@@ -198,284 +221,52 @@ let edit = match cx.path() {
       }
     }
 
+    const on = [
+      ['scroll', queue, { passive: true }],
+      ['scrollend', unlock],
+      ['wheel', unlock, { passive: true }],
+      ['touchstart', unlock, { passive: true }],
+      ['keydown', unlock],
+      ['hashchange', hash],
+      ['popstate', hash],
+    ]
     toc.addEventListener('click', click)
-    addEventListener('scroll', queue, { passive: true })
-    addEventListener('scrollend', unlock)
-    addEventListener('wheel', unlock, { passive: true })
-    addEventListener('touchstart', unlock, { passive: true })
-    addEventListener('keydown', unlock)
-    addEventListener('hashchange', hash)
-    addEventListener('popstate', hash)
+    for (const [n, f, o] of on) addEventListener(n, f, o)
     off = () => {
       cancelAnimationFrame(frame)
       clearTimeout(lockTimer)
       toc.removeEventListener('click', click)
-      removeEventListener('scroll', queue)
-      removeEventListener('scrollend', unlock)
-      removeEventListener('wheel', unlock)
-      removeEventListener('touchstart', unlock)
-      removeEventListener('keydown', unlock)
-      removeEventListener('hashchange', hash)
-      removeEventListener('popstate', hash)
+      for (const [n, f] of on) removeEventListener(n, f)
     }
-    seen = { disconnect: off }
 
     if (links.has(decodeURIComponent(location.hash.slice(1)))) hash()
     else pick()
   }
 
-  let status, results
-  let index = null
-  let loading = null
-  let hits = []
-  let sel = -1
-
-  function load() {
-    loading ??= fetch('/search-index.json')
-      .then((r) => r.json())
-      .then((pages) => {
-        index = []
-        for (const [path, title, group, desc, secs] of pages) {
-          for (const [id, heading, text] of secs) {
-            index.push({ path, title, id, heading, text })
-          }
-          index.push({ path, title, id: '', heading: '', text: desc })
-        }
-      })
-      .catch(() => (loading = null))
-    return loading
-  }
-
-  function words(s) {
-    return s.toLowerCase().match(/[\p{L}\p{N}_]+/gu) ?? []
-  }
-
-  // Edit distance of a to b, or more than max.
-  function near(a, b, max) {
-    if (Math.abs(a.length - b.length) > max) return max + 1
-    let prev = Array.from({ length: b.length + 1 }, (_, i) => i)
-    for (let i = 1; i <= a.length; i++) {
-      const cur = [i]
-      let low = i
-      for (let j = 1; j <= b.length; j++) {
-        cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1))
-        if (cur[j] < low) low = cur[j]
-      }
-      if (low > max) return max + 1
-      prev = cur
-    }
-    return prev[b.length]
-  }
-
-  // How well a query word matches a word: exact, prefix, inside, a typo, a subsequence.
-  function word(q, w) {
-    if (w === q) return 100
-    if (w.startsWith(q)) return 80
-    if (q.length > 2 && w.includes(q)) return 55
-    if (q.length > 3) {
-      const k = q.length > 6 ? 2 : 1
-      const d = near(q, w, k)
-      if (d <= k) return 45 - 5 * d
-      if (w.length > q.length && near(q, w.slice(0, q.length), k) <= k) return 35
-    }
-    if (q.length > 2) {
-      let i = 0
-      for (const c of w) if (c === q[i]) i++
-      if (i === q.length) return 15
-    }
-    return 0
-  }
-
-  function field(text, q, weight) {
-    let best = 0
-    for (const w of words(text)) {
-      const s = word(q, w)
-      if (s > best) best = s
-    }
-    return best * weight
-  }
-
-  function score(e, qs) {
-    let total = 0
-    for (const q of qs) {
-      const best = Math.max(field(e.title, q, 5), field(e.heading, q, 3), e.heading === '' ? 0 : field(e.text, q, 1))
-      if (!best) return 0
-      total += best
-    }
-    return total + (e.id === '' ? 8 : 0)
-  }
-
-  function search(query) {
-    const qs = words(query)
-    if (!qs.length) return []
-    const scored = []
-    for (const e of index) {
-      const s = score(e, qs)
-      if (s) scored.push([s, e])
-    }
-    scored.sort((a, b) => b[0] - a[0])
-    const seen = new Set()
-    const out = []
-    for (const [, e] of scored) {
-      const key = e.path + '#' + e.id
-      if (seen.has(key)) continue
-      seen.add(key)
-      out.push({ e, qs })
-      if (out.length === 8) break
-    }
-    // grouped by page, in the order of each page's best hit
-    const order = [...new Set(out.map((h) => h.e.path))]
-    return order.flatMap((p) => out.filter((h) => h.e.path === p))
-  }
-
-  function snippet(text, qs) {
-    const low = text.toLowerCase()
-    let at = -1
-    for (const q of qs) {
-      const i = low.indexOf(q)
-      if (i >= 0 && (at < 0 || i < at)) at = i
-    }
-    const start = Math.max(0, at - 30)
-    return (start > 0 ? '...' : '') + text.slice(start, start + 110) + (start + 110 < text.length ? '...' : '')
-  }
-
-  function mark(el, text, qs) {
-    const esc = qs.map((q) => q.replace(/[.*+?^$()|[\]\\]/g, '\\$&'))
-    const re = new RegExp('(' + esc.join('|') + ')', 'gi')
-    text.split(re).forEach((piece, i) => {
-      if (i % 2) {
-        const b = document.createElement('b')
-        b.textContent = piece
-        el.append(b)
-      } else el.append(piece)
-    })
-  }
-
-  function render(query) {
-    results.replaceChildren()
-    sel = -1
-    filter.removeAttribute('aria-activedescendant')
-    const active = query.trim() !== ''
-    results.hidden = !active
-    menu.hidden = active
-    filter.setAttribute('aria-expanded', String(active && hits.length > 0))
-    if (!active) {
-      status.textContent = ''
-      return
-    }
-    if (!hits.length) {
-      const li = document.createElement('li')
-      li.className = 'none'
-      li.setAttribute('role', 'presentation')
-      li.textContent = 'No Results'
-      results.append(li)
-      status.textContent = 'No Results'
-      return
-    }
-    let page = null
-    hits.forEach(({ e, qs }, i) => {
-      if (e.path !== page) {
-        page = e.path
-        const g = document.createElement('li')
-        g.className = 'page'
-        g.setAttribute('role', 'presentation')
-        g.textContent = e.title
-        results.append(g)
-      }
-      const li = document.createElement('li')
-      li.id = 'hit-' + i
-      li.setAttribute('role', 'option')
-      li.setAttribute('aria-selected', 'false')
-      const a = document.createElement('a')
-      a.href = e.path + (e.id ? '#' + e.id : '')
-      a.tabIndex = -1
-      const h = document.createElement('span')
-      h.className = 'h'
-      mark(h, e.heading || e.title, qs)
-      const t = document.createElement('span')
-      t.className = 't'
-      mark(t, snippet(e.text, qs), qs)
-      a.append(h, t)
-      li.append(a)
-      results.append(li)
-    })
-    status.textContent = hits.length + (hits.length === 1 ? ' result' : ' results')
-  }
-
-  function pick(i) {
-    const items = results.querySelectorAll('[role=option]')
-    if (!items.length) return
-    sel = (i + items.length) % items.length
-    items.forEach((li, j) => li.setAttribute('aria-selected', String(j === sel)))
-    filter.setAttribute('aria-activedescendant', items[sel].id)
-    items[sel].scrollIntoView({ block: 'nearest' })
-  }
-
-  async function typed() {
-    const q = filter.value
-    if (q.trim() && !index) await load()
-    if (q !== filter.value || (q.trim() && !index)) return
-    hits = q.trim() ? search(q) : []
-    render(q)
-  }
-
-  function clear() {
-    filter.value = ''
-    hits = []
-    render('')
-  }
-
-  function keys(e) {
-    if (e.key === 'ArrowDown') {
-      e.preventDefault()
-      pick(sel + 1)
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault()
-      pick(sel < 0 ? -1 : sel - 1)
-    } else if (e.key === 'Enter') {
-      const items = results.querySelectorAll('[role=option]')
-      const li = items[sel < 0 ? 0 : sel]
-      if (li) {
-        e.preventDefault()
-        li.querySelector('a').click()
-        clear()
-        filter.blur()
-      }
-    } else if (e.key === 'Escape') {
-      clear()
-    }
-  }
-
-  function shortcut(e) {
-    const typing = /^(input|textarea|select)$/i.test(e.target.tagName) || e.target.isContentEditable
-    const slash = e.key === '/' && !typing && !e.ctrlKey && !e.metaKey
-    const k = (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k'
-    if (!slash && !k) return
-    e.preventDefault()
-    const box = filter.closest('details')
-    if (box) box.open = true
-    filter.focus()
-    filter.select()
+  // Is This Page Useful: a thank you, nothing sent anywhere.
+  function feedback(e) {
+    const b = e.target.closest('button')
+    if (!b) return
+    const p = document.createElement('p')
+    p.className = 'thanks'
+    p.setAttribute('role', 'status')
+    p.textContent = b.dataset.v === 'yes' ? 'Thanks for Letting Us Know' : 'Thanks. An issue on GitHub helps us fix it.'
+    useful.replaceChildren(p)
   }
 
   onMount(() => {
     build()
+    useful.addEventListener('click', feedback)
     if (location.hash) document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView()
-    filter.addEventListener('focus', load, { once: true })
-    filter.addEventListener('input', typed)
-    filter.addEventListener('keydown', keys)
-    addEventListener('keydown', shortcut)
-    results.addEventListener('click', () => setTimeout(clear, 0))
   })
   // A new page eases in; a hash jump or a form post on the same page does not.
   const path = (u) => u && new URL(u, location.href).pathname
-  function enter({ from, to }) {
+  afterNavigate(({ from, to }) => {
     build()
     if (path(from) === path(to) || matchMedia('(prefers-reduced-motion: reduce)').matches) return
     doc.animate(
       [{ opacity: 0, translate: '0 6px' }, { opacity: 1, translate: '0 0' }],
       { duration: 320, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' },
     )
-  }
-  afterNavigate(enter)
+  })
 </script>

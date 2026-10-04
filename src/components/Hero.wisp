@@ -1,7 +1,13 @@
 <section class="hero">
   <div class="wrap">
-    <h1>A Fast, Fun Web Framework for <em>Rust</em></h1>
+    <img class="logo" src="/favicon.svg" alt="" width="132" height="132">
+    <h1>Wisp</h1>
+    <p class="sub">A Fast, Fun Web Framework for <em>Rust</em></p>
     <p class="lede">The fastest full stack web framework for anything.</p>
+    <p class="cta">
+      <a class="btn primary" href="/docs/quick-start">Learn Wisp</a>
+      <a class="btn" href="/docs/design">API Reference</a>
+    </p>
     <div class="install">
       <code id="install-cmd"><span class="prompt" aria-hidden="true">$</span> cargo install --git https://wisp.ar0.eu wisp-cli</code>
       <button
@@ -15,10 +21,6 @@
       </button>
       <span class="sr" aria-live="polite">{:label}</span>
     </div>
-    <p class="cta">
-      <a class="btn primary" href="/docs">Get Started</a>
-      <a class="btn" href="https://github.com/wyziedevs/wisp">View on GitHub</a>
-    </p>
   </div>
 </section>
 

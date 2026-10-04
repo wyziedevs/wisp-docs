@@ -1,21 +1,38 @@
 ---
 const SITE: &str = "https://wispweb.dev";
+// The wisp crate's version, from ../wisp/Cargo.toml ([workspace.package]).
+const VERSION: &str = "v0.1.0";
+// The docs groups that make up Reference; every other group is Learn.
+const REFERENCE: &[&str] = &["Reference", "Design"];
 
-let home = cx.path() == "/";
-let docs = cx.path() == "/docs" || cx.path().starts_with("/docs/");
+let path = cx.path();
+let home = path == "/";
 let me = wisp::pages("")
     .iter()
     .chain(wisp::pages("docs").iter())
-    .find(|p| p.path == cx.path());
+    .chain(wisp::pages("blog").iter())
+    .find(|p| p.path == path);
 let title = me.map_or("Wisp", |p| p.title);
 let about = me
     .and_then(|p| p.get("description"))
     .unwrap_or("A fast, fun web framework for Rust");
+let reference = me.is_some_and(|p| {
+    p.path.starts_with("/docs") && REFERENCE.contains(&p.get("group").unwrap_or(""))
+});
+let learn = !reference && (path == "/docs" || path.starts_with("/docs/"));
+let community = path == "/community";
+let blog = path == "/blog" || path.starts_with("/blog/");
+let links = [
+    ("/docs", "Learn", learn),
+    ("/docs/design", "Reference", reference),
+    ("/community", "Community", community),
+    ("/blog", "Blog", blog),
+];
 ---
 <head>
   <meta name="description" content={about}>
   {@html wisp::og(title, about, &format!("{SITE}/og.png"))}
-  <link rel="canonical" href={format!("{SITE}{}", cx.path())}>
+  <link rel="canonical" href={format!("{SITE}{}", path)}>
   <meta name="twitter:card" content="summary_large_image">
 </head>
 <a class="skip" href="#main">Skip to Content</a>
@@ -40,28 +57,106 @@ let about = me
       </span>
       <span>Wisp</span>
     </a>
-    <nav aria-label="Site">
-      <a href="/docs" aria-current={docs.then_some("page")}>Docs</a>
-      <a href="https://github.com/wyziedevs/wisp" target="_blank" rel="noopener">GitHub</a>
+    <a class="ver" href="https://github.com/wyziedevs/wisp" aria-label={format!("Version {VERSION}")}>{VERSION}</a>
+
+    <form class="search" action="/search" role="search" bind:this="bar">
+      <label class="sr" for="q">Search</label>
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="q" name="q" type="search" placeholder="Search" autocomplete="off" spellcheck="false" bind:this="q">
+      <kbd class="key" aria-hidden="true"><span bind:this="mod">Ctrl</span> K</kbd>
+    </form>
+
+    <nav class="links" aria-label="Site">
+      {#each links as (href, name, on)}
+        <a href={href} aria-current={on.then_some("page")}>{name}</a>
+      {/each}
     </nav>
+
+    <button class="icon theme" type="button" on:click="flip()" aria-label="Switch Light or Dark Theme">
+      <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+      <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+    <a class="icon gh" href="https://github.com/wyziedevs/wisp" aria-label="Wisp on GitHub">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path class="fill" d="M12 1.5a10.5 10.5 0 0 0-3.3 20.47c.52.1.72-.23.72-.5v-1.8c-2.92.63-3.54-1.4-3.54-1.4-.48-1.22-1.17-1.54-1.17-1.54-.95-.65.08-.64.08-.64 1.05.08 1.6 1.08 1.6 1.08.94 1.6 2.46 1.14 3.06.87.1-.68.37-1.14.66-1.4-2.33-.27-4.78-1.17-4.78-5.18 0-1.15.4-2.08 1.08-2.82-.1-.27-.47-1.34.1-2.78 0 0 .88-.29 2.89 1.07a10 10 0 0 1 5.26 0c2-1.36 2.88-1.07 2.88-1.07.58 1.44.21 2.51.1 2.78.68.74 1.08 1.67 1.08 2.82 0 4.02-2.45 4.9-4.79 5.16.38.33.71.97.71 1.95v2.9c0 .28.19.6.72.5A10.5 10.5 0 0 0 12 1.5z"/></svg>
+    </a>
+
+    <details class="mnav">
+      <summary aria-label="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></summary>
+      <nav aria-label="Site menu">
+        {#each links as (href, name, on)}
+          <a href={href} aria-current={on.then_some("page")}>{name}</a>
+        {/each}
+        <a href="https://github.com/wyziedevs/wisp">GitHub</a>
+      </nav>
+    </details>
   </div>
 </header>
+
+<dialog class="finder" aria-label="Search the Docs" bind:this="dlg">
+  <div class="find-bar">
+    <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <input
+      type="search"
+      placeholder="Search the Docs"
+      aria-label="Search the Docs"
+      autocomplete="off"
+      spellcheck="false"
+      role="combobox"
+      aria-expanded="false"
+      aria-controls="find-hits"
+      aria-autocomplete="list"
+      bind:this="fq">
+    <button class="esc" type="button" on:click="close()">Esc</button>
+  </div>
+  <p class="sr" role="status" aria-live="polite" bind:this="status"></p>
+  <ul id="find-hits" class="hits" role="listbox" aria-label="Search results" bind:this="hits"></ul>
+  <p class="find-tip" bind:this="tip">Type to search every docs page and heading.</p>
+</dialog>
+
 <main id="main" class:home={home}>
   <slot />
 </main>
+
 <footer class="foot">
-  <div class="bar">
-    <p class="mark"><img src="/favicon.svg" alt="" width="22" height="22"> Wisp. A fast, fun web framework for Rust.</p>
-    <ul>
-      <li><a href="/docs">Docs</a></li>
-      <li><a href="https://github.com/wyziedevs/wisp">Wisp on GitHub</a></li>
-    </ul>
+  <div class="wrap cols">
+    <div class="mark">
+      <a class="brand" href="/"><img src="/favicon.svg" alt="" width="28" height="28"> Wisp</a>
+      <p>A fast, fun web framework for Rust.</p>
+    </div>
+    <nav aria-label="Learn">
+      <h2>Learn</h2>
+      <a href="/docs">Getting Started</a>
+      <a href="/docs/why">Why Wisp</a>
+      <a href="/docs/overview">Overview</a>
+      <a href="/docs/tokens">Tokens</a>
+      <a href="/docs/benchmarks">Benchmarks</a>
+    </nav>
+    <nav aria-label="Reference">
+      <h2>Reference</h2>
+      <a href="/docs/design">Design and Files</a>
+      <a href="/docs/cli">CLI Reference</a>
+      <a href="/docs/env">Environment Variables</a>
+      <a href="/docs/config">Knobs and Settings</a>
+    </nav>
+    <nav aria-label="Community">
+      <h2>Community</h2>
+      <a href="/community">Community</a>
+      <a href="/blog">Blog</a>
+      <a href="https://github.com/wyziedevs/wisp/issues">Issues</a>
+    </nav>
+    <nav aria-label="More">
+      <h2>More</h2>
+      <a href="https://github.com/wyziedevs/wisp">Wisp on GitHub</a>
+      <a href="https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md">AGENTS.md</a>
+      <a href="https://github.com/wyziedevs/wisp-docs">Site Source</a>
+    </nav>
   </div>
 </footer>
 
 <script>
   import { afterNavigate } from 'wisp'
 
+  // Every code block can be focused and copied.
   function focusable() {
     for (const p of document.querySelectorAll('pre')) {
       p.tabIndex = 0
@@ -86,6 +181,17 @@ let about = me
       })
       p.append(b)
     }
+  }
+
+  // Theme: the head script already applied a saved choice; this flips it.
+  function flip() {
+    const root = document.documentElement
+    const now = root.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+    const next = now === 'dark' ? 'light' : 'dark'
+    root.dataset.theme = next
+    try {
+      localStorage.setItem('theme', next)
+    } catch (e) {}
   }
 
   let ghost
@@ -118,25 +224,280 @@ let about = me
     ghost.classList.add(name)
   }
 
-  let typed = ''
+  const typing = (t) => /^(input|textarea|select)$/i.test(t.tagName) || t.isContentEditable
+
+  let typedKeys = ''
   function boo(e) {
-    if (/^(input|textarea|select)$/i.test(e.target.tagName) || e.target.isContentEditable) return
-    typed = (typed + e.key.toLowerCase()).slice(-3)
-    if (typed === 'boo') play('boo')
+    if (typing(e.target)) return
+    typedKeys = (typedKeys + e.key.toLowerCase()).slice(-3)
+    if (typedKeys === 'boo') play('boo')
+  }
+
+  // Search: the header field opens a dialog over the docs index. Without
+  // JavaScript the field is a plain form that posts to /search.
+  let bar, q, mod, dlg, fq, status, hits, tip
+  let index = null
+  let loading = null
+  let found = []
+  let sel = -1
+
+  function load() {
+    loading ??= fetch('/search-index.json')
+      .then((r) => r.json())
+      .then((pages) => {
+        index = []
+        for (const [path, title, , desc, secs] of pages) {
+          for (const [id, heading, text] of secs) index.push({ path, title, id, heading, text })
+          index.push({ path, title, id: '', heading: '', text: desc })
+        }
+      })
+      .catch(() => (loading = null))
+    return loading
+  }
+
+  function words(s) {
+    return s.toLowerCase().match(/[\p{L}\p{N}_]+/gu) ?? []
+  }
+
+  // Edit distance of a to b, or more than max.
+  function near(a, b, max) {
+    if (Math.abs(a.length - b.length) > max) return max + 1
+    let prev = Array.from({ length: b.length + 1 }, (_, i) => i)
+    for (let i = 1; i <= a.length; i++) {
+      const cur = [i]
+      let low = i
+      for (let j = 1; j <= b.length; j++) {
+        cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1))
+        if (cur[j] < low) low = cur[j]
+      }
+      if (low > max) return max + 1
+      prev = cur
+    }
+    return prev[b.length]
+  }
+
+  // How well a query word matches a word: exact, prefix, inside, a typo, a subsequence.
+  function word(qw, w) {
+    if (w === qw) return 100
+    if (w.startsWith(qw)) return 80
+    if (qw.length > 2 && w.includes(qw)) return 55
+    if (qw.length > 3) {
+      const k = qw.length > 6 ? 2 : 1
+      const d = near(qw, w, k)
+      if (d <= k) return 45 - 5 * d
+      if (w.length > qw.length && near(qw, w.slice(0, qw.length), k) <= k) return 35
+    }
+    if (qw.length > 2) {
+      let i = 0
+      for (const c of w) if (c === qw[i]) i++
+      if (i === qw.length) return 15
+    }
+    return 0
+  }
+
+  function field(text, qw, weight) {
+    let best = 0
+    for (const w of words(text)) {
+      const s = word(qw, w)
+      if (s > best) best = s
+    }
+    return best * weight
+  }
+
+  function score(e, qs) {
+    let total = 0
+    for (const qw of qs) {
+      const best = Math.max(field(e.title, qw, 5), field(e.heading, qw, 3), e.heading === '' ? 0 : field(e.text, qw, 1))
+      if (!best) return 0
+      total += best
+    }
+    return total + (e.id === '' ? 8 : 0)
+  }
+
+  function search(query) {
+    const qs = words(query)
+    if (!qs.length) return []
+    const scored = []
+    for (const e of index) {
+      const s = score(e, qs)
+      if (s) scored.push([s, e])
+    }
+    scored.sort((a, b) => b[0] - a[0])
+    const seen = new Set()
+    const out = []
+    for (const [, e] of scored) {
+      const key = e.path + '#' + e.id
+      if (seen.has(key)) continue
+      seen.add(key)
+      out.push({ e, qs })
+      if (out.length === 10) break
+    }
+    // grouped by page, in the order of each page's best hit
+    const order = [...new Set(out.map((h) => h.e.path))]
+    return order.flatMap((p) => out.filter((h) => h.e.path === p))
+  }
+
+  function snippet(text, qs) {
+    const low = text.toLowerCase()
+    let at = -1
+    for (const qw of qs) {
+      const i = low.indexOf(qw)
+      if (i >= 0 && (at < 0 || i < at)) at = i
+    }
+    const start = Math.max(0, at - 30)
+    return (start > 0 ? '...' : '') + text.slice(start, start + 110) + (start + 110 < text.length ? '...' : '')
+  }
+
+  function mark(el, text, qs) {
+    const esc = qs.map((s) => s.replace(/[.*+?^$()|[\]\\]/g, '\\$&'))
+    const re = new RegExp('(' + esc.join('|') + ')', 'gi')
+    text.split(re).forEach((piece, i) => {
+      if (i % 2) {
+        const b = document.createElement('b')
+        b.textContent = piece
+        el.append(b)
+      } else el.append(piece)
+    })
+  }
+
+  function render(query) {
+    hits.replaceChildren()
+    sel = -1
+    fq.removeAttribute('aria-activedescendant')
+    const active = query.trim() !== ''
+    tip.hidden = active
+    fq.setAttribute('aria-expanded', String(active && found.length > 0))
+    if (!active) {
+      status.textContent = ''
+      return
+    }
+    if (!found.length) {
+      const li = document.createElement('li')
+      li.className = 'none'
+      li.setAttribute('role', 'presentation')
+      li.textContent = 'No Results'
+      hits.append(li)
+      status.textContent = 'No Results'
+      return
+    }
+    let page = null
+    found.forEach(({ e, qs }, i) => {
+      if (e.path !== page) {
+        page = e.path
+        const g = document.createElement('li')
+        g.className = 'page'
+        g.setAttribute('role', 'presentation')
+        g.textContent = e.title
+        hits.append(g)
+      }
+      const li = document.createElement('li')
+      li.id = 'hit-' + i
+      li.setAttribute('role', 'option')
+      li.setAttribute('aria-selected', 'false')
+      const a = document.createElement('a')
+      a.href = e.path + (e.id ? '#' + e.id : '')
+      a.tabIndex = -1
+      const h = document.createElement('span')
+      h.className = 'h'
+      mark(h, e.heading || e.title, qs)
+      const t = document.createElement('span')
+      t.className = 't'
+      mark(t, snippet(e.text, qs), qs)
+      a.append(h, t)
+      li.append(a)
+      hits.append(li)
+    })
+    status.textContent = found.length + (found.length === 1 ? ' result' : ' results')
+    choose(0)
+  }
+
+  function choose(i) {
+    const items = hits.querySelectorAll('[role=option]')
+    if (!items.length) return
+    sel = (i + items.length) % items.length
+    items.forEach((li, j) => li.setAttribute('aria-selected', String(j === sel)))
+    fq.setAttribute('aria-activedescendant', items[sel].id)
+    items[sel].scrollIntoView({ block: 'nearest' })
+  }
+
+  async function typed() {
+    const v = fq.value
+    if (v.trim() && !index) await load()
+    if (v !== fq.value || (v.trim() && !index)) return
+    found = v.trim() ? search(v) : []
+    render(v)
+  }
+
+  function open(v = '') {
+    if (!dlg.open) dlg.showModal()
+    fq.value = v
+    fq.focus()
+    load()
+    typed()
+  }
+
+  function close() {
+    if (dlg.open) dlg.close()
+  }
+
+  function keys(e) {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      choose(sel + 1)
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      choose(sel - 1)
+    } else if (e.key === 'Enter') {
+      e.preventDefault()
+      const li = hits.querySelectorAll('[role=option]')[sel < 0 ? 0 : sel]
+      if (li) li.querySelector('a').click()
+      else if (fq.value.trim()) location.href = '/search?q=' + encodeURIComponent(fq.value)
+      close()
+    }
+  }
+
+  function shortcut(e) {
+    const k = (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k'
+    const slash = e.key === '/' && !typing(e.target) && !e.ctrlKey && !e.metaKey
+    if (!k && !slash) return
+    e.preventDefault()
+    open()
   }
 
   const path = (u) => u && new URL(u, location.href).pathname
 
   onMount(() => {
     focusable()
+    if (/Mac|iPhone|iPad/.test(navigator.platform)) mod.textContent = '⌘'
+    bar.addEventListener('submit', (e) => {
+      e.preventDefault()
+      open(q.value)
+    })
+    q.addEventListener('pointerdown', (e) => {
+      e.preventDefault()
+      open(q.value)
+    })
+    q.addEventListener('input', () => {
+      open(q.value)
+      q.value = ''
+    })
+    fq.addEventListener('input', typed)
+    fq.addEventListener('keydown', keys)
+    dlg.addEventListener('click', (e) => {
+      if (e.target === dlg) close()
+      else if (e.target.closest('a')) setTimeout(close, 0)
+    })
     ghost.addEventListener('animationend', (e) => {
       if (e.animationName === 'hop' || e.animationName === 'boo') ghost.classList.remove('hop', 'boo')
     })
+    addEventListener('keydown', shortcut)
     addEventListener('keydown', boo)
     console.log('%cwispweb.dev is a Wisp app, one Rust binary. Source: https://github.com/wyziedevs/wisp-docs\n%cTry typing boo.', 'color:#a17ff5;font-weight:600', 'color:inherit')
   })
   afterNavigate(({ from, to }) => {
     focusable()
+    close()
+    document.querySelector('.mnav')?.removeAttribute('open')
     if (path(from) !== path(to)) play('hop')
   })
 </script>

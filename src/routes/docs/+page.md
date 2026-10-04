@@ -26,7 +26,7 @@ wisp dev               # http://127.0.0.1:3000
 
 ```html
 ---
-let name: String = cx.query_or("name", "world");
+let name = cx.query_or("name", "world".to_string());
 ---
 <h1>Hello, {name}!</h1>
 

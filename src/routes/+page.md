@@ -5,8 +5,12 @@ description: A fast, fun web framework for Rust that costs an AI the fewest toke
 
 <Hero />
 
-<section class="showcase">
+<section class="sec showcase">
 <div class="wrap">
+<div class="sec-head">
+<h2>A Page Is One File</h2>
+<p>The form writes its own inputs and errors, and a bad value is a 422 that keeps what was typed. The model in <code>src/db.rs</code> is in every route file with no <code>use</code> lines.</p>
+</div>
 
 <Demo>
 
@@ -46,11 +50,10 @@ pub static TODOS: Table<Todo> = Table::saved();
 
 </Demo>
 
-<p class="note">The form writes its own inputs and errors, and a bad value is a 422 that keeps what was typed. The model in <code>src/db.rs</code> is in every route file with no <code>use</code> lines.</p>
 </div>
 </section>
 
-<section class="band" id="fast">
+<section class="sec" id="fast">
 <div class="wrap">
 <div class="claim wide">
 
@@ -64,7 +67,7 @@ A route pays only for the features it uses, and a change that touches the reques
 </div>
 </section>
 
-<section class="band cheap" id="cheap">
+<section class="sec cheap" id="cheap">
 <div class="wrap">
 <div class="claim wide">
 
@@ -168,7 +171,7 @@ A bigger app, with sign up and in, a posts table, uploads, live refresh and a co
 </div>
 </section>
 
-<Band id="forms" title="Forms that work without JavaScript" lead="A form posts to an action. A bad value is a 422 that shows each problem beside its input and keeps what was typed. With JavaScript on, the page morphs instead of reloading.">
+<Band id="forms" title="Forms That Work Without JavaScript" lead="A form posts to an action. A bad value is a 422 that shows each problem beside its input and keeps what was typed. With JavaScript on, the page morphs instead of reloading.">
 
 ```html
 ---
@@ -185,11 +188,11 @@ fn signup(email: Email, #[validate(min_len = 8)] password: Password) {
 
 </Band>
 
-<Band id="reactive" flip title="Reactivity in the same file" lead="The block is Rust that runs for each request, name is drawn on the server, and the count is JavaScript state in the browser. Turn JavaScript off and the server's HTML still works.">
+<Band id="reactive" flip title="Reactivity in the Same File" lead="The block is Rust that runs for each request, name is drawn on the server, and the count is JavaScript state in the browser. Turn JavaScript off and the server's HTML still works.">
 
 ```html
 ---
-let name: String = cx.query_or("name", "world");
+let name = cx.query_or("name", "world".to_string());
 ---
 <h1>Hello, {name}!</h1>
 
@@ -202,7 +205,7 @@ let name: String = cx.query_or("name", "world");
 
 </Band>
 
-<Band id="binary" title="One binary, on any host" lead="Templates compile to plain Rust, and the whole app, styles and static files included, becomes one small binary. Every fast path is proven at startup and falls back, and nothing after startup panics. The same app builds as a container, static HTML, or for an edge or serverless host.">
+<Band id="binary" title="One Binary, on Any Host" lead="Templates compile to plain Rust, and the whole app, styles and static files included, becomes one small binary. Every fast path is proven at startup and falls back, and nothing after startup panics. The same app builds as a container, static HTML, or for an edge or serverless host.">
 
 ```bash
 wisp build
@@ -214,16 +217,18 @@ wisp deploy init cloudflare
 
 </Band>
 
-<section class="strip">
+<section class="sec strip">
 <div class="wrap">
-<h2 class="sr">Hosts</h2>
+<div class="sec-head">
+<h2>Builds for Your Host</h2>
+</div>
 
 <Hosts />
 
 </div>
 </section>
 
-<section class="final">
+<section class="sec final">
 <div class="wrap">
 
 ## Make Something
