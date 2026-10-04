@@ -1,9 +1,13 @@
-// GSAP motion for the launch pages: sections rise as they scroll in, table rows
-// follow one by one and Rust is
+// GSAP motion: sections, docs blocks and lists rise as they scroll in, table rows
+// follow one by one, the hero drifts away as you scroll and Rust is
 // underlined again on hover. GSAP is vendored in /vendor, loaded after the page
 // is idle and only where motion is welcome. Without it (no JavaScript, reduced
 // motion, a failed load) the page is complete and CSS does the lighter version.
-const REVEAL = '.sec-head, .band .claim, .band .sample, .demo, .pair .cmp, .hosts, .bench, .foot .cols > *'
+const REVEAL = [
+  '.sec-head, .band .claim, .band .sample, .demo, .pair .cmp, .hosts, .bench, .foot .cols > *',
+  '.posts li, .found li, .pager, .useful',
+  '.doc > :is(h2, pre, table, blockquote, figure, .callout, .tally, .file)',
+].join(',')
 
 const calm = matchMedia('(prefers-reduced-motion: reduce)')
 const fine = matchMedia('(hover: hover) and (pointer: fine)')
@@ -75,6 +79,19 @@ export function motion() {
     undo.push(() => em.removeEventListener('pointerenter', again))
   }
 
+  // The hero settles back and fades a little as it scrolls out.
+  function drift() {
+    const wrap = document.querySelector('.hero .wrap')
+    if (!wrap) return
+    gsap.to(wrap, {
+      y: 48,
+      opacity: 0.35,
+      ease: 'none',
+      scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
+    })
+    undo.push(() => gsap.set(wrap, { clearProps: 'opacity,transform' }))
+  }
+
   async function scan() {
     stop()
     if (calm.matches || !(await boot())) return
@@ -82,7 +99,15 @@ export function motion() {
     reveal()
     rows()
     scribble()
+    drift()
   }
+
+  // The theme switch turns its icon as the theme flips.
+  addEventListener('click', (e) => {
+    const b = e.target.closest?.('.theme')
+    if (!b || !window.gsap || calm.matches) return
+    gsap.fromTo(b.querySelectorAll('svg'), { rotate: -80, scale: 0.6 }, { rotate: 0, scale: 1, duration: 0.5, ease: 'power3.out', clearProps: 'transform' })
+  })
 
   addEventListener('beforeprint', stop)
   return { scan, stop }
