@@ -25,6 +25,10 @@
 
   /* Presses: a quick lift on hover, a crisp press on :active. */
   :is(
+    .icon,
+    .mnav summary,
+    .copy-icon,
+    .copy-code,
     .links a,
     .mnav nav a,
     .tabs label,
@@ -33,6 +37,7 @@
     .grp > summary,
     .pager a,
     .hosts span,
+    .find-bar .esc,
     .hits a,
     :is(.toc, .post-toc) a
   ) {
@@ -41,11 +46,17 @@
     transition-timing-function: var(--ease);
   }
 
-  :is(.links a, .mnav nav a, .tabs label, .side li a, .switch a,
-    .grp > summary, .pager a, .hosts span, .hits a):active {
+  :is(.icon, .mnav summary, .copy-icon, .copy-code, .links a, .mnav nav a, .tabs label, .side li a, .switch a,
+    .grp > summary, .pager a, .hosts span, .find-bar .esc, .hits a):active {
     scale: 0.97;
     translate: 0 1px;
     transition-duration: 80ms;
+  }
+
+  .icon:active,
+  .mnav summary:active {
+    scale: 0.92;
+    translate: 0;
   }
 
   @media (hover: hover) {
@@ -183,38 +194,4 @@ pre::after {
   to {
     transform: rotate(360deg);
   }
-}
-
-/* Every button is a raised key: a solid edge underneath, pushed flat when pressed. */
-:is(.btn, .demo button, .copy-code, .find-bar .esc, .icon, .mnav summary, .copy-icon) {
-  --edge: var(--line-strong);
-  border: 1px solid var(--line-strong);
-  background: var(--panel);
-  box-shadow: 0 3px 0 var(--edge);
-  transition:
-    color var(--t),
-    background-color var(--t),
-    border-color var(--t),
-    opacity var(--t),
-    box-shadow 120ms var(--ease),
-    translate 120ms var(--ease);
-}
-
-:is(.icon, .mnav summary, .copy-icon, .find-bar .esc) {
-  box-shadow: 0 2px 0 var(--edge);
-}
-
-@media (hover: hover) {
-  :is(.icon, .mnav summary, .copy-icon):hover {
-    background: var(--panel-2);
-  }
-}
-
-:is(.btn, .demo button, .copy-code, .find-bar .esc, .icon, .mnav summary, .copy-icon):active {
-  box-shadow: 0 0 0 var(--edge);
-  translate: 0 3px;
-}
-
-:is(.icon, .mnav summary, .copy-icon, .find-bar .esc):active {
-  translate: 0 2px;
 }

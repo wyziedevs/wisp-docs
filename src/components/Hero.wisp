@@ -108,6 +108,10 @@
     margin-right: -1rem;
   }
 
+  .copy-icon:active {
+    scale: 0.85;
+  }
+
   .copy-icon svg {
     grid-area: 1 / 1;
     width: 1.125rem;
