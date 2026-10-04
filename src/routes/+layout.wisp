@@ -65,7 +65,25 @@ let about = me
   import { afterNavigate } from 'wisp'
 
   function focusable() {
-    for (const p of document.querySelectorAll('pre')) p.tabIndex = 0
+    for (const p of document.querySelectorAll('pre')) {
+      p.tabIndex = 0
+      if (p.querySelector('.copy-code')) continue
+      const b = document.createElement('button')
+      b.type = 'button'
+      b.className = 'copy-code'
+      b.textContent = 'Copy'
+      b.setAttribute('aria-label', 'Copy code')
+      b.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(p.querySelector('code').innerText)
+          b.textContent = 'Copied'
+        } catch (e) {
+          b.textContent = 'Press Ctrl+C'
+        }
+        setTimeout(() => (b.textContent = 'Copy'), 1500)
+      })
+      p.append(b)
+    }
   }
 
   let ghost

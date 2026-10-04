@@ -306,10 +306,27 @@ a:hover {
     color 150ms var(--ease);
 }
 
-.top nav a:hover,
+.top nav a {
+  position: relative;
+}
+
+.top nav a:hover {
+  background: var(--panel-2);
+  color: var(--ink);
+}
+
 .top nav a[aria-current] {
-  background: var(--accent-soft);
   color: var(--accent-ink);
+  font-weight: 600;
+}
+
+.top nav a[aria-current]::after {
+  content: "";
+  position: absolute;
+  inset: auto 0.875rem 0.125rem;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
 }
 
 .foot {
@@ -812,6 +829,11 @@ main.home {
   color: var(--ink);
 }
 
+.side li a[aria-current]:hover {
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+
 .side li a[aria-current] {
   background: var(--accent-soft);
   color: var(--accent-ink);
@@ -1118,4 +1140,164 @@ main.home {
     scrollbar-width: thin;
     scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
   }
+}
+
+/* Scrollers keep their content off the thumb. */
+.side,
+.toc {
+  scrollbar-gutter: stable;
+  padding-right: 0.75rem;
+}
+
+pre,
+.doc table {
+  scrollbar-gutter: auto;
+}
+
+/* Focus ring for links and controls in the chrome. */
+.top nav a:focus-visible,
+.side li a:focus-visible,
+.toc a:focus-visible,
+.pager a:focus-visible,
+.btn:focus-visible,
+.copy:focus-visible,
+.copy-code:focus-visible,
+.brand:focus-visible,
+.foot a:focus-visible,
+.menu summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.find input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* TOC: hover lifts the text, the current section is accent and marked. */
+.toc a {
+  border-left: 2px solid transparent;
+  padding-left: 0.75rem;
+  transition: color 150ms var(--ease), border-color 150ms var(--ease);
+}
+
+.toc a:hover {
+  color: var(--ink);
+}
+
+.toc a[aria-current="location"] {
+  border-left-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* Prose */
+.doc p a,
+.doc li a {
+  text-decoration-line: underline;
+  text-decoration-color: color-mix(in oklch, var(--accent-ink) 45%, transparent);
+}
+
+.doc p a:hover,
+.doc li a:hover {
+  text-decoration-color: currentColor;
+}
+
+.doc > p,
+.doc > ul,
+.doc > ol {
+  line-height: 1.7;
+}
+
+.doc h2:first-of-type {
+  margin-top: 2rem;
+}
+
+/* Code blocks: copy button */
+pre {
+  position: relative;
+}
+
+.copy-code {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  height: 1.75rem;
+  padding: 0 0.625rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-2);
+  color: var(--slate);
+  font: 500 0.75rem/1 var(--sans);
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity 150ms var(--ease), color 150ms var(--ease), border-color 150ms var(--ease);
+}
+
+pre:hover .copy-code,
+pre:focus-within .copy-code,
+.copy-code:focus-visible {
+  opacity: 1;
+}
+
+.copy-code:hover {
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+@media (hover: none) {
+  .copy-code {
+    opacity: 1;
+  }
+}
+
+/* Mobile header: brand and nav share one row without crowding */
+@media (max-width: 30rem) {
+  .top nav a {
+    padding-inline: 0.5rem;
+  }
+
+  .top nav a[aria-current]::after {
+    inset-inline: 0.5rem;
+  }
+
+  .top nav a:nth-child(2) {
+    display: none;
+  }
+}
+
+/* Error page */
+.error {
+  width: min(100%, 36rem);
+  margin: 0 auto;
+  padding: 4rem var(--gutter);
+  text-align: center;
+}
+
+.error h1 {
+  margin: 1rem 0 0.5rem;
+  font-size: 2.5rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.error p {
+  color: var(--slate);
+}
+
+.error .button {
+  display: inline-flex;
+  align-items: center;
+  height: 2.5rem;
+  padding: 0 1rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 150ms var(--ease), color 150ms var(--ease);
+}
+
+.error .button:hover {
+  border-color: var(--accent);
+  color: var(--accent-ink);
 }

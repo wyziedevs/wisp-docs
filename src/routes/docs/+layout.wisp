@@ -94,6 +94,24 @@ let edit = match cx.path() {
       toc.append(li)
     }
     toc.parentElement.hidden = toc.children.length < 2
+    spy()
+  }
+
+  let seen = null
+  function spy() {
+    seen?.disconnect()
+    const links = new Map([...toc.querySelectorAll('a')].map((a) => [a.hash.slice(1), a]))
+    seen = new IntersectionObserver(
+      (hits) => {
+        for (const h of hits) {
+          if (!h.isIntersecting) continue
+          for (const a of links.values()) a.removeAttribute('aria-current')
+          links.get(h.target.id)?.setAttribute('aria-current', 'location')
+        }
+      },
+      { rootMargin: '-10% 0px -80% 0px' }
+    )
+    for (const id of links.keys()) seen.observe(document.getElementById(id))
   }
 
   function narrow() {
