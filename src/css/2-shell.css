@@ -331,7 +331,7 @@
 
 .foot {
   border-top: 1px solid var(--line);
-  background: var(--wash);
+  background: var(--bg);
   font-size: var(--fs-sm);
 }
 
