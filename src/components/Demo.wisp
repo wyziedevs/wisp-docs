@@ -1,24 +1,10 @@
-<div class="demo" :data-tab="tab">
+<div class="demo tabbed">
   <div class="code">
-    <div class="tabs" role="tablist" aria-label="Files" on:keydown="move">
-      <button
-        type="button"
-        role="tab"
-        id="tab-page"
-        aria-controls="pane-page"
-        class:on="tab === 0"
-        :aria-selected="tab === 0"
-        :tabindex="tab === 0 ? 0 : -1"
-        on:click="tab = 0">+page.wisp</button>
-      <button
-        type="button"
-        role="tab"
-        id="tab-db"
-        aria-controls="pane-db"
-        class:on="tab === 1"
-        :aria-selected="tab === 1"
-        :tabindex="tab === 1 ? 0 : -1"
-        on:click="tab = 1">db.rs</button>
+    <div class="tabs" role="radiogroup" aria-label="Files">
+      <input class="sr" type="radio" name="demo-file" id="demo-page" checked>
+      <label for="demo-page">+page.wisp</label>
+      <input class="sr" type="radio" name="demo-file" id="demo-db">
+      <label for="demo-db">db.rs</label>
     </div>
     <div class="panes">{@render children()}</div>
   </div>
@@ -51,7 +37,6 @@
 </div>
 
 <script>
-  let tab = 0
   let text = ''
   let error = ''
   let todos = ['Buy milk', 'Write the docs']
@@ -69,11 +54,5 @@
 
   function remove(i) {
     todos = todos.filter((_, j) => j !== i)
-  }
-
-  function move(e) {
-    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return
-    tab = tab === 0 ? 1 : 0
-    e.currentTarget.querySelectorAll('[role=tab]')[tab].focus()
   }
 </script>

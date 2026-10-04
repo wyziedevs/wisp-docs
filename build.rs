@@ -20,6 +20,7 @@ fn index() {
     collect(Path::new("src/routes/docs"), &mut pages);
     pages.sort();
     let mut out = String::from("[");
+    let mut toc = String::from("&[");
     let mut first = true;
     for md in pages {
         let Ok(src) = fs::read_to_string(&md) else { continue };
@@ -28,7 +29,12 @@ fn index() {
             .and_then(|p| p.parent())
             .map(|p| format!("/{}", p.to_string_lossy().replace('\\', "/")))
             .unwrap_or_default();
-        let entry = page(&path, &src);
+        let (entry, heads) = page(&path, &src);
+        let _ = write!(toc, "({path:?}, &[");
+        for (id, h, level) in heads {
+            let _ = write!(toc, "({id:?}, {h:?}, {level}),");
+        }
+        toc.push_str("]),");
         if !first {
             out.push(',');
         }
@@ -36,6 +42,12 @@ fn index() {
         out.push_str(&entry);
     }
     out.push(']');
+    toc.push(']');
+    // The headings of each page for the docs layout's Contents: [(path, [(id, text, level)])].
+    let toc_rs = Path::new(&std::env::var("OUT_DIR").unwrap_or_default()).join("toc.rs");
+    if fs::read_to_string(&toc_rs).ok().as_deref() != Some(&toc) {
+        let _ = fs::write(&toc_rs, toc);
+    }
     let _ = fs::create_dir_all("static");
     // Only rewrite on change, so an unchanged index does not retrigger the build.
     if fs::read_to_string("static/search-index.json").ok().as_deref() != Some(&out) {
@@ -55,7 +67,7 @@ fn collect(dir: &Path, out: &mut Vec<std::path::PathBuf>) {
     }
 }
 
-fn page(path: &str, src: &str) -> String {
+fn page(path: &str, src: &str) -> (String, Vec<(String, String, usize)>) {
     let (front, body) = match src.strip_prefix("---\n").or_else(|| src.strip_prefix("---\r\n")) {
         Some(rest) => match rest.split_once("\n---") {
             Some((f, b)) => (f, b.trim_start_matches(['\r', '\n'])),
@@ -74,6 +86,7 @@ fn page(path: &str, src: &str) -> String {
 
     let mut sections: Vec<(String, String, String)> = Vec::new();
     let mut ids: HashSet<String> = HashSet::new();
+    let mut heads = Vec::new();
     let mut fenced = false;
     let mut cur = (String::new(), String::new(), String::new());
     for line in body.lines() {
@@ -96,6 +109,9 @@ fn page(path: &str, src: &str) -> String {
                 n += 1;
             }
             ids.insert(id.clone());
+            if hashes <= 3 {
+                heads.push((id.clone(), heading.clone(), hashes));
+            }
             cur = (id, heading, String::new());
             continue;
         }
@@ -139,7 +155,7 @@ fn page(path: &str, src: &str) -> String {
         let _ = write!(out, "[{},{},{}]", js(&id), js(&h), js(&t));
     }
     out.push_str("]]");
-    out
+    (out, heads)
 }
 
 /// Markdown to the text a reader sees: links to their text, no emphasis marks.

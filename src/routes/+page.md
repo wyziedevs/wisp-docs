@@ -10,7 +10,7 @@ description: A fast, fun web framework for Rust that costs an AI the fewest toke
 
 <Demo>
 
-<div class="pane" id="pane-page" role="tabpanel" aria-labelledby="tab-page">
+<div class="pane pane-1">
 
 ```html
 ---
@@ -31,7 +31,7 @@ fn remove(id: u64) {
 ```
 
 </div>
-<div class="pane" id="pane-db" role="tabpanel" aria-labelledby="tab-db">
+<div class="pane pane-2">
 
 ```rust
 #[model]
@@ -58,7 +58,7 @@ pub static TODOS: Table<Todo> = Table::saved();
 
 A route pays only for the features it uses, and a change that touches the request path is checked by an instructions-per-request A/B before it lands. Wisp's first rule is that speed is never traded away for convenience.
 
-<p class="cta left"><a class="btn" href="/docs/benchmarks">How Speed Is Measured</a></p>
+<p class="more"><a href="/docs/benchmarks">How Speed Is Measured</a></p>
 
 </div>
 </div>
@@ -75,8 +75,10 @@ AI writes most code now, and every token it reads and writes costs time and mone
 </div>
 
 <div class="pair">
-<figure class="file">
+<figure class="cmp">
 <figcaption>Wisp: a contact form that validates, 89 tokens</figcaption>
+<div class="file">
+<div class="tabs"><span class="tab">+page.wisp</span></div>
 <div class="scroll" tabindex="0" aria-label="Wisp code">
 
 ```html
@@ -91,13 +93,20 @@ fn default(#[validate(len = 1..=50)] name: String, email: Email) {
 ```
 
 </div>
+</div>
 </figure>
-<figure class="file">
+<figure class="cmp">
 <figcaption>SvelteKit: the same form, 396 tokens</figcaption>
-<div class="scroll" tabindex="0" aria-label="SvelteKit code, scrollable">
+<div class="file tabbed">
+<div class="tabs" role="radiogroup" aria-label="SvelteKit files">
+<input class="sr" type="radio" name="sk-file" id="sk-server" checked>
+<label for="sk-server">+page.server.js</label>
+<input class="sr" type="radio" name="sk-file" id="sk-page">
+<label for="sk-page">+page.svelte</label>
+</div>
+<div class="scroll pane pane-1" tabindex="0" aria-label="SvelteKit +page.server.js">
 
 ```js
-// +page.server.js
 import { fail, redirect } from '@sveltejs/kit';
 
 export const actions = {
@@ -115,8 +124,10 @@ export const actions = {
 };
 ```
 
+</div>
+<div class="scroll pane pane-2" tabindex="0" aria-label="SvelteKit +page.svelte">
+
 ```html
-<!-- +page.svelte -->
 <script>
   import { enhance } from '$app/forms';
   let { form } = $props();
@@ -132,6 +143,7 @@ export const actions = {
 </form>
 ```
 
+</div>
 </div>
 </figure>
 </div>

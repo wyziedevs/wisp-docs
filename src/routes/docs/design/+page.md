@@ -76,7 +76,7 @@ fn matches(s: &str) -> bool {
 
 ## Markdown Pages
 
-`+page.md` and each `x.md` (a page at `x`) is turned into markup at build time by `pulldown-cmark` (CommonMark, tables, strikethrough, task lists, footnotes), then compiled like a `.wisp` page. The folder's layouts wrap it; with no Rust in it, it is baked.
+`+page.md` and each `x.md` (a page at `x`) is turned into markup at build time by `pulldown-cmark` (CommonMark, tables, strikethrough, task lists, footnotes), then compiled like a `.wisp` page. The folder's layouts wrap it; with no Rust in it, it is baked. Each heading gets an id from its text, GitHub style (`## Install and Run` is `#install-and-run`, a repeat gets `-2`), so section links work with no JavaScript.
 
 ```markdown
 ---

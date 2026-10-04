@@ -22,6 +22,11 @@ for p in &all {
 let at = all.iter().position(|p| p.path == cx.path());
 let prev = at.and_then(|i| i.checked_sub(1)).map(|i| all[i]);
 let next = at.and_then(|i| all.get(i + 1)).copied();
+let toc: &[(&str, &[(&str, &str, u8)])] = include!(concat!(env!("OUT_DIR"), "/toc.rs"));
+let heads = toc
+    .iter()
+    .find(|(p, _)| *p == cx.path())
+    .map_or(&[][..], |(_, h)| *h);
 let edit = match cx.path() {
     "/docs" => "src/routes/docs/+page.md".to_string(),
     p => format!("src/routes{p}/+page.md"),
@@ -81,10 +86,16 @@ let edit = match cx.path() {
     <p class="edit"><a href={format!("https://github.com/wyziedevs/wisp-docs/edit/main/{edit}")}>Edit This Page on GitHub</a></p>
   </article>
 
-  <aside class="toc" aria-label="On this page">
-    <h2>Contents</h2>
-    <ul bind:this="toc"></ul>
-  </aside>
+  {#if heads.len() > 1}
+    <aside class="toc" aria-label="On this page">
+      <h2>Contents</h2>
+      <ul>
+        {#each heads as (id, text, level)}
+          <li class={format!("h{level}")}><a href={format!("#{id}")}>{text}</a></li>
+        {/each}
+      </ul>
+    </aside>
+  {/if}
 </div>
 
 <script>
@@ -92,28 +103,8 @@ let edit = match cx.path() {
 
   let filter, menu, doc, toc, copied
 
-  function slug(text) {
-    return text.toLowerCase().replace(/[^\w\- ]/g, '').trim().replace(/ /g, '-')
-  }
-
+  // Headings have ids from the build; this adds the # link that copies one.
   function build() {
-    toc.replaceChildren()
-    for (const h of doc.querySelectorAll('h2:not([id]), h3:not([id]), h4:not([id])')) {
-      const base = slug(h.textContent)
-      let id = base
-      for (let n = 2; document.getElementById(id); n++) id = base + '-' + n
-      h.id = id
-    }
-    for (const h of doc.querySelectorAll('h2[id], h3[id]')) {
-      const li = document.createElement('li')
-      li.className = h.tagName.toLowerCase()
-      const a = document.createElement('a')
-      a.href = '#' + h.id
-      a.textContent = h.textContent.replace(/^(#|✓)/, '')
-      li.append(a)
-      toc.append(li)
-    }
-    toc.parentElement.hidden = toc.children.length < 2
     for (const h of doc.querySelectorAll('h2[id], h3[id]')) {
       if (h.querySelector('.anchor')) continue
       const a = document.createElement('a')
@@ -135,7 +126,10 @@ let edit = match cx.path() {
       })
       h.prepend(a)
     }
-    spy()
+    off?.()
+    off = null
+    toc = document.querySelector(".toc ul")
+    if (toc) spy()
   }
 
   let seen = null
