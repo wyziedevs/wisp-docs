@@ -250,6 +250,29 @@
   flex-direction: column;
 }
 
+/* From 48rem the results drop below the header field instead of opening a
+   modal; search.js sets where. */
+.finder.drop {
+  position: fixed;
+  inset: var(--drop-top, 4rem) auto auto var(--drop-left, 0);
+  z-index: 30;
+  width: var(--drop-w, 34rem);
+  max-height: min(70dvh, 30rem);
+  margin: 0;
+}
+
+.finder.drop .find-bar {
+  display: none;
+}
+
+.search:is(:focus-within, :has(input:not(:placeholder-shown))) .key {
+  opacity: 0;
+}
+
+.key {
+  transition: opacity var(--t);
+}
+
 .finder::backdrop {
   background: var(--scrim);
 }

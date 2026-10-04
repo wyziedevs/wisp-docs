@@ -133,9 +133,13 @@ function mark(el, text, qs) {
   })
 }
 
-// Wires the header form and the dialog. els: bar, q, dlg, fq, status, hits, tip.
-// Returns { open, close }.
-export function finder({ bar, q, dlg, fq, status, hits, tip }) {
+// Wires the header form and the results box. els: bar, q, dlg, fq, status,
+// hits, tip. From 48rem the header field is the search box and the results
+// drop below it; on a narrower screen they open as a modal with its own field
+// (fq). Returns { open, close }.
+export function finder({ bar, q, dlg, fq: modalField, status, hits, tip }) {
+  const wide = matchMedia('(min-width: 48rem)')
+  let fq = modalField
   let found = []
   let sel = -1
   let frame = 0
@@ -212,16 +216,36 @@ export function finder({ bar, q, dlg, fq, status, hits, tip }) {
   // One search a frame, however fast the keys come.
   const soon = () => frame || (frame = requestAnimationFrame(typed))
 
+  // The results sit under the header field, as wide as it is.
+  function place() {
+    const r = bar.getBoundingClientRect()
+    dlg.style.setProperty('--drop-top', r.bottom + 8 + 'px')
+    dlg.style.setProperty('--drop-left', r.left + 'px')
+    dlg.style.setProperty('--drop-w', r.width + 'px')
+  }
+
   function open(v = '') {
-    if (!dlg.open) dlg.showModal()
-    fq.value = v
-    fq.focus()
+    if (wide.matches) {
+      fq = q
+      dlg.classList.add('drop')
+      place()
+      if (!dlg.open) dlg.show()
+      q.value = v
+      q.focus()
+    } else {
+      fq = modalField
+      dlg.classList.remove('drop')
+      if (!dlg.open) dlg.showModal()
+      fq.value = v
+      fq.focus()
+    }
     load()
     typed()
   }
 
   function close() {
     if (dlg.open) dlg.close()
+    dlg.classList.remove('drop')
   }
 
   function keys(e) {
@@ -237,6 +261,7 @@ export function finder({ bar, q, dlg, fq, status, hits, tip }) {
       if (li) li.querySelector('a').click()
       else if (fq.value.trim()) location.href = '/search?q=' + encodeURIComponent(fq.value)
       close()
+      if (fq === q) q.blur()
     }
   }
 
@@ -245,23 +270,41 @@ export function finder({ bar, q, dlg, fq, status, hits, tip }) {
     const slash = e.key === '/' && !typing(e.target) && !e.ctrlKey && !e.metaKey
     if (!k && !slash) return
     e.preventDefault()
-    open()
+    open(wide.matches ? q.value : '')
+    if (wide.matches) q.select()
   }
 
+  q.setAttribute('role', 'combobox')
+  q.setAttribute('aria-controls', 'find-hits')
+  q.setAttribute('aria-autocomplete', 'list')
   bar.addEventListener('submit', (e) => {
     e.preventDefault()
-    open(q.value)
+    if (!wide.matches) open(q.value)
   })
   q.addEventListener('pointerdown', (e) => {
+    if (wide.matches) return
     e.preventDefault()
     open(q.value)
   })
+  q.addEventListener('focus', () => wide.matches && open(q.value))
   q.addEventListener('input', () => {
+    if (wide.matches) return dlg.open ? soon() : open(q.value)
     open(q.value)
     q.value = ''
   })
+  q.addEventListener('keydown', (e) => {
+    if (!wide.matches) return
+    if (e.key === 'Escape') {
+      close()
+      q.blur()
+    } else keys(e)
+  })
+  q.addEventListener('blur', () => wide.matches && setTimeout(close, 0))
   fq.addEventListener('input', soon)
   fq.addEventListener('keydown', keys)
+  addEventListener('resize', () => dlg.classList.contains('drop') && place())
+  // Keep the field's focus while a result is pressed; the click still lands.
+  dlg.addEventListener('pointerdown', (e) => dlg.classList.contains('drop') && e.preventDefault())
   dlg.addEventListener('click', (e) => {
     if (e.target === dlg) close()
     else if (e.target.closest('a')) setTimeout(close, 0)

@@ -166,12 +166,13 @@
   min-width: 0;
   width: min(100%, var(--measure));
   margin-inline: auto;
-  padding: 2.5rem var(--gutter) 4rem;
+  padding: 2.5rem var(--pad) 4rem;
+  --pad: var(--gutter);
 }
 
 @media (min-width: 62rem) {
   .doc {
-    padding-inline: 3rem;
+    --pad: 3rem;
   }
 }
 
