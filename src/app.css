@@ -88,6 +88,34 @@ svg {
   max-width: 100%;
 }
 
+body {
+  --sb-track-color: transparent;
+  --sb-thumb-color: #a17ff5;
+  --sb-size: 8px;
+}
+
+body::-webkit-scrollbar {
+  width: var(--sb-size)
+}
+
+body::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 12px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 12px;
+  
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  body {
+    scrollbar-color: var(--sb-thumb-color)
+                     var(--sb-track-color);
+  }
+}
+
 a {
   color: var(--accent-ink);
   text-underline-offset: 0.2em;
@@ -1061,4 +1089,33 @@ main.home {
 .file .note {
   margin-inline: 0;
   text-align: left;
+}
+
+/* Scrollbars: 8px, transparent track, violet thumb, on every scroller. */
+:root {
+  --sb-track-color: transparent;
+  --sb-thumb-color: oklch(0.67 0.17 295);
+  --sb-size: 8px;
+}
+
+*::-webkit-scrollbar {
+  width: var(--sb-size);
+  height: var(--sb-size);
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 12px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 12px;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+  }
 }
