@@ -183,10 +183,6 @@
   overflow: auto;
 }
 
-.strip .sec-head {
-  margin-bottom: 2rem;
-}
-
 /* Launch sections rise into place as they scroll in (CSS only, where supported). */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
@@ -207,3 +203,13 @@
   }
 }
 
+
+/* A code block after a claim's text has room above it. */
+.claim p + pre {
+  margin-top: 1.75rem;
+}
+
+.hosts-title {
+  margin: 2rem 0 0.875rem;
+  font-size: 1.0625rem;
+}

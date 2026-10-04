@@ -218,15 +218,9 @@ wisp build --target cloudflare
 wisp deploy init cloudflare
 ```
 
-</Band>
-
-<section class="sec strip">
-<div class="wrap">
-<div class="sec-head">
-<h2>Builds for Your Host</h2>
-</div>
+<h3 class="hosts-title">Builds for Your Host</h3>
 
 <Hosts />
 
-</div>
-</section>
+</Band>
+

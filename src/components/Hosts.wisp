@@ -9,8 +9,6 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.625rem;
-    max-width: 44rem;
-    margin-inline: auto;
   }
 
   .hosts span {
