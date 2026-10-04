@@ -54,7 +54,7 @@ When two goals pull apart, Wisp has an order for choosing:
 3. **Durable.** Each fast path is proven when the server starts, falls back to the plain path if the proof fails, and nothing after startup panics.
 4. **Flexible.** Last in the order, and never at the cost of the first three.
 
-Speed is never traded away for convenience. How it is measured, and how to run the benchmark tools yourself, is on the [Benchmarks](/docs/benchmarks) page.
+Speed is never traded away for convenience. How it is measured, and how to run the benchmark tools yourself, is on the [Benchmarks](/docs/benchmarks/) page.
 
 ## Why Tokens
 
@@ -73,7 +73,7 @@ Code written by a model is paid for by the token, so we count them. The same fiv
 
 </div>
 
-A bigger app, with sign up and in, a posts table, uploads, live refresh and a component, is 995 tokens in Wisp, 3473 in SvelteKit and 3331 in Next.js. The numbers come from `cargo run -p wisp-tokens`, which counts every hand-written file and its path with a byte-pair style estimate. The [Tokens](/docs/tokens) page has the method and the apps, so you can check the count.
+A bigger app, with sign up and in, a posts table, uploads, live refresh and a component, is 995 tokens in Wisp, 3473 in SvelteKit and 3331 in Next.js. The numbers come from `cargo run -p wisp-tokens`, which counts every hand-written file and its path with a byte-pair style estimate. The [Tokens](/docs/tokens/) page has the method and the apps, so you can check the count.
 
 For agents, [AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md) is the whole reference in one file, and `wisp mcp` serves the docs over MCP.
 
@@ -88,7 +88,7 @@ wisp build --docker
 wisp build --target cloudflare
 ```
 
-`--target` also takes `deno`, `vercel`, `netlify`, `node`, `bun` and `lambda`. See [Deploying](/docs/deploy).
+`--target` also takes `deno`, `vercel`, `netlify`, `node`, `bun` and `lambda`. See [Deploying](/docs/deploy/).
 
 ## Reactivity in the Same File
 
@@ -107,7 +107,7 @@ let name: String = cx.query_or("name", "world".to_string());
 </script>
 ```
 
-Turn JavaScript off and the server's HTML still works. See [Browser code](/docs/client).
+Turn JavaScript off and the server's HTML still works. See [Browser code](/docs/client/).
 
 ## Get Started
 
@@ -120,6 +120,6 @@ cd my-app
 wisp dev
 ```
 
-The [Quick Start](/docs/quick-start) covers the concepts in one page, and the [Tutorial](/docs/tutorial) builds a small app from an empty folder. The code is at [wyziedevs/wisp](https://github.com/wyziedevs/wisp), and issues and pull requests are welcome. See [Community](/community) for where to ask.
+The [Quick Start](/docs/quick-start/) covers the concepts in one page, and the [Tutorial](/docs/tutorial/) builds a small app from an empty folder. The code is at [wyziedevs/wisp](https://github.com/wyziedevs/wisp), and issues and pull requests are welcome. See [Community](/community/) for where to ask.
 
 Thank you for trying Wisp.

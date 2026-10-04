@@ -28,7 +28,7 @@ fn remove(id: u64) { /* ... */ }
 - `<button action="?/remove&id={todo.id}">` outside a form becomes its own `<form method="post"><button formaction="...">`. Works without JS.
 - Query parameters in an action URL are read like form fields (`id` above is `id: u64`).
 - A body with `.await` makes the action `async` (`#[action]` adds it); never write `async` there.
-- Cookies, sessions and sign-in: [design-sessions](/docs/design-sessions).
+- Cookies, sessions and sign-in: [design-sessions](/docs/design-sessions/).
 
 ## Validation
 
@@ -118,7 +118,7 @@ Styles live in `crates/wisp/src/client/tokens.css` (the one source of tokens), `
 
 | Piece | What it is |
 |---|---|
-| Error page | For apps without `+error.wisp`. Status and one line (status name, or the error's message when it says more), centered, dark tokens, styles inlined. No links or buttons; write a `+error.wisp` for those. Errors for endpoints and API clients are JSON (see [api](/docs/api)). |
+| Error page | For apps without `+error.wisp`. Status and one line (status name, or the error's message when it says more), centered, dark tokens, styles inlined. No links or buttons; write a `+error.wisp` for those. Errors for endpoints and API clients are JSON (see [api](/docs/api/)). |
 | Error page in `wisp dev` | Adds the status name, the request, what caused a 5xx and a link home. |
 | Server errors in dev | Every answer has `Server-Timing: total;dur=ms`. A 5xx dev page holds its message (a panic says `file:line`) in `<template id="wisp-server-error">`, which `wisp-dev.js` opens in the dialog below. Debug builds only. |
 | Build error dialog (dev) | Title, one sentence on where to look (`src/routes/+page.rs, line 7.`), then the error in a code block with Copy. Lives in a shadow root off `<html>`, so app CSS and morphs cannot touch it. Closes when the next build succeeds. |

@@ -23,7 +23,7 @@ The app compiles to WebAssembly in a folder with the host's config, an entry fil
 | `netlify` | Netlify | `npx netlify deploy --prod` |
 | `node` | Amplify, Firebase, Azure, Stormkit, Zeabur, any Node host | `npm start` |
 | `bun` | Bun (`Bun.listen`) | `bun server.mjs` |
-| `lambda` | AWS Lambda | [below](/docs/deploy-targets) |
+| `lambda` | AWS Lambda | [below](/docs/deploy-targets/) |
 
 </div>
 
@@ -80,7 +80,7 @@ aws lambda update-function-code --function-name my-app --zip-file fileb://dist/l
 - Any Wisp binary answers Lambda's runtime API when `AWS_LAMBDA_RUNTIME_API` is set.
 - Everything works except WebSockets and streaming (a stream is sent whole).
 - Saved tables go in `/tmp`, per instance: use `wisp::store` for lasting data.
-- The `tower` feature with `lambda_http` also works ([embed](/docs/embed)).
+- The `tower` feature with `lambda_http` also works ([embed](/docs/embed/)).
 
 ## What Works on the Edge
 

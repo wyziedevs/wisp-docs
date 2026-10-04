@@ -29,4 +29,4 @@ You need Rust. `bench/README.md` lists every option, the frameworks compared, an
 
 ## Tokens
 
-Writing cost is measured by a program in the repository: `cargo run -p wisp-tokens --release`. See [Tokens](/docs/tokens).
+Writing cost is measured by a program in the repository: `cargo run -p wisp-tokens --release`. See [Tokens](/docs/tokens/).

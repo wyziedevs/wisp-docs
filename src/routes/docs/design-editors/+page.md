@@ -51,7 +51,7 @@ A language server over stdio, in the CLI: JSON-RPC framed by hand, `wisp_shared:
 |---|---|
 | Problems | On open and every change the buffer goes through the build's own parser and checks (`wisp_build::ide::check_file`: `---` block, template, component props against `src/components` as last read). On open and save the whole app is checked from disk as `wisp check` does, and its problem shows in its file, open or not. One problem per file (the compiler stops at the first). A panic in a request is answered as an error; the server goes on. |
 | Hover | A component's `{@props}`, a prop's type and default, directive and block docs, a route param's type, the `const` knobs (`CACHE`, `RATE_LIMIT`, `SSR`, ...), `<form fields>`, `action="?/x"`, `use:enhance`, the `data-wisp-*` attributes, Rust attributes in a block (`#[action]`, `#[model]`, `#[validate(..)]` and each rule, `#[derive(Rest)]`, `#[rest(..)]`, `#[json(..)]`, `#[unique]`) (tables in `lsp.rs`; a test fails when the reference shows one they lack). Rust items carry `///` docs (`#![deny(missing_docs)]` in `wisp`) for rust-analyzer. |
-| Go to definition | `<Card>` to its file, `'$lib/x.js'` to `src/lib/x.js`, a literal `href="/x"` to the route's `+page.wisp` (or `+page.rs`, `+server.rs`) |
+| Go to definition | `<Card>` to its file, `'$lib/x.js'` to `src/lib/x.js`, a literal `href="/x/"` to the route's `+page.wisp` (or `+page.rs`, `+server.rs`) |
 | Completion | Components (with required props), props, directives, `on:` events and modifiers, `{#...}` / `{:#...}` blocks, route paths in `href`, `#[` attributes in a block |
 | Formatting | `fmt.rs` on the buffer, one edit of the whole text (none when formatted) |
 

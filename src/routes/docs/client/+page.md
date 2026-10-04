@@ -84,7 +84,7 @@ A write redraws only the bindings that read what changed (no virtual DOM); the s
 - Server: `wisp::env("K")`.
 
 ## Translations
-`t('cart.items', n)` or `t('hi', { name, count: n })` in a script or directive, no import; keys checked at build; the page sends only the messages its scripts use. `src/lib` code can't call `t`. Message files: [/docs/design](/docs/design).
+`t('cart.items', n)` or `t('hi', { name, count: n })` in a script or directive, no import; keys checked at build; the page sends only the messages its scripts use. `src/lib` code can't call `t`. Message files: [/docs/design](/docs/design/).
 
 ## Directives
 

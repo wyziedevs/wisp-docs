@@ -5,7 +5,7 @@ group: Project
 order: 71
 ---
 
-Method and the five-feature table: [Tokens](/docs/tokens).
+Method and the five-feature table: [Tokens](/docs/tokens/).
 
 ## The Four Apps
 

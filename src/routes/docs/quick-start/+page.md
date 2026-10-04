@@ -93,12 +93,12 @@ Browser code lives in the same file as the markup. A top-level `let` in a `<scri
 </script>
 ```
 
-A write redraws only the parts of the page that read what changed. Without JavaScript the server's HTML still works, which is why forms and links do not depend on a script. See [Browser code](/docs/client).
+A write redraws only the parts of the page that read what changed. Without JavaScript the server's HTML still works, which is why forms and links do not depend on a script. See [Browser code](/docs/client/).
 
 <details class="deep-dive">
 <summary>Server Values and Browser Values</summary>
 
-`{name}` is Rust, evaluated once on the server. `{:count}` and the quoted value of `on:click` are JavaScript, evaluated in the browser. A name a page's Rust block makes is also available by name in browser code, as long as its type is a `#[model]` or derives `Json`. See [Server values and client blocks](/docs/client-templates).
+`{name}` is Rust, evaluated once on the server. `{:count}` and the quoted value of `on:click` are JavaScript, evaluated in the browser. A name a page's Rust block makes is also available by name in browser code, as long as its type is a `#[model]` or derives `Json`. See [Server values and client blocks](/docs/client-templates/).
 
 </details>
 
@@ -163,12 +163,12 @@ let entries = ENTRIES.all();
 {/each}
 ```
 
-`add`, `get`, `all`, `find`, `filter`, `update`, `set`, `remove` and `len` cover most needs. A row has an `id` and reads as the value you stored. See [Data, files and jobs](/docs/data).
+`add`, `get`, `all`, `find`, `filter`, `update`, `set`, `remove` and `len` cover most needs. A row has an `id` and reads as the value you stored. See [Data, files and jobs](/docs/data/).
 
 <details class="deep-dive">
 <summary>Where the Rows Are Kept</summary>
 
-Saved tables live in the folder named by `WISP_DATA`: `.wisp/data` in dev and `data` next to the binary in a release build. On a host with no disk, point a table at a database with a custom store. See [Where rows are kept](/docs/api-tables).
+Saved tables live in the folder named by `WISP_DATA`: `.wisp/data` in dev and `data` next to the binary in a release build. On a host with no disk, point a table at a database with a custom store. See [Where rows are kept](/docs/api-tables/).
 
 </details>
 
@@ -198,17 +198,17 @@ Pick the build for your host:
 
 </div>
 
-`wisp deploy init <host>` writes a GitHub Actions workflow or the host's config. An app that signs cookies needs `WISP_SECRET` set to 32 or more random characters on every host. See [Deploying](/docs/deploy).
+`wisp deploy init <host>` writes a GitHub Actions workflow or the host's config. An app that signs cookies needs `WISP_SECRET` set to 32 or more random characters on every host. See [Deploying](/docs/deploy/).
 
 ## Next Steps
 
 You now know most of what an everyday Wisp app uses. Where to go next:
 
-- [Tutorial](/docs/tutorial): build a guestbook step by step, with tests and a deploy.
-- [Pages and templates](/docs/design-pages): the Rust block, loads, actions and caching in full.
-- [Template syntax and styles](/docs/design-syntax): every `{#each}`, `{#if}` and snippet.
-- [Actions, forms and UI](/docs/design-forms): validation rules, uploads and the built-in form UI.
-- [Browser code](/docs/client): runes, directives, islands and the router.
-- [APIs and platforms](/docs/api): a JSON API from one struct.
-- [Deploying](/docs/deploy) and [Edge and serverless targets](/docs/deploy-targets).
-- Working with an AI agent: [Design and files](/docs/design-editors) covers `AGENTS.md` and `wisp mcp`.
+- [Tutorial](/docs/tutorial/): build a guestbook step by step, with tests and a deploy.
+- [Pages and templates](/docs/design-pages/): the Rust block, loads, actions and caching in full.
+- [Template syntax and styles](/docs/design-syntax/): every `{#each}`, `{#if}` and snippet.
+- [Actions, forms and UI](/docs/design-forms/): validation rules, uploads and the built-in form UI.
+- [Browser code](/docs/client/): runes, directives, islands and the router.
+- [APIs and platforms](/docs/api/): a JSON API from one struct.
+- [Deploying](/docs/deploy/) and [Edge and serverless targets](/docs/deploy-targets/).
+- Working with an AI agent: [Design and files](/docs/design-editors/) covers `AGENTS.md` and `wisp mcp`.

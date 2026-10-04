@@ -16,7 +16,7 @@ All on the built-in server; each costs nothing for what does not use it.
 | Security headers | HTML and error pages carry `x-content-type-options: nosniff` and `referrer-policy: strict-origin-when-cross-origin` unless the app set its own. |
 | Health | `GET /_wisp/health` is 200 `ok`, and 503 `stopping` once the server drains, so a load balancer moves traffic away first. |
 | Handler timeout | A handler still waiting after the limit is dropped and answers 503. It is checked when the handler waits: one that blocks its thread without awaiting cannot be stopped. |
-| OpenTelemetry | See [Observe](/docs/deploy-observe). |
+| OpenTelemetry | See [Observe](/docs/deploy-observe/). |
 
 </div>
 

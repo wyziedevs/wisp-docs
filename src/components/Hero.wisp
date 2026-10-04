@@ -4,8 +4,8 @@
     <h1><span class="sr">Wisp</span><span class="word" aria-hidden="true"><span>W</span><span>i</span><span>s</span><span>p</span></span></h1>
     <p class="sub">A Fast, Fun Web Framework for <em>Rust<svg class="scribble" viewBox="0 0 120 21" aria-hidden="true" focusable="false"><path pathLength="1" d="M3 13.5C28 10.4 63 10.9 116 6.2C88 11.8 52 15.6 22 18.6"/></svg></em></p>
     <p class="cta">
-      <a class="btn primary" href="/docs/quick-start">Learn Wisp</a>
-      <a class="btn" href="/docs/design">API Reference</a>
+      <a class="btn primary" href="/docs/quick-start/">Learn Wisp</a>
+      <a class="btn" href="/docs/design/">API Reference</a>
     </p>
     <div class="install">
       <code id="install-cmd"><span class="prompt" aria-hidden="true">$</span> cargo install --git https://wisp.ar0.eu wisp-cli</code>

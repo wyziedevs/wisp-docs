@@ -67,52 +67,52 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
   {#if index}
     <header class="blog-head">
       <h1>Wisp Blog</h1>
-      <form class="blog-bar" method="get" action="/blog" role="search">
+      <form class="blog-bar" method="get" action="/blog/" role="search">
         <label class="sr" for="blog-q">Filter Posts</label>
         <input id="blog-q" type="search" name="q" value={q} placeholder="Filter by word or tag" autocomplete="off" on:input="filter(event)">
         {#if !tag.is_empty()}<input type="hidden" name="tag" value={tag}>{/if}
         <p class="blog-count" role="status" aria-live="polite">{count(shown.len())}</p>
-        <a href="/blog/tags">All Tags</a>
+        <a href="/blog/tags/">All Tags</a>
         <a href="/feed.xml">RSS</a>
       </form>
       {#if !tag.is_empty()}
-        <p class="blog-tag">Tagged <strong>{tag}</strong> · <a href="/blog">Show All</a></p>
+        <p class="blog-tag">Tagged <strong>{tag}</strong> · <a href="/blog/">Show All</a></p>
       {/if}
     </header>
     <ul class="posts">
       {#each shown as (p, text)}
         <li data-text={text}>
-          <h2><a href={p.path}>{p.title}</a></h2>
+          <h2><a href={site::dir(p.path)}>{p.title}</a></h2>
           {#if let Some(d) = p.get("description")}<p>{d}</p>{/if}
           <Meta iso={p.get("date").unwrap_or("")} when={day(p.get("date").unwrap_or(""), true)} author={p.get("author").unwrap_or("")} read={read(p.path)} />
         </li>
       {/each}
     </ul>
-    <p class="blog-none" hidden={!shown.is_empty()}>No posts match. <a href="/blog">Show All</a></p>
+    <p class="blog-none" hidden={!shown.is_empty()}>No posts match. <a href="/blog/">Show All</a></p>
   {:else}
     {#if tags_page}
       <header class="blog-head">
-        <p class="eyebrow"><a href="/blog">The Blog</a></p>
+        <p class="eyebrow"><a href="/blog/">The Blog</a></p>
         <h1>Everything We Write About</h1>
         <p class="lede">Every topic on the Wisp blog, with how many posts cover it.</p>
       </header>
       <ul class="tag-list">
         {#each all_tags as (t, n)}
-          <li><a href={format!("/blog?tag={t}")}>{t}</a> <span>{count(*n)}</span></li>
+          <li><a href={format!("/blog/?tag={t}")}>{t}</a> <span>{count(*n)}</span></li>
         {/each}
       </ul>
     {:else}
       <div class="post-wrap">
         <Toc heads={heads} cls="post-toc" />
         <article class="post doc">
-          <p class="eyebrow"><a href="/blog">The Blog</a></p>
+          <p class="eyebrow"><a href="/blog/">The Blog</a></p>
           {#if let Some(p) = post}
             <h1 class="doc-title">{p.title}</h1>
             {#if let Some(d) = p.get("description")}<p class="lede">{d}</p>{/if}
             <Meta iso={p.get("date").unwrap_or("")} when={day(p.get("date").unwrap_or(""), false)} author={p.get("author").unwrap_or("")} read={read(path)} />
             {#if !tags_of(p).is_empty()}
               <nav class="chips" aria-label="Tags">
-                {#each tags_of(p) as t}<a href={format!("/blog?tag={t}")}>{t}</a>{/each}
+                {#each tags_of(p) as t}<a href={format!("/blog/?tag={t}")}>{t}</a>{/each}
               </nav>
             {/if}
           {/if}

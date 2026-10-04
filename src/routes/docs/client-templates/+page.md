@@ -102,4 +102,4 @@ The server renders what it can know into the page (it works before JS and withou
 - Left to the browser: a call, sum, comparison, or a `+page.js` page's `data`.
 - Live attributes (`:class`, `class="a {:b}"`) keep static text until it starts.
 
-Next: [components, custom elements and state helpers](/docs/client-components).
+Next: [components, custom elements and state helpers](/docs/client-components/).

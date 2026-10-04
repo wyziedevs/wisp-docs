@@ -59,7 +59,7 @@ pub static TODOS: Table<Todo> = Table::saved();
 
 A route pays only for the features it uses, and a change that touches the request path is checked by an instructions-per-request A/B before it lands. Wisp's first rule is that speed is never traded away for convenience.
 
-<p class="more"><a href="/docs/benchmarks">How Speed Is Measured</a></p>
+<p class="more"><a href="/docs/benchmarks/">How Speed Is Measured</a></p>
 
 </Claim>
 
@@ -202,7 +202,7 @@ The same five features (a list page, a contact form, a JSON endpoint, a layout a
 </tbody>
 </table>
 
-A bigger app, with sign up and in, a posts table, uploads, live refresh and a component, is 995 tokens in Wisp, 3473 in SvelteKit and 3331 in Next.js. The numbers come from `cargo run -p wisp-tokens`, which counts every hand-written file and its path with a byte-pair style estimate; the [Tokens page](/docs/tokens) has the method and the apps.
+A bigger app, with sign up and in, a posts table, uploads, live refresh and a component, is 995 tokens in Wisp, 3473 in SvelteKit and 3331 in Next.js. The numbers come from `cargo run -p wisp-tokens`, which counts every hand-written file and its path with a byte-pair style estimate; the [Tokens page](/docs/tokens/) has the method and the apps.
 
 </div>
 </div>

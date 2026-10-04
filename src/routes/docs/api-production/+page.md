@@ -12,7 +12,7 @@ Keys:
 
 Sessions:
 - `cx.sign_in(id)` after `wisp::password::check(&typed, user_hash).await?` (`None` for no such user, as slow; `hash(&password).await?`; both on hashing threads).
-- Then `cx.signed_in()?` or `cx.user()?` (`cx.login`/`signup`: [/docs/auth](/docs/auth)) where only members go: signed out, a page 303s to `/login` (`wisp::sign_in_page("/x")`), an endpoint or JSON client gets 401 (`signed_out`).
+- Then `cx.signed_in()?` or `cx.user()?` (`cx.login`/`signup`: [/docs/auth](/docs/auth/)) where only members go: signed out, a page 303s to `/login` (`wisp::sign_in_page("/x")`), an endpoint or JSON client gets 401 (`signed_out`).
 - `cx.sign_out()` ends it here. The id is in a signed cookie for 30 days; each `sign_in` sets a new session.
 - `wisp::sign_out_everywhere(id)?` ends all earlier sessions of `id` on every device (counted in the saved table `wisp_sign_outs`; nothing is looked up until an app calls it; another instance sharing the store sees it on its next start; a store failure is its `Err`).
 
@@ -66,7 +66,7 @@ fn init() {
 ```
 
 - `every` runs until stop, never two at once; a panicking run is reported and the next starts on time.
-- `wisp::spawn` runs one task. Durable queues, cron: [/docs/data](/docs/data).
+- `wisp::spawn` runs one task. Durable queues, cron: [/docs/data](/docs/data/).
 - A health check is a route: `fn get() -> &'static str { "ok" }` (`/_wisp/health` exists).
 
 ## Configuration and Databases

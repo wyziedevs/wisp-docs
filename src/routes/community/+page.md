@@ -11,7 +11,7 @@ Come say hello. The [Wisp Discord](https://discord.gg/2mxraHBVtB) is the fastest
 
 ## Get Help
 
-Start with the docs. [Quick Start](/docs/quick-start) and the [Tutorial](/docs/tutorial) cover the everyday path, and the search box finds any page. For a question the docs do not answer, ask in the [Discord](https://discord.gg/2mxraHBVtB) or in [Discussions](https://github.com/wyziedevs/wisp/discussions), and say what you tried. A problem that is a bug belongs in an issue:
+Start with the docs. [Quick Start](/docs/quick-start/) and the [Tutorial](/docs/tutorial/) cover the everyday path, and the search box finds any page. For a question the docs do not answer, ask in the [Discord](https://discord.gg/2mxraHBVtB) or in [Discussions](https://github.com/wyziedevs/wisp/discussions), and say what you tried. A problem that is a bug belongs in an issue:
 
 - [Wisp issues](https://github.com/wyziedevs/wisp/issues) for questions and problems with the framework, the `wisp` command or an example.
 - [Docs issues](https://github.com/wyziedevs/wisp-docs/issues) for a mistake, a gap or an unclear page on this site.

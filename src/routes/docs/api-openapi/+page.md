@@ -74,7 +74,7 @@ fn counter() {
 All of this works in the binary, Docker, Lambda and `tower`. JSON, validation, errors, CORS, auth, webhooks and docs work everywhere. The edge (`--target cloudflare` etc.) runs each request in an instance that may be its own:
 
 - `wisp::channel`, `wisp::every`, `RateLimit` are not there; WebSockets answer 501 (use the host's rate limiting).
-- Jobs (`cron`, `work`) run from the host's cron triggers ([/docs/deploy](/docs/deploy)).
+- Jobs (`cron`, `work`) run from the host's cron triggers ([/docs/deploy](/docs/deploy/)).
 - Tables are per-instance memory.
 
 Dev logs every request, release logs failures. Pass a proxy's request id back: `cx.set_header("x-request-id", id)` in `before` (`WISP_LOG=json`: AGENTS.md).

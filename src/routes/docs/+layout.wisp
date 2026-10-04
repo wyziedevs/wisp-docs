@@ -63,8 +63,8 @@ let edit = match cx.path() {
     <details class="menu">
       <summary>{kind} Menu</summary>
       <div class="switch" role="list">
-        <a role="listitem" href={learn_home} aria-current={(!reference).then_some("true")}>Learn</a>
-        <a role="listitem" href={ref_home} aria-current={reference.then_some("true")}>Reference</a>
+        <a role="listitem" href={site::dir(learn_home)} aria-current={(!reference).then_some("true")}>Learn</a>
+        <a role="listitem" href={site::dir(ref_home)} aria-current={reference.then_some("true")}>Reference</a>
       </div>
       <nav aria-label={format!("{kind} pages")}>
         {#each groups as (name, open, items)}
@@ -72,7 +72,7 @@ let edit = match cx.path() {
             <summary>{name}</summary>
             <ul>
               {#each items as p}
-                <li><a href={p.path} aria-current={(p.path == cx.path()).then_some("page")}>{p.title}</a></li>
+                <li><a href={site::dir(p.path)} aria-current={(p.path == cx.path()).then_some("page")}>{p.title}</a></li>
               {/each}
             </ul>
           </details>
@@ -84,7 +84,7 @@ let edit = match cx.path() {
   <article class="doc" bind:this="doc">
     <p class="sr" role="status" aria-live="polite" bind:this="copied"></p>
     <nav class="crumbs" aria-label="Breadcrumb">
-      <a href={if reference { ref_home } else { learn_home }}>{kind}</a>
+      <a href={site::dir(if reference { ref_home } else { learn_home })}>{kind}</a>
       <span>{group}</span>
     </nav>
     <h1 class="doc-title">{at.map(|i| all[i].title).unwrap_or("")}</h1>

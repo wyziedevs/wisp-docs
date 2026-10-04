@@ -20,10 +20,10 @@ let learn = !reference && docs;
 let community = path == "/community";
 let blog = path == "/blog" || path.starts_with("/blog/");
 let links = [
-    ("/docs", "Learn", learn),
-    ("/docs/design", "Reference", reference),
-    ("/community", "Community", community),
-    ("/blog", "Blog", blog),
+    ("/docs/", "Learn", learn),
+    ("/docs/design/", "Reference", reference),
+    ("/community/", "Community", community),
+    ("/blog/", "Blog", blog),
 ];
 
 // The page's head: Open Graph, a canonical address and JSON-LD. An error page is not indexed.
@@ -164,23 +164,23 @@ let ld = match me {
     </div>
     <nav aria-label="Learn">
       <h2>Learn</h2>
-      <a href="/docs">Getting Started</a>
-      <a href="/docs/why">Why Wisp</a>
-      <a href="/docs/overview">Overview</a>
-      <a href="/docs/tokens">Tokens</a>
-      <a href="/docs/benchmarks">Benchmarks</a>
+      <a href="/docs/">Getting Started</a>
+      <a href="/docs/why/">Why Wisp</a>
+      <a href="/docs/overview/">Overview</a>
+      <a href="/docs/tokens/">Tokens</a>
+      <a href="/docs/benchmarks/">Benchmarks</a>
     </nav>
     <nav aria-label="Reference">
       <h2>Reference</h2>
-      <a href="/docs/design">Design and Files</a>
-      <a href="/docs/cli">CLI Reference</a>
-      <a href="/docs/env">Environment Variables</a>
-      <a href="/docs/config">Knobs and Settings</a>
+      <a href="/docs/design/">Design and Files</a>
+      <a href="/docs/cli/">CLI Reference</a>
+      <a href="/docs/env/">Environment Variables</a>
+      <a href="/docs/config/">Knobs and Settings</a>
     </nav>
     <nav aria-label="Community">
       <h2>Community</h2>
-      <a href="/community">Community</a>
-      <a href="/blog">Blog</a>
+      <a href="/community/">Community</a>
+      <a href="/blog/">Blog</a>
       <a href="https://discord.gg/2mxraHBVtB">Discord</a>
       <a href="https://github.com/wyziedevs/wisp/discussions">Discussions</a>
       <a href="https://github.com/wyziedevs/wisp/issues">Issues</a>

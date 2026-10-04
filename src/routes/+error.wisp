@@ -9,5 +9,5 @@
   {:else}
     <p>{message}</p>
   {/if}
-  <p class="cta"><a class="btn primary" href="/docs">Go to the Docs</a> <a class="btn" href="/">Home</a></p>
+  <p class="cta"><a class="btn primary" href="/docs/">Go to the Docs</a> <a class="btn" href="/">Home</a></p>
 </div>

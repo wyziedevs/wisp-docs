@@ -46,7 +46,7 @@ fn before(cx: &mut Cx) -> Result<()> {
 | `static X: Shared<Vec<Todo>> = Shared::new(Vec::new());` | in-memory value every request shares: `X.lock().push(todo)`. A `Mutex` without `unwrap` (a panic while held leaves the value as it was); do not hold the guard across `.await` |
 | `static X: Table<Todo> = Table::new();` | rows under ids it gives |
 | `Table::saved("todos")` | also kept in the app's store (log files in `WISP_DATA`, or any database via `wisp::Store`), survives restarts |
-| `#[derive(Rest)]` | the type has a saved table, `Note::table()`, which a `+server.rs` serves (see [api](/docs/api)) |
+| `#[derive(Rest)]` | the type has a saved table, `Note::table()`, which a `+server.rs` serves (see [api](/docs/api/)) |
 | `cx.set(value)` / `cx.get::<T>()` | hand a value along one request (`before` finds the user, pages read it) |
 | `cx.take::<T>()` | moves it out, so it need not be `Clone` |
 | `cx.bearer()` | token of an `Authorization: Bearer` header |
@@ -109,7 +109,7 @@ Rules:
 
 ## Client Code
 
-Browser reactivity is in [client](/docs/client): a bare `<script>` per file, directives (`on:`, `bind:`, `:attr`, `class:`, `use:`, `transition:`), `{:expr}` holes, client `{:#if}` and `{:#each}`, client components, stores, a client router and `use:enhance`.
+Browser reactivity is in [client](/docs/client/): a bare `<script>` per file, directives (`on:`, `bind:`, `:attr`, `class:`, `use:`, `transition:`), `{:expr}` holes, client `{:#if}` and `{:#each}`, client components, stores, a client router and `use:enhance`.
 
 - The build tokenizes the script (`wisp-build/src/js.rs`), finds which Rust values it uses, and sends only those as JSON (`wisp::Json`).
 - `live.js` (loaded only on pages with client code) runs it. `wisp.js` does forms, the morph and the router. No `eval`, no `with`; nothing is required with JS off.

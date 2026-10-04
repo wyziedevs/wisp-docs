@@ -45,7 +45,7 @@ wisp::queue("mail").push(&Mail { to, body });         // .later(secs, &job)
 - Jobs live in the saved table `queue-mail`. A failure (`Err` or a panic) is tried again after 4, 8, 16... seconds (an hour at most), five tries; then it stays `dead` with its last error (`queue.dead()`, `queue.retry(id)`).
 - At least once: a job running when the process died runs again a minute later. One at a time per queue, in order.
 - `cron` takes five fields (`*`, `n`, `a-b`, `*/n`, lists; Sunday is 0 or 7).
-- On Cloudflare, Vercel and Netlify (`wisp build --target ...`) the same code runs from the host's cron: `wisp build` writes each `cron` schedule (a string literal) into its trigger config, and a trigger also runs the queues' due jobs (each minute if the app has `work`). Set `CRON_SECRET` and `WISP_STORE` there. See [/docs/deploy](/docs/deploy).
+- On Cloudflare, Vercel and Netlify (`wisp build --target ...`) the same code runs from the host's cron: `wisp build` writes each `cron` schedule (a string literal) into its trigger config, and a trigger also runs the queues' due jobs (each minute if the app has `work`). Set `CRON_SECRET` and `WISP_STORE` there. See [/docs/deploy](/docs/deploy/).
 
 ## Cache
 `wisp::cache("top", 60, || async { top_posts().await }).await` keeps an answer for 60 s per process. `wisp::uncache("/posts")` forgets cache keys starting with it and the pages `const CACHE` keeps, on every worker, for `/posts` and below (`/` is all).

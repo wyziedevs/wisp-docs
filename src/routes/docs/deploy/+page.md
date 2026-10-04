@@ -14,12 +14,12 @@ Run `wisp build`, copy the binary, run it. Pick the build for your host:
 | VPS or server | `wisp build`; `wisp service install` keeps it running |
 | Container host (Fly.io, Railway, Render, Cloud Run, Azure Container Apps) | `wisp build --docker` |
 | Static host (GitHub/GitLab Pages, S3) | `wisp build --static` (or `--spa`) |
-| Edge or serverless (Cloudflare, Deno Deploy, Vercel, Netlify, Amplify, Firebase, Azure Static Web Apps) | `wisp build --target <host>` ([targets](/docs/deploy-targets)) |
+| Edge or serverless (Cloudflare, Deno Deploy, Vercel, Netlify, Amplify, Firebase, Azure Static Web Apps) | `wisp build --target <host>` ([targets](/docs/deploy-targets/)) |
 | AWS Lambda / Bun | `--target lambda` / `--target bun` |
 
 </div>
 
-An app that signs cookies needs `WISP_SECRET` (32+ random characters) on every host. Logs, metrics and traces: [Observe](/docs/deploy-observe).
+An app that signs cookies needs `WISP_SECRET` (32+ random characters) on every host. Logs, metrics and traces: [Observe](/docs/deploy-observe/).
 
 A plain `wisp build` inside a host's CI picks the target from its variables and says so: `WORKERS_CI` or `CF_PAGES` (cloudflare), `VERCEL` (output in `.vercel/output`), `NETLIFY`, `DENO_DEPLOYMENT_ID` (deno), `AWS_APP_ID` (node). `--target native` forces the plain binary.
 

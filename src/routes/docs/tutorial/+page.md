@@ -144,7 +144,7 @@ let entries = ENTRIES.all();
 <details class="deep-dive">
 <summary>Where the Rows Are Stored</summary>
 
-A saved table is a log file named after it, `entries.log`, in the folder named by `WISP_DATA`: `.wisp/data` in dev and `data` in a release build. Each change appends a line. Use `Table::new()` for rows that may vanish on restart. See [Where rows are kept](/docs/api-tables).
+A saved table is a log file named after it, `entries.log`, in the folder named by `WISP_DATA`: `.wisp/data` in dev and `data` in a release build. Each change appends a line. Use `Table::new()` for rows that may vanish on restart. See [Where rows are kept](/docs/api-tables/).
 
 </details>
 
@@ -211,7 +211,7 @@ Let a visitor mark a note as liked. This is browser code, so it goes in a `<scri
 
 <strong>Pitfall</strong>
 
-This state lives in the browser. Reload the page and every note is unliked again. To keep a like, send it to the server with an action or a `#[remote]` function and store it in a table. See [Browser code](/docs/client).
+This state lives in the browser. Reload the page and every note is unliked again. To keep a like, send it to the server with an action or a `#[remote]` function and store it in a table. See [Browser code](/docs/client/).
 
 </aside>
 
@@ -274,7 +274,7 @@ Pick the build that fits your host:
 
 </div>
 
-A guestbook has a form, so it needs a server: `wisp build --static` suits pages with no actions. On a host with no disk, tables are memory, so use a database store there. See [Deploying](/docs/deploy) and [Edge and serverless targets](/docs/deploy-targets).
+A guestbook has a form, so it needs a server: `wisp build --static` suits pages with no actions. On a host with no disk, tables are memory, so use a database store there. See [Deploying](/docs/deploy/) and [Edge and serverless targets](/docs/deploy-targets/).
 
 ## Recap
 
@@ -398,8 +398,8 @@ let note = ENTRIES.get(id).or_404()?;
 
 ## Next Steps
 
-- [Quick Start](/docs/quick-start): the same ideas on one page.
-- [Actions, forms and UI](/docs/design-forms): more validation rules, uploads and the built-in UI.
-- [Data, files and jobs](/docs/data): tables, relay, files and background jobs.
-- [Browser code](/docs/client): runes, directives, islands and the router.
-- [Testing and mixing with Rust code](/docs/embed): more on testing an app in process.
+- [Quick Start](/docs/quick-start/): the same ideas on one page.
+- [Actions, forms and UI](/docs/design-forms/): more validation rules, uploads and the built-in UI.
+- [Data, files and jobs](/docs/data/): tables, relay, files and background jobs.
+- [Browser code](/docs/client/): runes, directives, islands and the router.
+- [Testing and mixing with Rust code](/docs/embed/): more on testing an app in process.

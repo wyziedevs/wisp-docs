@@ -39,10 +39,10 @@ Lists of strings in `Cargo.toml`, checked and baked at build.
 | Key | What it does |
 |---|---|
 | `base = "/app"` | serve under a base path (`WISP_BASE`) |
-| `redirects = [...]` | `"from to [status]"` (308 by default; [design](/docs/design)) |
+| `redirects = [...]` | `"from to [status]"` (308 by default; [design](/docs/design/)) |
 | `rewrites = [...]` | serve one path from another |
 | `headers = [...]` | headers by path |
-| `i18n = [...]` | locale routing: `default`, `prefix`, `domain`, `missing` ([translations](/docs/design-tooling)) |
+| `i18n = [...]` | locale routing: `default`, `prefix`, `domain`, `missing` ([translations](/docs/design-tooling/)) |
 | `use = [...]` | plugin crates the build loads |
 | `extends = ["../base"]` | layers: an app's layout, components and static files under yours |
 
@@ -58,7 +58,7 @@ Lists of strings in `Cargo.toml`, checked and baked at build.
 | `h2` (wisp) | HTTP/2 with prior knowledge (h2c) on the built-in server |
 | `img` (wisp) | `wisp::img::serve`: `/_img?src=&w=&q=` resizes a picture of `static/` |
 | `og-png` (wisp and wisp-cli) | PNG Open Graph pictures for `wisp::og(.., "auto")` |
-| `tower` (wisp) | the app as a Tower service ([embed](/docs/embed)) |
+| `tower` (wisp) | the app as a Tower service ([embed](/docs/embed/)) |
 | `browser` (wisp) | `wisp::test::browser`: tests in headless Chrome or Edge |
 | `types` (wisp) | used by `wisp check --types`; never in a served build |
 | `avif` (wisp-cli) | AVIF widths for images in `wisp build`, beside WebP |

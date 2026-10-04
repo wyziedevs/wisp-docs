@@ -12,7 +12,7 @@ Wisp is the framework for the AI age: ultra fast to run, cheap in AI tokens to w
 | Area | What you get |
 |---|---|
 | Reactivity | `$state`, `$derived`, `$effect` in a plain `<script>`, no build step. Islands (`client:visible`, `client:idle`, `client:media`) load code when needed. Components ship no JavaScript by default. Hot reload keeps `$state`; markup edits show in under 100 ms. |
-| AI and tokens | [AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md) and [llms-full.txt](https://github.com/wyziedevs/wisp/blob/main/llms/llms-full.txt) hold the whole reference. `wisp mcp` serves the docs to coding agents. A whole app takes about half the tokens of SvelteKit or Next.js ([Tokens](/docs/tokens)). |
+| AI and tokens | [AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md) and [llms-full.txt](https://github.com/wyziedevs/wisp/blob/main/llms/llms-full.txt) hold the whole reference. `wisp mcp` serves the docs to coding agents. A whole app takes about half the tokens of SvelteKit or Next.js ([Tokens](/docs/tokens/)). |
 | Rendering | Server-side rendering with streamed responses and server-streamed `{#await}`. Prerendered pages in a server build, `wisp build --static` and `--spa`. |
 | Data and forms | `#[action]` form handlers with validation, and uploads. `#[remote]` functions called from the browser. `#[derive(Rest)]` gives a JSON CRUD API; a store keeps rows in log files or any database. |
 | Styling | Scoped CSS in a `<style>` block, Tailwind and Sass built in. |
@@ -23,14 +23,14 @@ Wisp is the framework for the AI age: ultra fast to run, cheap in AI tokens to w
 
 ## Speed
 
-Zero cost on the request hot path is the first rule: see [Benchmarks](/docs/benchmarks). Wisp has no `unsafe` code outside its Linux I/O drivers and the edge exports.
+Zero cost on the request hot path is the first rule: see [Benchmarks](/docs/benchmarks/). Wisp has no `unsafe` code outside its Linux I/O drivers and the edge exports.
 
 ## Docs
 
-- [Design](/docs/design): the template language, routing, actions and the runtime.
-- [Browser code](/docs/client): scripts, directives, islands, stores and the router.
-- [APIs and platforms](/docs/api): JSON APIs, validation, auth, OpenAPI and testing.
-- [Deploying](/docs/deploy) covers every host. [Testing and mixing with Rust code](/docs/embed) covers axum, hyper and Lambda.
+- [Design](/docs/design/): the template language, routing, actions and the runtime.
+- [Browser code](/docs/client/): scripts, directives, islands, stores and the router.
+- [APIs and platforms](/docs/api/): JSON APIs, validation, auth, OpenAPI and testing.
+- [Deploying](/docs/deploy/) covers every host. [Testing and mixing with Rust code](/docs/embed/) covers axum, hyper and Lambda.
 - [examples](https://github.com/wyziedevs/wisp/tree/main/examples): a demo app, a JSON API and Wisp inside axum.
 
 Issues and pull requests are welcome; read the design rule at the top of [AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md) first. License: [MIT](https://github.com/wyziedevs/wisp/blob/main/LICENSE).
