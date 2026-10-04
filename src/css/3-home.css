@@ -204,6 +204,11 @@
 }
 
 
+/* GSAP (src/lib/motion.js) takes over the rise once it has loaded. */
+.gsap :is(.sec-head, .band .claim, .band .sample, .demo, .pair .cmp, .hosts) {
+  animation: none;
+}
+
 /* A code block after a claim's text has room above it. */
 .claim p + pre {
   margin-top: 1.75rem;

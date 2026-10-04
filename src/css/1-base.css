@@ -247,6 +247,7 @@ h4 {
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.75rem;
+  padding-top: 1rem;
 }
 
 .cta .btn.primary::after {

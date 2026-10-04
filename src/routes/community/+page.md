@@ -5,9 +5,13 @@ description: Where to get help with Wisp, report a bug and contribute to the fra
 
 Wisp is an open source project, and it lives on GitHub. This page lists the places where work on it happens.
 
+## Chat
+
+Come say hello. The [Wisp Discord](https://discord.gg/2mxraHBVtB) is the fastest way to ask a question, show what you are building or hear what is coming next. Longer threads, ideas and announcements live in [GitHub Discussions](https://github.com/wyziedevs/wisp/discussions), where an answer stays easy to find. New here? Introduce yourself in [Welcome to Wisp](https://github.com/wyziedevs/wisp/discussions/1).
+
 ## Get Help
 
-Start with the docs. [Quick Start](/docs/quick-start) and the [Tutorial](/docs/tutorial) cover the everyday path, and the search box finds any page. For a question the docs do not answer, open an issue and say what you tried:
+Start with the docs. [Quick Start](/docs/quick-start) and the [Tutorial](/docs/tutorial) cover the everyday path, and the search box finds any page. For a question the docs do not answer, ask in the [Discord](https://discord.gg/2mxraHBVtB) or in [Discussions](https://github.com/wyziedevs/wisp/discussions), and say what you tried. A problem that is a bug belongs in an issue:
 
 - [Wisp issues](https://github.com/wyziedevs/wisp/issues) for questions and problems with the framework, the `wisp` command or an example.
 - [Docs issues](https://github.com/wyziedevs/wisp-docs/issues) for a mistake, a gap or an unclear page on this site.

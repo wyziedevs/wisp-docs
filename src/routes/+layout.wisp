@@ -175,6 +175,8 @@ let ld = match me {
       <h2>Community</h2>
       <a href="/community">Community</a>
       <a href="/blog">Blog</a>
+      <a href="https://discord.gg/2mxraHBVtB">Discord</a>
+      <a href="https://github.com/wyziedevs/wisp/discussions">Discussions</a>
       <a href="https://github.com/wyziedevs/wisp/issues">Issues</a>
     </nav>
     <nav aria-label="More">
@@ -193,16 +195,19 @@ let ld = match me {
   import { ghost } from '$lib/ghost.js'
   import { finder } from '$lib/search.js'
   import { haptics } from '$lib/haptic.js'
+  import { motion } from '$lib/motion.js'
 
   let box, bar, q, mod, dlg, fq, status, hits, tip
   let spirit = null
   let find = null
+  const move = motion()
 
   const flip = () => swap()
 
   onMount(() => {
     blocks()
     haptics()
+    ;(window.requestIdleCallback || setTimeout)(() => move.scan())
     if (/Mac|iPhone|iPad/.test(navigator.platform)) mod.textContent = '⌘'
     spirit = ghost(box)
     find = finder({ bar, q, dlg, fq, status, hits, tip })
@@ -211,6 +216,7 @@ let ld = match me {
   afterNavigate(({ from, to }) => {
     blocks()
     find?.close()
+    move.scan()
     document.querySelector('.mnav')?.removeAttribute('open')
     if (path(from) !== path(to)) spirit?.play('hop')
   })

@@ -2,8 +2,7 @@
   <div class="wrap">
     <img class="logo" src="/favicon.svg" alt="" width="132" height="132">
     <h1>Wisp</h1>
-    <p class="sub">A Fast, Fun Web Framework for <em>Rust</em></p>
-    <p class="lede">The fastest full stack web framework for anything.</p>
+    <p class="sub">A Fast, Fun Web Framework for <em>Rust<svg class="scribble" viewBox="0 0 120 14" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path pathLength="1" d="M2.4 9.2C9 6.8 15.5 10.3 25 8.4C37 6.1 44 5.9 58 7.6C71 9.2 82 9.6 94 6.8C102 5 110 5.6 117.6 2.9"/><path class="again" pathLength="1" d="M9 12C27 10.1 46 12.3 66 10.9C80 10 92 10.7 104 9.4"/></svg></em></p>
     <p class="cta">
       <a class="btn primary" href="/docs/quick-start">Learn Wisp</a>
       <a class="btn" href="/docs/design">API Reference</a>
@@ -147,7 +146,7 @@
     animation: check 350ms var(--ease) 80ms backwards;
   }
 
-  /* Rust gets a pen stroke. */
+  /* Rust gets a pen stroke: two loose passes, drawn by hand. */
   .hero em {
     position: relative;
     font-style: normal;
@@ -155,17 +154,30 @@
     white-space: nowrap;
   }
 
-  .hero em::after {
-    content: "";
+  .hero .scribble {
     position: absolute;
-    left: -0.04em;
-    right: -0.06em;
-    bottom: -0.16em;
-    height: 0.26em;
-    background: var(--mask-ink, currentColor);
-    forced-color-adjust: none;
-    opacity: 0.7;
-    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 14' preserveAspectRatio='none'%3E%3Cpath d='M2.5 9.6C14 8.1 27 7.1 41 6.9C60 6.5 80 7.3 96 6.6C104 6.2 110 5.3 117.5 3.4' fill='none' stroke='black' stroke-width='3.2' stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+    left: -0.06em;
+    bottom: -0.2em;
+    width: calc(100% + 0.12em);
+    height: 0.3em;
+    overflow: visible;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 3.4px;
+    opacity: 0.8;
+    pointer-events: none;
+  }
+
+  .hero .scribble path {
+    vector-effect: non-scaling-stroke;
+    stroke-dasharray: 1;
+  }
+
+  .hero .scribble .again {
+    stroke-width: 2px;
+    opacity: 0.55;
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -186,8 +198,13 @@
         bob 5s cubic-bezier(0.37, 0, 0.63, 1) 600ms infinite alternate;
     }
 
-    .hero em::after {
-      animation: draw 800ms var(--ease) 500ms backwards;
+    .hero .scribble path {
+      animation: scribble 650ms var(--ease) 500ms backwards;
+    }
+
+    .hero .scribble .again {
+      animation-delay: 850ms;
+      animation-duration: 450ms;
     }
   }
 </style>

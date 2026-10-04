@@ -145,6 +145,12 @@
   }
 }
 
+@keyframes scribble {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
 @keyframes draw {
   from {
     clip-path: inset(0 100% 0 0);
