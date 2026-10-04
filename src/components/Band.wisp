@@ -8,3 +8,9 @@
     <div class="sample">{@render children()}</div>
   </div>
 </section>
+
+<style>
+  .band .claim h2 {
+    font-size: clamp(1.75rem, 3.6vw, 2.375rem);
+  }
+</style>

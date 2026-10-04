@@ -9,19 +9,14 @@
   background: var(--bg);
 }
 
-.bar {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  height: 100%;
-  padding-inline: var(--gutter);
-}
-
 /* The header: brand left, search centered, links right. */
-.top .bar {
+.bar {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
+  align-items: center;
   gap: 1rem;
+  height: 100%;
+  padding-inline: var(--gutter);
 }
 
 .top .brand {
@@ -77,11 +72,11 @@
   height: 2.5rem;
   padding: 0 4.5rem 0 2.625rem;
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--pill);
   background: var(--panel-2);
   color: var(--ink);
   font: inherit;
-  font-size: 0.9375rem;
+  font-size: var(--fs-sm);
   cursor: text;
 }
 
@@ -98,11 +93,6 @@
   right: 0.75rem;
   top: 50%;
   translate: 0 -50%;
-  padding: 0 0.375rem;
-  border: 1px solid var(--line-strong);
-  border-radius: 0.3125rem;
-  color: var(--ash);
-  font: 500 0.75rem/1.5 var(--mono);
   pointer-events: none;
 }
 
@@ -132,29 +122,6 @@
 .mnav nav a[aria-current] {
   background: var(--accent-soft);
   color: var(--accent-ink);
-}
-
-.icon,
-.mnav summary {
-  display: grid;
-  place-items: center;
-  flex: none;
-  width: 2.5rem;
-  height: 2.5rem;
-  border: 0;
-  border-radius: 999px;
-  background: none;
-  color: var(--ink);
-  cursor: pointer;
-  transition:
-    background-color 150ms var(--ease),
-    scale 120ms var(--ease);
-}
-
-.icon:hover,
-.mnav summary:hover {
-  background: var(--panel-2);
-  color: var(--ink);
 }
 
 .icon svg,
@@ -197,14 +164,6 @@
   position: relative;
 }
 
-.mnav summary {
-  list-style: none;
-}
-
-.mnav summary::-webkit-details-marker {
-  display: none;
-}
-
 .mnav nav {
   position: absolute;
   right: 0;
@@ -228,7 +187,7 @@
 }
 
 @media (max-width: 40rem) {
-  .top .bar {
+  .bar {
     grid-template-columns: auto 1fr auto;
     gap: 0.5rem;
   }
@@ -258,8 +217,6 @@
   max-height: min(80vh, 36rem);
   margin: 10vh auto auto;
   padding: 0;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
   background: var(--panel);
   color: var(--ink);
   overflow: hidden;
@@ -271,7 +228,7 @@
 }
 
 .finder::backdrop {
-  background: oklch(0.2 0.02 285 / 0.5);
+  background: var(--scrim);
 }
 
 .find-bar {
@@ -299,12 +256,7 @@
 
 .find-bar .esc {
   margin-right: 0.75rem;
-  padding: 0 0.375rem;
-  border: 1px solid var(--line-strong);
-  border-radius: 0.3125rem;
   background: none;
-  color: var(--ash);
-  font: 500 0.75rem/1.5 var(--mono);
   cursor: pointer;
 }
 
@@ -344,11 +296,6 @@
   color: var(--accent-ink);
 }
 
-.hits [aria-selected="true"] a,
-.hits a:hover {
-  background: var(--accent-soft);
-}
-
 .hits .none,
 .find-tip {
   margin: 0;
@@ -362,7 +309,7 @@
 .foot {
   border-top: 1px solid var(--line);
   background: var(--wash);
-  font-size: 0.9375rem;
+  font-size: var(--fs-sm);
 }
 
 .cols {
@@ -392,7 +339,7 @@
 .foot h2 {
   margin: 0 0 0.75rem;
   color: var(--ink);
-  font-size: 0.9375rem;
+  font-size: var(--fs-sm);
 }
 
 .foot nav {

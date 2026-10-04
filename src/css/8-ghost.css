@@ -63,7 +63,7 @@
 
 .ghost .shape {
   fill: var(--accent);
-  transition: fill 150ms var(--ease);
+  transition: fill var(--t);
 }
 
 .ghost .eye,
@@ -76,37 +76,39 @@
 .ghost .eye {
   translate: calc(var(--look-x, 0) * 1.2px) calc(var(--look-y, 0) * 1.2px);
   transition:
-    translate 150ms var(--ease),
-    scale 150ms var(--ease);
-  animation: blink 5s infinite;
+    translate var(--t),
+    scale var(--t);
 }
 
 .ghost .mouth {
   translate: calc(var(--look-x, 0) * 0.7px) calc(var(--look-y, 0) * 0.7px);
   transition:
-    translate 150ms var(--ease),
-    scale 150ms var(--ease);
+    translate var(--t),
+    scale var(--t);
 }
 
-.brand:hover .ghost svg,
-.brand:focus-visible .ghost svg,
+.brand:is(:hover, :focus-visible) .ghost svg,
 .ghost.hop svg {
   animation: hop 450ms var(--ease);
 }
 
-.brand:hover .ghost .shape,
-.brand:focus-visible .ghost .shape {
+.brand:is(:hover, :focus-visible) .ghost .shape {
   fill: var(--accent-hover);
 }
 
-.brand:hover .ghost .eye,
-.brand:focus-visible .ghost .eye {
+.brand:is(:hover, :focus-visible) .ghost .eye {
   scale: 1.2;
 }
 
-.brand:hover .ghost .mouth,
-.brand:focus-visible .ghost .mouth {
+.brand:is(:hover, :focus-visible) .ghost .mouth {
   scale: 1.5 1.9;
+}
+
+/* The eyes blink now and then. */
+@media (prefers-reduced-motion: no-preference) {
+  .ghost .eye {
+    animation: blink 5s infinite;
+  }
 }
 
 .ghost.boo svg {
@@ -234,10 +236,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
   *,
   ::before,
   ::after {

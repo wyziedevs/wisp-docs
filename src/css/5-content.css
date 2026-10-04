@@ -17,8 +17,6 @@ pre {
   position: relative;
   margin: 0 0 1.5rem;
   padding: 1rem 1.25rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
   background: var(--code);
   overflow-x: auto;
   font-size: 0.875rem;
@@ -34,35 +32,33 @@ pre code {
 
 /* A block in an article or a sample gets a header bar with its language
    (CSS only), and the copy button sits in that bar. */
-.doc pre,
-.sample pre {
+:is(.doc, .sample) pre {
   padding-top: 3.25rem;
-}
 
-.doc pre::before,
-.sample pre::before {
-  content: "Code";
-  position: absolute;
-  inset: 0 0 auto;
-  height: 2.5rem;
-  padding: 0 1.25rem;
-  border-bottom: 1px solid var(--line);
-  color: var(--ash);
-  font: 500 0.8125rem/2.5rem var(--sans);
-}
+  &::before {
+    content: "Code";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 2.5rem;
+    padding: 0 1.25rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--ash);
+    font: 500 0.8125rem/2.5rem var(--sans);
+  }
 
-:is(.doc, .sample) pre:has(> .language-rust)::before { content: "Rust"; }
-:is(.doc, .sample) pre:has(> .language-html)::before { content: "Template"; }
-:is(.doc, .sample) pre:has(> .language-wisp)::before { content: "Wisp"; }
-:is(.doc, .sample) pre:has(> :is(.language-bash, .language-sh, .language-shell, .language-console))::before { content: "Terminal"; }
-:is(.doc, .sample) pre:has(> :is(.language-js, .language-javascript))::before { content: "JavaScript"; }
-:is(.doc, .sample) pre:has(> :is(.language-ts, .language-typescript))::before { content: "TypeScript"; }
-:is(.doc, .sample) pre:has(> .language-toml)::before { content: "TOML"; }
-:is(.doc, .sample) pre:has(> .language-json)::before { content: "JSON"; }
-:is(.doc, .sample) pre:has(> .language-css)::before { content: "CSS"; }
-:is(.doc, .sample) pre:has(> :is(.language-yaml, .language-yml))::before { content: "YAML"; }
-:is(.doc, .sample) pre:has(> .language-sql)::before { content: "SQL"; }
-:is(.doc, .sample) pre:has(> .language-text)::before { content: "Text"; }
+  &:has(> .language-rust)::before { content: "Rust"; }
+  &:has(> .language-html)::before { content: "Template"; }
+  &:has(> .language-wisp)::before { content: "Wisp"; }
+  &:has(> :is(.language-bash, .language-sh, .language-shell, .language-console))::before { content: "Terminal"; }
+  &:has(> :is(.language-js, .language-javascript))::before { content: "JavaScript"; }
+  &:has(> :is(.language-ts, .language-typescript))::before { content: "TypeScript"; }
+  &:has(> .language-toml)::before { content: "TOML"; }
+  &:has(> .language-json)::before { content: "JSON"; }
+  &:has(> .language-css)::before { content: "CSS"; }
+  &:has(> :is(.language-yaml, .language-yml))::before { content: "YAML"; }
+  &:has(> .language-sql)::before { content: "SQL"; }
+  &:has(> .language-text)::before { content: "Text"; }
+}
 
 .copy-code {
   position: absolute;
@@ -70,15 +66,15 @@ pre code {
   right: 0.5rem;
   padding: 0.125rem 0.625rem;
   border: 1px solid var(--line);
-  border-radius: 999px;
+  border-radius: var(--pill);
   background: var(--panel);
   color: var(--slate);
   font: 500 0.75rem/1.6 var(--sans);
   cursor: pointer;
   opacity: 0;
   transition:
-    opacity 150ms var(--ease),
-    border-color 150ms var(--ease);
+    opacity var(--t),
+    border-color var(--t);
 }
 
 pre:hover .copy-code,
@@ -113,7 +109,7 @@ pre:focus-within .copy-code,
   width: 100%;
   margin-bottom: 1.5rem;
   border-collapse: collapse;
-  font-size: 0.9375rem;
+  font-size: var(--fs-sm);
 }
 
 .table-wrap {
@@ -176,7 +172,7 @@ pre:focus-within .copy-code,
   display: block;
   width: calc(var(--v) * 100%);
   height: 0.5rem;
-  border-radius: 999px;
+  border-radius: var(--pill);
   background: var(--line-strong);
 }
 
@@ -207,12 +203,6 @@ td:last-child {
   padding-right: 0;
 }
 
-kbd {
-  padding: 0.0625em 0.375em;
-  border: 1px solid var(--line-strong);
-  border-radius: 0.3125rem;
-}
-
 /* Is This Page Useful, prev and next, edit. */
 .useful {
   display: flex;
@@ -225,14 +215,14 @@ kbd {
 }
 
 .useful p {
-  margin: 0 0.5rem 0 0 !important;
+  margin: 0 0.5rem 0 0;
   font-weight: 600;
 }
 
 .useful .btn {
   min-height: 2.25rem;
   padding-inline: 1.125rem;
-  font-size: 0.9375rem;
+  font-size: var(--fs-sm);
 }
 
 .useful .thanks {
@@ -251,12 +241,10 @@ kbd {
   display: grid;
   gap: 0.125rem;
   padding: 1rem 1.25rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
   color: var(--ink);
   font-weight: 700;
   text-decoration: none;
-  transition: border-color 150ms var(--ease), background-color 150ms var(--ease);
+  transition: border-color var(--t), background-color var(--t);
 }
 
 .pager a:hover {
@@ -282,22 +270,20 @@ kbd {
   justify-content: end;
 }
 
-.pager small::before,
+/* An arrow points at the page it leads to: left for prev, right for next. */
+.pager .prev small::before,
 .pager .next small::after {
-  content: "";
   width: 1em;
   height: 1em;
-  background: currentColor;
-  mask: var(--i-left) center / contain no-repeat;
   transition: translate 200ms var(--ease);
 }
 
-.pager .next small::before {
-  display: none;
+.pager .prev small::before {
+  --ico: var(--i-left);
 }
 
 .pager .next small::after {
-  mask-image: var(--i-right);
+  --ico: var(--i-right);
 }
 
 .pager .prev:hover small::before {
@@ -319,8 +305,8 @@ kbd {
 }
 
 .edit {
-  margin: 2rem 0 0 !important;
-  font-size: 0.9375rem;
+  margin: 2rem 0 0;
+  font-size: var(--fs-sm);
 }
 
 .toc {

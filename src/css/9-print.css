@@ -1,0 +1,93 @@
+/* ---- Print and forced colors ------------------------------------------- */
+
+@media print {
+  :root {
+    color-scheme: light;
+  }
+
+  body {
+    display: block;
+    background: #fff;
+    color: #000;
+  }
+
+  .top,
+  .side,
+  .toc,
+  .post-toc,
+  .foot,
+  .copy-code,
+  .useful,
+  .pager,
+  .skip,
+  .nojs,
+  .doc .anchor {
+    display: none;
+  }
+
+  .docs,
+  .post-wrap {
+    display: block;
+  }
+
+  .doc,
+  .page {
+    width: 100%;
+    padding: 0;
+    animation: none;
+  }
+
+  .doc a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    color: #000;
+    font-size: 0.8em;
+    overflow-wrap: anywhere;
+  }
+
+  pre {
+    break-inside: avoid;
+    white-space: pre-wrap;
+    overflow: visible;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    break-after: avoid;
+  }
+}
+
+@media (forced-colors: active) {
+  /* Mask icons paint with a color, which forced colors would reset to the page. */
+  :root {
+    --mask-ink: CanvasText;
+  }
+
+  .top:has(~ main .docs)::after {
+    forced-color-adjust: none;
+    background: Highlight;
+  }
+
+  .ghost .shape {
+    fill: CanvasText;
+  }
+
+  .ghost .eye,
+  .ghost .mouth {
+    fill: Canvas;
+  }
+
+  .btn {
+    border: 1px solid ButtonText;
+  }
+
+  .tally .meter span {
+    forced-color-adjust: none;
+    background: CanvasText;
+  }
+
+  .tally .us .meter span {
+    background: Highlight;
+  }
+}
