@@ -1485,3 +1485,316 @@ pre code {
   justify-content: space-between;
   gap: 0.75rem 2rem;
 }
+
+/* ---- Layout pass: one grid, one spacing scale, one type scale ------------ */
+
+:root {
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-6: 1.5rem;
+  --s-8: 2rem;
+  --s-12: 3rem;
+  --s-16: 4rem;
+  --s-24: 6rem;
+
+  --t-sm: 0.875rem;
+  --t-base: 1rem;
+  --t-lg: 1.125rem;
+  --t-h3: 1.1875rem;
+  --t-h2: 1.5rem;
+  --t-h1: clamp(1.875rem, 1.4rem + 2vw, 2.5rem);
+
+  --page: 72rem;
+  --prose: 68ch;
+}
+
+/* The header, launch sections and footer share one set of edges. */
+.wrap,
+.bar,
+.docs {
+  width: min(100%, 80rem);
+  padding-inline: var(--gutter);
+}
+
+.wrap {
+  width: min(100%, var(--page));
+}
+
+.claim,
+.claim.wide,
+.cheap .claim.wide {
+  max-width: var(--prose);
+}
+
+.claim h2,
+.final h2 {
+  margin: 0 0 var(--s-4);
+}
+
+/* Launch page rhythm */
+.hero {
+  padding-block: var(--s-12) var(--s-6);
+}
+
+.showcase {
+  padding-block: var(--s-6) var(--s-12);
+}
+
+.band {
+  padding-block: var(--s-12);
+}
+
+.band + .band,
+.band + .strip {
+  padding-top: 0;
+}
+
+.cheap .pair {
+  margin-block: var(--s-8);
+}
+
+.pair {
+  gap: var(--s-6);
+}
+
+.final {
+  padding-block: var(--s-12) var(--s-16);
+  text-align: left;
+}
+
+.final .wrap > * + * {
+  margin-top: var(--s-4);
+}
+
+.final pre {
+  display: block;
+  width: 100%;
+  max-width: 46rem;
+  min-width: 0;
+  margin: 0;
+}
+
+.final .cta {
+  justify-content: flex-start;
+  margin-top: var(--s-4);
+}
+
+.cta,
+.install {
+  gap: var(--s-3);
+}
+
+.install {
+  justify-content: flex-start;
+}
+
+.hero {
+  text-align: center;
+}
+
+.hero .install,
+.hero .cta {
+  justify-content: center;
+}
+
+.btn,
+.copy {
+  height: 2.5rem;
+  padding-inline: var(--s-4);
+  font-size: var(--t-base);
+  font-weight: 600;
+}
+
+/* Tables: the full column, quiet header, hairline rows */
+.doc table,
+.cheap table,
+.claim table {
+  display: table;
+  width: 100%;
+  max-width: none;
+  margin: var(--s-6) 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  font-size: var(--t-sm);
+  line-height: 1.5;
+}
+
+.doc th,
+.doc td,
+.cheap th,
+.cheap td {
+  padding: var(--s-3) var(--s-4);
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.doc th,
+.cheap th {
+  background: transparent;
+  color: var(--ash);
+  font-weight: 600;
+  white-space: nowrap;
+  border-bottom-color: var(--line-strong);
+}
+
+.doc td:first-child,
+.cheap td:first-child {
+  width: 34%;
+  font-weight: 500;
+}
+
+.doc tbody tr:last-child td,
+.cheap tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.doc td[align="right"],
+.doc th[align="right"],
+.cheap td[align="right"],
+.cheap th[align="right"] {
+  width: 1%;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 40rem) {
+  .doc table,
+  .cheap table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .doc td:first-child,
+  .cheap td:first-child {
+    width: auto;
+  }
+}
+
+/* Prose */
+.doc {
+  padding-block: var(--s-8) var(--s-12);
+}
+
+.doc > * + * {
+  margin-top: var(--s-4);
+}
+
+.doc > h2 {
+  margin-top: var(--s-12);
+  margin-bottom: 0;
+  padding-top: var(--s-8);
+}
+
+.doc > h3 {
+  margin-top: var(--s-8);
+  margin-bottom: 0;
+}
+
+.doc > h4 {
+  margin-top: var(--s-6);
+  margin-bottom: 0;
+}
+
+.doc > h2 + *,
+.doc > h3 + *,
+.doc > h4 + * {
+  margin-top: var(--s-3);
+}
+
+.doc > .doc-title + * {
+  margin-top: var(--s-4);
+}
+
+.doc > .doc-title + h2 {
+  margin-top: var(--s-8);
+  border-top: 0;
+  padding-top: 0;
+}
+
+.doc .pager {
+  max-width: none;
+  margin-top: var(--s-12);
+}
+
+.doc .edit {
+  margin-top: var(--s-6);
+}
+
+.doc p,
+.doc li {
+  line-height: 1.7;
+}
+
+.doc li + li {
+  margin-top: var(--s-1);
+}
+
+.doc :not(pre) > code {
+  padding: 0.0625em 0.375em;
+  line-height: 1;
+  font-size: 0.875em;
+  vertical-align: baseline;
+}
+
+.doc pre {
+  margin-block: var(--s-4);
+}
+
+.doc a:not(.anchor) {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+.doc .pager a {
+  text-decoration: none;
+}
+
+@media (min-width: 60rem) {
+  .docs {
+    column-gap: var(--s-12);
+  }
+}
+
+@media (max-width: 52rem) {
+  .band {
+    padding-block: var(--s-8);
+  }
+
+  .final {
+    padding-block: var(--s-8) var(--s-12);
+  }
+}
+
+/* Tables with many columns scroll inside the column instead of spilling out of it. */
+.doc table:has(th:nth-child(4)),
+.cheap table:has(th:nth-child(4)) {
+  display: block;
+  overflow-x: auto;
+}
+
+.doc table:has(th:nth-child(4)) td:first-child,
+.cheap table:has(th:nth-child(4)) td:first-child {
+  width: auto;
+  white-space: nowrap;
+}
+
+.doc table:has(th:nth-child(4)) td,
+.doc table:has(th:nth-child(4)) th {
+  padding-inline: var(--s-3);
+  white-space: nowrap;
+}
+
+.doc table:has(th:nth-child(4)) td:last-child {
+  white-space: normal;
+}
+
+.doc table:not(:has(th:nth-child(4))) td:first-child {
+  width: 34%;
+}
