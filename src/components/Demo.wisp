@@ -72,17 +72,6 @@
     font: 0.8125rem/1.4 var(--mono);
   }
 
-  .chrome .url::before {
-    content: "";
-    display: inline-block;
-    width: 0.4375rem;
-    height: 0.4375rem;
-    margin-right: 0.5rem;
-    border-radius: 50%;
-    background: var(--good);
-    vertical-align: 0.0625em;
-  }
-
   .result {
     background: var(--panel);
   }

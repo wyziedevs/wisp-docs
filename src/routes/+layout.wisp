@@ -202,6 +202,7 @@ let ld = match me {
   import { finder } from '$lib/search.js'
   import { haptics } from '$lib/haptic.js'
   import { motion } from '$lib/motion.js'
+  import { demo } from '$lib/demo.js'
 
   let box, bar, q, mod, dlg, fq, status, hits, tip
   let spirit = null
@@ -213,6 +214,7 @@ let ld = match me {
   onMount(() => {
     blocks()
     haptics()
+    demo()
     ;(window.requestIdleCallback || setTimeout)(() => move.scan())
     if (/Mac|iPhone|iPad/.test(navigator.platform)) mod.textContent = '⌘'
     spirit = ghost(box)
@@ -221,6 +223,7 @@ let ld = match me {
   })
   afterNavigate(({ from, to }) => {
     blocks()
+    demo()
     find?.close()
     move.scan()
     document.querySelector('.mnav')?.removeAttribute('open')

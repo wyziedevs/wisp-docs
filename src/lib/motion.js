@@ -126,8 +126,9 @@ export function motion() {
     const em = document.querySelector('.hero em')
     if (!em || !fine.matches) return
     const pen = em.querySelector('path')
+    // The Web Animations API, not a tween: it leaves no inline offset behind to hide the line.
     const again = () =>
-      gsap.fromTo(pen, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.75, ease: 'power2.inOut', overwrite: true })
+      pen.animate({ strokeDashoffset: [1, 0] }, { duration: 750, easing: 'cubic-bezier(0.45, 0, 0.55, 1)' })
     em.addEventListener('pointerenter', again)
     undo.push(() => em.removeEventListener('pointerenter', again))
   }

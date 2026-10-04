@@ -82,7 +82,9 @@
   gap: 0.25rem;
   padding: 0 0.75rem;
   border-bottom: 1px solid var(--line);
+  position: relative; /* holds the hidden radios, so focusing one never scrolls the row */
   overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .tabs :is(label, .tab) {
