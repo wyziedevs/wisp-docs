@@ -171,6 +171,18 @@ pre:focus-within .copy-code,
   text-align: right;
 }
 
+.tally .stack {
+  color: var(--slate);
+  white-space: nowrap;
+}
+
+/* On a phone the bars give way to the numbers. */
+@media (max-width: 30rem) {
+  .bench :is(.meter, thead th:nth-child(3)) {
+    display: none;
+  }
+}
+
 .tally .meter {
   width: 100%;
 }

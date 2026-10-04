@@ -72,24 +72,24 @@ TechEmpower's plaintext and JSON tests, run with their own load scripts against 
 <div class="benches">
 <div class="bench"><table class="tally">
 <caption>Plaintext, 256 connections, pipelined</caption>
-<thead><tr><th scope="col">Framework</th><th scope="col"><span class="sr">Relative speed</span></th><th scope="col" class="num">Req/s</th></tr></thead>
+<thead><tr><th scope="col">Framework</th><th scope="col">Built On</th><th scope="col"><span class="sr">Relative speed</span></th><th scope="col" class="num">Req/s</th></tr></thead>
 <tbody>
-<tr class="us"><th scope="row">Wisp</th><td class="meter" aria-hidden="true"><span style="--v: 1.000"></span></td><td class="num">1,129,577</td></tr>
-<tr><th scope="row">Fastify (Node.js)</th><td class="meter" aria-hidden="true"><span style="--v: 0.046"></span></td><td class="num">51,713</td></tr>
-<tr><th scope="row">Express (Node.js)</th><td class="meter" aria-hidden="true"><span style="--v: 0.036"></span></td><td class="num">40,421</td></tr>
-<tr><th scope="row">SvelteKit (Svelte)</th><td class="meter" aria-hidden="true"><span style="--v: 0.010"></span></td><td class="num">10,929</td></tr>
-<tr><th scope="row">Next.js (React)</th><td class="meter" aria-hidden="true"></td><td class="num">Out of memory</td></tr>
+<tr class="us"><th scope="row">Wisp</th><td class="stack">Rust</td><td class="meter" aria-hidden="true"><span style="--v: 1.000"></span></td><td class="num">1,129,577</td></tr>
+<tr><th scope="row">Fastify</th><td class="stack">Node.js</td><td class="meter" aria-hidden="true"><span style="--v: 0.046"></span></td><td class="num">51,713</td></tr>
+<tr><th scope="row">Express</th><td class="stack">Node.js</td><td class="meter" aria-hidden="true"><span style="--v: 0.036"></span></td><td class="num">40,421</td></tr>
+<tr><th scope="row">SvelteKit</th><td class="stack">Svelte</td><td class="meter" aria-hidden="true"><span style="--v: 0.010"></span></td><td class="num">10,929</td></tr>
+<tr><th scope="row">Next.js</th><td class="stack">React</td><td class="meter" aria-hidden="true"></td><td class="num">Out of memory</td></tr>
 </tbody>
 </table></div>
 <div class="bench"><table class="tally">
 <caption>JSON, 64 connections</caption>
-<thead><tr><th scope="col">Framework</th><th scope="col"><span class="sr">Relative speed</span></th><th scope="col" class="num">Req/s</th></tr></thead>
+<thead><tr><th scope="col">Framework</th><th scope="col">Built On</th><th scope="col"><span class="sr">Relative speed</span></th><th scope="col" class="num">Req/s</th></tr></thead>
 <tbody>
-<tr class="us"><th scope="row">Wisp</th><td class="meter" aria-hidden="true"><span style="--v: 1.000"></span></td><td class="num">96,089</td></tr>
-<tr><th scope="row">Fastify (Node.js)</th><td class="meter" aria-hidden="true"><span style="--v: 0.229"></span></td><td class="num">21,965</td></tr>
-<tr><th scope="row">Express (Node.js)</th><td class="meter" aria-hidden="true"><span style="--v: 0.153"></span></td><td class="num">14,746</td></tr>
-<tr><th scope="row">SvelteKit (Svelte)</th><td class="meter" aria-hidden="true"><span style="--v: 0.108"></span></td><td class="num">10,378</td></tr>
-<tr><th scope="row">Next.js (React)</th><td class="meter" aria-hidden="true"><span style="--v: 0.016"></span></td><td class="num">1,524</td></tr>
+<tr class="us"><th scope="row">Wisp</th><td class="stack">Rust</td><td class="meter" aria-hidden="true"><span style="--v: 1.000"></span></td><td class="num">96,089</td></tr>
+<tr><th scope="row">Fastify</th><td class="stack">Node.js</td><td class="meter" aria-hidden="true"><span style="--v: 0.229"></span></td><td class="num">21,965</td></tr>
+<tr><th scope="row">Express</th><td class="stack">Node.js</td><td class="meter" aria-hidden="true"><span style="--v: 0.153"></span></td><td class="num">14,746</td></tr>
+<tr><th scope="row">SvelteKit</th><td class="stack">Svelte</td><td class="meter" aria-hidden="true"><span style="--v: 0.108"></span></td><td class="num">10,378</td></tr>
+<tr><th scope="row">Next.js</th><td class="stack">React</td><td class="meter" aria-hidden="true"><span style="--v: 0.016"></span></td><td class="num">1,524</td></tr>
 </tbody>
 </table></div>
 </div>
