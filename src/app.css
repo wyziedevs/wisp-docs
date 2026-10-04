@@ -2161,8 +2161,24 @@ pre code {
     padding-right: 0.75rem;
   }
 
+  /* While searching, the results take the sidebar's whole height. */
+  .side:has(.results:not([hidden])) .find {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .side:has(.results:not([hidden])) .menu {
+    display: none;
+  }
+
   .side .results {
-    max-height: 50vh;
+    margin-top: var(--s-3);
+    flex: 1;
+    min-height: 0;
+    max-height: none;
     overflow-y: auto;
+    scrollbar-gutter: stable;
   }
 }
