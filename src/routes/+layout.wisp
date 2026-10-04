@@ -192,6 +192,7 @@ let ld = match me {
   import { blocks, flip as swap } from '$lib/page.js'
   import { ghost } from '$lib/ghost.js'
   import { finder } from '$lib/search.js'
+  import { haptics } from '$lib/haptic.js'
 
   let box, bar, q, mod, dlg, fq, status, hits, tip
   let spirit = null
@@ -201,6 +202,7 @@ let ld = match me {
 
   onMount(() => {
     blocks()
+    haptics()
     if (/Mac|iPhone|iPad/.test(navigator.platform)) mod.textContent = '⌘'
     spirit = ghost(box)
     find = finder({ bar, q, dlg, fq, status, hits, tip })

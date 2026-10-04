@@ -29,7 +29,7 @@ export function ghost(el) {
 
   function play(name) {
     if (calm.matches) return
-    el.classList.remove('hop', 'boo')
+    el.classList.remove('hop', 'boo', 'happy', 'spin')
     void el.offsetWidth
     el.classList.add(name)
   }
@@ -47,8 +47,33 @@ export function ghost(el) {
     addEventListener('resize', () => (box = null))
   }
   el.addEventListener('animationend', (e) => {
-    if (e.animationName === 'hop' || e.animationName === 'boo') el.classList.remove('hop', 'boo')
+    if (['hop', 'boo', 'happy', 'spin'].includes(e.animationName)) el.classList.remove('hop', 'boo', 'happy', 'spin')
   })
+  // A click makes the ghost (or the big logo on the home page) hop happily.
+  document.addEventListener('click', (e) => {
+    const logo = e.target.closest?.('.hero .logo')
+    if (logo && !calm.matches) {
+      logo.classList.remove('happy')
+      void logo.offsetWidth
+      logo.classList.add('happy')
+    }
+  })
+  document.addEventListener('animationend', (e) => e.target.classList?.remove('happy'))
+  el.addEventListener('click', () => play('happy'))
+
+  // Up up down down left right left right b a: the ghost spins once.
+  const code = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a']
+  let at = 0
+  function konami(e) {
+    if (typing(e.target)) return
+    at = e.key === code[at] ? at + 1 : e.key === code[0] ? 1 : 0
+    if (at === code.length) {
+      at = 0
+      play('spin')
+      console.log('%cKonami code! The ghost does a spin.', 'color:#a17ff5;font-weight:600')
+    }
+  }
   addEventListener('keydown', boo)
+  addEventListener('keydown', konami)
   return { play }
 }

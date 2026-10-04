@@ -46,9 +46,21 @@ export function spy(toc) {
   let lockTimer = 0
   let bottom = false
 
+  // The marker bar slides to the current link (CSS moves it; see 8a-delight.css).
+  function place() {
+    const a = links.get(current)
+    if (!a || !a.offsetHeight) return
+    toc.style.setProperty('--y', a.offsetTop + 'px')
+    toc.style.setProperty('--h', a.offsetHeight)
+    if (!toc.hasAttribute('data-live')) requestAnimationFrame(() => toc.setAttribute('data-live', ''))
+  }
+  const size = new ResizeObserver(place)
+  size.observe(toc)
+
   function mark(id) {
     if (!id || id === current || !links.has(id)) return
     current = id
+    place()
     for (const [k, a] of links) {
       if (k === id) {
         a.setAttribute('aria-current', 'true')
@@ -130,6 +142,7 @@ export function spy(toc) {
   const off = () => {
     band.disconnect()
     foot.disconnect()
+    size.disconnect()
     end.remove()
     clearTimeout(lockTimer)
     toc.removeEventListener('click', click)
