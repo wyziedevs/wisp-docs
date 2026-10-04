@@ -363,21 +363,18 @@ pre {
 }
 
 /* Nav links: a hover wash, the current page in the accent. */
-.switch a:hover,
 .side li a:hover,
 :is(.toc, .post-toc) a:hover {
   background: var(--panel-2);
   color: var(--ink);
 }
 
-.switch a[aria-current],
 .side li a[aria-current],
 :is(.toc, .post-toc) a[aria-current] {
   color: var(--accent-ink);
   font-weight: 600;
 }
 
-.switch a[aria-current],
 .side li a[aria-current],
 :is(.toc, .post-toc) a[aria-current],
 .hits [aria-selected="true"] a,
