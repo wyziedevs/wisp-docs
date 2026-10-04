@@ -34,6 +34,7 @@
           <li><span>{t}</span><button class="remove" form="todo-remove" formaction={format!("/demo?/remove&i={i}")} aria-label={format!("Remove {t}")}>Remove</button></li>
         {/each}
       </ul>
+      <template id="todo-row"><li><span></span><button class="remove" type="button">Remove</button></li></template>
       <form id="todo-remove" method="post" action="/demo?/remove" hidden></form>
     </div>
   </div>
@@ -145,6 +146,11 @@
     transition:
       opacity 300ms var(--ease),
       translate 300ms var(--ease);
+  }
+
+  .view li[data-leaving] {
+    opacity: 0;
+    translate: 0 0.375rem;
   }
 
   @starting-style {
