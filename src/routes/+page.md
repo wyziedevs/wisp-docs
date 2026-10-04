@@ -18,11 +18,15 @@ description: A fast, fun web framework for Rust that costs an AI the fewest toke
 fn add(todo: Todo) {
     TODOS.add(todo);
 }
+#[action]
+fn remove(id: u64) {
+    TODOS.remove(id);
+}
 ---
 <title>Todos ({TODOS.len()})</title>
 <form action="?/add" fields><button>Add</button></form>
 {#each TODOS.all() as todo}
-  <p>{todo.text}</p>
+  <p>{todo.text} <button action="?/remove&id={todo.id}">Remove</button></p>
 {/each}
 ```
 

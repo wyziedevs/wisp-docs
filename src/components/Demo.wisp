@@ -24,7 +24,7 @@
   </div>
 
   <div class="result">
-    <div class="chrome"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="url">localhost:3000</span></div>
+    <div class="chrome"><span class="url">localhost:3000</span></div>
     <div class="view">
       <h3>Todos ({:todos.length})</h3>
       <form on:submit.prevent="add()" novalidate>
@@ -42,8 +42,8 @@
         <small id="todo-problem" class="problem" role="alert">{:error}</small>
       </form>
       <ul>
-        {:#each todos as t}
-          <li>{:t}</li>
+        {:#each todos as t, i}
+          <li><span>{:t}</span><button type="button" class="remove" on:click="remove(i)" :aria-label="'Remove ' + t">Remove</button></li>
         {:/each}
       </ul>
     </div>
@@ -65,6 +65,10 @@
     error = ''
     todos = [...todos, t]
     text = ''
+  }
+
+  function remove(i) {
+    todos = todos.filter((_, j) => j !== i)
   }
 
   function move(e) {
