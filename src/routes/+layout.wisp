@@ -1,7 +1,7 @@
 ---
 const SITE: &str = "https://wispweb.dev";
-// The docs groups that make up Reference; every other group is Learn.
-const REFERENCE: &[&str] = &["Reference", "Design"];
+const ORG: &str = r#"{"@type":"Organization","name":"Wyzie LLC","url":"https://wyzie.io"}"#;
+const SITE_LD: &str = r#"{"@context":"https://schema.org","@type":"WebSite","name":"Wisp","url":"~/","potentialAction":{"@type":"SearchAction","target":"~/search?q={search_term_string}","query-input":"required name=search_term_string"}}"#;
 
 let path = cx.path();
 let home = path == "/";
@@ -14,10 +14,9 @@ let title = me.map_or("Wisp", |p| p.title);
 let about = me
     .and_then(|p| p.get("description"))
     .unwrap_or("A fast, fun web framework for Rust");
-let reference = me.is_some_and(|p| {
-    p.path.starts_with("/docs") && REFERENCE.contains(&p.get("group").unwrap_or(""))
-});
-let learn = !reference && (path == "/docs" || path.starts_with("/docs/"));
+let reference = me.is_some_and(|p| path.starts_with("/docs") && site::is_reference(p));
+let docs = path == "/docs" || path.starts_with("/docs/");
+let learn = !reference && docs;
 let community = path == "/community";
 let blog = path == "/blog" || path.starts_with("/blog/");
 let links = [
@@ -26,27 +25,59 @@ let links = [
     ("/community", "Community", community),
     ("/blog", "Blog", blog),
 ];
+
+// The page's head: Open Graph, a canonical address and JSON-LD. An error page is not indexed.
+let url = format!("{SITE}{path}");
+// Layouts cannot see the status, so a path no page or route answers (a 404) is the error case.
+let indexed = me.is_some() || path == "/demo";
+let dated = me.and_then(|p| p.get("date"));
+let json = |s: &str| format!("\"{}\"", s.replace('\\', "\\\\").replace('"', "\\\"").replace('\n', " ").replace('<', "\\u003c"));
+let ld = match me {
+    _ if !indexed => String::new(),
+    _ if home => SITE_LD.replace('~', SITE),
+    Some(p) if blog && dated.is_some() => format!(
+        "{{\"@context\":\"https://schema.org\",\"@type\":\"BlogPosting\",\"headline\":{},\"description\":{},\"url\":{},\"image\":\"{SITE}/og.png\",\"inLanguage\":\"en\",\"datePublished\":{},\"author\":{},\"publisher\":{ORG}}}",
+        json(p.title),
+        json(about),
+        json(&url),
+        json(dated.unwrap_or("")),
+        p.get("author").map_or(ORG.to_string(), |a| format!("{{\"@type\":\"Person\",\"name\":{}}}", json(a))),
+    ),
+    Some(p) if docs => format!(
+        "{{\"@context\":\"https://schema.org\",\"@type\":\"TechArticle\",\"headline\":{},\"description\":{},\"url\":{},\"image\":\"{SITE}/og.png\",\"inLanguage\":\"en\",\"author\":{ORG},\"publisher\":{ORG}}}",
+        json(p.title),
+        json(about),
+        json(&url),
+    ),
+    _ => String::new(),
+};
 ---
 <head>
   <title>{if title.starts_with("Wisp") { title.to_string() } else { format!("Wisp: {title}") }}</title>
   <meta name="description" content={about}>
   <meta name="author" content="Wyzie LLC">
   {@html wisp::og(title, about, &format!("{SITE}/og.png"))}
-  <link rel="canonical" href={format!("{SITE}{}", path)}>
+  <meta property="og:type" content={if blog && dated.is_some() { "article" } else { "website" }}>
+  <meta property="og:site_name" content="Wisp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Wisp, a fast, fun web framework for Rust">
+  {#if indexed}
+    <link rel="canonical" href={url.clone()}>
+    <meta property="og:url" content={url.clone()}>
+  {:else}
+    <meta name="robots" content="noindex">
+  {/if}
   <link rel="alternate" type="application/rss+xml" title="Wisp Blog" href="/rss.xml">
-  <meta name="twitter:card" content="summary_large_image">
+  {#if !ld.is_empty()}
+    {@html format!("<script type=\"application/ld+json\">{ld}</script>")}
+  {/if}
 </head>
 <a class="skip" href="#main">Skip to Content</a>
-<header class="top">
+<header class="top" class:docs={docs}>
   <div class="bar">
     <a class="brand" href="/" aria-label="Wisp home">
-      <span
-        class="ghost"
-        aria-hidden="true"
-        bind:this="ghost"
-        on:pointermove.window="look"
-        style:--look-x="x"
-        style:--look-y="y">
+      <span class="ghost" aria-hidden="true" bind:this="box">
         <svg viewBox="0 0 32 32">
           <path
             class="shape"
@@ -61,16 +92,14 @@ let links = [
 
     <form class="search" action="/search" role="search" bind:this="bar">
       <label class="sr" for="q">Search</label>
-      <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <SearchIcon />
       <input id="q" name="q" type="search" placeholder="Search" autocomplete="off" spellcheck="false" bind:this="q">
       <kbd class="key" aria-hidden="true"><span bind:this="mod">Ctrl</span> K</kbd>
     </form>
 
     <div class="end">
     <nav class="links" aria-label="Site">
-      {#each links as (href, name, on)}
-        <a href={href} aria-current={on.then_some("page")}>{name}</a>
-      {/each}
+      <NavLinks links={links} />
     </nav>
 
     <button class="icon theme" type="button" on:click="flip()" aria-label="Switch Light or Dark Theme">
@@ -84,9 +113,7 @@ let links = [
     <details class="mnav">
       <summary aria-label="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></summary>
       <nav aria-label="Site menu">
-        {#each links as (href, name, on)}
-          <a href={href} aria-current={on.then_some("page")}>{name}</a>
-        {/each}
+        <NavLinks links={links} />
         <a href="https://github.com/wyziedevs/wisp">GitHub</a>
       </nav>
     </details>
@@ -99,7 +126,7 @@ let links = [
 
 <dialog class="finder" aria-label="Search the Docs" bind:this="dlg">
   <div class="find-bar">
-    <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <SearchIcon />
     <input
       type="search"
       placeholder="Search the Docs"
@@ -111,7 +138,7 @@ let links = [
       aria-controls="find-hits"
       aria-autocomplete="list"
       bind:this="fq">
-    <button class="esc" type="button" on:click="close()">Esc</button>
+    <button class="esc" type="button" on:click="find?.close()">Esc</button>
   </div>
   <p class="sr" role="status" aria-live="polite" bind:this="status"></p>
   <ul id="find-hits" class="hits" role="listbox" aria-label="Search results" bind:this="hits"></ul>
@@ -161,349 +188,28 @@ let links = [
 
 <script>
   import { afterNavigate } from 'wisp'
+  import { path } from '$lib/toc.js'
+  import { blocks, flip as swap } from '$lib/page.js'
+  import { ghost } from '$lib/ghost.js'
+  import { finder } from '$lib/search.js'
 
-  // Every code block can be focused and copied.
-  function focusable() {
-    for (const p of document.querySelectorAll('pre')) {
-      p.tabIndex = 0
-      if (p.querySelector('.copy-code')) continue
-      const b = document.createElement('button')
-      b.type = 'button'
-      b.className = 'copy-code'
-      b.textContent = 'Copy'
-      b.setAttribute('aria-label', 'Copy code')
-      b.addEventListener('click', async () => {
-        try {
-          await navigator.clipboard.writeText(p.querySelector('code').innerText)
-          b.textContent = 'Copied'
-          b.classList.add('done')
-        } catch (e) {
-          b.textContent = 'Press Ctrl+C'
-        }
-        setTimeout(() => {
-          b.textContent = 'Copy'
-          b.classList.remove('done')
-        }, 1500)
-      })
-      p.append(b)
-    }
-  }
+  let box, bar, q, mod, dlg, fq, status, hits, tip
+  let spirit = null
+  let find = null
 
-  // Theme: the head script already applied a saved choice; this flips it.
-  function flip() {
-    const root = document.documentElement
-    const now = root.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-    const next = now === 'dark' ? 'light' : 'dark'
-    root.dataset.theme = next
-    try {
-      localStorage.setItem('theme', next)
-    } catch (e) {}
-  }
-
-  let ghost
-  let x = 0, y = 0, frame = 0, last = null
-  const calm = matchMedia('(prefers-reduced-motion: reduce)')
-
-  // The ghost's eyes and body lean toward the pointer, one update a frame.
-  function look(e) {
-    if (calm.matches) return
-    last = e
-    if (!frame) frame = requestAnimationFrame(aim)
-  }
-
-  function aim() {
-    frame = 0
-    const box = ghost.getBoundingClientRect()
-    const dx = last.clientX - (box.left + box.width / 2)
-    const dy = last.clientY - (box.top + box.height * 0.4)
-    const d = Math.hypot(dx, dy) || 1
-    const k = Math.min(1, d / 240) / d
-    x = (dx * k).toFixed(3)
-    y = (dy * k).toFixed(3)
-  }
-
-  // The ghost hops when a new page arrives, and says boo when you type it.
-  function play(name) {
-    if (calm.matches || !ghost) return
-    ghost.classList.remove('hop', 'boo')
-    void ghost.offsetWidth
-    ghost.classList.add(name)
-  }
-
-  const typing = (t) => /^(input|textarea|select)$/i.test(t.tagName) || t.isContentEditable
-
-  let typedKeys = ''
-  function boo(e) {
-    if (typing(e.target)) return
-    typedKeys = (typedKeys + e.key.toLowerCase()).slice(-3)
-    if (typedKeys === 'boo') play('boo')
-  }
-
-  // Search: the header field opens a dialog over the docs index. Without
-  // JavaScript the field is a plain form that posts to /search.
-  let bar, q, mod, dlg, fq, status, hits, tip
-  let index = null
-  let loading = null
-  let found = []
-  let sel = -1
-
-  function load() {
-    loading ??= fetch('/search-index.json')
-      .then((r) => r.json())
-      .then((pages) => {
-        index = []
-        for (const [path, title, , desc, secs] of pages) {
-          for (const [id, heading, text] of secs) index.push({ path, title, id, heading, text })
-          index.push({ path, title, id: '', heading: '', text: desc })
-        }
-      })
-      .catch(() => (loading = null))
-    return loading
-  }
-
-  function words(s) {
-    return s.toLowerCase().match(/[\p{L}\p{N}_]+/gu) ?? []
-  }
-
-  // Edit distance of a to b, or more than max.
-  function near(a, b, max) {
-    if (Math.abs(a.length - b.length) > max) return max + 1
-    let prev = Array.from({ length: b.length + 1 }, (_, i) => i)
-    for (let i = 1; i <= a.length; i++) {
-      const cur = [i]
-      let low = i
-      for (let j = 1; j <= b.length; j++) {
-        cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1))
-        if (cur[j] < low) low = cur[j]
-      }
-      if (low > max) return max + 1
-      prev = cur
-    }
-    return prev[b.length]
-  }
-
-  // How well a query word matches a word: exact, prefix, inside, a typo, a subsequence.
-  function word(qw, w) {
-    if (w === qw) return 100
-    if (w.startsWith(qw)) return 80
-    if (qw.length > 2 && w.includes(qw)) return 55
-    if (qw.length > 3) {
-      const k = qw.length > 6 ? 2 : 1
-      const d = near(qw, w, k)
-      if (d <= k) return 45 - 5 * d
-      if (w.length > qw.length && near(qw, w.slice(0, qw.length), k) <= k) return 35
-    }
-    if (qw.length > 2) {
-      let i = 0
-      for (const c of w) if (c === qw[i]) i++
-      if (i === qw.length) return 15
-    }
-    return 0
-  }
-
-  function field(text, qw, weight) {
-    let best = 0
-    for (const w of words(text)) {
-      const s = word(qw, w)
-      if (s > best) best = s
-    }
-    return best * weight
-  }
-
-  function score(e, qs) {
-    let total = 0
-    for (const qw of qs) {
-      const best = Math.max(field(e.title, qw, 5), field(e.heading, qw, 3), e.heading === '' ? 0 : field(e.text, qw, 1))
-      if (!best) return 0
-      total += best
-    }
-    return total + (e.id === '' ? 8 : 0)
-  }
-
-  function search(query) {
-    const qs = words(query)
-    if (!qs.length) return []
-    const scored = []
-    for (const e of index) {
-      const s = score(e, qs)
-      if (s) scored.push([s, e])
-    }
-    scored.sort((a, b) => b[0] - a[0])
-    const seen = new Set()
-    const out = []
-    for (const [, e] of scored) {
-      const key = e.path + '#' + e.id
-      if (seen.has(key)) continue
-      seen.add(key)
-      out.push({ e, qs })
-      if (out.length === 10) break
-    }
-    // grouped by page, in the order of each page's best hit
-    const order = [...new Set(out.map((h) => h.e.path))]
-    return order.flatMap((p) => out.filter((h) => h.e.path === p))
-  }
-
-  function snippet(text, qs) {
-    const low = text.toLowerCase()
-    let at = -1
-    for (const qw of qs) {
-      const i = low.indexOf(qw)
-      if (i >= 0 && (at < 0 || i < at)) at = i
-    }
-    const start = Math.max(0, at - 30)
-    return (start > 0 ? '...' : '') + text.slice(start, start + 110) + (start + 110 < text.length ? '...' : '')
-  }
-
-  function mark(el, text, qs) {
-    const esc = qs.map((s) => s.replace(/[.*+?^$()|[\]\\]/g, '\\$&'))
-    const re = new RegExp('(' + esc.join('|') + ')', 'gi')
-    text.split(re).forEach((piece, i) => {
-      if (i % 2) {
-        const b = document.createElement('b')
-        b.textContent = piece
-        el.append(b)
-      } else el.append(piece)
-    })
-  }
-
-  function render(query) {
-    hits.replaceChildren()
-    sel = -1
-    fq.removeAttribute('aria-activedescendant')
-    const active = query.trim() !== ''
-    tip.hidden = active
-    fq.setAttribute('aria-expanded', String(active && found.length > 0))
-    if (!active) {
-      status.textContent = ''
-      return
-    }
-    if (!found.length) {
-      const li = document.createElement('li')
-      li.className = 'none'
-      li.setAttribute('role', 'presentation')
-      li.textContent = 'No Results'
-      hits.append(li)
-      status.textContent = 'No Results'
-      return
-    }
-    let page = null
-    found.forEach(({ e, qs }, i) => {
-      if (e.path !== page) {
-        page = e.path
-        const g = document.createElement('li')
-        g.className = 'page'
-        g.setAttribute('role', 'presentation')
-        g.textContent = e.title
-        hits.append(g)
-      }
-      const li = document.createElement('li')
-      li.id = 'hit-' + i
-      li.setAttribute('role', 'option')
-      li.setAttribute('aria-selected', 'false')
-      const a = document.createElement('a')
-      a.href = e.path + (e.id ? '#' + e.id : '')
-      a.tabIndex = -1
-      const h = document.createElement('span')
-      h.className = 'h'
-      mark(h, e.heading || e.title, qs)
-      const t = document.createElement('span')
-      t.className = 't'
-      mark(t, snippet(e.text, qs), qs)
-      a.append(h, t)
-      li.append(a)
-      hits.append(li)
-    })
-    status.textContent = found.length + (found.length === 1 ? ' result' : ' results')
-    choose(0)
-  }
-
-  function choose(i) {
-    const items = hits.querySelectorAll('[role=option]')
-    if (!items.length) return
-    sel = (i + items.length) % items.length
-    items.forEach((li, j) => li.setAttribute('aria-selected', String(j === sel)))
-    fq.setAttribute('aria-activedescendant', items[sel].id)
-    items[sel].scrollIntoView({ block: 'nearest' })
-  }
-
-  async function typed() {
-    const v = fq.value
-    if (v.trim() && !index) await load()
-    if (v !== fq.value || (v.trim() && !index)) return
-    found = v.trim() ? search(v) : []
-    render(v)
-  }
-
-  function open(v = '') {
-    if (!dlg.open) dlg.showModal()
-    fq.value = v
-    fq.focus()
-    load()
-    typed()
-  }
-
-  function close() {
-    if (dlg.open) dlg.close()
-  }
-
-  function keys(e) {
-    if (e.key === 'ArrowDown') {
-      e.preventDefault()
-      choose(sel + 1)
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault()
-      choose(sel - 1)
-    } else if (e.key === 'Enter') {
-      e.preventDefault()
-      const li = hits.querySelectorAll('[role=option]')[sel < 0 ? 0 : sel]
-      if (li) li.querySelector('a').click()
-      else if (fq.value.trim()) location.href = '/search?q=' + encodeURIComponent(fq.value)
-      close()
-    }
-  }
-
-  function shortcut(e) {
-    const k = (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k'
-    const slash = e.key === '/' && !typing(e.target) && !e.ctrlKey && !e.metaKey
-    if (!k && !slash) return
-    e.preventDefault()
-    open()
-  }
-
-  const path = (u) => u && new URL(u, location.href).pathname
+  const flip = () => swap()
 
   onMount(() => {
-    focusable()
+    blocks()
     if (/Mac|iPhone|iPad/.test(navigator.platform)) mod.textContent = '⌘'
-    bar.addEventListener('submit', (e) => {
-      e.preventDefault()
-      open(q.value)
-    })
-    q.addEventListener('pointerdown', (e) => {
-      e.preventDefault()
-      open(q.value)
-    })
-    q.addEventListener('input', () => {
-      open(q.value)
-      q.value = ''
-    })
-    fq.addEventListener('input', typed)
-    fq.addEventListener('keydown', keys)
-    dlg.addEventListener('click', (e) => {
-      if (e.target === dlg) close()
-      else if (e.target.closest('a')) setTimeout(close, 0)
-    })
-    ghost.addEventListener('animationend', (e) => {
-      if (e.animationName === 'hop' || e.animationName === 'boo') ghost.classList.remove('hop', 'boo')
-    })
-    addEventListener('keydown', shortcut)
-    addEventListener('keydown', boo)
+    spirit = ghost(box)
+    find = finder({ bar, q, dlg, fq, status, hits, tip })
     console.log('%cwispweb.dev is a Wisp app, one Rust binary. Source: https://github.com/wyziedevs/wisp-docs\n%cTry typing boo.', 'color:#a17ff5;font-weight:600', 'color:inherit')
   })
   afterNavigate(({ from, to }) => {
-    focusable()
-    close()
+    blocks()
+    find?.close()
     document.querySelector('.mnav')?.removeAttribute('open')
-    if (path(from) !== path(to)) play('hop')
+    if (path(from) !== path(to)) spirit?.play('hop')
   })
 </script>

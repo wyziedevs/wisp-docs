@@ -84,11 +84,7 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
         <li data-text={text}>
           <h2><a href={p.path}>{p.title}</a></h2>
           {#if let Some(d) = p.get("description")}<p>{d}</p>{/if}
-          <p class="meta">
-            {#if let Some(d) = p.get("date")}<time datetime={d}>{day(d, true)}</time> · {/if}
-            {#if let Some(a) = p.get("author")}{a} · {/if}
-            {read(p.path)}
-          </p>
+          <Meta iso={p.get("date").unwrap_or("")} when={day(p.get("date").unwrap_or(""), true)} author={p.get("author").unwrap_or("")} read={read(p.path)} />
         </li>
       {/each}
     </ul>
@@ -107,26 +103,13 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
       </ul>
     {:else}
       <div class="post-wrap">
-        {#if heads.len() > 1}
-          <aside class="post-toc" aria-label="On this page">
-            <h2>On This Page</h2>
-            <ul>
-              {#each heads as (id, text, level)}
-                <li class={format!("h{level}")}><a href={format!("#{id}")}>{text}</a></li>
-              {/each}
-            </ul>
-          </aside>
-        {/if}
+        <Toc heads={heads} cls="post-toc" />
         <article class="post doc">
           <p class="eyebrow"><a href="/blog">The Blog</a></p>
           {#if let Some(p) = post}
             <h1 class="doc-title">{p.title}</h1>
             {#if let Some(d) = p.get("description")}<p class="lede">{d}</p>{/if}
-            <p class="meta">
-              {#if let Some(d) = p.get("date")}<time datetime={d}>{day(d, false)}</time> · {/if}
-              {#if let Some(a) = p.get("author")}{a} · {/if}
-              {read(path)}
-            </p>
+            <Meta iso={p.get("date").unwrap_or("")} when={day(p.get("date").unwrap_or(""), false)} author={p.get("author").unwrap_or("")} read={read(path)} />
             {#if !tags_of(p).is_empty()}
               <nav class="chips" aria-label="Tags">
                 {#each tags_of(p) as t}<a href={format!("/blog?tag={t}")}>{t}</a>{/each}
@@ -134,14 +117,12 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
             {/if}
           {/if}
           <slot />
-          <nav class="pager" aria-label="Newer and older posts">
-            {#if let Some(p) = newer}
-              <a class="prev" rel="prev" href={p.path}><small>Newer</small><span>{p.title}</span></a>
-            {/if}
-            {#if let Some(p) = older}
-              <a class="next" rel="next" href={p.path}><small>Older</small><span>{p.title}</span></a>
-            {/if}
-          </nav>
+          <Pager
+            label="Newer and older posts"
+            before="Newer"
+            after="Older"
+            prev={newer.map(|p| (p.path, p.title))}
+            next={older.map(|p| (p.path, p.title))} />
         </article>
       </div>
     {/if}
@@ -150,7 +131,7 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
 
 <script>
   import { afterNavigate } from 'wisp'
-  import { spy } from '$lib/toc.js'
+  import { reading } from '$lib/toc.js'
 
   // Filters the list as you type; without JS the form filters on the server.
   function filter(e) {
@@ -165,26 +146,13 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
     document.querySelector('.blog-none').hidden = n > 0
   }
 
-  // Heading anchors on a post.
-  function anchors() {
-    for (const h of document.querySelectorAll('.post h2[id], .post h3[id]')) {
-      if (h.querySelector('.anchor')) continue
-      const a = document.createElement('a')
-      a.className = 'anchor'
-      a.href = '#' + h.id
-      a.setAttribute('aria-label', 'Link to this section')
-      h.append(a)
-    }
-  }
-
-  // The On This Page list marks the section being read, as in the docs.
+  // Heading anchors on a post, and the On This Page marker, as in the docs.
   let off = null
   function post() {
-    anchors()
     off?.()
     off = null
-    const toc = document.querySelector('.post-toc ul')
-    if (toc) off = spy(toc)
+    const art = document.querySelector('.post')
+    if (art) off = reading(art, '.post-toc ul')
   }
 
   onMount(post)

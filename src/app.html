@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#fcfbfe" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#1c1b24" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="/favicon.svg">
-  <script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark'){document.documentElement.dataset.theme=t;document.querySelectorAll('meta[name=theme-color]').forEach(function(m){m.content=t==='dark'?'#1c1b24':'#fcfbfe';m.media='all'})}}catch(e){}</script>
   <noscript><style>.copy-icon,.theme,.search .key,.useful{display:none!important}</style></noscript>
   %wisp.head%
 </head>

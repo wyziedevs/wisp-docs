@@ -22,7 +22,10 @@ for p in wisp::pages("").iter().chain(wisp::pages("docs").iter()).chain(wisp::pa
     }
 }
 ---
-<title>Search</title>
+<head>
+  <title>Search</title>
+  <meta name="robots" content="noindex, follow">
+</head>
 
 <div class="page narrow">
   <h1>Search</h1>

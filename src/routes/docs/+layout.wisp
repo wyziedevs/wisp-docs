@@ -1,8 +1,4 @@
 ---
-// The docs groups that make up Reference; every other group is Learn.
-// A page can also say `section: reference` or `section: learn` in its front matter.
-const REFERENCE: &[&str] = &["Reference", "Design"];
-
 let mut all: Vec<_> = wisp::pages("")
     .iter()
     .chain(wisp::pages("docs").iter())
@@ -18,15 +14,10 @@ all.sort_by_key(|p| {
     let order = p.get("order").and_then(|o| o.parse::<u32>().ok()).unwrap_or(999);
     (lead, order)
 });
-let is_ref: Vec<bool> = all
-    .iter()
-    .map(|p| match p.get("section") {
-        Some(s) => s == "reference",
-        None => REFERENCE.contains(&p.get("group").unwrap_or("")),
-    })
-    .collect();
+let is_ref: Vec<bool> = all.iter().map(|p| site::is_reference(p)).collect();
 let at = all.iter().position(|p| p.path == cx.path());
 let reference = at.is_some_and(|i| is_ref[i]);
+let kind = if reference { "Reference" } else { "Learn" };
 let list: Vec<_> = all
     .iter()
     .zip(&is_ref)
@@ -70,12 +61,12 @@ let edit = match cx.path() {
 <div class="docs">
   <aside class="side" aria-label="Documentation">
     <details class="menu">
-      <summary>{if reference { "Reference" } else { "Learn" }} Menu</summary>
+      <summary>{kind} Menu</summary>
       <div class="switch" role="list">
         <a role="listitem" href={learn_home} aria-current={(!reference).then_some("true")}>Learn</a>
         <a role="listitem" href={ref_home} aria-current={reference.then_some("true")}>Reference</a>
       </div>
-      <nav aria-label={if reference { "Reference pages" } else { "Learn pages" }}>
+      <nav aria-label={format!("{kind} pages")}>
         {#each groups as (name, open, items)}
           <details class="grp" open={*open}>
             <summary>{name}</summary>
@@ -93,7 +84,7 @@ let edit = match cx.path() {
   <article class="doc" bind:this="doc">
     <p class="sr" role="status" aria-live="polite" bind:this="copied"></p>
     <nav class="crumbs" aria-label="Breadcrumb">
-      <a href={if reference { ref_home } else { learn_home }}>{if reference { "Reference" } else { "Learn" }}</a>
+      <a href={if reference { ref_home } else { learn_home }}>{kind}</a>
       <span>{group}</span>
     </nav>
     <h1 class="doc-title">{at.map(|i| all[i].title).unwrap_or("")}</h1>
@@ -105,62 +96,30 @@ let edit = match cx.path() {
       <button type="button" class="btn" data-v="no">No</button>
     </div>
 
-    <nav class="pager" aria-label="Previous and next">
-      {#if let Some(p) = prev}
-        <a class="prev" rel="prev" href={p.path}><small>Previous</small><span>{p.title}</span></a>
-      {/if}
-      {#if let Some(p) = next}
-        <a class="next" rel="next" href={p.path}><small>Next</small><span>{p.title}</span></a>
-      {/if}
-    </nav>
+    <Pager
+      label="Previous and next"
+      before="Previous"
+      after="Next"
+      prev={prev.map(|p| (p.path, p.title))}
+      next={next.map(|p| (p.path, p.title))} />
     <p class="edit"><a href={format!("https://github.com/wyziedevs/wisp-docs/edit/main/{edit}")}>Edit This Page</a></p>
   </article>
 
-  {#if heads.len() > 1}
-    <aside class="toc" aria-label="On this page">
-      <h2>On This Page</h2>
-      <ul>
-        {#each heads as (id, text, level)}
-          <li class={format!("h{level}")}><a href={format!("#{id}")}>{text}</a></li>
-        {/each}
-      </ul>
-    </aside>
-  {/if}
+  <Toc heads={heads} cls="toc" />
 </div>
 
 <script>
   import { afterNavigate } from 'wisp'
-  import { spy } from '$lib/toc.js'
+  import { reading, path } from '$lib/toc.js'
 
   let doc, copied, useful
-
-  // Headings have ids from the build; this adds the link icon that copies one.
-  function build() {
-    for (const h of doc.querySelectorAll('h2[id], h3[id]')) {
-      if (h.querySelector('.anchor')) continue
-      const a = document.createElement('a')
-      a.className = 'anchor'
-      a.href = '#' + h.id
-      a.setAttribute('aria-label', 'Link to this section')
-      a.addEventListener('click', () => {
-        navigator.clipboard?.writeText(location.origin + location.pathname + '#' + h.id).then(() => {
-          a.classList.add('done')
-          copied.textContent = 'Link copied'
-          setTimeout(() => {
-            a.classList.remove('done')
-            copied.textContent = ''
-          }, 1200)
-        }, () => {})
-      })
-      h.append(a)
-    }
-    off?.()
-    off = null
-    const toc = document.querySelector('.toc ul')
-    if (toc) off = spy(toc)
-  }
-
   let off = null
+
+  // Heading link icons and the On This Page marker, again for each page.
+  function build() {
+    off?.()
+    off = reading(doc, '.toc ul', (m) => (copied.textContent = m))
+  }
 
   // Is This Page Useful: a thank you, nothing sent anywhere.
   function feedback(e) {
@@ -179,7 +138,6 @@ let edit = match cx.path() {
     if (location.hash) document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView()
   })
   // A new page eases in; a hash jump or a form post on the same page does not.
-  const path = (u) => u && new URL(u, location.href).pathname
   afterNavigate(({ from, to }) => {
     build()
     if (path(from) === path(to) || matchMedia('(prefers-reduced-motion: reduce)').matches) return
