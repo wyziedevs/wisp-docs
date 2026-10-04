@@ -2,7 +2,7 @@
   <div class="wrap">
     <img class="logo" src="/favicon.svg" alt="" width="132" height="132">
     <h1>Wisp</h1>
-    <p class="sub">A Fast, Fun Web Framework for <em>Rust<svg class="scribble" viewBox="0 0 120 14" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path pathLength="1" d="M2.4 9.2C9 6.8 15.5 10.3 25 8.4C37 6.1 44 5.9 58 7.6C71 9.2 82 9.6 94 6.8C102 5 110 5.6 117.6 2.9"/></svg></em></p>
+    <p class="sub">A Fast, Fun Web Framework for <em>Rust<svg class="scribble" viewBox="0 0 120 12" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M1 9C20 6.2 44 5.6 66 4.8S104 3 119 1.4C105 6 87 9.8 65 10.6C43 11.4 21 11.8 1 9Z"/></svg></em></p>
     <p class="cta">
       <a class="btn primary" href="/docs/quick-start">Learn Wisp</a>
       <a class="btn" href="/docs/design">API Reference</a>
@@ -146,7 +146,7 @@
     animation: check 350ms var(--ease) 80ms backwards;
   }
 
-  /* Rust gets a pen stroke: one loose line, drawn by hand. */
+  /* Rust gets a pen stroke: one tapered brush stroke, drawn left to right. */
   .hero em {
     position: relative;
     font-style: normal;
@@ -156,23 +156,14 @@
 
   .hero .scribble {
     position: absolute;
-    left: -0.06em;
-    bottom: -0.2em;
-    width: calc(100% + 0.12em);
-    height: 0.3em;
+    left: -0.05em;
+    bottom: -0.26em;
+    width: calc(100% + 0.1em);
+    height: 0.36em;
     overflow: visible;
-    fill: none;
-    stroke: currentColor;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-width: 3.4px;
-    opacity: 0.8;
+    fill: currentColor;
+    opacity: 0.85;
     pointer-events: none;
-  }
-
-  .hero .scribble path {
-    vector-effect: non-scaling-stroke;
-    stroke-dasharray: 1;
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -193,8 +184,8 @@
         bob 5s cubic-bezier(0.37, 0, 0.63, 1) 600ms infinite alternate;
     }
 
-    .hero .scribble path {
-      animation: scribble 650ms var(--ease) 500ms backwards;
+    .hero .scribble {
+      animation: draw 700ms var(--ease) 500ms backwards;
     }
   }
 </style>

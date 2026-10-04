@@ -72,9 +72,9 @@ export function motion() {
   function scribble() {
     const em = document.querySelector('.hero em')
     if (!em || !fine.matches) return
-    const paths = em.querySelectorAll('path')
+    const stroke = em.querySelector('svg')
     const again = () =>
-      gsap.fromTo(paths, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.55, stagger: 0, ease: 'power2.out', overwrite: true })
+      gsap.fromTo(stroke, { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.6, ease: 'power2.out', overwrite: true, clearProps: 'clipPath' })
     em.addEventListener('pointerenter', again)
     undo.push(() => em.removeEventListener('pointerenter', again))
   }
