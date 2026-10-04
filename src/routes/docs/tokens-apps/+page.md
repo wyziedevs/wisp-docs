@@ -71,6 +71,7 @@ fn remove(id: u64) {
     TODOS.remove(id);
 }
 ---
+
 <form action="?/add">
   <input name="text">
   <button>Add</button>
@@ -87,6 +88,7 @@ fn remove(id: u64) {
 ---
 let post = posts::POSTS.iter().find(|p| p.slug == slug).or_404()?;
 ---
+
 <title>{post.title}</title>
 <h1>{post.title}</h1>
 <p>{post.body}</p>

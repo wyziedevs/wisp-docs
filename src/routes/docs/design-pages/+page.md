@@ -17,9 +17,12 @@ async fn like(id: i64) {
     db::like(id).await?;
 }
 ---
+
 <head><title>{post.title}</title></head>
 <h1>{post.title}</h1>
-<form method="post" action="?/like"><button name="id" value={post.id}>Like</button></form>
+<form method="post" action="?/like">
+  <button name="id" value={post.id}>Like</button>
+</form>
 ```
 
 ```rust

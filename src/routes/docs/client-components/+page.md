@@ -10,7 +10,9 @@ A component inside a client block, or given `{:…}`, `bind:` or `on:`, is drawn
 
 ```html
 {:#each names as name (name)}
-  <Item label={:name} bind:count="counts[name]" on:bump="bumped = event"><b>{:name}!</b></Item>
+  <Item label={:name} bind:count="counts[name]" on:bump="bumped = event">
+    <b>{:name}!</b>
+  </Item>
 {:/each}
 ```
 ```html
