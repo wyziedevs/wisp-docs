@@ -20,7 +20,7 @@ replaceState('', { tab: 3 })         // this entry's state ('' keeps the URL)
 - A component instance on an element the morph keeps keeps its state and gets the new `data`. `data-wisp-reset` on an element around it starts it fresh.
 - Global stores (`store`, `persisted`) are module state: they outlive every navigation.
 - Prefetch on hover (60 ms) and touch; `data-wisp-preload="off"` opts out.
-- Scroll is restored; focus moves to `[autofocus]`.
+- Scroll is restored; focus moves to `[autofocus]`. A navigation lands at once, as a page load does, even under `scroll-behavior: smooth`, which still smooths same-page `#` links.
 - View transitions when available. `data-wisp-notransition` on a link, or on `<body>` for the app, skips them; reduced motion skips them too.
 - `data-wisp-reload` on a link or parent forces a full load. Links with `target`, `download`, `rel="external"` and `/_app/` are left alone.
 - `pushState(url, state)` (shallow routing, for tabs and modals) adds an entry at `url` (`''`: this one) and loads nothing; `page.value.state` is reactive (`{}` on other entries). Back/forward restores it with no request; a reload keeps it only at its URL.
