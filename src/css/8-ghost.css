@@ -139,12 +139,6 @@
   }
 }
 
-@keyframes read {
-  from {
-    scale: 0 1;
-  }
-}
-
 @keyframes draw {
   from {
     clip-path: inset(0 100% 0 0);

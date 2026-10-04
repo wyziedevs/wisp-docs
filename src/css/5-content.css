@@ -382,26 +382,6 @@ td:last-child {
   font-weight: 600;
 }
 
-/* Docs: a reading bar across the top of the text, fed by the scroll position.
-   It sticks under the header and takes no room in the flow. */
-@supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .docs .doc::before {
-      content: "";
-      position: sticky;
-      top: var(--head);
-      z-index: 5;
-      display: block;
-      height: 2px;
-      margin: -2.5rem calc(-1 * var(--pad)) 2.5rem;
-      background: var(--accent);
-      transform-origin: left;
-      animation: read linear both;
-      animation-timeline: scroll(root);
-    }
-  }
-}
-
 @media (prefers-reduced-motion: no-preference) {
   .doc {
     animation: fade 400ms var(--ease) backwards;
