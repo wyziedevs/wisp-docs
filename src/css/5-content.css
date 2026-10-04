@@ -155,6 +155,7 @@ pre:focus-within .copy-code,
 }
 
 .tally thead th {
+  white-space: nowrap;
   color: var(--ash);
   font-size: 0.8125rem;
   font-weight: 600;
