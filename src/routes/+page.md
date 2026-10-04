@@ -7,9 +7,10 @@ description: A fast, fun web framework for Rust that costs an AI the fewest toke
 
 <section class="showcase">
 <div class="wrap">
-<div class="pair">
-<figure class="file">
-<figcaption>src/routes/+page.wisp</figcaption>
+
+<Demo>
+
+<div class="pane" id="pane-page" role="tabpanel" aria-labelledby="tab-page">
 
 ```html
 ---
@@ -25,7 +26,8 @@ fn add(todo: Todo) {
 {/each}
 ```
 
-<figcaption>src/db.rs, in every route file with no use lines</figcaption>
+</div>
+<div class="pane" id="pane-db" role="tabpanel" aria-labelledby="tab-db">
 
 ```rust
 #[model]
@@ -36,22 +38,11 @@ pub struct Todo {
 pub static TODOS: Table<Todo> = Table::saved();
 ```
 
-</figure>
-<figure class="file">
-<figcaption>The files that matter</figcaption>
-
-```text
-Cargo.toml
-src/
-  db.rs
-  routes/
-    +page.wisp
-```
-
-<p class="note">A validated form action, the form with its inputs and errors, and a list. A bad value is a 422 that keeps what was typed.</p>
-
-</figure>
 </div>
+
+</Demo>
+
+<p class="note">The form writes its own inputs and errors, and a bad value is a 422 that keeps what was typed. The model in <code>src/db.rs</code> is in every route file with no <code>use</code> lines.</p>
 </div>
 </section>
 

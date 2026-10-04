@@ -67,6 +67,7 @@ let edit = match cx.path() {
   </aside>
 
   <article class="doc" bind:this="doc">
+    <p class="sr" role="status" aria-live="polite" bind:this="copied"></p>
     <h1 class="doc-title">{at.map(|i| all[i].title).unwrap_or("")}</h1>
     <slot />
     <nav class="pager" aria-label="Previous and next">
@@ -89,7 +90,7 @@ let edit = match cx.path() {
 <script>
   import { afterNavigate } from 'wisp'
 
-  let filter, menu, doc, toc
+  let filter, menu, doc, toc, copied
 
   function slug(text) {
     return text.toLowerCase().replace(/[^\w\- ]/g, '').trim().replace(/ /g, '-')
@@ -108,7 +109,7 @@ let edit = match cx.path() {
       li.className = h.tagName.toLowerCase()
       const a = document.createElement('a')
       a.href = '#' + h.id
-      a.textContent = h.textContent.replace(/^(#|Copied)/, '')
+      a.textContent = h.textContent.replace(/^(#|✓)/, '')
       li.append(a)
       toc.append(li)
     }
@@ -122,8 +123,14 @@ let edit = match cx.path() {
       a.setAttribute('aria-label', 'Link to this section')
       a.addEventListener('click', () => {
         navigator.clipboard?.writeText(location.origin + location.pathname + '#' + h.id).then(() => {
-          a.textContent = 'Copied'
-          setTimeout(() => (a.textContent = '#'), 1200)
+          a.textContent = '✓'
+          a.classList.add('done')
+          copied.textContent = 'Link copied'
+          setTimeout(() => {
+            a.textContent = '#'
+            a.classList.remove('done')
+            copied.textContent = ''
+          }, 1200)
         }, () => {})
       })
       h.prepend(a)
