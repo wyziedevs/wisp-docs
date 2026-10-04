@@ -9,7 +9,7 @@ let has = |text: &str| {
 };
 let toc: &[(&str, &[(&str, &str, u8)])] = include!(concat!(env!("OUT_DIR"), "/toc.rs"));
 let mut found: Vec<(String, &str, &str)> = Vec::new();
-for p in wisp::pages("").iter().chain(wisp::pages("docs").iter()).chain(wisp::pages("blog").iter()) {
+for p in wisp::pages("").iter().chain(wisp::pages("docs").iter()).chain(wisp::pages("docs/hosting").iter()).chain(wisp::pages("blog").iter()) {
     let about = p.get("description").unwrap_or("");
     if has(&format!("{} {about}", p.title)) {
         found.push((p.path.to_string(), p.title, about));

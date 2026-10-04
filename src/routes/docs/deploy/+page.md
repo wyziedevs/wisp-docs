@@ -11,15 +11,15 @@ Run `wisp build`, copy the binary, run it. Pick the build for your host:
 
 | You have | Use |
 |---|---|
-| VPS or server | `wisp build`; `wisp service install` keeps it running |
-| Container host (Fly.io, Railway, Render, Cloud Run, Azure Container Apps) | `wisp build --docker` |
-| Static host (GitHub/GitLab Pages, S3) | `wisp build --static` (or `--spa`) |
-| Edge or serverless (Cloudflare, Deno Deploy, Vercel, Netlify, Amplify, Firebase, Azure Static Web Apps) | `wisp build --target <host>` ([targets](/docs/deploy-targets/)) |
-| AWS Lambda / Bun | `--target lambda` / `--target bun` |
+| VPS or server | `wisp build`; `wisp service install` keeps it running ([VPS](/docs/hosting/vps/)) |
+| Container host ([Fly.io](/docs/hosting/fly/), [Railway](/docs/hosting/railway/), [Render](/docs/hosting/render/), [Cloud Run](/docs/hosting/cloud-run/), [Azure](/docs/hosting/azure/)) | `wisp build --docker` ([Docker](/docs/hosting/docker/)) |
+| Static host ([GitHub Pages](/docs/hosting/github-pages/), GitLab Pages, S3) | `wisp build --static` (or `--spa`) |
+| Edge or serverless ([Cloudflare](/docs/hosting/cloudflare/), [Deno Deploy](/docs/hosting/deno-deploy/), [Vercel](/docs/hosting/vercel/), [Netlify](/docs/hosting/netlify/), Amplify, Firebase, [Azure Static Web Apps](/docs/hosting/azure/)) | `wisp build --target <host>` ([targets](/docs/deploy-targets/)) |
+| [AWS Lambda](/docs/hosting/aws-lambda/) / [Bun](/docs/hosting/bun/) / [Node](/docs/hosting/node/) | `--target lambda` / `--target bun` / `--target node` |
 
 </div>
 
-An app that signs cookies needs `WISP_SECRET` (32+ random characters) on every host. Logs, metrics and traces: [Observe](/docs/deploy-observe/).
+An app that signs cookies needs `WISP_SECRET` (32+ random characters) on every host. Logs, metrics and traces: [Observe](/docs/deploy-observe/). Step by step for each host: [Hosting](/docs/hosting/).
 
 A plain `wisp build` inside a host's CI picks the target from its variables and says so: `WORKERS_CI` or `CF_PAGES` (cloudflare), `VERCEL` (output in `.vercel/output`), `NETLIFY`, `DENO_DEPLOYMENT_ID` (deno), `AWS_APP_ID` (node). `--target native` forces the plain binary.
 
@@ -29,7 +29,7 @@ A plain `wisp build` inside a host's CI picks the target from its variables and 
 
 | Host | Writes |
 |---|---|
-| `cloudflare`, `deno`, `vercel`, `netlify`, `lambda`, `fly`, `pages` | `.github/workflows/deploy.yml`: build and deploy on push to `main`; line 1 names the secrets; `--force` replaces it |
+| `cloudflare`, `deno`, `vercel`, `netlify`, `lambda`, `pages` (GitHub Pages) | `.github/workflows/deploy.yml`: build and deploy on push to `main`; line 1 names the secrets; `--force` replaces it |
 | `fly`, `render`, `railway` | that host's config, and a Dockerfile if none |
 
 </div>

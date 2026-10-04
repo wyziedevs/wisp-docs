@@ -2,7 +2,7 @@
 title: Tokens
 description: See what a Wisp app costs to write in AI tokens, counted by wisp-tokens for five features and a real app, and compared with other web stacks and their methods.
 group: Project
-order: 70
+order: 90
 ---
 
 Most app code is written by AI, so an app's cost is measured in tokens, and keeping it low is a Wisp principle ([design](/docs/design/)). Run `cargo run -q -p wisp-tokens --release` for the numbers. The four-app comparison against six frameworks: [Tokens, app by app](/docs/tokens-apps/).

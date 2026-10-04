@@ -16,28 +16,28 @@ The app compiles to WebAssembly in a folder with the host's config, an entry fil
 
 | Target | For | From `dist/<target>` |
 |---|---|---|
-| `cloudflare` | Workers | `npx wrangler deploy` (secrets: `npx wrangler secret put WISP_SECRET`) |
-| `pages` | Cloudflare Pages | `npx wrangler pages deploy .` in `dist/pages` (`_worker.js`, `_routes.json`; `WISP_SECRET` under Settings) |
-| `deno` | Deno Deploy | `deployctl deploy --entrypoint main.ts` (local: `deno run -A main.ts`) |
-| `vercel` | Vercel | `npx vercel deploy --prebuilt` (env var `WISP_SECRET`) |
-| `netlify` | Netlify | `npx netlify deploy --prod` |
-| `node` | Amplify, Firebase, Azure, Stormkit, Zeabur, any Node host | `npm start` |
-| `bun` | Bun (`Bun.listen`) | `bun server.mjs` |
-| `lambda` | AWS Lambda | [below](/docs/deploy-targets/) |
+| `cloudflare` | [Workers](/docs/hosting/cloudflare/) | `npx wrangler deploy` (secrets: `npx wrangler secret put WISP_SECRET`) |
+| `pages` | [Cloudflare Pages](/docs/hosting/cloudflare/) | `npx wrangler pages deploy .` in `dist/pages` (`_worker.js`, `_routes.json`; `WISP_SECRET` under Settings) |
+| `deno` | [Deno Deploy](/docs/hosting/deno-deploy/) | `deployctl deploy --entrypoint main.ts` (local: `deno run -A main.ts`) |
+| `vercel` | [Vercel](/docs/hosting/vercel/) | `npx vercel deploy --prebuilt` (env var `WISP_SECRET`) |
+| `netlify` | [Netlify](/docs/hosting/netlify/) | `npx netlify deploy --prod` |
+| `node` | Amplify, Firebase, [Azure](/docs/hosting/azure/), Stormkit, Zeabur, any [Node](/docs/hosting/node/) host | `npm start` |
+| `bun` | [Bun](/docs/hosting/bun/) (`Bun.listen`) | `bun server.mjs` |
+| `lambda` | [AWS Lambda](/docs/hosting/aws-lambda/) | [below](#aws-lambda) |
 
 </div>
 
-Other hosts:
+Other hosts (each has a page under [Hosting](/docs/hosting/)):
 
 <div class="table-wrap">
 
 | Host | Use |
 |---|---|
 | Amplify, Firebase, Azure Static Web Apps, Stormkit, Zeabur | `--target node` (`npm start`); the output's `hosts/*.md` has each host's manifest or function glue (Amplify: folder in `.amplify-hosting/compute/default/`, `static/` in `.amplify-hosting/static/`, a `deploy-manifest.json`) |
-| GitHub/GitLab Pages | `--static`, publish `dist/` (a project site under a path prefix needs prefix-safe links) |
-| Fly.io | `--docker`, `fly launch`, `fly deploy`, `fly secrets set WISP_SECRET=...` |
-| Railway, Render | `--docker`, point at the repo, set `WISP_SECRET` |
-| Cloud Run | `--docker`, `gcloud run deploy --source .` |
+| [GitHub Pages](/docs/hosting/github-pages/), GitLab Pages | `--static`, publish `dist/` (a project site under a path prefix needs prefix-safe links) |
+| [Fly.io](/docs/hosting/fly/) | `--docker`, `fly launch`, `fly deploy`, `fly secrets set WISP_SECRET=...` |
+| [Railway](/docs/hosting/railway/), [Render](/docs/hosting/render/) | `--docker`, point at the repo, set `WISP_SECRET` |
+| [Cloud Run](/docs/hosting/cloud-run/) | `--docker`, `gcloud run deploy --source .` |
 
 </div>
 

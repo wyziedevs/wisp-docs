@@ -5,7 +5,7 @@ const SITE: &str = "https://wispweb.dev";
 
 fn get() -> Response {
     let mut xml = String::from("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n");
-    for p in wisp::pages("").iter().chain(wisp::pages("docs")).chain(wisp::pages("blog")) {
+    for p in wisp::pages("").iter().chain(wisp::pages("docs")).chain(wisp::pages("docs/hosting")).chain(wisp::pages("blog")) {
         let end = if p.path == "/" { "" } else { "/" };
         xml.push_str(&format!("<url><loc>{SITE}{}{end}</loc>", p.path));
         if let Some(d) = p.get("date") {

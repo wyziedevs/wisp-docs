@@ -8,6 +8,7 @@ let home = path == "/";
 let me = wisp::pages("")
     .iter()
     .chain(wisp::pages("docs").iter())
+    .chain(wisp::pages("docs/hosting").iter())
     .chain(wisp::pages("blog").iter())
     .find(|p| p.path == path);
 let title = me.map_or("Wisp", |p| p.title);

@@ -163,6 +163,11 @@ wisp build      # one release binary
 - [Testing and mixing with Rust code](/docs/embed/): Testing an app in process, WebSockets, and Wisp inside axum, hyper and Lambda
 - [Logs, metrics and traces](/docs/deploy-observe/): JSON request logs, Prometheus metrics and OpenTelemetry traces
 
+**Hosting**
+
+- [Hosting](/docs/hosting/): How to host a Wisp app on a VPS, Docker, Fly.io, Render, Railway, Cloudflare, Deno Deploy, Vercel, Netlify, AWS Lambda, Bun, Node, GitHub Pages, Cloud Run or Azure
+- One page per host: [VPS](/docs/hosting/vps/), [Docker](/docs/hosting/docker/), [Fly.io](/docs/hosting/fly/), [Render](/docs/hosting/render/), [Railway](/docs/hosting/railway/), [Cloudflare](/docs/hosting/cloudflare/), [Deno Deploy](/docs/hosting/deno-deploy/), [Vercel](/docs/hosting/vercel/), [Netlify](/docs/hosting/netlify/), [AWS Lambda](/docs/hosting/aws-lambda/), [Bun](/docs/hosting/bun/), [Node](/docs/hosting/node/), [GitHub Pages](/docs/hosting/github-pages/), [Cloud Run](/docs/hosting/cloud-run/), [Azure](/docs/hosting/azure/)
+
 **Project**
 
 - [Tokens](/docs/tokens/): What an app costs to write in AI tokens, measured against other stacks

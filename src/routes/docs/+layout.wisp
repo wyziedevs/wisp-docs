@@ -2,6 +2,7 @@
 let mut all: Vec<_> = wisp::pages("")
     .iter()
     .chain(wisp::pages("docs").iter())
+    .chain(wisp::pages("docs/hosting").iter())
     .filter(|p| p.path == "/docs" || p.path.starts_with("/docs/"))
     .collect();
 // Quick Start and the Tutorial lead Learn, then front matter `order`.
