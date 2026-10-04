@@ -592,6 +592,10 @@ h4 {
   color: var(--ash);
 }
 
+.foot .mark .maker {
+  margin-top: 1rem;
+}
+
 .foot .maker a {
   color: var(--slate);
 }
@@ -1117,18 +1121,6 @@ h4 {
   margin-bottom: 2rem;
 }
 
-.final .wrap {
-  max-width: 44rem;
-}
-
-.final pre {
-  margin: 0 0 2rem;
-}
-
-.final .cta {
-  justify-content: flex-start;
-}
-
 /* Launch sections rise into place as they scroll in (CSS only, where supported). */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
@@ -1137,8 +1129,7 @@ h4 {
     .band .sample,
     .demo,
     .pair .cmp,
-    .hosts,
-    .final .wrap > * {
+    .hosts {
       animation: rise var(--ease) both;
       animation-timeline: view();
       animation-range: entry 0% entry 60%;
@@ -1496,14 +1487,12 @@ pre code {
 /* A block in an article or a sample gets a header bar with its language
    (CSS only), and the copy button sits in that bar. */
 .doc pre,
-.sample pre,
-.final pre {
+.sample pre {
   padding-top: 3.25rem;
 }
 
 .doc pre::before,
-.sample pre::before,
-.final pre::before {
+.sample pre::before {
   content: "Code";
   position: absolute;
   inset: 0 0 auto;
@@ -1514,18 +1503,18 @@ pre code {
   font: 500 0.8125rem/2.5rem var(--sans);
 }
 
-:is(.doc, .sample, .final) pre:has(> .language-rust)::before { content: "Rust"; }
-:is(.doc, .sample, .final) pre:has(> .language-html)::before { content: "Template"; }
-:is(.doc, .sample, .final) pre:has(> .language-wisp)::before { content: "Wisp"; }
-:is(.doc, .sample, .final) pre:has(> :is(.language-bash, .language-sh, .language-shell, .language-console))::before { content: "Terminal"; }
-:is(.doc, .sample, .final) pre:has(> :is(.language-js, .language-javascript))::before { content: "JavaScript"; }
-:is(.doc, .sample, .final) pre:has(> :is(.language-ts, .language-typescript))::before { content: "TypeScript"; }
-:is(.doc, .sample, .final) pre:has(> .language-toml)::before { content: "TOML"; }
-:is(.doc, .sample, .final) pre:has(> .language-json)::before { content: "JSON"; }
-:is(.doc, .sample, .final) pre:has(> .language-css)::before { content: "CSS"; }
-:is(.doc, .sample, .final) pre:has(> :is(.language-yaml, .language-yml))::before { content: "YAML"; }
-:is(.doc, .sample, .final) pre:has(> .language-sql)::before { content: "SQL"; }
-:is(.doc, .sample, .final) pre:has(> .language-text)::before { content: "Text"; }
+:is(.doc, .sample) pre:has(> .language-rust)::before { content: "Rust"; }
+:is(.doc, .sample) pre:has(> .language-html)::before { content: "Template"; }
+:is(.doc, .sample) pre:has(> .language-wisp)::before { content: "Wisp"; }
+:is(.doc, .sample) pre:has(> :is(.language-bash, .language-sh, .language-shell, .language-console))::before { content: "Terminal"; }
+:is(.doc, .sample) pre:has(> :is(.language-js, .language-javascript))::before { content: "JavaScript"; }
+:is(.doc, .sample) pre:has(> :is(.language-ts, .language-typescript))::before { content: "TypeScript"; }
+:is(.doc, .sample) pre:has(> .language-toml)::before { content: "TOML"; }
+:is(.doc, .sample) pre:has(> .language-json)::before { content: "JSON"; }
+:is(.doc, .sample) pre:has(> .language-css)::before { content: "CSS"; }
+:is(.doc, .sample) pre:has(> :is(.language-yaml, .language-yml))::before { content: "YAML"; }
+:is(.doc, .sample) pre:has(> .language-sql)::before { content: "SQL"; }
+:is(.doc, .sample) pre:has(> .language-text)::before { content: "Text"; }
 
 .copy-code {
   position: absolute;

@@ -230,18 +230,3 @@ wisp deploy init cloudflare
 
 </div>
 </section>
-
-<section class="sec final">
-<div class="wrap">
-
-## Make Something
-
-```bash
-wisp new my-app
-cd my-app
-wisp dev
-```
-
-<p class="cta"><a class="btn primary" href="/docs">Read the Docs</a> <a class="btn" href="https://github.com/wyziedevs/wisp">Wisp on GitHub</a></p>
-</div>
-</section>
