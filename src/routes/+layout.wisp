@@ -28,6 +28,7 @@ let links = [
 ];
 ---
 <head>
+  <title>{if title.starts_with("Wisp") { title.to_string() } else { format!("Wisp: {title}") }}</title>
   <meta name="description" content={about}>
   <meta name="author" content="Wyzie LLC">
   {@html wisp::og(title, about, &format!("{SITE}/og.png"))}
