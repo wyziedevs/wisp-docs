@@ -88,6 +88,19 @@
     color: var(--ash);
   }
 
+  /* On a phone the whole command shows, wrapped, instead of scrolling out of sight. */
+  @media (max-width: 30rem) {
+    .install {
+      border-radius: var(--radius-lg);
+      padding-inline: 1rem;
+    }
+
+    .install code {
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+  }
+
   /* The copy button (round, see 1-base.css) sits nearer the edge than the text does. */
   .copy-icon {
     --size: 2.25rem;

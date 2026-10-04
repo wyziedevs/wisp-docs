@@ -116,7 +116,7 @@
   .view .remove {
     padding: 0 1rem;
     border: 1px solid var(--line-strong);
-    border-radius: var(--radius);
+    border-radius: var(--pill);
     background: var(--panel-2);
     color: var(--ink);
     font: 500 var(--fs-sm) var(--sans);

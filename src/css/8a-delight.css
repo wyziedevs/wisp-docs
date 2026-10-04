@@ -48,8 +48,10 @@
     transition-timing-function: var(--ease);
   }
 
-  :is(.btn, .pager a, .hosts span, .demo button):hover {
-    translate: 0 -1px;
+  @media (hover: hover) {
+    :is(.btn, .pager a, .hosts span, .demo button):hover {
+      translate: 0 -1px;
+    }
   }
 
   :is(.btn, .icon, .mnav summary, .copy-icon, .copy-code, .links a, .mnav nav a, .tabs label, .side li a, .switch a,
@@ -65,9 +67,11 @@
     translate: 0;
   }
 
-  .hosts span:hover {
-    border-color: var(--accent);
-    color: var(--ink);
+  @media (hover: hover) {
+    .hosts span:hover {
+      border-color: var(--accent);
+      color: var(--ink);
+    }
   }
 
   /* Heading links slide in. */

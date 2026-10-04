@@ -365,7 +365,7 @@ td:last-child {
 /* Docs: a reading bar under the header, fed by the scroll position. */
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
-    .top.docs::after {
+    .top.reading::after {
       content: "";
       position: absolute;
       left: 0;

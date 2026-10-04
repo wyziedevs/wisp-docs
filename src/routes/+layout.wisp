@@ -74,7 +74,7 @@ let ld = match me {
   {/if}
 </head>
 <a class="skip" href="#main">Skip to Content</a>
-<header class="top" class:docs={docs}>
+<header class="top" class:reading={docs}>
   <div class="bar">
     <a class="brand" href="/" aria-label="Wisp home">
       <span class="ghost" aria-hidden="true" bind:this="box">

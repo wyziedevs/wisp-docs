@@ -143,10 +143,10 @@
 .blog-bar input {
   flex: 1;
   min-width: 0;
-  height: 2.5rem;
-  padding: 0 0.75rem;
+  height: 2.75rem;
+  padding: 0 1.125rem;
   border: 1px solid var(--line-strong);
-  border-radius: var(--radius);
+  border-radius: var(--pill);
   background: var(--bg);
   color: var(--ink);
   font: inherit;
