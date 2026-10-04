@@ -11,6 +11,8 @@ src/routes/docs/+layout.wisp     sidebar, filter, table of contents, previous an
 src/routes/docs/+page.md         Getting started (/docs)
 src/routes/docs/<slug>/+page.md  one docs page each
 src/css/*.css                    all the styling, joined in name order (light and dark follow the system)
+build.rs                         joins src/css into .wisp/app.css, writes static/search-index.json and the
+                                 docs and blog heading tables, then runs the Wisp build
 static/                          favicon, og.png, fonts
 ```
 

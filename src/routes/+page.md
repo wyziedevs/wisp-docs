@@ -53,9 +53,7 @@ pub static TODOS: Table<Todo> = Table::saved();
 </div>
 </section>
 
-<section class="sec" id="fast">
-<div class="wrap">
-<div class="claim wide">
+<Claim id="fast">
 
 ## Nothing Extra on the Hot Path
 
@@ -63,9 +61,7 @@ A route pays only for the features it uses, and a change that touches the reques
 
 <p class="more"><a href="/docs/benchmarks">How Speed Is Measured</a></p>
 
-</div>
-</div>
-</section>
+</Claim>
 
 <section class="sec cheap" id="cheap">
 <div class="wrap">
@@ -74,6 +70,10 @@ A route pays only for the features it uses, and a change that touches the reques
 ## Make the Same App with Half the Tokens
 
 AI writes most code now, and every token it reads and writes costs time and money. Wisp is built so an app costs the fewest: conventions instead of config, types the compiler infers, and forms that write themselves. The whole reference is one file, [llms.txt and AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md), and `wisp mcp` serves it to coding agents.
+
+```bash
+claude mcp add wisp -- wisp mcp
+```
 
 </div>
 
@@ -208,7 +208,7 @@ let name = cx.query_or("name", "world".to_string());
 
 </Band>
 
-<Band id="binary" title="One Binary, on Any Host" lead="Templates compile to plain Rust, and the whole app, styles and static files included, becomes one small binary. Every fast path is proven at startup and falls back, and nothing after startup panics. The same app builds as a container, static HTML, or for an edge or serverless host.">
+<Band id="binary" title="One Binary, on Any Host" lead="Templates compile to plain Rust, and the whole app, styles and static files included, becomes one small binary. Every fast path is proven at startup and falls back, and nothing after startup panics. The same app builds as a container, static HTML, or for an edge or serverless host. This site is one too: server-rendered pages that work with JavaScript off, down to the demo and the search form.">
 
 ```bash
 wisp build

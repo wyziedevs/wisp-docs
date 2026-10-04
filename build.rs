@@ -4,7 +4,7 @@
 use std::collections::HashSet;
 use std::fmt::Write as _;
 use std::fs;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 const TEXT_CAP: usize = 420;
 
@@ -19,6 +19,33 @@ fn main() {
     wisp_build::run();
 }
 
+/// Writes `text` to `path` only when it differs, so an unchanged file does not
+/// retrigger the build.
+fn put(path: &Path, text: &str) {
+    if fs::read_to_string(path).ok().as_deref() != Some(text) {
+        let _ = fs::write(path, text);
+    }
+}
+
+fn out_dir() -> PathBuf {
+    PathBuf::from(std::env::var("OUT_DIR").unwrap_or_default())
+}
+
+/// The URL path of a `+page.md`: its directory below `src/routes`, with a leading slash.
+fn route(md: &Path) -> Option<String> {
+    let dir = md.parent()?.strip_prefix("src/routes").ok()?;
+    Some(format!("/{}", dir.to_string_lossy().replace('\\', "/")))
+}
+
+/// A page's headings as Rust tuple source: `(id, text, level),` each.
+fn heads_rs(heads: &[(String, String, usize)]) -> String {
+    let mut out = String::new();
+    for (id, h, level) in heads {
+        let _ = write!(out, "({id:?}, {h:?}, {level}),");
+    }
+    out
+}
+
 /// The stylesheet is `src/css/*.css`, in name order, joined into `.wisp/app.css`,
 /// which the Wisp build serves in place of `src/app.css`.
 fn css() {
@@ -30,56 +57,33 @@ fn css() {
         .filter(|p| p.extension().is_some_and(|x| x == "css"))
         .collect();
     files.sort();
-    let all: String = files
+    let all = files
         .iter()
         .filter_map(|f| fs::read_to_string(f).ok())
         .collect::<Vec<_>>()
-        .join("
-");
+        .join("\n");
     let _ = fs::create_dir_all(".wisp");
-    if fs::read_to_string(".wisp/app.css").ok().as_deref() != Some(&all) {
-        let _ = fs::write(".wisp/app.css", all);
-    }
+    put(Path::new(".wisp/app.css"), &all);
 }
 
 fn index() {
     let mut pages = Vec::new();
     collect(Path::new("src/routes/docs"), &mut pages);
     pages.sort();
-    let mut out = String::from("[");
+    let mut entries = Vec::new();
     let mut toc = String::from("&[");
-    let mut first = true;
     for md in pages {
         let Ok(src) = fs::read_to_string(&md) else { continue };
-        let path = md
-            .strip_prefix("src/routes").ok()
-            .and_then(|p| p.parent())
-            .map(|p| format!("/{}", p.to_string_lossy().replace('\\', "/")))
-            .unwrap_or_default();
-        let (entry, heads) = page(&path, &src);
-        let _ = write!(toc, "({path:?}, &[");
-        for (id, h, level) in heads {
-            let _ = write!(toc, "({id:?}, {h:?}, {level}),");
-        }
-        toc.push_str("]),");
-        if !first {
-            out.push(',');
-        }
-        first = false;
-        out.push_str(&entry);
+        let path = route(&md).unwrap_or_default();
+        let p = page(&src);
+        let _ = write!(toc, "({path:?}, &[{}]),", heads_rs(&p.heads));
+        entries.push(p.entry(&path));
     }
-    out.push(']');
     toc.push(']');
     // The headings of each page for the docs layout's Contents: [(path, [(id, text, level)])].
-    let toc_rs = Path::new(&std::env::var("OUT_DIR").unwrap_or_default()).join("toc.rs");
-    if fs::read_to_string(&toc_rs).ok().as_deref() != Some(&toc) {
-        let _ = fs::write(&toc_rs, toc);
-    }
+    put(&out_dir().join("toc.rs"), &toc);
     let _ = fs::create_dir_all("static");
-    // Only rewrite on change, so an unchanged index does not retrigger the build.
-    if fs::read_to_string("static/search-index.json").ok().as_deref() != Some(&out) {
-        let _ = fs::write("static/search-index.json", out);
-    }
+    put(Path::new("static/search-index.json"), &format!("[{}]", entries.join(",")));
 }
 
 /// Each blog post's reading words and h2s for the blog layout:
@@ -92,13 +96,11 @@ fn blog() {
     let mut out = String::from("&[");
     for md in posts {
         let Ok(src) = fs::read_to_string(&md) else { continue };
-        let Some(dir) = md.parent().and_then(|p| p.strip_prefix("src/routes").ok()) else { continue };
-        let path = format!("/{}", dir.to_string_lossy().replace('\\', "/"));
+        let Some(path) = route(&md) else { continue };
         let body = src
             .strip_prefix("---")
             .and_then(|r| r.split_once("\n---"))
             .map_or(src.as_str(), |(_, b)| b);
-        let (_, heads) = page(&path, &src);
         let mut words = 0;
         let mut fenced = false;
         for line in body.lines() {
@@ -108,20 +110,13 @@ fn blog() {
                 words += plain(line.trim_start_matches('#')).split_whitespace().count();
             }
         }
-        let _ = write!(out, "({path:?}, {words}, &[");
-        for (id, h, level) in heads {
-            let _ = write!(out, "({id:?}, {h:?}, {level}),");
-        }
-        out.push_str("]),");
+        let _ = write!(out, "({path:?}, {words}, &[{}]),", heads_rs(&page(&src).heads));
     }
     out.push(']');
-    let rs = Path::new(&std::env::var("OUT_DIR").unwrap_or_default()).join("blog.rs");
-    if fs::read_to_string(&rs).ok().as_deref() != Some(&out) {
-        let _ = fs::write(&rs, out);
-    }
+    put(&out_dir().join("blog.rs"), &out);
 }
 
-fn collect(dir: &Path, out: &mut Vec<std::path::PathBuf>) {
+fn collect(dir: &Path, out: &mut Vec<PathBuf>) {
     let Ok(rd) = fs::read_dir(dir) else { return };
     for e in rd.flatten() {
         let p = e.path();
@@ -133,7 +128,45 @@ fn collect(dir: &Path, out: &mut Vec<std::path::PathBuf>) {
     }
 }
 
-fn page(path: &str, src: &str) -> (String, Vec<(String, String, usize)>) {
+/// A parsed docs page: front matter, sections `(id, heading, text)` and the h2/h3 `heads`.
+struct Page {
+    title: String,
+    group: String,
+    desc: String,
+    sections: Vec<(String, String, String)>,
+    heads: Vec<(String, String, usize)>,
+}
+
+impl Page {
+    /// The search index entry: `[path, title, group, desc, [[id, heading, text]..]]`.
+    fn entry(&self, path: &str) -> String {
+        let mut parts = Vec::new();
+        for (id, h, t) in &self.sections {
+            if h.is_empty() && t.is_empty() {
+                continue;
+            }
+            let mut t = t.as_str();
+            if t.len() > TEXT_CAP {
+                let mut n = TEXT_CAP;
+                while !t.is_char_boundary(n) {
+                    n -= 1;
+                }
+                t = &t[..n];
+            }
+            parts.push(format!("[{},{},{}]", js(id), js(h), js(t)));
+        }
+        format!(
+            "[{},{},{},{},[{}]]",
+            js(path),
+            js(&self.title),
+            js(&self.group),
+            js(&self.desc),
+            parts.join(",")
+        )
+    }
+}
+
+fn page(src: &str) -> Page {
     let (front, body) = match src.strip_prefix("---\n").or_else(|| src.strip_prefix("---\r\n")) {
         Some(rest) => match rest.split_once("\n---") {
             Some((f, b)) => (f, b.trim_start_matches(['\r', '\n'])),
@@ -148,7 +181,6 @@ fn page(path: &str, src: &str) -> (String, Vec<(String, String, usize)>) {
             .map(|v| v.trim().to_string())
             .unwrap_or_default()
     };
-    let (title, group, desc) = (field("title"), field("group"), field("description"));
 
     let mut sections: Vec<(String, String, String)> = Vec::new();
     let mut ids: HashSet<String> = HashSet::new();
@@ -193,35 +225,7 @@ fn page(path: &str, src: &str) -> (String, Vec<(String, String, usize)>) {
         }
     }
     sections.push(cur);
-    let mut out = String::new();
-    let _ = write!(
-        out,
-        "[{},{},{},{},[",
-        js(path),
-        js(&title),
-        js(&group),
-        js(&desc)
-    );
-    let mut first = true;
-    for (id, h, mut t) in sections {
-        if h.is_empty() && t.is_empty() {
-            continue;
-        }
-        if t.len() > TEXT_CAP {
-            let mut n = TEXT_CAP;
-            while !t.is_char_boundary(n) {
-                n -= 1;
-            }
-            t.truncate(n);
-        }
-        if !first {
-            out.push(',');
-        }
-        first = false;
-        let _ = write!(out, "[{},{},{}]", js(&id), js(&h), js(&t));
-    }
-    out.push_str("]]");
-    (out, heads)
+    Page { title: field("title"), group: field("group"), desc: field("description"), sections, heads }
 }
 
 /// Markdown to the text a reader sees: links to their text, no emphasis marks.
