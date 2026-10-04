@@ -94,11 +94,6 @@
     animation: veil 180ms var(--ease);
   }
 
-  /* The current sidebar link grows its bar in. */
-  .side li a[aria-current]::before {
-    animation: grow 260ms var(--ease) backwards;
-  }
-
   /* The ghost's happy hop and the Konami spin. */
   .brand .ghost.happy svg,
   .brand:is(:hover, :focus-visible) .ghost.happy svg {
@@ -139,18 +134,6 @@
 /* The sidebar's current marker. */
 .side li a {
   position: relative;
-}
-
-.side li a[aria-current]::before {
-  content: "";
-  position: absolute;
-  left: 0.5rem;
-  top: 0.4rem;
-  bottom: 0.4rem;
-  width: 2px;
-  border-radius: 1px;
-  background: var(--accent);
-  transform-origin: top;
 }
 
 /* On This Page: one bar that slides to the section being read (toc.js sets
@@ -220,12 +203,6 @@ pre::after {
 @keyframes veil {
   from {
     opacity: 0;
-  }
-}
-
-@keyframes grow {
-  from {
-    scale: 1 0;
   }
 }
 
