@@ -3,8 +3,8 @@ const MONTHS: [&str; 12] = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December",
 ];
-// Each post's prose word count and h2s, from build.rs: [(path, words, [(id, text)])].
-let facts: &[(&str, usize, &[(&str, &str)])] = include!(concat!(env!("OUT_DIR"), "/blog.rs"));
+// Each post's prose word count and headings, from build.rs: [(path, words, [(id, text, level)])].
+let facts: &[(&str, usize, &[(&str, &str, u8)])] = include!(concat!(env!("OUT_DIR"), "/blog.rs"));
 // "2026-10-04" to "Oct 4, 2026" (short) or "October 4, 2026".
 let day = |d: &str, short: bool| {
     let mut it = d.splitn(3, '-');
@@ -108,12 +108,14 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
     {:else}
       <div class="post-wrap">
         {#if heads.len() > 1}
-          <nav class="post-toc" aria-label="Contents">
-            <p>Contents</p>
+          <aside class="post-toc" aria-label="On this page">
+            <h2>On This Page</h2>
             <ul>
-              {#each heads as (id, text)}<li><a href={format!("#{id}")}>{text}</a></li>{/each}
+              {#each heads as (id, text, level)}
+                <li class={format!("h{level}")}><a href={format!("#{id}")}>{text}</a></li>
+              {/each}
             </ul>
-          </nav>
+          </aside>
         {/if}
         <article class="post doc">
           <p class="eyebrow"><a href="/blog">The Blog</a></p>
@@ -148,6 +150,7 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
 
 <script>
   import { afterNavigate } from 'wisp'
+  import { spy } from '$lib/toc.js'
 
   // Filters the list as you type; without JS the form filters on the server.
   function filter(e) {
@@ -174,6 +177,16 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
     }
   }
 
-  onMount(anchors)
-  afterNavigate(anchors)
+  // The On This Page list marks the section being read, as in the docs.
+  let off = null
+  function post() {
+    anchors()
+    off?.()
+    off = null
+    const toc = document.querySelector('.post-toc ul')
+    if (toc) off = spy(toc)
+  }
+
+  onMount(post)
+  afterNavigate(post)
 </script>

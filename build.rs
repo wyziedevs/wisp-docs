@@ -58,7 +58,7 @@ fn index() {
 }
 
 /// Each blog post's reading words and h2s for the blog layout:
-/// [(path, words, [(id, text)])]. Words are the prose a reader reads (text
+/// [(path, words, [(id, text, level)])]. Words are the prose a reader reads (text
 /// outside code fences, Markdown marks stripped), counted at build time.
 fn blog() {
     let mut posts = Vec::new();
@@ -85,9 +85,7 @@ fn blog() {
         }
         let _ = write!(out, "({path:?}, {words}, &[");
         for (id, h, level) in heads {
-            if level == 2 {
-                let _ = write!(out, "({id:?}, {h:?}),");
-            }
+            let _ = write!(out, "({id:?}, {h:?}, {level}),");
         }
         out.push_str("]),");
     }
