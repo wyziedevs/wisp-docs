@@ -15,18 +15,17 @@ all.sort_by_key(|p| {
     let order = p.get("order").and_then(|o| o.parse::<u32>().ok()).unwrap_or(999);
     (lead, order)
 });
-let is_ref: Vec<bool> = all.iter().map(|p| site::is_reference(p)).collect();
+let secs: Vec<&str> = all.iter().map(|p| site::section(p)).collect();
 let at = all.iter().position(|p| p.path == site::bare(cx.path()));
-let reference = at.is_some_and(|i| is_ref[i]);
-let kind = if reference { "Reference" } else { "Learn" };
-let list: Vec<_> = all
-    .iter()
-    .zip(&is_ref)
-    .filter(|(_, r)| **r == reference)
-    .map(|(p, _)| *p)
-    .collect();
-let learn_home = all.iter().zip(&is_ref).find(|(_, r)| !**r).map_or("/docs", |(p, _)| p.path);
-let ref_home = all.iter().zip(&is_ref).find(|(_, r)| **r).map_or("/docs", |(p, _)| p.path);
+let tab = at.map_or("learn", |i| secs[i]);
+let kind = match tab {
+    "reference" => "Reference",
+    "hosting" => "Hosting",
+    _ => "Learn",
+};
+let list: Vec<_> = all.iter().zip(&secs).filter(|(_, s)| **s == tab).map(|(p, _)| *p).collect();
+let home = |s: &str| all.iter().zip(&secs).find(|(_, t)| **t == s).map_or("/docs", |(p, _)| p.path);
+let (learn_home, ref_home, host_home) = (home("learn"), home("reference"), home("hosting"));
 
 let mut groups: Vec<(&str, bool, Vec<_>)> = Vec::new();
 for p in &list {
@@ -64,8 +63,9 @@ let edit = match site::bare(cx.path()) {
     <details class="menu">
       <summary>{kind} Menu</summary>
       <div class="switch" role="list">
-        <a role="listitem" href={site::dir(learn_home)} aria-current={(!reference).then_some("true")}>Learn</a>
-        <a role="listitem" href={site::dir(ref_home)} aria-current={reference.then_some("true")}>Reference</a>
+        <a role="listitem" href={site::dir(learn_home)} aria-current={(tab == "learn").then_some("true")}>Learn</a>
+        <a role="listitem" href={site::dir(ref_home)} aria-current={(tab == "reference").then_some("true")}>Reference</a>
+        <a role="listitem" href={site::dir(host_home)} aria-current={(tab == "hosting").then_some("true")}>Hosting</a>
       </div>
       <nav aria-label={format!("{kind} pages")}>
         {#each groups as (name, open, items)}
@@ -85,7 +85,7 @@ let edit = match site::bare(cx.path()) {
   <article class="doc" bind:this="doc">
     <p class="sr" role="status" aria-live="polite" bind:this="copied"></p>
     <nav class="crumbs" aria-label="Breadcrumb">
-      <a href={site::dir(if reference { ref_home } else { learn_home })}>{kind}</a>
+      <a href={site::dir(home(tab))}>{kind}</a>
       <span>{group}</span>
     </nav>
     <h1 class="doc-title">{at.map(|i| all[i].title).unwrap_or("")}</h1>

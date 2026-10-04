@@ -15,14 +15,17 @@ let title = me.map_or("Wisp", |p| p.title);
 let about = me
     .and_then(|p| p.get("description"))
     .unwrap_or("Wisp is a fast, fun web framework for Rust: file routes, .wisp templates compiled to Rust, form actions and one binary to deploy.");
-let reference = me.is_some_and(|p| path.starts_with("/docs") && site::is_reference(p));
 let docs = path == "/docs" || path.starts_with("/docs/");
-let learn = !reference && docs;
+let tab = if docs { me.map_or("learn", |p| site::section(p)) } else { "" };
+let reference = tab == "reference";
+let hosting = tab == "hosting";
+let learn = tab == "learn";
 let community = path == "/community";
 let blog = path == "/blog" || path.starts_with("/blog/");
 let links = [
     ("/docs/", "Learn", learn),
     ("/docs/design/", "Reference", reference),
+    ("/docs/deploy/", "Hosting", hosting),
     ("/community/", "Community", community),
     ("/blog/", "Blog", blog),
 ];
