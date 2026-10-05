@@ -53,7 +53,7 @@ A route pays only for the features it uses, and a change that touches the reques
 
 ## Benchmarked Against Popular Frameworks
 
-TechEmpower's plaintext and JSON tests on one shared 4-vCPU VM, every server on the same 2 cores, medians of 3 runs. Hono on Bun, SvelteKit and Next.js have no TechEmpower entry, so they serve the same routes as plain handlers. Not an official TechEmpower result.
+TechEmpower's plaintext and JSON tests on one shared 4-vCPU VM, every server on the same 2 cores, medians of 3 runs.
 
 <Speed />
 
