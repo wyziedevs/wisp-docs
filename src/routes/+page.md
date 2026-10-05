@@ -92,7 +92,7 @@ TechEmpower's plaintext and JSON tests, run with their own load scripts against 
 </div>
 </div>
 
-Source: [`bench/tfb`](https://github.com/wyziedevs/wisp/blob/main/bench/tfb/RESULTS.md), run 2026-10-04 on a shared 4-vCPU AMD EPYC 7B13 VM, wrk, medians of 3 runs of 15 seconds, server on 2 pinned cores; sorted by median requests per second, with a contender that completed no request marked No result and listed last. Every contender, both workloads and all connection levels are in the full results; this is not an official TechEmpower result, and the same binary moved between moments on this shared VM, so rows whose min-max ranges overlap are ties: on JSON at 64 connections Wisp is tied with Actix Web and Axum.
+Source: [`bench/tfb`](https://github.com/wyziedevs/wisp/blob/main/bench/tfb/RESULTS.md), 2026-10-04, shared 4-vCPU VM, medians of 3 runs. Not an official TechEmpower result. Close results are ties; the full results have the ranges.
 
 <p class="more"><a href="https://github.com/wyziedevs/wisp/blob/main/bench/tfb/RESULTS.md">Full Results</a></p>
 
