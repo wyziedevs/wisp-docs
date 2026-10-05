@@ -55,7 +55,7 @@ fn remove(id: u64) {
 
 A route pays only for the features it uses, and a change that touches the request path is checked by an instructions-per-request A/B before it lands. Wisp's first rule is that speed is never traded away for convenience.
 
-The same app built for Node, Deno and Bun answers from the app's own HTTP parser over raw sockets. The measured tables against Hono on each host, with the machine and date, are on the benchmarks page. Rank tables against more frameworks are pending a valid run.
+The same app built for Node, Deno and Bun answers from the app's own HTTP parser over raw sockets. The raw tables against Hono on each host, with the machine and date, are on the benchmarks page (run validity not recorded, no steal data; no ranking is drawn from them). Rank tables against more frameworks are pending a valid run.
 
 <p class="more"><a href="/docs/benchmarks/">Results and How Speed Is Measured</a></p>
 
