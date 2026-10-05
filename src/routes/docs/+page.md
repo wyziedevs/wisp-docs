@@ -29,18 +29,15 @@ wisp dev               # http://127.0.0.1:3000
 ```html
 ---
 let name = cx.query_or("name", "world".to_string());
+let count = 0;
 ---
 
 <h1>Hello, {name}!</h1>
 
 <button on:click="count++">Clicked {:count} times</button>
-
-<script>
-  let count = $state(0)
-</script>
 ```
 
-The `---` block is Rust that runs per request, `{name}` renders on the server, and `{:count}` is JavaScript state in the browser. With JavaScript off, the server's HTML still works.
+The `---` block is Rust that runs per request, `{name}` renders on the server, and `{:count}` is JavaScript state in the browser: a literal `let` alone on its line there is browser state built in, with nothing computed per request. With JavaScript off, the server's HTML still works.
 
 ## Data and a Form
 

@@ -8,14 +8,22 @@ order: 30
 Pages work without JavaScript; a script and directives in the same `.wisp` file add behavior. No bundler. `{…}` is Rust (server); a quoted directive value and `{:…}` are JavaScript (browser).
 
 ```html
+---
+let count = 0;
+---
 <button on:click="count++">Clicked {:count} times</button>
-<script>
-  let count = 0
-</script>
 ```
 
+## State in the `---` Block
+The cheapest browser state is a literal `let` in the page's `---` block: a number, `true`/`false`, `None` (null), a string, or `[..]`/`vec![..]` of those, alone on its line (a trailing comment is fine). The build moves it into the page's client code exactly as a `<script>` `let` would be: no per-request server cost, and `{:count}` and directives read it. A computed value, or one the server also renders, stays a Rust `let` and is sent with the page.
+
+- A form action that rewrites the name keeps the browser's value across the morph.
+- A moved number is no longer a Rust value, so its type and range are not checked: `let x: u8 = 300;` builds.
+- A `let` that shares its line with other code stays Rust.
+- Use a `<script>` for real browser logic: the DOM, `$effect`, lifecycle, imports, `$props`.
+
 ## The Script
-A bare `<script>` (no attributes; one per file) works in pages, layouts and components and runs once per place the file is shown. `<script type|src>` stays plain HTML. Errors point at the `.wisp` line.
+A bare `<script>` (no attributes; one per file) is for real browser logic and works in pages, layouts and components and runs once per place the file is shown. `<script type|src>` stays plain HTML. Errors point at the `.wisp` line.
 
 - Top-level `let`s are state: assigning one, or changing an object, array, `Map` or `Set` in it (`todos.push(t)`, `todo.done = true`), redraws. A `let` set to a string, number or boolean and never assigned is a constant.
 - `import` lines move to the module head (`import c from 'https://esm.sh/canvas-confetti'`).

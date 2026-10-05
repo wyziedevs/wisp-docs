@@ -84,17 +84,18 @@ The `<style>` block applies to this component only. Props are checked when the a
 
 ## Adding State
 
-Browser code lives in the same file as the markup. A top-level `let` in a `<script>` is state, `{:count}` shows it, and a directive such as `on:click` changes it:
+Browser state can live in the page's `---` block. A `let` set to a literal (a number, `true`/`false`, a string, a list of those) on its own line is state, `{:count}` shows it, and a directive such as `on:click` changes it. It costs the server nothing per request:
 
 ```html
+---
+let count = 0;
+---
 <button on:click="count++">Clicked {:count} times</button>
-
-<script>
-  let count = $state(0)
-</script>
 ```
 
-A write redraws only the parts of the page that read what changed. Without JavaScript the server's HTML still works, which is why forms and links do not depend on a script. See [Browser code](/docs/client/).
+A `<script>` is for real browser logic (the DOM, effects, lifecycle, imports), where a top-level `let` is state too. A moved header number is no longer checked by Rust: `let x: u8 = 300;` builds. See [Browser code](/docs/client/).
+
+A write redraws only the parts of the page that read what changed. Without JavaScript the server's HTML still works, which is why forms and links do not depend on a script.
 
 <details class="deep-dive">
 <summary>Server Values and Browser Values</summary>
