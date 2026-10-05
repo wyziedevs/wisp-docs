@@ -47,7 +47,7 @@ One std-only process. `wisp dev [--port <n> | --port=<n> | -p <n>]`; anything el
 - **Children die with the CLI.** The app's stdin is a pipe the CLI holds; when it closes (however `wisp dev` ends, even `kill -9`) the app exits (`exit_with_parent`), freeing the port. A CSS watcher runs under `wisp __child <exe> <args...>`, which kills the tool then.
 - **Reload.** Serves a Server-Sent Events stream on its own port. Browsers stay connected across restarts and are told to morph/reload once the new app is ready.
 - **Output.** Cargo progress on the first build, then one line per change (`~ src/routes/+page.wisp  swapped in 0ms`, `✓ Rebuilt in 0.3s`). Compiler errors have paths relative to the app and no generated module names (`Data`, not `page_3::Data`). An error rustc finds in template-generated code is retold against the template's line; an action that returns a value is caught before compiling, against `+page.rs`.
-- **Request log.** The app logs each request in dev (`GET /nope  404  0.1ms`, yellow 4xx, red 5xx) and a handler's panic once, with where. Release builds log only 5xx.
+- **Request log.** The app logs each request in dev (`GET /nope  404  0.1ms`, yellow 4xx, red 5xx) and a handler's panic once, with where; the error dialog shows that panic's message and `file:line`. Release builds log only 5xx and answer a panic with the plain 500.
 
 ### CSS Tools
 

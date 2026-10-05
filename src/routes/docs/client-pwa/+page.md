@@ -47,7 +47,7 @@ Components match by creation order, so a reordering list may trade states. Build
 
 - Component tree with live props and state (editable), stores.
 - The route (params, server values, the page's forms), a table of all the app's routes.
-- Timings (dev responses carry `Server-Timing: total;dur=…`).
+- Timings (dev responses carry `Server-Timing: total;dur=…, before;dur=…, handler;dur=…, render;dur=…`; `WISP_SERVER_TIMING` sets it).
 - A server panic or other 5xx opens the same error dialog with its message and `file:line`; "Open" uses `$WISP_EDITOR` or `$EDITOR`, else `code -g`.
 
 

@@ -24,6 +24,7 @@ Read once at start. Switches take `on`/`off` (also `1`/`0`, `true`/`false`). You
 | `WISP_CLIENT_IP_HEADER` | header with the client address behind a proxy; the client is the last address of the header's last line, the one the trusted proxy added; a client can forge the first |
 | `WISP_SECURE_HEADERS` | `off` leaves out `nosniff` and `referrer-policy` |
 | `WISP_HSTS` | `on` adds `strict-transport-security` |
+| `WISP_SERVER_TIMING` | `Server-Timing` on every answer (on in dev, off otherwise; off costs nothing): `total;dur=ms`, and in a debug build `before`, `handler`, `render` |
 | `WISP_PROBLEM_JSON` | `on`: errors as RFC 9457 problem JSON |
 | `WISP_REQUEST_ID` | `on`: every request gets an id (`cx.request_id()`), echoed as `x-request-id` |
 | `WISP_API_DOCS` | serve `/_wisp/openapi.json` and `/_wisp/docs` (on in dev) |
