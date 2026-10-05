@@ -19,7 +19,9 @@ fn main() {
     css();
     index();
     blog();
-    speed(fetch("bench/tfb/results.json").as_ref());
+    let tfb = fetch("bench/tfb/results.json");
+    speed(tfb.as_ref());
+    levels(tfb.as_ref());
     tokens(fetch("bench/tokens/results.json").as_ref());
     wisp_build::run();
 }
@@ -389,6 +391,44 @@ fn speed(tfb: Option<&Json>) {
     put(&out_dir().join("speed.rs"), &out);
 }
 
+/// The order of the grid's rows: fixed, not ranked.
+const ORDER: &[&str] = &["wisp", "axum", "actix", "express", "fastify", "hono-node", "hono-bun", "sveltekit", "next", "nuxt"];
+
+/// `$OUT_DIR/levels.rs`: [(workload, [connections], [(name, [req/s per level])])], the
+/// medians of every level, a failed one as "No result" and a level not run as "not run".
+fn levels(tfb: Option<&Json>) {
+    let mut out = String::from("&[");
+    for (work, _, _) in SPEED {
+        let at = tfb.and_then(|j| j.get("summary")?.get(work));
+        let mut conns: Vec<u32> = match at {
+            Some(Json::Obj(m)) => m.iter().filter_map(|(k, _)| k.parse().ok()).collect(),
+            _ => Vec::new(),
+        };
+        conns.sort();
+        let _ = write!(out, "({work:?}, &[{}], &[", conns.iter().map(|c| format!("\"{c}\"")).collect::<Vec<_>>().join(","));
+        for key in ORDER {
+            let Some((_, name, _)) = CONTENDERS.iter().find(|(k, _, _)| k == key) else { continue };
+            let cells: Vec<Option<&Json>> = conns.iter().map(|c| at.and_then(|a| a.get(&c.to_string())?.get(key))).collect();
+            if cells.iter().all(Option::is_none) {
+                continue;
+            }
+            let _ = write!(out, "({name:?}, &[");
+            for cell in cells {
+                let text = match cell {
+                    None => "not run".to_string(),
+                    Some(r) if !matches!(r.get("failed"), None | Some(Json::Null)) => "No result".to_string(),
+                    Some(r) => commas(num(r.get("rps_median")).round() as u64),
+                };
+                let _ = write!(out, "{text:?},");
+            }
+            out.push_str("]),");
+        }
+        out.push_str("]),");
+    }
+    out.push(']');
+    put(&out_dir().join("levels.rs"), &out);
+}
+
 /// The stacks the token table shows: the counter's name, the table's.
 const STACKS: &[(&str, &str)] = &[
     ("Wisp", "Wisp"),
@@ -399,24 +439,45 @@ const STACKS: &[(&str, &str)] = &[
     ("React (Vite + Express)", "React (Vite + Express)"),
 ];
 
-/// `$OUT_DIR/tokens.rs`: [(stack, share of the largest, tokens, files)], fewest first.
+/// `$OUT_DIR/tokens.rs`, two tables of the same counts. TOKENS: [(stack, share of the
+/// largest, tokens, files)], the home page's stacks, fewest first. FEATURES: ([feature],
+/// [(stack, [tokens per feature], total, chars / 4, files)]) of every stack, in the
+/// counter's order.
 fn tokens(counts: Option<&Json>) {
-    let mut apps: Vec<_> = counts
-        .and_then(|j| j.get("apps"))
-        .map(|list| list.items())
-        .into_iter()
-        .flatten()
+    let list: Vec<&Json> = counts.and_then(|j| j.get("apps")).map(|l| l.items().collect()).unwrap_or_default();
+    let mut home: Vec<_> = list
+        .iter()
         .filter_map(|r| {
             let name = STACKS.iter().find(|(k, _)| Some(*k) == r.str("stack"))?.1;
             Some((name, num(r.get("tokens")), num(r.get("files")) as usize))
         })
         .collect();
-    apps.sort_by(|a, b| a.1.total_cmp(&b.1));
-    let top = apps.iter().map(|r| r.1).fold(0.0, f64::max);
+    home.sort_by(|a, b| a.1.total_cmp(&b.1));
+    let top = home.iter().map(|r| r.1).fold(0.0, f64::max);
     let mut out = String::from("&[");
-    for (name, t, files) in apps {
+    for (name, t, files) in home {
         let _ = write!(out, "({name:?}, {:.3}, {:?}, {files}),", t / top, commas(t as u64));
     }
     out.push(']');
     put(&out_dir().join("tokens.rs"), &out);
+
+    let names: Vec<String> = match list.first().and_then(|r| r.get("features")) {
+        Some(Json::Obj(m)) => m.iter().map(|(k, _)| k.clone()).collect(),
+        _ => Vec::new(),
+    };
+    let mut out = format!("(&[{}], &[", names.iter().map(|n| format!("{n:?}")).collect::<Vec<_>>().join(","));
+    for r in &list {
+        let by: Vec<String> = names.iter().map(|n| format!("{:?}", num(r.get("features").and_then(|f| f.get(n))) as u64)).collect();
+        let _ = write!(
+            out,
+            "({:?}, &[{}], {:?}, {:?}, {}),",
+            r.str("stack").unwrap_or(""),
+            by.join(","),
+            commas(num(r.get("tokens")) as u64),
+            commas(num(r.get("chars")) as u64),
+            num(r.get("files")) as usize
+        );
+    }
+    out.push_str("])");
+    put(&out_dir().join("features.rs"), &out);
 }

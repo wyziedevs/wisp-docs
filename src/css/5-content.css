@@ -127,6 +127,11 @@ pre:focus-within .copy-code,
   }
 }
 
+/* The Levels and TokenGrid components: Wisp's row in bold. */
+.grid .us :is(th, td) {
+  font-weight: 700;
+}
+
 /* The token tally: a bar per stack, Wisp in the accent. */
 .tally {
   width: 100%;

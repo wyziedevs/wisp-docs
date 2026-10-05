@@ -34,6 +34,14 @@ pub fn bare(path: &str) -> &str {
 /// (build.rs): [(caption, [(name, built on, share of the fastest, req/s)])].
 pub const SPEED: &[(&str, &[(&str, &str, f64, &str)])] = include!(concat!(env!("OUT_DIR"), "/speed.rs"));
 
+/// Every workload's medians at every connection level, from `bench/tfb/results.json`:
+/// [(workload, [connections], [(name, [req/s per level])])].
+pub const LEVELS: &[(&str, &[&str], &[(&str, &[&str])])] = include!(concat!(env!("OUT_DIR"), "/levels.rs"));
+
+/// Every stack's tokens per feature, from `bench/tokens/results.json`: ([feature],
+/// [(stack, [tokens per feature], total, chars / 4, files)]).
+pub const FEATURES: (&[&str], &[(&str, &[&str], &str, &str, usize)]) = include!(concat!(env!("OUT_DIR"), "/features.rs"));
+
 /// The home page's token table, from `bench/tokens/results.json`:
 /// [(stack, share of the largest, tokens, files)].
 pub const TOKENS: &[(&str, f64, &str, usize)] = include!(concat!(env!("OUT_DIR"), "/tokens.rs"));

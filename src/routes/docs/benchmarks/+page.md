@@ -19,21 +19,9 @@ You need Rust. `bench/README.md` lists every option, the frameworks compared, an
 
 Source: [`bench/tfb/RESULTS.md`](https://github.com/wyziedevs/wisp/blob/main/bench/tfb/RESULTS.md) (generated from `results.json`). TechEmpower's plaintext and JSON tests with their own wrk scripts, run 2026-10-04 on one shared 4-vCPU VM (AMD EPYC 7B13), the server on 2 pinned cores, medians of 3 runs of 15 s. Not an official TechEmpower result. Contenders are in a fixed order, not ranked; "Failed" means no run completed a request, and a `0` median means at least 2 of 3 runs completed none. The full results add min, max, latency and errors per row. The same Wisp binary moved between moments on this VM, so gaps inside the min-max ranges are ties.
 
-<div class="table-wrap">
-
 Plaintext, pipelined, requests per second (median of 3), by connections:
 
-| Contender | 256 | 1024 | 4096 | 16384 |
-|---|---:|---:|---:|---:|
-| **Wisp** | **1,129,577** | **623,348** | **532,959** | **220** |
-| Axum | 276,948 | 381,324 | 446,398 | 171,231 |
-| Actix Web | 603,163 | 366,626 | 351,844 | 0 |
-| Express | 40,421 | 36,184 | 27,554 | 0 |
-| Fastify | 51,713 | 62,345 | 58,956 | 16,573 |
-| Hono (Node) | 28,966 | 29,602 | 34,173 | 0 |
-| Hono (Bun) | 10,599 | 10,375 | 9,652 | 6,910 |
-| SvelteKit | 10,929 | 8,464 | 8,359 | 0 |
-| Next.js | No result | No result | No result | not run |
+<Levels work="plaintext" />
 
 Rows whose min-max ranges overlap are ties. 256: Fastify and Express; Hono (Node), SvelteKit and Hono (Bun). 1024: Axum and Actix Web; Express and Hono (Node). 4096: Hono (Node) and Express. 16384: Wisp's range (0 to 29,252) overlaps every row that answered, so no rank is drawn there.
 
@@ -41,21 +29,9 @@ Next.js completed no pipelined plaintext response at any level, and raising its 
 
 JSON, requests per second (median of 3), by connections:
 
-| Contender | 16 | 32 | 64 | 128 | 256 | 512 |
-|---|---:|---:|---:|---:|---:|---:|
-| **Wisp** | **71,879** | **86,813** | **96,089** | **107,834** | **91,876** | **73,714** |
-| Axum | 79,105 | 86,901 | 78,427 | 92,662 | 60,465 | 47,070 |
-| Actix Web | 90,199 | 99,098 | 89,648 | 106,246 | 108,428 | 71,315 |
-| Express | 16,945 | 16,586 | 14,746 | 13,795 | 18,023 | 22,644 |
-| Fastify | 21,996 | 21,210 | 21,965 | 19,977 | 21,249 | 24,163 |
-| Hono (Node) | 17,069 | 15,571 | 8,988 | 9,354 | 13,084 | 15,349 |
-| Hono (Bun) | 52,353 | 54,056 | 59,619 | 51,580 | 47,379 | 28,439 |
-| SvelteKit | 7,990 | 9,774 | 10,378 | 7,714 | 6,062 | 6,698 |
-| Next.js | 1,499 | 1,285 | 1,524 | 1,513 | 1,370 | 1,715 |
+<Levels work="json" />
 
 Rows whose min-max ranges overlap are ties. 16: Actix Web and Axum, Axum and Wisp; Fastify, Hono (Node) and Express. 32: Wisp with Actix Web and with Axum; Express, Hono (Node) and SvelteKit. 64: Wisp, Actix Web and Axum; SvelteKit and Hono (Node). 128: Wisp and Actix Web. 256: Fastify and Express. 512: Wisp and Actix Web; Axum and Hono (Bun).
-
-</div>
 
 Earlier run (2026-09-28, other Linux VPS, 64 connections, plaintext and fortunes, CPU per request): [`bench/README.md`](https://github.com/wyziedevs/wisp/blob/main/bench/README.md). A later rerun on a CPU-capped VPS (about 75% steal) was invalid and is not published, so this site claims no current Linux ranking; rank tables are pending a valid run. Instructions per request (callgrind, valid on any host load): `GET /` 1572, `GET /user/0` 2310, `POST /user` 1773 at d72eee5; 1585, 2323 and 1789 after the chunked fix.
 

@@ -21,20 +21,7 @@ An AI reads and writes code by the token, so an app's cost is measured in tokens
 
 The Node apps: Nuxt is file routes, server routes in `server/api` and `useFetch`, the form posting with `$fetch`; Express renders EJS views with a shared header and footer and a small script for the search; React is a Vite app with React Router, `useState` and `fetch`, over a small Express API. Their generated `package.json`, `nuxt.config.ts` and `index.html` are not counted; the proxy line added to `vite.config.js` is. The Wisp app builds with the workspace, and its tests check each feature.
 
-<div class="table-wrap">
-
-| Stack | list | form | api | layout | search | data | setup | total | chars / 4 | files |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| **Wisp** | 58 | 79 | 31 | 60 | 96 | 108 | 44 | **476** | 299 | 7 |
-| SvelteKit 2 | 128 | 602 | 57 | 83 | 192 | 72 | 0 | 1134 | 696 | 9 |
-| Next.js 15 | 107 | 575 | 44 | 108 | 241 | 71 | 0 | 1146 | 782 | 8 |
-| Nuxt 4 (Vue) | 96 | 600 | 22 | 96 | 158 | 71 | 0 | 1043 | 670 | 8 |
-| React 19 (Vite + Express) | 108 | 696 | 32 | 268 | 191 | 161 | 143 | 1599 | 1098 | 9 |
-| Express 5 + EJS | 128 | 602 | 34 | 116 | 291 | 69 | 148 | 1388 | 805 | 8 |
-| Axum 0.8 + askama | 145 | 894 | 29 | 104 | 217 | 123 | 291 | 1803 | 1239 | 7 |
-| Actix Web 4 + tera | 164 | 906 | 46 | 104 | 237 | 123 | 298 | 1878 | 1279 | 7 |
-
-</div>
+<TokenGrid />
 
 Wisp's `data` is longer than JavaScript's: a Rust type with its fields' types. Most of the rest is shorter, the form most of all; the exception is `api`, where Nuxt (22) and Axum (29) are shorter than Wisp (31). Against Wisp's total, Nuxt is 2.2 times, SvelteKit 2.4, Next.js 2.4, Express 2.9, React 3.4, Axum 3.8 and Actix 3.9. Of what is left, 108 tokens are the Rust type and data, and the rest is markup every stack writes.
 
