@@ -347,6 +347,12 @@
   outline: 0;
 }
 
+/* The field drops its outline; the bar's rule turns violet instead. */
+.find-bar:has(input:focus-visible) {
+  border-bottom-color: var(--accent);
+  box-shadow: 0 1px 0 var(--accent);
+}
+
 .find-bar .esc {
   margin-right: 0.75rem;
   background: none;

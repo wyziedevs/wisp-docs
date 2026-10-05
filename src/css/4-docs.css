@@ -11,6 +11,12 @@
   }
 }
 
+@media (min-width: 72rem) {
+  .docs {
+    grid-template-columns: 17rem minmax(0, 1fr) 14rem;
+  }
+}
+
 @media (min-width: 84rem) {
   .docs {
     grid-template-columns: 19rem minmax(0, 1fr) 16rem;
@@ -264,6 +270,8 @@
 .doc .anchor {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  min-width: 1.5rem; /* a 24px target */
   margin-right: 0.5rem;
   color: var(--ash);
   font-size: 0.7em;
@@ -295,7 +303,7 @@
     position: absolute;
     right: 100%;
     inset-block: 0;
-    height: 1em;
+    height: max(1em, 1.5rem);
     margin-block: auto;
     margin-right: 0.375rem;
   }

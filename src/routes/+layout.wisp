@@ -1,7 +1,7 @@
 ---
 const SITE: &str = "https://wispweb.dev";
 const ORG: &str = r#"{"@type":"Organization","name":"Wyzie LLC","url":"https://wyzie.io"}"#;
-const SITE_LD: &str = r#"{"@context":"https://schema.org","@type":"WebSite","name":"Wisp","url":"~/","potentialAction":{"@type":"SearchAction","target":"~/search?q={search_term_string}","query-input":"required name=search_term_string"}}"#;
+const SITE_LD: &str = r#"{"@context":"https://schema.org","@type":"WebSite","name":"Wisp","url":"~/","potentialAction":{"@type":"SearchAction","target":"~/search/?q={search_term_string}","query-input":"required name=search_term_string"}}"#;
 
 let path = site::bare(cx.path());
 let home = path == "/";
@@ -102,6 +102,14 @@ let ld = match me {
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Wisp, a fast, fun web framework for Rust">
+  <meta name="twitter:image" content="https://wispweb.dev/og.png?v=2">
+  <meta name="twitter:image:alt" content="Wisp, a fast, fun web framework for Rust">
+  {#if blog && dated.is_some()}
+    <meta property="article:published_time" content={dated.unwrap_or("")}>
+    <meta
+      property="article:author"
+      content={me.and_then(|p| p.get("author")).unwrap_or("Wyzie LLC")}>
+  {/if}
   {#if indexed}
     <link rel="canonical" href={url.clone()}>
     <meta property="og:url" content={url.clone()}>
@@ -260,7 +268,11 @@ let ld = match me {
   const mnav = () => document.querySelector('.mnav')
   const shut = (e) => {
     const m = mnav()
-    if (m?.open && (e.type === 'keydown' ? e.key === 'Escape' : !m.contains(e.target))) m.removeAttribute('open')
+    if (m?.open && (e.type === 'keydown' ? e.key === 'Escape' : !m.contains(e.target))) {
+      m.removeAttribute('open')
+      // Escape from inside the menu hands focus back to the button that opened it.
+      if (e.type === 'keydown' && m.contains(document.activeElement)) m.querySelector('summary').focus()
+    }
   }
 
   onMount(() => {
@@ -273,7 +285,6 @@ let ld = match me {
     if (/Mac|iPhone|iPad/.test(navigator.platform)) mod.textContent = '⌘'
     spirit = ghost(box)
     find = finder({ bar, q, dlg, fq, status, hits, tip })
-    console.log('%cwispweb.dev is a Wisp app, one Rust binary. Source: https://github.com/wyziedevs/wisp-docs\n%cTry typing boo.', 'color:#a17ff5;font-weight:600', 'color:inherit')
   })
   afterNavigate(({ from, to }) => {
     blocks()

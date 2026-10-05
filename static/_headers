@@ -5,6 +5,8 @@
   Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-uoCKqZiociVH1lOD5EGScnv8yNoODzeBJu2ao64yf4k=' https://esm.sh https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://esm.sh https://cloudflareinsights.com; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  X-Frame-Options: SAMEORIGIN
 
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable
@@ -15,6 +17,10 @@
 
 /_app/*
   Cache-Control: public, max-age=31536000, immutable
+
+# Icons and the card image: a day.
+/*.png
+  Cache-Control: public, max-age=86400
 
 # Only wispweb.dev is indexed.
 https://:project.pages.dev/*

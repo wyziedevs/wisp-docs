@@ -45,6 +45,7 @@ let text = cx
 <section class="sec showcase">
   <div class="wrap">
     <h1 class="sr">Todos Demo</h1>
+    <h2 class="sr">Todo List</h2>
     <Demo todos={&todos} problem={&problem} text={&text}></Demo>
     <p><a href="/#demo">Back to the Home Page</a></p>
   </div>

@@ -31,6 +31,20 @@ const fit = (p) => {
 }
 const watch = new ResizeObserver((list) => list.forEach((e) => fit(e.target)))
 
+// A polite status for screen readers: a copy button's text change is not announced on its own.
+function say(text) {
+  let r = document.getElementById('copy-status')
+  if (!r) {
+    r = document.createElement('p')
+    r.id = 'copy-status'
+    r.className = 'sr'
+    r.setAttribute('role', 'status')
+    document.body.append(r)
+  }
+  r.textContent = ''
+  setTimeout(() => (r.textContent = text), 50)
+}
+
 // Every code block gets a copy button and, if it overflows, a focus stop.
 export function blocks() {
   watch.disconnect()
@@ -43,6 +57,8 @@ export function blocks() {
     w.append(t)
   }
   for (const t of document.querySelectorAll('.table-wrap, .bench')) watch.observe(t)
+  // Header cells name their column for a screen reader.
+  for (const h of document.querySelectorAll('.doc thead th:not([scope])')) h.scope = 'col'
   for (const p of document.querySelectorAll('pre')) {
     watch.observe(p)
     if (p.querySelector('.copy-code')) continue
@@ -56,9 +72,11 @@ export function blocks() {
         await navigator.clipboard.writeText(p.querySelector('code').textContent)
         b.textContent = 'Copied'
         b.classList.add('done')
+        say('Code copied')
       } catch (e) {
         getSelection()?.selectAllChildren(p.querySelector('code'))
         b.textContent = 'Press Ctrl+C'
+        say('Press Ctrl+C to copy')
       }
       setTimeout(() => {
         b.textContent = 'Copy'

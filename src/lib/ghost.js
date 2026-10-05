@@ -70,7 +70,6 @@ export function ghost(el) {
     if (at === code.length) {
       at = 0
       play('spin')
-      console.log('%cKonami code! The ghost does a spin.', 'color:#a17ff5;font-weight:600')
     }
   }
   addEventListener('keydown', boo)

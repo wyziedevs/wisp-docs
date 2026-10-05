@@ -254,6 +254,7 @@ export function finder({ bar, q, dlg, fq: modalField, status, hits, tip }) {
   function close() {
     if (dlg.open) dlg.close()
     dlg.classList.remove('drop')
+    fq.setAttribute('aria-expanded', 'false')
   }
 
   function keys(e) {
@@ -284,6 +285,7 @@ export function finder({ bar, q, dlg, fq: modalField, status, hits, tip }) {
 
   q.setAttribute('role', 'combobox')
   q.setAttribute('aria-controls', 'find-hits')
+  q.setAttribute('aria-expanded', 'false')
   q.setAttribute('aria-autocomplete', 'list')
   bar.addEventListener('submit', (e) => {
     e.preventDefault()

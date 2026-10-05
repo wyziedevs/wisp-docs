@@ -333,7 +333,7 @@ td:last-child {
   display: none;
 }
 
-@media (min-width: 84rem) {
+@media (min-width: 72rem) {
   .toc {
     display: block;
     position: sticky;

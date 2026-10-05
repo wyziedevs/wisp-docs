@@ -128,6 +128,7 @@ export function motion() {
     const pen = em.querySelector('path')
     // The Web Animations API, not a tween: it leaves no inline offset behind to hide the line.
     const again = () =>
+      !calm.matches &&
       pen.animate({ strokeDashoffset: [1, 0] }, { duration: 750, easing: 'cubic-bezier(0.45, 0, 0.55, 1)' })
     em.addEventListener('pointerenter', again)
     undo.push(() => em.removeEventListener('pointerenter', again))

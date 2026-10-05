@@ -37,7 +37,6 @@ for p in wisp::pages("")
 
 <head>
   <title>Search the Docs | Wisp Rust Web Framework</title>
-  <meta name="robots" content="noindex, follow">
 </head>
 
 <div class="page narrow">

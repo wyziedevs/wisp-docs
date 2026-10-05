@@ -109,7 +109,7 @@ let edit = match site::bare(cx.path()) {
     <p class="sr" role="status" aria-live="polite" bind:this="copied"></p>
     <nav class="crumbs" aria-label="Breadcrumb">
       <a href={site::dir(home(tab))}>{kind}</a>
-      <span>{group}</span>
+      {#if group != kind}<span>{group}</span>{/if}
     </nav>
     <h1 class="doc-title">{at.map(|i| all[i].title).unwrap_or("")}</h1>
     <slot />
