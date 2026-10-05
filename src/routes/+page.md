@@ -9,7 +9,7 @@ description: Wisp is a fast, fun web framework for Rust with file routes, templa
 <div class="wrap">
 <div class="sec-head">
 <h2>A Page Is One File</h2>
-<p>The form writes its own inputs and errors, and a bad value is a 422 that keeps what was typed. The model in <code>src/db.rs</code> is in every route file with no <code>use</code> lines. JSON endpoints join the same file as <code>mod server { … }</code>.</p>
+<p>The form writes its own inputs and errors, and a bad value is a 422 that keeps what was typed. The model in <code>src/db.rs</code> is in every route file with no <code>use</code> lines. JSON endpoints join the same file as a <code>mod server</code> block.</p>
 </div>
 
 <Demo todos={&demo_todos(cx)}>
