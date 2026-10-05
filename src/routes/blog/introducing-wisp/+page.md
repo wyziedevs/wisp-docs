@@ -69,12 +69,12 @@ Code written by a model is paid for by the token, so we count them. The same fiv
 | Nuxt (Vue) | 1043 | 8 |
 | SvelteKit | 1134 | 9 |
 | Next.js (React) | 1146 | 8 |
-| Express (Node.js) | 1394 | 8 |
-| React (Vite + Express) | 1606 | 10 |
+| Express (Node.js) | 1388 | 8 |
+| React (Vite + Express) | 1599 | 9 |
 
 </div>
 
-A bigger app, with sign up and in, a posts table, uploads, live refresh and a component, is 1016 tokens in Wisp, 3497 in SvelteKit and 3349 in Next.js. Every stack's contact form checks the same rules with the same messages as Wisp's. The numbers come from `cargo run -p wisp-tokens`, which counts every hand-written file and its path with a byte-pair style estimate. The [Tokens](/docs/tokens/) page has the method and the apps, so you can check the count.
+A bigger app, with sign up and in, a posts table, uploads, live refresh and a component, is 1016 tokens in Wisp, 3666 in SvelteKit and 3458 in Next.js. Every stack's contact form checks the same rules with the same messages as Wisp's. The numbers come from `cargo run -p wisp-tokens`, which counts every hand-written file and its path with a byte-pair style estimate. The [Tokens](/docs/tokens/) page has the method and the apps, so you can check the count.
 
 For agents, [AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md) is the whole reference in one file, and `wisp mcp` serves the docs over MCP.
 

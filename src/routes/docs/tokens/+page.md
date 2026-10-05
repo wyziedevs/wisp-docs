@@ -29,8 +29,8 @@ The Node apps: Nuxt is file routes, server routes in `server/api` and `useFetch`
 | SvelteKit 2 | 128 | 602 | 57 | 83 | 192 | 72 | 0 | 1134 | 696 | 9 |
 | Next.js 15 | 107 | 575 | 44 | 108 | 241 | 71 | 0 | 1146 | 782 | 8 |
 | Nuxt 4 (Vue) | 96 | 600 | 22 | 96 | 158 | 71 | 0 | 1043 | 670 | 8 |
-| React 19 (Vite + Express) | 108 | 696 | 32 | 268 | 191 | 161 | 150 | 1606 | 1103 | 10 |
-| Express 5 + EJS | 128 | 602 | 34 | 116 | 291 | 69 | 154 | 1394 | 807 | 8 |
+| React 19 (Vite + Express) | 108 | 696 | 32 | 268 | 191 | 161 | 143 | 1599 | 1098 | 9 |
+| Express 5 + EJS | 128 | 602 | 34 | 116 | 291 | 69 | 148 | 1388 | 805 | 8 |
 | Axum 0.8 + askama | 145 | 894 | 29 | 104 | 217 | 123 | 291 | 1803 | 1239 | 7 |
 | Actix Web 4 + tera | 164 | 906 | 46 | 104 | 237 | 123 | 298 | 1878 | 1279 | 7 |
 
@@ -40,7 +40,7 @@ Wisp's `data` is longer than JavaScript's: a Rust type with its fields' types. M
 
 ## A Real App: Auth, CRUD, Upload, Live, a Component
 
-`bench/tokens/real` is sign up and in, a posts table with validation, edit, delete, pages and live refresh, an avatar upload and a toggle component: 11 files, **1,016** tokens in Wisp, 3.4x less than SvelteKit 2 and 3.3x less than Next.js 15. The Wisp app has tests for every feature (`bench/tokens/real/wisp/src/tests.rs`); the SvelteKit and Next.js apps have none, so their behavior is checked by reading, not by tests.
+`bench/tokens/real` is sign up and in, a posts table with validation, edit, delete, pages and live refresh, an avatar upload and a toggle component: 11 files, **1,016** tokens in Wisp, 3.6x less than SvelteKit 2 and 3.4x less than Next.js 15. The Wisp app has tests for every feature (`bench/tokens/real/wisp/src/tests.rs`); the SvelteKit and Next.js apps have none, so their behavior is checked by reading, not by tests.
 
 ## Method
 
