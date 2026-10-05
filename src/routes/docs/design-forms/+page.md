@@ -49,7 +49,7 @@ fn remove(id: u64) {
 
 On that 422 page:
 
-- Each named `<input>`, `<textarea>`, `<select>` of the posting form shows what was sent (`wisp::rt::kept`) instead of its own value, then `<small class="problem">...</small>` (`wisp::rt::problem`).
+- Each named `<input>`, `<textarea>`, `<select>` of the posting form shows what was sent (`wisp::rt::kept`) instead of its own value, then `<small class="problem">...</small>` (`wisp::rt::problem`). A checkbox or radio is ticked when its value was sent (`wisp::rt::ticked`; left out is unticked), and a `<select multiple>` selects every value sent (`wisp::rt::sent`). Ticks and choices come back only in the form whose action refused; another form on the page shows its own.
 - Own value forms: `value={post.title}`, or `value="text"` (same node, position in the tag does not matter). A hole inside, `value="a{b}"`, is a build error. Textarea content works; `<select value={post.kind}>` marks the matching option `selected`.
 - Passwords and files show the problem but are never sent back. Checkboxes, radios, hidden inputs and component inputs are left alone.
 - `{cx.problem("text")}` places that field's `<small>` yourself (nothing when none); none is added then.
