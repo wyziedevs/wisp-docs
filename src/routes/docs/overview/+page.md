@@ -5,7 +5,7 @@ group: Start
 order: 3
 ---
 
-Wisp is the framework for the AI age: ultra fast to run, cheap in AI tokens to write, durable, and flexible.
+Wisp is a fast, fun web framework for Rust: ultra fast to run, cheap in AI tokens to write, durable and flexible.
 
 <div class="table-wrap">
 
@@ -31,7 +31,7 @@ Zero cost on the request hot path is the first rule: see [Benchmarks](/docs/benc
 - [Browser code](/docs/client/): scripts, directives, islands, stores and the router.
 - [APIs and platforms](/docs/api/): JSON APIs, validation, auth, OpenAPI and testing.
 - [Deploying](/docs/deploy/) covers every host. [Testing and mixing with Rust code](/docs/embed/) covers axum, hyper and Lambda.
-- [examples](https://github.com/wyziedevs/wisp/tree/main/examples): a demo app, a JSON API and Wisp inside axum.
+- [Examples](https://github.com/wyziedevs/wisp/tree/main/examples): a demo app, a JSON API and Wisp inside axum.
 
 Issues and pull requests are welcome; read the design rule at the top of [AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md) first. License: [MIT](https://github.com/wyziedevs/wisp/blob/main/LICENSE).
 
@@ -39,12 +39,11 @@ Issues and pull requests are welcome; read the design rule at the top of [AGENTS
 
 Wisp is young and still being hardened: see [Security and hardening](/docs/security/) for the tests, the fuzzing and what is not claimed.
 
-Every feature passes four gates: fast (no cost for apps that don't use it), cheap (one line, file or attribute), durable (checked at build time, no new runtime panics) and done (tests, an AGENTS.md entry, a docs section). The roadmap runs in five phases.
+Every feature passes four gates: fast (no cost for apps that don't use it), cheap (one line, file or attribute), durable (checked at build time, no new runtime panics) and done (tests, an AGENTS.md entry, a docs section). Wisp was built in five phases, all shipped.
 
 - Phase 1, the compiler: scoped styles, source maps, TypeScript in scripts, accessibility warnings, public and private environment variables (`env.PUBLIC_X`), Content Security Policy.
 - Phase 2, developer experience: editor support (`wisp lsp`), formatter (`wisp fmt`), hot reload that keeps state, devtools, browser E2E tests (`wisp test --browser`).
 - Phase 3, rendering and routing: SPA mode (`const SSR: bool = false;`), code loading on demand, server functions (`#[remote]`), shallow routing, snapshots, per-page prerendering (`const PRERENDER: bool = true;`), trailing slash.
 - Phase 4, content and assets: Markdown pages, image optimization, i18n, sitemap and robots.txt.
 - Phase 5, platform: service worker and PWA, web components (`{@element "x-card"}`), third-party UI (`wisp ui add`, framework islands), observability (`WISP_LOG=json`, `/_wisp/metrics`, OpenTelemetry).
-- Planned order: phase 1 first (scoped styles, source maps, TypeScript, accessibility warnings, env variables, CSP), then phase 2 (editor support and formatter first), then phase 3 (`#[remote]` and loading on demand first). Phases 4 and 5 are mostly independent.
 - Decisions: images use a pinned `cwebp` (sha256 checked, `$WISP_CWEBP` override; if unavailable the build warns and serves the original); Markdown uses `pulldown-cmark` at build time only; E2E tests are Rust only; i18n is supported while Wisp's own docs stay English.

@@ -37,13 +37,13 @@ deno run -A main.ts          # try it locally
 
 - Deno Deploy has no sockets, so it always serves with `Deno.serve`. (Locally `deno run -A main.ts` reads raw sockets, and `WISP_NODE_HTTP=1` selects `Deno.serve`.)
 - WebSockets work through `Deno.upgradeWebSocket`; a message past the limit closes with 4009, as Deno's `close` takes no 1009. `Response::stream` and `Response::events` are live.
-- No threads or files: use `wisp::spawn` and `wisp::sleep`. See [What works on the edge](/docs/deploy-targets/).
+- No threads or files: use `wisp::spawn` and `wisp::sleep`. See [What works on the edge](/docs/deploy-targets/#what-works-on-the-edge).
 - `wisp::channel`, `wisp::every` and `RateLimit` are not in the edge build, and there is no cron trigger to write: the build says so and stops when the app uses `wisp::cron`.
 
 ## Files and Data
 
 - `dist/deno` has no separate static folder: the app answers for `static/` itself.
-- `Table::saved` and `Rest` are per-instance memory unless `WISP_STORE=deno-kv` (or `deno-kv:<path>` for a file or URL) is set. See [Saved tables](/docs/deploy-targets/).
+- `Table::saved` and `Rest` are per-instance memory unless `WISP_STORE=deno-kv` (or `deno-kv:<path>` for a file or URL) is set. See [Saved tables](/docs/deploy-targets/#saved-tables).
 
 ## More
 

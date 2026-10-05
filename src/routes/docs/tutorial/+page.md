@@ -31,13 +31,14 @@ cd guestbook
 wisp dev
 ```
 
-Open `http://127.0.0.1:3000`. Leave `wisp dev` running: it rebuilds when you save a file and reloads the page. The app has these files, and you will add a few more:
+`wisp new` asks a few questions (press Enter for the defaults, or add `-y`). Open `http://127.0.0.1:3000`. Leave `wisp dev` running: it rebuilds when you save a file and reloads the page. The app has these files, and you will add a few more:
 
 ```
 src/main.rs                 wisp::main!();
 src/app.html                the page shell
 src/app.css                 styles
 src/routes/+page.wisp       the home page
+src/routes/+layout.wisp     wraps every page
 src/routes/+error.wisp      the error page
 ```
 
@@ -70,7 +71,7 @@ struct Entry {
 pub static ENTRIES: Table<Entry> = Table::saved();
 ```
 
-`#[model]` makes `Entry` something a form can fill and a table can store, and it and its fields public. `#[validate]` states the rule once: a name has 1 to 40 characters and a message 1 to 200. `Table::saved()` keeps the rows in a log file, so they survive a restart.
+`#[model]` makes `Entry` something a form can fill and a table can store, and makes it and its fields public. `#[validate]` states the rule once: a name has 1 to 40 characters and a message 1 to 200. `Table::saved()` keeps the rows in a log file, so they survive a restart.
 
 ## Add the Form
 

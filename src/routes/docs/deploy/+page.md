@@ -14,7 +14,7 @@ Run `wisp build`, copy the binary, run it. Pick the build for your host:
 | VPS or server | `wisp build`; `wisp service install` keeps it running ([VPS](/docs/hosting/vps/)) |
 | Container host ([Fly.io](/docs/hosting/fly/), [Railway](/docs/hosting/railway/), [Render](/docs/hosting/render/), [Cloud Run](/docs/hosting/cloud-run/), [Azure](/docs/hosting/azure/)) | `wisp build --docker` ([Docker](/docs/hosting/docker/)) |
 | Static host ([GitHub Pages](/docs/hosting/github-pages/), GitLab Pages, S3) | `wisp build --static` (or `--spa`) |
-| Edge or serverless ([Cloudflare](/docs/hosting/cloudflare/), [Deno Deploy](/docs/hosting/deno-deploy/), [Vercel](/docs/hosting/vercel/), [Netlify](/docs/hosting/netlify/), Amplify, Firebase, [Azure Static Web Apps](/docs/hosting/azure/)) | `wisp build --target <host>` ([targets](/docs/deploy-targets/)) |
+| Edge or serverless ([Cloudflare](/docs/hosting/cloudflare/), [Deno Deploy](/docs/hosting/deno-deploy/), [Vercel](/docs/hosting/vercel/), [Netlify](/docs/hosting/netlify/), Amplify, Firebase, [Azure Static Web Apps](/docs/hosting/azure/)) | `wisp build --target <host>` ([Edge and serverless targets](/docs/deploy-targets/)) |
 | [AWS Lambda](/docs/hosting/aws-lambda/) / [Bun](/docs/hosting/bun/) / [Node](/docs/hosting/node/) | `--target lambda` / `--target bun` / `--target node` |
 
 </div>

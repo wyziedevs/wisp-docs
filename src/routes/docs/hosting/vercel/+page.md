@@ -34,7 +34,7 @@ npx vercel deploy --prebuilt
 
 ## Limits
 
-- Per route: `const RUNTIME: wisp::Runtime = wisp::Runtime::Edge;` in a `+page.rs` or `+server.rs` puts that route on the Edge runtime and the rest stay on the Node function. See [Edge runtime per route](/docs/deploy-targets/).
+- Per route: `const RUNTIME: wisp::Runtime = wisp::Runtime::Edge;` in a `+page.rs` or `+server.rs` puts that route on the Edge runtime and the rest stay on the Node function. See [Edge runtime per route](/docs/deploy-targets/#edge-runtime-per-route).
 - The build stops, naming the route, if an Edge route uses what WebAssembly lacks (`std::fs`, `std::thread`, `std::process`, `std::net`, websockets).
 - WebSockets answer 501; use `Response::events` (SSE). Streaming is live.
 - Vercel may freeze the instance after the response, so finish background work first.
@@ -44,7 +44,7 @@ npx vercel deploy --prebuilt
 ## Files and Data
 
 - `static/` goes to `.vercel/output/static` and stays the CDN's.
-- `Table::saved` and `Rest` are per-instance memory. `WISP_STORE` accepts `libsql://` (Turso or any libSQL server, with `WISP_STORE_TOKEN`); see [Saved tables](/docs/deploy-targets/).
+- `Table::saved` and `Rest` are per-instance memory. `WISP_STORE` accepts `libsql://` (Turso or any libSQL server, with `WISP_STORE_TOKEN`); see [Saved tables](/docs/deploy-targets/#saved-tables).
 
 ## More
 

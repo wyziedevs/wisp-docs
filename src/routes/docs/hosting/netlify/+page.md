@@ -36,7 +36,7 @@ npx netlify deploy --prod
 
 ## Limits
 
-- Per route: `const RUNTIME: wisp::Runtime = wisp::Runtime::Edge;` puts a route on the edge; the rest stay on the function. See [Edge runtime per route](/docs/deploy-targets/).
+- Per route: `const RUNTIME: wisp::Runtime = wisp::Runtime::Edge;` puts a route on the edge; the rest stay on the function. See [Edge runtime per route](/docs/deploy-targets/#edge-runtime-per-route).
 - Edge functions have the edge limits (no `std::fs`, `std::thread`, `std::process`, `std::net`, websockets); the build stops, naming the route, if an Edge route uses them.
 - WebSockets answer 501; use `Response::events` (SSE). Streaming is live.
 - Netlify keeps the instance alive (`waitUntil`) for started timers and fetches.
@@ -46,7 +46,7 @@ npx netlify deploy --prod
 ## Files and Data
 
 - `static/` goes to `public`, which Netlify serves; with `--edge` the edge function skips it via `excludedPath`.
-- `Table::saved` and `Rest` are per-instance memory. `WISP_STORE` accepts `libsql://` (Turso or any libSQL server, with `WISP_STORE_TOKEN`); see [Saved tables](/docs/deploy-targets/).
+- `Table::saved` and `Rest` are per-instance memory. `WISP_STORE` accepts `libsql://` (Turso or any libSQL server, with `WISP_STORE_TOKEN`); see [Saved tables](/docs/deploy-targets/#saved-tables).
 
 ## More
 

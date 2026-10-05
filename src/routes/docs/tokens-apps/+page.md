@@ -41,7 +41,7 @@ What a real API adds in Wisp:
 
 - a `created_at: String` field: 6 tokens
 - a hook such as `fn before_create(note: &mut Note) -> Result { Ok(()) }`: 22 with its body
-- every table in SQLite instead of log files: a `wisp::Store` of 373 (docs/api.md), written once per app
+- every table in SQLite instead of log files: a `wisp::Store` of 373 ([Where rows are kept](/docs/api-tables/)), written once per app
 
 ## The Wisp Versions
 

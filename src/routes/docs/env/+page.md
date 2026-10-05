@@ -1,6 +1,6 @@
 ---
 title: Environment Variables
-description: The complete list of environment variables Wisp reads, grouped by what they control: the server, logs and traces, and the CLI and tests, with each one explained.
+description: Every environment variable Wisp reads, grouped by what it controls: the server, logs and traces, and the CLI and tests.
 group: Reference
 order: 81
 ---

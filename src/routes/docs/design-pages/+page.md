@@ -47,7 +47,7 @@ async fn load(slug: String) -> Result<Data> {
 - Errors in a block point at the `.wisp` file and line. Editing a block compiles again; editing markup still swaps in without a compile.
 - A route file needs no `use` and no `pub`: it is included in its own module with `wisp::prelude` in scope (`Cx`, `Response`, `Result`, `error`, `redirect`, `#[action]`, the derives...), and its template is compiled inside it, so it reads private types and fields. `pub`, `use` (an explicit `use wisp::prelude::*` replaces Wisp's), `//!` docs and `#![…]` attributes still work. CRLF and byte order marks are fine.
 - `load` is found by name, actions by `#[action]`; nothing else is reachable from HTTP, so a helper never becomes an endpoint by accident.
-- `fn entries() -> Vec<…>` in a page under `[params]` lists the pages `wisp build --static` writes ([deploy](/docs/deploy/)).
+- `fn entries() -> Vec<…>` in a page under `[params]` lists the pages `wisp build --static` writes ([Deploying](/docs/deploy/)).
 - The build checks that `load` returns `Data` (plain or in a `Result`), that every parameter but `cx` has a plain name, and that `#[action]` (by any path, `wisp::action` too) marks only top-level functions of a page.
 
 ## Signatures and Inputs
@@ -89,7 +89,7 @@ fn signup(name: String, email: Email) {
 </form>
 ```
 
-- `+server.rs` method: the `Response` it returns; any other value as JSON (`#[derive(Json)]`); nothing is a 204; `Option<Response>` `None` is a 404. `body: T` (not a string) is the JSON body read as a `FromJson` type. An error on a request under `/api`, or one that sent or asks for JSON, is answered as JSON ([api](/docs/api/)).
+- `+server.rs` method: the `Response` it returns; any other value as JSON (`#[derive(Json)]`); nothing is a 204; `Option<Response>` `None` is a 404. `body: T` (not a string) is the JSON body read as a `FromJson` type. An error on a request under `/api`, or one that sent or asks for JSON, is answered as JSON ([APIs and platforms](/docs/api/)).
 
 ## Limits and Caching
 
@@ -141,6 +141,6 @@ The rest is CSS, the client script and the starters, adding nothing to a request
 - A navigation moves focus to the `<h1>` and says the title in an `aria-live` region.
 - View transitions and `--change` (every component's transition time) go to nothing under `prefers-reduced-motion`; `tokens.css` turns lines and quiet text up under `prefers-contrast: more`.
 - Starters carry a skip link (`.skip`, `<main id="main">`), `:focus-visible` rings, 44px buttons on coarse pointers, `forced-colors` borders, `viewport-fit=cover` with `env(safe-area-inset-*)`, `100dvh`, fluid `clamp()` tokens (`--wisp-step-0..3`, `--wisp-space-s..xl`).
-- `Dialog` and `Menu` are native `<dialog>` and popover (focus trap, Escape, focus returned); `Input`, `Textarea`, `Select` set `aria-invalid` and `aria-describedby` from `problem`/`hint`; `Card` answers its own width with `@container`. Phones: [client](/docs/client-router/).
+- `Dialog` and `Menu` are native `<dialog>` and popover (focus trap, Escape, focus returned); `Input`, `Textarea`, `Select` set `aria-invalid` and `aria-describedby` from `problem`/`hint`; `Card` answers its own width with `@container`. Phones: [The router and forms](/docs/client-router/).
 
 Template syntax, components, snippets and scoped styles: [Template syntax and styles](/docs/design-syntax/).

@@ -18,6 +18,8 @@ cd my-app
 wisp dev               # http://127.0.0.1:3000
 ```
 
+`wisp new` asks a few questions: press Enter for the defaults, or add `-y`.
+
 `wisp dev` rebuilds as you edit, hot reload keeps your `$state`, and `Alt+Shift+W` opens the devtools with the routes table.
 
 ## A Page
@@ -106,6 +108,8 @@ wisp build      # one release binary
 
 ## Next
 
+- [Quick Start](/docs/quick-start/): the everyday concepts on one page.
+- [Tutorial](/docs/tutorial/): build a guestbook step by step, with tests and a deploy.
 - [Overview](/docs/overview/): what Wisp gives you.
 - [Browser code](/docs/client/): `$state`, directives, islands.
 - [APIs and platforms](/docs/api/): a JSON API from one struct.
@@ -116,6 +120,8 @@ wisp build      # one release binary
 
 **Start**
 
+- [Quick Start](/docs/quick-start/): Create an app, then add a page, a component, state, a form and a table, and build it
+- [Tutorial: Guestbook](/docs/tutorial/): Build a small guestbook app step by step, with a test and a deploy
 - [Why Wisp](/docs/why/): Wisp is fast to run, cheap for an AI to write, and shaped by how the code looks
 - [Overview](/docs/overview/): What Wisp gives you for reactivity, AI tokens, rendering, data, styling, tooling and deploy
 - [Benchmarks](/docs/benchmarks/): What Wisp measures for speed, and how to run the benchmark tools yourself
@@ -134,7 +140,7 @@ wisp build      # one release binary
 - [Parity features](/docs/design-features/): What a server framework is expected to have, and what Wisp does for each
 - [Cookies and sign-in](/docs/design-sessions/): Cookies, signed cookies, sessions, sign-in, password hashing
 
-**Browser code**
+**Browser Code**
 
 - [Browser code](/docs/client/): Scripts, runes, directives and TypeScript in the same .wisp file
 - [Server values and client blocks](/docs/client-templates/): Server values in the browser, {:expr} holes, client blocks, snippets and first paint
@@ -152,12 +158,12 @@ wisp build      # one release binary
 - [OpenAPI and tests](/docs/api-openapi/): The generated OpenAPI document and docs page, and testing an API
 - [Where rows are kept](/docs/api-tables/): Table storage, WISP_DATA, custom stores, the edge and paging
 
-**Data and auth**
+**Data and Auth**
 
 - [Data, files and jobs](/docs/data/): Tables, files, validation rules, jobs and cache
 - [Auth and integrations](/docs/auth/): Roles, signed tokens, two-factor codes, outbound HTTP, email and OAuth sign-in
 
-**Deploy and run**
+**Deploy and Run**
 
 - [Deploying](/docs/deploy/): Binary, static, prerender, service and Docker
 - [Edge and serverless targets](/docs/deploy-targets/): Build for Cloudflare, Deno, Vercel, Netlify, Lambda, Bun and more

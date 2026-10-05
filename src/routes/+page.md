@@ -70,7 +70,7 @@ The same app built for Node, Deno and Bun answers from the app's own HTTP parser
 
 ## Benchmarked Against Popular Frameworks
 
-TechEmpower's plaintext and JSON tests, run with their own load scripts against their reference sources of each framework, on one 4-vCPU VM with the server pinned to 2 cores. Medians of 3 runs of 15 seconds each.
+TechEmpower's plaintext and JSON tests, run with their own load scripts against TechEmpower's source for each framework that has one (SvelteKit and Next.js have none, so theirs are two plain route handlers in a production build), on one 4-vCPU VM with the server pinned to 2 cores. Medians of 3 runs of 15 seconds each.
 
 <div class="benches">
 <div class="bench"><table class="tally">
@@ -109,7 +109,7 @@ Wisp is first on plaintext at 256, 1,024 and 4,096 connections, and first on JSO
 
 ## Make the Same App with Half the Tokens
 
-AI writes most code now, and every token it reads and writes costs time and money. Wisp is built so an app costs the fewest: conventions instead of config, types the compiler infers, and forms that write themselves. The whole reference is one file, [llms.txt and AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md), and `wisp mcp` serves it to coding agents.
+An AI is paid for by the token, in time and money, for what it reads and writes. Wisp is built so an app costs the fewest: conventions instead of config, types the compiler infers, and forms that write themselves. The whole reference is one file, [llms.txt and AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md), and `wisp mcp` serves it to coding agents.
 
 ```bash
 claude mcp add wisp -- wisp mcp

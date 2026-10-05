@@ -83,7 +83,7 @@ aws lambda update-function-code --function-name my-app --zip-file fileb://dist/l
 - Any Wisp binary answers Lambda's runtime API when `AWS_LAMBDA_RUNTIME_API` is set.
 - Everything works except WebSockets (501) and streaming (a stream is sent whole).
 - Saved tables go in `/tmp`, per instance: use `wisp::store` for lasting data.
-- The `tower` feature with `lambda_http` also works ([embed](/docs/embed/)).
+- The `tower` feature with `lambda_http` also works ([Testing and mixing with Rust code](/docs/embed/)).
 
 ## What Works on the Edge
 

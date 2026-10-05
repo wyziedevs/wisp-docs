@@ -48,7 +48,7 @@ fn counter() {
 
 </div>
 
-More in AGENTS.md and api.md. Nothing upgrades in process, so `Response::websocket` is 501: test WebSockets against the running server (`tests/app/tests/http.rs` uses a `TcpStream`).
+More in [OpenAPI and tests](/docs/api-openapi/#tests) and AGENTS.md. Nothing upgrades in process, so `Response::websocket` is 501: test WebSockets against the running server (`tests/app/tests/http.rs` uses a `TcpStream`).
 
 ## WebSockets
 

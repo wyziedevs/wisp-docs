@@ -34,12 +34,12 @@ The folder's `package.json` has `"start": "bun server.mjs"`. Copy the folder to 
 
 - The app's own HTTP/1.1 parser answers over raw sockets (pipelining, keep-alive, chunked bodies, 413, 431 and each route's `BODY_LIMIT`). At startup a request over loopback must be answered as the app answers it (twice, on one connection); if not, it serves with `Bun.serve` and one stderr line says so.
 - WebSockets work: Wisp's parser on the raw socket, or `server.upgrade` with `Bun.serve`.
-- No threads or files: use `wisp::spawn` and `wisp::sleep`. See [What works on the edge](/docs/deploy-targets/).
+- No threads or files: use `wisp::spawn` and `wisp::sleep`. See [What works on the edge](/docs/deploy-targets/#what-works-on-the-edge).
 - There is no cron trigger to write: the build says so and stops when the app uses `wisp::cron`.
 
 ## Files and Data
 
-- `Table::saved` and `Rest` are per-instance memory unless `WISP_STORE` is set (`libsql://`; see [Saved tables](/docs/deploy-targets/)).
+- `Table::saved` and `Rest` are per-instance memory unless `WISP_STORE` is set (`libsql://`; see [Saved tables](/docs/deploy-targets/#saved-tables)).
 
 ## More
 

@@ -52,7 +52,7 @@ Syntax | Compiles to
 `{cx.path()}` | `cx`, the request (`&Cx`), in pages, layouts, error pages
 
 - Expressions are Rust passed to `rustc` verbatim, so type errors are real. Inside `<script>`, `<style>` and HTML comments there are no holes, so CSS and JS braces need no escaping. Comments are stripped.
-- A bare `<script>` (no attributes) is the file's client script: compiled with the file's directives into an ES module, top-level names are its state, no collisions across files ([client](/docs/client/)). A `<script>` with `type` or `src` is copied through.
+- A bare `<script>` (no attributes) is the file's client script: compiled with the file's directives into an ES module, top-level names are its state, no collisions across files ([Browser code](/docs/client/)). A `<script>` with `type` or `src` is copied through.
 - Whitespace runs containing a newline collapse to one newline, except in `<pre>`/`<textarea>`. A block tag (`{#…}`, `{:…}`, `{/…}`, `{@const}`) alone on a line leaves no line behind.
 - Boolean attributes (`disabled`, `checked`, `selected`, `hidden`, `open`, `required`...) are on when present whatever the value, so `disabled="false"` disables. `name={cond}` takes a `bool` and prints the bare name or nothing; a hole in a quoted value is an error.
 - Braces are Rust on the server; a quoted directive value or `{:expr}` is JavaScript in the browser. No Rust expression goes inside `<script>`: use the Rust name or `data.x` (sent as JSON) there, or `data-*` attributes.
@@ -95,7 +95,7 @@ A `.wisp` file in `src/components` (any depth) is a component named by its file:
 - `{@render children()}` shows what the tag wraps. Children compile in the using page, so they see its `data`, loop variables and `{@const}`s.
 - Build checks: the component exists (the ones that do are listed if not), every given prop is declared, every prop without a default is given, a flag only goes to a `bool`, children only to a component that shows them.
 - The name starts with a capital and has a lowercase letter (`<DIV>` is HTML). Components cannot go in `<wisp:head>`; only components take `{@props}`. Component files hot-swap like templates.
-- The browser can draw components too (client blocks, `{:…}` props, `bind:`, `on:`): [client](/docs/client/).
+- The browser can draw components too (client blocks, `{:…}` props, `bind:`, `on:`): [Browser code](/docs/client/).
 
 ## Snippets
 
@@ -122,7 +122,7 @@ Markup a file renders more than once, or gives to a component:
 
 - Parameters are Rust `let` patterns, typed or not. The body sees the names around its definition, like a closure. A snippet is in scope after its `{/snippet}` to the end of its block; it cannot render itself (a component can).
 - A component takes one as a prop of type `Snippet<A, B>` (`Snippet` for none), which is `&dyn Fn(&mut Out, A, B)`: `{row}` or `row={row}` in its tag, or a `{#snippet row(…)}` among its children; it renders with `{@render row(…)}`.
-- `{:@render row(x)}` has the browser draw it: arguments are JavaScript, the body uses its parameters in `{:…}` ([client](/docs/client/)). A component the browser draws takes snippets the same way (`<List items={:xs} {row} />`, or `{#snippet row(x)}` among children) and draws one with `{:@render row(x)}` where `row` is a prop. The body is a block before the tag (`Dir::Snip`, which `snip` in extra.js binds), found among the anchors right before the component's own, so no first paint for a component given one.
+- `{:@render row(x)}` has the browser draw it: arguments are JavaScript, the body uses its parameters in `{:…}` ([Browser code](/docs/client/)). A component the browser draws takes snippets the same way (`<List items={:xs} {row} />`, or `{#snippet row(x)}` among children) and draws one with `{:@render row(x)}` where `row` is a prop. The body is a block before the tag (`Dir::Snip`, which `snip` in extra.js binds), found among the anchors right before the component's own, so no first paint for a component given one.
 
 ## Scoped Styles
 

@@ -1,6 +1,6 @@
 ---
 title: Auth and Integrations
-description: Add roles, CORS, signed tokens for resets and magic links, two-factor codes, outbound HTTP, email and OAuth sign-in with GitHub, Google or OpenID Connect in Wisp.
+description: Add roles, CORS, signed tokens for resets and magic links, two-factor codes, outbound HTTP and OAuth sign-in with GitHub, Google or OpenID Connect in Wisp.
 group: Data and Auth
 order: 51
 ---
@@ -93,4 +93,4 @@ Kept safe by:
 - every failure the same 400.
 
 ## Not Here
-Distributed `RateLimit` waits for the relay (S2). Automatic `/_wisp/oauth/...` routes need `http.rs`; the two small routes above do the same. SMTP, SES.
+Not built in: a `RateLimit` shared between servers, automatic `/_wisp/oauth/...` routes (the two small routes above do the same), and SMTP or SES clients.

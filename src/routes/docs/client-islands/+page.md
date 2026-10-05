@@ -1,6 +1,6 @@
 ---
 title: Islands and Loading
-description: Use islands in Wisp to add React, Vue, Svelte or Preact, web components, npm UI libraries and third-party scripts, with loading views, web vitals and lazy loading.
+description: Use islands in Wisp to add React, Vue, Svelte or Preact, web components, npm UI libraries and third-party scripts, with loading views and lazy loading.
 group: Browser Code
 order: 32
 ---

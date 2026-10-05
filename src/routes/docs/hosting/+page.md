@@ -1,6 +1,6 @@
 ---
 title: Hosting
-description: How to host a Wisp app on a VPS, Docker, Fly.io, Render, Railway, Cloudflare, Deno Deploy, Vercel, Netlify, AWS Lambda, Bun, Node, GitHub Pages, Cloud Run or Azure.
+description: Host a Wisp app on a VPS, Docker, Fly.io, Render, Railway, Cloudflare, Deno Deploy, Vercel, Netlify, AWS Lambda, Bun, Node, GitHub Pages, Cloud Run or Azure.
 group: Hosting
 order: 70
 ---

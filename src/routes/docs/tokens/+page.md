@@ -5,7 +5,7 @@ group: Project
 order: 90
 ---
 
-Most app code is written by AI, so an app's cost is measured in tokens, and keeping it low is a Wisp principle ([design](/docs/design/)). Run `cargo run -q -p wisp-tokens --release` for the numbers. The four-app comparison against six frameworks: [Tokens, app by app](/docs/tokens-apps/).
+An AI reads and writes code by the token, so an app's cost is measured in tokens, and keeping it low is a Wisp principle ([Design and files](/docs/design/)). Run `cargo run -q -p wisp-tokens --release` for the numbers. The four-app comparison against six frameworks: [Tokens, app by app](/docs/tokens-apps/).
 
 ## Five Features, Counted by `wisp-tokens`
 
@@ -36,7 +36,7 @@ The Node apps: Nuxt is file routes, server routes in `server/api` and `useFetch`
 
 </div>
 
-Wisp's `data` is longer than JavaScript's: a Rust type with its fields' types. Everything else is shorter, the form most of all. Against the next stack, Nuxt is 1.9 times Wisp's total, SvelteKit and Next.js 2.1, Express 2.5, React 3.0, Axum 3.1 and Actix 3.3. Of what is left, 60 tokens are file paths, 115 the Rust type and data, and the rest is markup every stack writes.
+Wisp's `data` is longer than JavaScript's: a Rust type with its fields' types. Everything else is shorter, the form most of all. Against Wisp's total, Nuxt is 1.9 times, SvelteKit and Next.js 2.1, Express 2.5, React 3.0, Axum 3.1 and Actix 3.3. Of what is left, 60 tokens are file paths, 115 the Rust type and data, and the rest is markup every stack writes.
 
 ## A Real App: Auth, CRUD, Upload, Live, a Component
 

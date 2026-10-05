@@ -13,7 +13,7 @@ wisp fmt            # format .wisp files
 wisp build          # release binary
 ```
 
-Agents (`wisp mcp`, `wisp update-docs`) and editors (`wisp lsp`): [design-editors](/docs/design-editors/).
+Agents (`wisp mcp`, `wisp update-docs`) and editors (`wisp lsp`): [AI agents and editors](/docs/design-editors/).
 
 ## `wisp new`
 
@@ -101,7 +101,7 @@ cargo install --path <checkout>/crates/wisp-cli --force  # path checkout
 - **Signed cookies.** The signature binds the cookie's name and value, compared in constant time. `WISP_SECRET` under 32 characters stops the server at start.
 - **Dev endpoints.** Only in debug builds, only answering loopback peers with a loopback `Host` (a DNS-rebinding page is refused), and the template swap also needs the `x-wisp-dev` header the CLI sends, which a cross-site page cannot add. Behind a proxy on the same machine every peer is loopback: never serve a debug build. Dev mode on a non-loopback address says so at start.
 - **Live URL attributes** (`href={:x}`, `:src="x"`) block `javascript:` and `vbscript:` on the server's first paint and in the browser, as `href={x}` does. URL attributes whose scheme an expression decides are checked where they end: `javascript:` never reaches a page. wisp.js never follows a `javascript:` redirect or `goto`, and saves a posted form's attachment instead of opening it as a page of this site.
-- **Limits.** Request size and time limits as in [design-runtime](/docs/design-runtime/); no request smuggling surface (strict chunked parsing, CL+TE rejected).
+- **Limits.** Request size and time limits as in [Runtime and build](/docs/design-runtime/); no request smuggling surface (strict chunked parsing, CL+TE rejected).
 - **Connections.** At most `WISP_MAX_CONNS` (10000) open, WebSockets included; past it a new one gets a 503 and is closed before it costs a task.
 - **CSP.** Pages and error pages carry a `content-security-policy` (below).
 - **Tests.** `examples/demo/tests/http.rs` runs the demo's binary and sends malformed, oversized, smuggling and cross-site requests, path traversal attempts and junk cookies, checking every answer and that the server keeps answering. `tests/app` uses what the demo does not (hooks, state, components, uploads, signed cookies, chunked bodies, body limits, streamed responses); its `tests/http.rs` checks each on the wire.

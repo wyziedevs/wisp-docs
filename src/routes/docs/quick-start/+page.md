@@ -22,7 +22,7 @@ Welcome to the Wisp docs. This page gives you a tour of the concepts you will us
 
 ## Create an App
 
-You need [Rust](https://rustup.rs) 1.88 or later. Install the `wisp` command, make an app and start the dev server:
+You need [Rust](https://rustup.rs) 1.88 or later. Install the `wisp` command, make an app and start the dev server. `wisp new` asks a few questions: press Enter for the defaults, or add `-y`.
 
 ```bash
 cargo install --git https://wisp.ar0.eu wisp-cli

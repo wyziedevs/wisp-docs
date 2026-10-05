@@ -120,7 +120,7 @@ struct Note {
 - An unknown field is a 400 listing the known ones.
 - `x-total-count` has the match count; `link: <…?limit=20&after=60>; rel="next"` the next page; `accept: application/x-ndjson` gives a line per row.
 - Every row and list has an `etag`; `if-none-match` gets a 304. A write with `if-match` is a 412 (`code` `changed`) if the row changed since.
-- `const CACHE: u32 = 5;` in a `+server.rs` caches each GET per path and query per worker (rules: [/docs/design](/docs/design/)); a write does not clear it.
+- `const CACHE: u32 = 5;` in a `+server.rs` caches each GET per path and query per worker (rules: [Limits and caching](/docs/design-pages/#limits-and-caching)); a write does not clear it.
 
 ### Hooks
 
@@ -143,4 +143,4 @@ fn after_update(note: &Row<Note>) {
 
 A type with a field named `user` in `users/[user=int]/notes/+server.rs` holds each user's own: the route's `user` filters every request and is set on every row made or changed there.
 
-Where rows are kept, custom stores and paging: [/docs/api-tables](/docs/api-tables/).
+Where rows are kept, custom stores and paging: [Where rows are kept](/docs/api-tables/).

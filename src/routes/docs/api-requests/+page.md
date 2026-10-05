@@ -43,7 +43,7 @@ Each param but `cx` is read by name: route param, then form field or JSON object
 
 </div>
 
-- `None` passes. Further rules (`url one_of pattern with`): [/docs/data](/docs/data/).
+- `None` passes. Further rules (`url one_of pattern with`): [Data, files and jobs](/docs/data/).
 - An unknown rule is a build error listing the valid ones.
 - Own checks: `return invalid("email", "is already taken")` (422); `Error::invalid(..).and(..)` names several fields.
 

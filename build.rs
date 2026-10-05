@@ -232,9 +232,13 @@ fn page(src: &str) -> Page {
 fn plain(s: &str) -> String {
     let mut out = String::new();
     let mut chars = s.trim().trim_start_matches(['-', '*', '>']).trim().chars().peekable();
+    let mut code = false;
     while let Some(c) = chars.next() {
         match c {
-            '`' | '*' => {}
+            '`' => code = !code,
+            // Inside a code span `<name>` is text, not a tag.
+            _ if code => out.push(c),
+            '*' => {}
             '[' => {}
             ']' if chars.peek() == Some(&'(') => {
                 for d in chars.by_ref() {

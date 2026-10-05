@@ -1,11 +1,11 @@
 ---
 title: Security and Hardening
-description: What Wisp does to refuse hostile input, how it is tested, what each hardening pass fixed, and what is not claimed, for a framework that is young and still being hardened.
+description: What Wisp does to refuse hostile input, how it is tested, what each hardening pass fixed, and what is not claimed for a young framework.
 group: Project
 order: 92
 ---
 
-Wisp is young. It has not been audited, and nothing here claims it cannot be broken. This page says what is done, how it is tested, and what was found and fixed, so you can judge it. Defaults and the CSP are in [Design CLI](/docs/design-cli/), limits in [Design runtime](/docs/design-runtime/).
+Wisp is young. It has not been audited, and nothing here claims it cannot be broken. This page says what is done, how it is tested, and what was found and fixed, so you can judge it. Defaults and the CSP are in [CLI, dev loop and security](/docs/design-cli/), limits in [Runtime and build](/docs/design-runtime/).
 
 ## Status: Young, Actively Hardened
 
@@ -49,7 +49,7 @@ Wisp is young. It has not been audited, and nothing here claims it cannot be bro
 
 ## Not Claimed
 
-- No audit, no bug bounty and no certification. A TLS server is not built in: put a proxy in front for browsers, as the [deploy](/docs/deploy/) page says.
+- No audit, no bug bounty and no certification. A TLS server is not built in: put a proxy in front for browsers, as [Deploying](/docs/deploy/) says.
 - Fuzzing and tests find what they are written to find. The fuzz targets are in the repository: read them.
 - A debug build is for your machine: behind a proxy on the same machine every peer is loopback, so never serve one.
 

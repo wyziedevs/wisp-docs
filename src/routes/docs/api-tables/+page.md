@@ -1,6 +1,6 @@
 ---
 title: Where Rows Are Kept
-description: Learn where Wisp keeps table rows, from the default storage and the WISP_DATA setting to any database through a custom store, plus a page's own table and paging.
+description: Where Wisp keeps table rows: the default storage, the WISP_DATA setting, any database through a custom store, a page's own table and paging.
 group: APIs
 order: 44
 ---

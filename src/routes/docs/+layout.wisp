@@ -135,7 +135,7 @@ let edit = match site::bare(cx.path()) {
     const p = document.createElement('p')
     p.className = 'thanks'
     p.setAttribute('role', 'status')
-    p.textContent = b.dataset.v === 'yes' ? 'Thanks for Letting Us Know' : 'Thanks. An issue on GitHub helps us fix it.'
+    p.textContent = b.dataset.v === 'yes' ? 'Thanks for letting us know.' : 'Thanks. An issue on GitHub helps us fix it.'
     e.currentTarget.replaceChildren(p)
   }
 

@@ -43,8 +43,8 @@ For Workers, `wisp deploy init cloudflare` writes a GitHub Actions workflow that
 
 ## Limits
 
-- No threads, sockets or files: use `wisp::spawn` and `wisp::sleep`, not `tokio::spawn`. See [What works on the edge](/docs/deploy-targets/).
-- WebSockets work through `WebSocketPair`, one connection to one isolate ([Deploy targets](/docs/deploy-targets/)); `Response::events` (SSE) also works. `Response::stream` and `Response::events` are live.
+- No threads, sockets or files: use `wisp::spawn` and `wisp::sleep`, not `tokio::spawn`. See [What works on the edge](/docs/deploy-targets/#what-works-on-the-edge).
+- WebSockets work through `WebSocketPair`, one connection to one isolate ([WebSockets](/docs/deploy-targets/#websockets)); `Response::stream` and `Response::events` (SSE) are live.
 - `wisp::channel`, `wisp::every` and `RateLimit` are not in the edge build.
 - Started timers and fetches keep the instance alive (`waitUntil`).
 - Cron: `wisp::cron` becomes `[triggers] crons` in `wrangler.toml` (Workers); Pages has no trigger, so the build says so and stops.
@@ -52,7 +52,7 @@ For Workers, `wisp deploy init cloudflare` writes a GitHub Actions workflow that
 ## Files and Data
 
 - `static/` goes into the build output and is served by Cloudflare before the app runs (Workers: `public` with an `[assets]` entry in `wrangler.toml`; Pages: beside `_worker.js`).
-- `Table::saved` and `Rest` are per-instance memory unless `WISP_STORE=d1:DB` is set, with a `[[d1_databases]]` binding named `DB` in `wrangler.toml`. See [Saved tables](/docs/deploy-targets/).
+- `Table::saved` and `Rest` are per-instance memory unless `WISP_STORE=d1:DB` is set, with a `[[d1_databases]]` binding named `DB` in `wrangler.toml`. See [Saved tables](/docs/deploy-targets/#saved-tables).
 
 ## More
 

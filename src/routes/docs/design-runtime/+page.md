@@ -5,7 +5,7 @@ group: Design
 order: 16
 ---
 
-`wisp::main!()` is `wisp::app!()` plus a `main` that calls `wisp::run::<App>()`. An app that sets things up first writes that `main` itself. `wisp::serve::<App>(addr)` is the async form for apps that own their runtime; it runs until its future is dropped. Feature list (base path, slots, fonts, layers...): [design-features](/docs/design-features/).
+`wisp::main!()` is `wisp::app!()` plus a `main` that calls `wisp::run::<App>()`. An app that sets things up first writes that `main` itself. `wisp::serve::<App>(addr)` is the async form for apps that own their runtime; it runs until its future is dropped. Feature list (base path, slots, fonts, layers...): [Parity features](/docs/design-features/).
 
 ## Server
 
@@ -17,7 +17,7 @@ order: 16
 - On SIGTERM (systemd, Docker, Kubernetes) or Ctrl+C (both caught before the `listening` line, so a signal sent right after it is not the process's default death): stop accepting, answer requests under way with `connection: close`, wait for responses the drivers are still sending, close idle connections (the client retries on a new one), return after at most 10 s or at a second signal.
 - Under `wisp dev` the app holds a pipe from the CLI as stdin and exits when it closes, so a killed `wisp dev` never leaves an app on the port.
 - A panic in a handler becomes a 500 for that request; the connection survives. A log line that cannot be written (stderr's reader gone) is dropped, not a panic.
-- TLS and compression belong to the reverse proxy or CDN (Caddy, nginx, Cloudflare), keeping the binary small and the hot path simple. Or run Wisp as a tower service under hyper or axum: [embed](/docs/embed/).
+- TLS and compression belong to the reverse proxy or CDN (Caddy, nginx, Cloudflare), keeping the binary small and the hot path simple. Or run Wisp as a tower service under hyper or axum: [Testing and mixing with Rust code](/docs/embed/).
 
 ### Settings
 
@@ -106,7 +106,7 @@ Off by default; the `h2` feature compiles it (nothing of it otherwise). A connec
 
 ## One Request Entry Point
 
-The built-in server is one front end. `respond` decides an answer as a `Reply { status, headers, body }`; the HTTP/1.1 writer adds `content-length`, `date` and `connection`. Everything else calls the same code, with the same parser and limits ([embed](/docs/embed/), [deploy](/docs/deploy/)):
+The built-in server is one front end. `respond` decides an answer as a `Reply { status, headers, body }`; the HTTP/1.1 writer adds `content-length`, `date` and `connection`. Everything else calls the same code, with the same parser and limits ([Testing and mixing with Rust code](/docs/embed/), [Deploying](/docs/deploy/)):
 
 <div class="table-wrap">
 

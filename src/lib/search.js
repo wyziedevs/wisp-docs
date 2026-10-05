@@ -165,9 +165,9 @@ export function finder({ bar, q, dlg, fq: modalField, status, hits, tip }) {
       const li = document.createElement('li')
       li.className = 'none'
       li.setAttribute('role', 'presentation')
-      li.textContent = 'No Results'
+      li.textContent = 'No results'
       hits.append(li)
-      status.textContent = 'No Results'
+      status.textContent = 'No results'
       return
     }
     let page = null

@@ -41,7 +41,7 @@ File | Meaning
 `+layout.rs` | Instead of a block: `load` for the layout
 `+error.wisp` | Errors below this directory; gets `status`, `message` (a sentence about the status when the error says no more than its name)
 `+page.js` | Optional. `load({ data, url, params, route, fetch })` in the browser
-`+server.rs` | `get`/`post`/`put`/`patch`/`delete` endpoints; one taking an `id` the path lacks serves `/[id]` below, and `list` is then the folder's GET. A `#[derive(Rest)]` type in it is served whole ([api](/docs/api/))
+`+server.rs` | `get`/`post`/`put`/`patch`/`delete` endpoints; one taking an `id` the path lacks serves `/[id]` below, and `list` is then the folder's GET. A `#[derive(Rest)]` type in it is served whole ([APIs and platforms](/docs/api/))
 
 Segments: `blog` (static), `[slug]` (param), `[[lang]]` (optional), `[...rest]` (rest, may be empty), `(group)` (not in the URL).
 
@@ -62,7 +62,7 @@ fn matches(s: &str) -> bool {
 
 `/about/` gets a 308 to `/about`, query kept. `wisp::trailing_slash(Always)` in `init` flips it (`/about` to `/about/`, GET and HEAD of pages; endpoints and paths with a `.` in the last segment are left alone); `Ignore` serves both. The other form is matched only after no route matched, so the default costs nothing. `wisp build --static` asks for each page in the set form, so `Always` exports without a 308 warning. The build warns of a literal `href="/…"` in a template the setting would redirect.
 
-### Sitemap, Robots, Feed, Og
+### Sitemap, Robots, Feed and Open Graph
 
 `/sitemap.xml` and `/robots.txt` are made from the route tree, answered only for a GET no route and no file matched. A file of the same name in `static/`, or a route, wins.
 
@@ -114,12 +114,12 @@ Rule | Form | Behavior
 
 In order: ultra fast, cheap, durable, flexible; developer happiness last.
 
-1. **Cheap** means app code in as few tokens as possible: AI writes most code, so a developer picks the framework whose apps run fastest, cost the fewest tokens, keep working and bend furthest. A convention beats a line of setup, one file beats two, a name the build can infer is not written. [tokens](/docs/tokens/) measures it; [AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md) is the whole language in one page.
-2. **Durable**: every fast path is proven at startup and falls back; nothing after startup takes the process down.
-3. **Fast by construction**: templates compile to straight-line `push_str` calls, routes to one `match`, buffers are reused per connection. No boxing, no dynamic dispatch, no hot-path allocation after warm-up.
+1. **Fast by construction**: templates compile to straight-line `push_str` calls, routes to one `match`, buffers are reused per connection. No boxing, no dynamic dispatch, no hot-path allocation after warm-up.
+2. **Cheap** means app code in as few tokens as possible, because an AI pays by the token. A convention beats a line of setup, one file beats two, a name the build can infer is not written. [Tokens](/docs/tokens/) measures it; [AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md) is the whole language in one page.
+3. **Durable**: every fast path is proven at startup and falls back; nothing after startup takes the process down.
 4. **Minimal dependencies.** Each new one needs a written reason here.
 5. **Boring code**: plain functions and data; abstractions only where they remove more code than they add; invariants asserted.
-6. **Safe**: no `unsafe` in Wisp or its generated code (workspace lint `forbid`; the benchmark runner, which pins processes to CPUs through the OS, sets its own).
+6. **Safe**: no `unsafe` in the compiler, the CLI or an app's generated code (workspace lint `forbid`). The runtime has it only in the Linux I/O drivers and the edge exports, each block with its reason; the benchmark runner, which pins processes to CPUs through the OS, sets its own.
 7. **Mistakes fail early, in the user's file**: the build checks what it can and says where and what to do (a private `load`, an `#[action]` in the wrong place, `page.wisp` without its `+`, a block leaving a tag open in one branch). rustc only points at code the user wrote.
 8. **Fast dev loop**: editing markup never waits for `cargo`; editing Rust rebuilds only the app crate.
 9. **Works without JavaScript**: forms and links are real; `wisp.js` enhances, never required.
@@ -138,7 +138,7 @@ The build crate and CLI depend on std and `pulldown-cmark` only.
 - Not used by default: hyper, axum, tower, serde, a TOML parser, `notify`, `syn`/`quote`.
 - Written ourselves: the HTTP/1.1 connection loop, URL/form decoding, multipart, HTML escaping, the HTTP date, the template compiler, a polling file watcher, the dev proxy of events.
 - Signed cookies: SHA-256 and HMAC in about a hundred lines in `crates/wisp/src/sign.rs`, fixed algorithms with published vectors (FIPS 180-4, RFC 4231) its tests check, and a constant-time compare. Anything that encrypts would use a vetted crate; we write no ciphers.
-- JSON: a fixed grammar (RFC 8259), so `crates/wisp/src/json.rs` has a strict parser for request bodies and `FromJson` with its checks, and `live.rs` writes JSON ([api](/docs/api/)). Apps wanting serde still use it (`serde_json::from_slice(cx.body())`, `Response::json(serde_json::to_string(&x)?)`).
+- JSON: a fixed grammar (RFC 8259), so `crates/wisp/src/json.rs` has a strict parser for request bodies and `FromJson` with its checks, and `live.rs` writes JSON ([APIs and platforms](/docs/api/)). Apps wanting serde still use it (`serde_json::from_slice(cx.body())`, `Response::json(serde_json::to_string(&x)?)`).
 - Apps bring their own crates for a database driver, mailer, HTTP client.
 
 ## Workspace

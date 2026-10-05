@@ -8,14 +8,14 @@ AGENTS.md is the complete, compact reference: read it before writing Wisp code. 
 
 - [AGENTS.md](https://raw.githubusercontent.com/wyziedevs/wisp/main/llms/AGENTS.md): every syntax form, API and gotcha on one page
 - [llms-full.txt](https://raw.githubusercontent.com/wyziedevs/wisp/main/llms/llms-full.txt): AGENTS.md and all the docs, one file
-- [Design](https://wispweb.dev/docs/design): routes, page logic, templates, components, forms, cookies, hooks, runtime, build
-- [Client code](https://wispweb.dev/docs/client): scripts, runes, directives, client blocks, components, stores, router, islands, npm packages
-- [APIs](https://wispweb.dev/docs/api): resources and queries, storage, endpoints, validation, errors, auth, webhooks, rate limits, streams, jobs, OpenAPI
-- [Deploy](https://wispweb.dev/docs/deploy): binary, static, Docker, Cloudflare, Deno, Vercel, Netlify, Node
-- [Embedding and tests](https://wispweb.dev/docs/embed): in-process tests, tower, axum, Lambda
+- [Design and files](https://wispweb.dev/docs/design/): routes, page logic, templates, components, forms, cookies, hooks, runtime, build
+- [Browser code](https://wispweb.dev/docs/client/): scripts, runes, directives, client blocks, components, stores, router, islands, npm packages
+- [APIs and platforms](https://wispweb.dev/docs/api/): resources and queries, storage, endpoints, validation, errors, auth, webhooks, rate limits, streams, jobs, OpenAPI
+- [Deploying](https://wispweb.dev/docs/deploy/): binary, static, Docker, Cloudflare, Deno, Vercel, Netlify, Node
+- [Testing and mixing with Rust code](https://wispweb.dev/docs/embed/): in-process tests, tower, axum, Lambda
 
 ## Optional
 
 - [Website](https://wispweb.dev): overview, quick start and the docs
-- [Token counts](https://wispweb.dev/docs/tokens): the same apps in Wisp and other frameworks
+- [Tokens](https://wispweb.dev/docs/tokens/): the same apps in Wisp and other frameworks
 - [Examples](https://github.com/wyziedevs/wisp/tree/main/examples): demo app, JSON API, Wisp inside axum

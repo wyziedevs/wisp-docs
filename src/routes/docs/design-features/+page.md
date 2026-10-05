@@ -1,6 +1,6 @@
 ---
 title: Parity Features
-description: See how Wisp covers what a server framework is expected to have: base path, hooks, routing options, client features, slots, intercepting routes, build tools, fonts.
+description: See how Wisp covers what a server framework is expected to have: base path, hooks, routing options, slots, intercepting routes, build tools and fonts.
 group: Design
 order: 19
 ---
