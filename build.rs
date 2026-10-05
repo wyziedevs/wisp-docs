@@ -477,7 +477,7 @@ fn tokens(counts: Option<&Json>) {
     };
     let mut out = format!("(&[{}], &[", names.iter().map(|n| format!("{n:?}")).collect::<Vec<_>>().join(","));
     for r in &list {
-        let by: Vec<String> = names.iter().map(|n| format!("{:?}", num(r.get("features").and_then(|f| f.get(n))) as u64)).collect();
+        let by: Vec<String> = names.iter().map(|n| format!("{:?}", (num(r.get("features").and_then(|f| f.get(n))) as u64).to_string())).collect();
         let _ = write!(
             out,
             "({:?}, &[{}], {:?}, {:?}, {}),",
