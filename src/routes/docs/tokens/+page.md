@@ -27,11 +27,11 @@ Wisp's `data` is longer than JavaScript's: a Rust type with its fields' types. M
 
 ## A Real App: Auth, CRUD, Upload, Live, a Component
 
-`bench/tokens/real` is sign up and in, a posts table with validation, edit, delete, pages and live refresh, an avatar upload and a toggle component: 11 files, **1,016** tokens in Wisp, 3.6x less than SvelteKit 2 and 3.4x less than Next.js 15. The Wisp app has tests for every feature (`bench/tokens/real/wisp/src/tests.rs`); the SvelteKit and Next.js apps have none, so their behavior is checked by reading, not by tests.
+`bench/tokens/real` is sign up and in, a posts table with validation, edit, delete, pages and live refresh, an avatar upload and a toggle component: <Stat k="files.real.wisp" /> files, **<Stat k="real.wisp" />** tokens in Wisp, <Stat k="x.real.sveltekit" />x less than SvelteKit and <Stat k="x.real.next" />x less than Next.js. The Wisp app has tests for every feature (`bench/tokens/real/wisp/src/tests.rs`); the SvelteKit and Next.js apps have none, so their behavior is checked by reading, not by tests.
 
 ## Method
 
-Counted: every file a developer (or an agent) writes by hand, beyond what the framework's generator gives, plus each file's path (writing a file means naming it, so two files cost more than one). Manifests and configs count as `setup` for every stack, by the lines a developer adds beyond what the stack's generator writes (Wisp 44 for its `Cargo.toml`, Axum's and Actix's `[dependencies]`, Express's and React's `package.json` and server setup); the generated parts are left out. `cargo run -p wisp-tokens` lists each stack's counted and skipped files.
+Counted: every file a developer (or an agent) writes by hand, beyond what the framework's generator gives, plus each file's path (writing a file means naming it, so two files cost more than one). Manifests and configs count as `setup` for every stack, by the lines a developer adds beyond what the stack's generator writes (Wisp <Stat k="setup.wisp" /> for its `Cargo.toml`, Axum's and Actix's `[dependencies]`, Express's and React's `package.json` and server setup); the generated parts are left out. `cargo run -p wisp-tokens` lists each stack's counted and skipped files.
 
 What this favors: Wisp ships the form rules, the validation messages and the form markup (`<form fields />`), so most of the gap in `form` is work the other stacks write by hand or take from a library. That is the point of a batteries-included design, but read the totals as "what an app author writes", not as equal work by each framework. Only the Wisp apps have tests (`src/tests.rs`); the other stacks' apps are written to the same behavior and reviewed by hand, not checked by a test.
 

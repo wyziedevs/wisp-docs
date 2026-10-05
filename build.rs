@@ -21,8 +21,9 @@ fn main() {
     blog();
     let tfb = fetch("bench/tfb/results.json");
     speed(tfb.as_ref());
-    levels(tfb.as_ref());
-    tokens(fetch("bench/tokens/results.json").as_ref());
+    let mut stats = levels(tfb.as_ref());
+    stats.extend(tokens(fetch("bench/tokens/results.json").as_ref()));
+    put(&out_dir().join("stats.rs"), &format!("{stats:?}"));
     wisp_build::run();
 }
 
@@ -407,7 +408,8 @@ const ORDER: &[&str] = &["wisp", "axum", "actix", "express", "fastify", "hono-no
 
 /// `$OUT_DIR/levels.rs`: [(workload, [connections], [(name, [req/s per level])])], the
 /// medians of every level, a failed one as "No result" and a level not run as "not run".
-fn levels(tfb: Option<&Json>) {
+fn levels(tfb: Option<&Json>) -> Vec<(String, String)> {
+    let mut stats = Vec::new();
     let mut out = String::from("&[");
     for (work, _, _) in SPEED {
         let at = tfb.and_then(|j| j.get("summary")?.get(work));
@@ -417,6 +419,18 @@ fn levels(tfb: Option<&Json>) {
         };
         conns.sort();
         let _ = write!(out, "({work:?}, &[{}], &[", conns.iter().map(|c| format!("\"{c}\"")).collect::<Vec<_>>().join(","));
+        for c in &conns {
+            let failed: Vec<&str> = ORDER
+                .iter()
+                .filter_map(|key| Some((CONTENDERS.iter().find(|(k, _, _)| k == key)?.1, at?.get(&c.to_string())?.get(key)?)))
+                .filter(|(_, r)| failure(r).is_some())
+                .map(|(name, _)| name)
+                .collect();
+            if let Some((last, rest)) = failed.split_last() {
+                let list = if rest.is_empty() { last.to_string() } else { format!("{} and {last}", rest.join(", ")) };
+                stats.push((format!("failed.{work}.{c}"), list));
+            }
+        }
         for key in ORDER {
             let Some((_, name, _)) = CONTENDERS.iter().find(|(k, _, _)| k == key) else { continue };
             let cells: Vec<Option<&Json>> = conns.iter().map(|c| at.and_then(|a| a.get(&c.to_string())?.get(key))).collect();
@@ -437,6 +451,7 @@ fn levels(tfb: Option<&Json>) {
     }
     out.push(']');
     put(&out_dir().join("levels.rs"), &out);
+    stats
 }
 
 /// The stacks the token table shows: the counter's name, the table's.
@@ -453,7 +468,7 @@ const STACKS: &[(&str, &str)] = &[
 /// largest, tokens, files)], the home page's stacks, fewest first. FEATURES: ([feature],
 /// [(stack, [tokens per feature], total, chars / 4, files)]) of every stack, in the
 /// counter's order.
-fn tokens(counts: Option<&Json>) {
+fn tokens(counts: Option<&Json>) -> Vec<(String, String)> {
     let list: Vec<&Json> = counts.and_then(|j| j.get("apps")).map(|l| l.items().collect()).unwrap_or_default();
     let mut home: Vec<_> = list
         .iter()
@@ -490,4 +505,32 @@ fn tokens(counts: Option<&Json>) {
     }
     out.push_str("])");
     put(&out_dir().join("features.rs"), &out);
+
+    // STATS: one number per key, for prose. `<suite>.<stack>` is a total ("real.wisp"),
+    // `files.<suite>.<stack>` its files, `<feature>.<stack>` one feature's tokens,
+    // `x.<suite>.<stack>` how many times the stack costs Wisp's.
+    let mut stats: Vec<(String, String)> = Vec::new();
+    for suite in ["apps", "real"] {
+        let rows: Vec<&Json> = counts.and_then(|j| j.get(suite)).map(|l| l.items().collect()).unwrap_or_default();
+        let wisp = rows.iter().find(|r| r.str("stack") == Some("Wisp")).map_or(0.0, |r| num(r.get("tokens")));
+        for r in rows {
+            let slug = stack_key(r.str("stack").unwrap_or(""));
+            let t = num(r.get("tokens"));
+            stats.push((format!("{suite}.{slug}"), commas(t as u64)));
+            stats.push((format!("files.{suite}.{slug}"), (num(r.get("files")) as u64).to_string()));
+            if wisp > 0.0 {
+                stats.push((format!("x.{suite}.{slug}"), format!("{:.1}", t / wisp)));
+            }
+            if let Some(Json::Obj(m)) = r.get("features").filter(|_| suite == "apps") {
+                stats.extend(m.iter().map(|(f, n)| (format!("{f}.{slug}"), commas(num(Some(n)) as u64))));
+            }
+        }
+    }
+    stats
+}
+
+/// A stack's key in `STATS`: its name up to the first character that is not a letter or digit,
+/// lowercased ("Next.js" is "next", "Nuxt (Vue)" is "nuxt").
+fn stack_key(name: &str) -> String {
+    name.chars().take_while(char::is_ascii_alphanumeric).collect::<String>().to_lowercase()
 }

@@ -61,20 +61,9 @@ Speed is never traded away for convenience. How it is measured, and how to run t
 
 Code written by a model is paid for by the token, so we count them. The same five features, a list page, a contact form, a JSON endpoint, a layout and a live search, written as a complete app in each stack:
 
-<div class="table-wrap">
+<Tokens />
 
-| Stack | Tokens | Files |
-|---|---:|---:|
-| **Wisp** | **476** | 7 |
-| Nuxt (Vue) | 1043 | 8 |
-| SvelteKit | 1134 | 9 |
-| Next.js (React) | 1146 | 8 |
-| Express (Node.js) | 1388 | 8 |
-| React (Vite + Express) | 1599 | 9 |
-
-</div>
-
-A bigger app, with sign up and in, a posts table, uploads, live refresh and a component, is 1016 tokens in Wisp, 3666 in SvelteKit and 3458 in Next.js. Every stack's contact form checks the same rules with the same messages as Wisp's. The numbers come from `cargo run -p wisp-tokens`, which counts every hand-written file and its path with a byte-pair style estimate. The [Tokens](/docs/tokens/) page has the method and the apps, so you can check the count.
+A bigger app, with sign up and in, a posts table, uploads, live refresh and a component, is <Stat k="real.wisp" /> tokens in Wisp, <Stat k="real.sveltekit" /> in SvelteKit and <Stat k="real.next" /> in Next.js. Every stack's contact form checks the same rules with the same messages as Wisp's. The numbers come from `cargo run -p wisp-tokens`, which counts every hand-written file and its path with a byte-pair style estimate. The [Tokens](/docs/tokens/) page has the method and the apps, so you can check the count.
 
 For agents, [AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md) is the whole reference in one file, and `wisp mcp` serves the docs over MCP.
 

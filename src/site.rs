@@ -42,6 +42,15 @@ pub const LEVELS: &[(&str, &[&str], &[(&str, &[&str])])] = include!(concat!(env!
 /// [(stack, [tokens per feature], total, chars / 4, files)]).
 pub const FEATURES: (&[&str], &[(&str, &[&str], &str, &str, usize)]) = include!(concat!(env!("OUT_DIR"), "/features.rs"));
 
+/// Numbers for prose, from `bench/tokens/results.json` (see `tokens` in build.rs): [(key, text)].
+const STATS: &[(&str, &str)] = &include!(concat!(env!("OUT_DIR"), "/stats.rs"));
+
+/// The number `key` names, such as `real.wisp`; a key the results lack stops the build, so a
+/// page never prints a stale or blank figure.
+pub fn stat(key: &str) -> &'static str {
+    STATS.iter().find(|(k, _)| *k == key).map(|(_, v)| *v).unwrap_or_else(|| panic!("no stat {key:?} in the results"))
+}
+
 /// The home page's token table, from `bench/tokens/results.json`:
 /// [(stack, share of the largest, tokens, files)].
 pub const TOKENS: &[(&str, f64, &str, usize)] = include!(concat!(env!("OUT_DIR"), "/tokens.rs"));

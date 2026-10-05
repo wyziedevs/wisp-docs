@@ -77,7 +77,7 @@ claude mcp add wisp -- wisp mcp
 
 <div class="pair">
 <figure class="cmp">
-<figcaption>Wisp: a contact form that validates, 79 tokens</figcaption>
+<figcaption>Wisp: a contact form that validates, <Stat k="form.wisp" /> tokens</figcaption>
 <div class="file">
 <div class="tabs"><span class="tab">+page.wisp</span></div>
 <div class="scroll" tabindex="0" aria-label="Wisp code">
@@ -98,7 +98,7 @@ fn default(#[validate(len = 1..=50)] name: String, email: Email) {
 </div>
 </figure>
 <figure class="cmp">
-<figcaption>SvelteKit: the same form, 602 tokens</figcaption>
+<figcaption>SvelteKit: the same form, <Stat k="form.sveltekit" /> tokens</figcaption>
 <div class="file tabbed">
 <div class="tabs" role="radiogroup" aria-label="SvelteKit files">
 <input class="sr" type="radio" name="sk-file" id="sk-server" checked>

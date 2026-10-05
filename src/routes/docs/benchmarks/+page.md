@@ -23,7 +23,7 @@ Plaintext, pipelined, requests per second (median of 3), by connections:
 
 <Levels work="plaintext" />
 
-Rows whose min-max ranges overlap are ties. 256: Fastify and Express; Hono (Node), SvelteKit and Hono (Bun). 1024: Axum and Actix Web; Express and Hono (Node). 4096: Hono (Node) and Express. 16384: Wisp, Actix Web and Express failed, and Wisp's three stalled runs are under investigation, so no Wisp rank is drawn there.
+Rows whose min-max ranges overlap are ties. 256: Fastify and Express; Hono (Node), SvelteKit and Hono (Bun). 1024: Axum and Actix Web; Express and Hono (Node). 4096: Hono (Node) and Express. 16384: <Stat k="failed.plaintext.16384" /> failed, and Wisp's three stalled runs are under investigation, so no Wisp rank is drawn there.
 
 Next.js completed no pipelined plaintext response at any level, and raising its heap to 8 GB changed nothing, so the cause is not memory; the runs were indicative only.
 

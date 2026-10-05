@@ -210,11 +210,14 @@
   overflow: auto;
 }
 
-/* Code on the home page keeps its lines and indents whole, and scrolls sideways
-   when a line is long, instead of wrapping mid-statement. */
+/* Code on the home page keeps its indents and wraps a long line, so it never scrolls sideways. */
 :is(.demo, .cmp, .sample) pre {
-  white-space: pre;
-  overflow-wrap: normal;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.cmp .scroll {
+  overflow-x: hidden;
 }
 
 /* Their scrollbars are thin and quiet; the page's own keeps the accent. */
