@@ -103,7 +103,7 @@ fn signup(name: String, email: Email) {
 - Only a 200 is kept, never one that sets a cookie or has `cache-control` of `private` or `no-store`. The page's headers are kept with it.
 - `before` in `src/hooks.rs` and a `+server.rs`'s `before` run on every request, before the lookup.
 - A kept answer has an ETag; a client sending it back gets a 304.
-- A page that reads a header (`accept-language`, a custom one) varies by it: do not `CACHE` it. Dev keeps nothing. At most 8 MB per worker; past that stale ones go, so a flood of query strings costs renders, never memory.
+- A page that reads a header (`accept-language`, a custom one) varies by it: do not `CACHE` it. Dev keeps nothing. At most 8 MB per worker; past that stale ones go, so a flood of query strings costs renders but no extra memory.
 
 Three more consts cost nothing for requests that do not use them (they fold away):
 

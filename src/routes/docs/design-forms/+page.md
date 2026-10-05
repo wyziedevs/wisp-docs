@@ -116,7 +116,7 @@ async fn get(name: String) -> Result<Response> {
 
 ## Built-In UI
 
-Wisp draws a few things from one design system: dark tokens, as the demo site has, with Wisp violet (`#896ce0`) as the one accent, only on what is interactive. One-pixel hairlines, two shadow steps, one type scale, one focus ring.
+Wisp draws a few things from one design system: dark tokens, as the demo site has, with Wisp violet (`#896ce0`) as the only accent, used on what is interactive. It has one-pixel hairlines, two shadow steps, one type scale and one focus ring.
 
 Styles live in `crates/wisp/src/client/tokens.css` (the one source of tokens), `ui.css` (buttons), `error.css` and `dialog.css` (dev only). All are `--wisp-*` tokens and `.wisp-*` classes, so they never touch app CSS.
 

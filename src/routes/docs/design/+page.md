@@ -115,7 +115,7 @@ Rule | Form | Behavior
 In order: ultra fast, cheap, durable, flexible; developer happiness last.
 
 1. **Fast by construction**: templates compile to straight-line `push_str` calls, routes to one `match`, buffers are reused per connection. No boxing, no dynamic dispatch, no hot-path allocation after warm-up.
-2. **Cheap** means app code in as few tokens as possible, because an AI pays by the token. A convention beats a line of setup, one file beats two, a name the build can infer is not written. [Tokens](/docs/tokens/) measures it; [AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md) is the whole language in one page.
+2. **Cheap**: app code in as few tokens as possible, because an AI pays by the token. A convention replaces a line of setup, one file replaces two, and a name the build can infer is not written. [Tokens](/docs/tokens/) measures it; [AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md) is the whole language in one page.
 3. **Durable**: every fast path is proven at startup and falls back; nothing after startup takes the process down.
 4. **Minimal dependencies.** Each new one needs a written reason here.
 5. **Boring code**: plain functions and data; abstractions only where they remove more code than they add; invariants asserted.

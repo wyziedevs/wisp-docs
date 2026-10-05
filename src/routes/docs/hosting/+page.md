@@ -5,7 +5,7 @@ group: Hosting
 order: 70
 ---
 
-Wisp builds one binary for a server, an image for a container host, plain files for a static host, or WebAssembly for an edge or serverless host. Pick your host below for the build command, the deploy steps, its environment and its limits. The general rules are in [Deploying](/docs/deploy/) and [Edge and serverless targets](/docs/deploy-targets/).
+Wisp builds one binary for a server, an image for a container host, plain files for a static host, or WebAssembly for an edge or serverless host. Each host page below has the build command, the deploy steps, the environment and the limits. The general rules are in [Deploying](/docs/deploy/) and [Edge and serverless targets](/docs/deploy-targets/).
 
 <div class="table-wrap">
 

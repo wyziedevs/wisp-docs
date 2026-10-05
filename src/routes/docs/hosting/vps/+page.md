@@ -5,7 +5,7 @@ group: Hosting
 order: 71
 ---
 
-A VPS is a server you rent and run yourself. Wisp fits it best: one binary, no runtime to install, and the full feature set (WebSockets, streaming, saved tables on disk).
+A VPS is a server you rent and run yourself. It is the simplest host for Wisp: one binary, no runtime to install, and the full feature set (WebSockets, streaming, saved tables on disk).
 
 ## Build
 

@@ -7,7 +7,7 @@ order: 12
 
 ## Recipes: `wisp add <name>`
 
-A recipe is the app's own, in `add/<name>/`; Wisp ships none and has no runtime part in it. `wisp add` lists recipes, `wisp add sqlite` applies one; a name with no recipe is an npm package. A recipe wires in an existing crate; the app never gets homegrown database or auth code.
+A recipe is the app's own, in `add/<name>/`; Wisp ships none and has no runtime part in it. `wisp add` lists recipes, `wisp add sqlite` applies one; a name with no recipe is an npm package. A recipe wires in an existing crate, so the app has no database or auth code of its own to maintain.
 
 `add/<name>/recipe` lines (`#` comments): `dep` (a `[dependencies]` line), `env` (a `.env.example` line), `file <path>` (copies `add/<name>/<path>` to `<path>`), `note` (printed after). Nothing runs, nothing downloads. Idempotent: an existing crate or key is skipped, an existing file stays unless `--force`, a path outside the app is refused, every file is checked before any is written.
 
@@ -70,7 +70,7 @@ file src/app.css
 note Wisp builds app.css with Tailwind when it imports it.
 ```
 
-Wisp does not ship or maintain integrations: recipes are yours to write, change and share as folders.
+Wisp does not ship or maintain integrations. Recipes are folders you write, change and share.
 
 ## Component Kit: `wisp ui add`
 

@@ -109,7 +109,7 @@ Wisp is first on plaintext at 256, 1,024 and 4,096 connections, and first on JSO
 
 ## Make the Same App with Half the Tokens
 
-An AI is paid for by the token, in time and money, for what it reads and writes. Wisp is built so an app costs the fewest: conventions instead of config, types the compiler infers, and forms that write themselves. The whole reference is one file, [llms.txt and AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md), and `wisp mcp` serves it to coding agents.
+An AI is paid for by the token, in time and money, for what it reads and writes. Wisp keeps that count low with conventions instead of config, types the compiler infers, and forms that write themselves. The whole reference is one file, [llms.txt and AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md), and `wisp mcp` serves it to coding agents.
 
 ```bash
 claude mcp add wisp -- wisp mcp
@@ -216,7 +216,7 @@ A bigger app, with sign up and in, a posts table, uploads, live refresh and a co
 
 ## Tested and Actively Hardened
 
-Wisp is new, and that is a fair worry. What backs it: over a thousand tests run on every change, seeded fuzzing of the HTTP, HTTP/2, template and formatter parsers, a table of request-smuggling shapes each refused on both HTTP versions, every fast path proven at startup with a fallback, and no `unsafe` outside the Linux I/O drivers and the edge exports. It is not audited, and it is not claimed to be unbreakable. Issues are welcome.
+Wisp is new and has not been audited. Over a thousand tests run on every change. The HTTP, HTTP/2, template and formatter parsers are fuzzed with seeded inputs, a table of request-smuggling shapes is refused on both HTTP versions, every fast path is proven at startup with a fallback, and there is no `unsafe` outside the Linux I/O drivers and the edge exports. Bugs are likely to remain, and issues are welcome.
 
 <p class="more"><a href="/docs/security/">What Is Hardened, and What Is Not</a></p>
 

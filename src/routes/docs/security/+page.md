@@ -5,7 +5,7 @@ group: Project
 order: 92
 ---
 
-Wisp is young. It has not been audited, and nothing here claims it cannot be broken. This page says what is done, how it is tested, and what was found and fixed, so you can judge it. Defaults and the CSP are in [CLI, dev loop and security](/docs/design-cli/), limits in [Runtime and build](/docs/design-runtime/).
+Wisp is young and has not been audited, and it can be broken. This page lists what is done, how it is tested, and what was found and fixed, so you can judge for yourself. Defaults and the CSP are in [CLI, dev loop and security](/docs/design-cli/), limits in [Runtime and build](/docs/design-runtime/).
 
 ## Status: Young, Actively Hardened
 

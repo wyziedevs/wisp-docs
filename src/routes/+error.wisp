@@ -5,7 +5,7 @@
   <span class="shade" aria-hidden="true"></span>
   <h1>{status}</h1>
   {#if status == 404}
-    <p>This page vanished. It may have moved; search or the docs menu will find it.</p>
+    <p>This page was not found. It may have moved, so try the search or the docs menu.</p>
   {:else}
     <p>{message}</p>
   {/if}

@@ -8,7 +8,7 @@ tags: Release, Engineering
 
 Today we are sharing Wisp, a fast, fun web framework for Rust. A folder is a URL, its `+page.wisp` is the page, and the whole app, styles and static files included, builds to one small binary.
 
-In this post, we will go through what Wisp looks like, the four rules we build it by, and where to start.
+Below are what a Wisp app looks like, the four rules the framework follows, and where to start.
 
 ## What a Wisp App Looks Like
 

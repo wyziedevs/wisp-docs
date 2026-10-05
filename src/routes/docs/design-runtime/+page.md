@@ -12,7 +12,7 @@ order: 16
 `wisp::run::<App>()` serves on `$HOST:$PORT` (default 3000), thread per core.
 
 - One worker per CPU (`WISP_THREADS`), each a single-threaded tokio runtime with its own I/O driver. The main thread accepts and hands out connections in turn. A connection lives on one thread, so the request path never wakes another.
-- Why: a multi-thread tokio runtime funnels every socket event through one driver, which left cores idle when measured (bench/README.md).
+- A multi-thread tokio runtime funnels every socket event through one driver, which left cores idle when measured (bench/README.md).
 - Tradeoff: no work stealing. A handler that blocks its thread stalls that thread's connections. Dev builds log any handler holding its thread 100 ms or more in one go, with what to use instead.
 - On SIGTERM (systemd, Docker, Kubernetes) or Ctrl+C (both caught before the `listening` line, so a signal sent right after it is not the process's default death): stop accepting, answer requests under way with `connection: close`, wait for responses the drivers are still sending, close idle connections (the client retries on a new one), return after at most 10 s or at a second signal.
 - Under `wisp dev` the app holds a pipe from the CLI as stdin and exits when it closes, so a killed `wisp dev` never leaves an app on the port.

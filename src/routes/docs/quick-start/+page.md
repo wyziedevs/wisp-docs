@@ -5,7 +5,7 @@ group: Start
 order: 5
 ---
 
-Welcome to the Wisp docs. This page gives you a tour of the concepts you will use every day.
+This page covers the concepts an everyday Wisp app uses.
 
 <div class="learn">
 
@@ -205,7 +205,7 @@ Pick the build for your host:
 
 ## Next Steps
 
-You now know most of what an everyday Wisp app uses. Where to go next:
+That covers most of what an everyday Wisp app uses. To go further:
 
 - [Tutorial](/docs/tutorial/): build a guestbook step by step, with tests and a deploy.
 - [Pages and templates](/docs/design-pages/): the Rust block, loads, actions and caching in full.

@@ -3,11 +3,11 @@ title: Community
 description: Find out where to get help with Wisp, how to report a bug and how to contribute to the framework or these docs on GitHub, plus the project license.
 ---
 
-Wisp is an open source project, and it lives on GitHub. This page lists the places where work on it happens.
+Wisp is open source and developed on GitHub. These are the places where people talk about it and work on it.
 
 ## Chat
 
-Come say hello. The [Wisp Discord](https://discord.gg/2mxraHBVtB) is the fastest way to ask a question, show what you are building or hear what is coming next. Longer threads, ideas and announcements live in [GitHub Discussions](https://github.com/wyziedevs/wisp/discussions), where an answer stays easy to find. New here? Introduce yourself in [Welcome to Wisp](https://github.com/wyziedevs/wisp/discussions/1).
+The [Wisp Discord](https://discord.gg/2mxraHBVtB) is the fastest way to ask a question, show what you are building or hear what is coming next. Longer threads, ideas and announcements live in [GitHub Discussions](https://github.com/wyziedevs/wisp/discussions), where an answer stays easy to find. If you are new, introduce yourself in [Welcome to Wisp](https://github.com/wyziedevs/wisp/discussions/1).
 
 ## Get Help
 
