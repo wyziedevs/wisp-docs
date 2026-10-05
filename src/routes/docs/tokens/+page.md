@@ -12,7 +12,7 @@ An AI reads and writes code by the token, so an app's cost is measured in tokens
 `bench/tokens/apps` holds the same five features as a complete app in each stack:
 
 - a list page loading its data
-- a contact form (name 1 to 50 characters, a valid email; a 422 that shows each problem and keeps what was typed, else a redirect). Every stack checks the same two rules and shows a message for each problem. Wisp's rules are built in; the other stacks write them by hand, with their own wording and a simple email pattern (Wisp's check follows the browser's email rules)
+- a contact form (name 1 to 50 characters, a valid email; a 422 that shows each problem and keeps what was typed, else a redirect). Every stack checks the same rules with Wisp's messages, word for word: a name of 1 to 50 characters, counted as characters ("must have at least 1 character", "must have at most 50 characters"), and the browser's own email rule, the HTML spec's valid email address ("must be an email address"); a missing field is a 400, and the name input carries `pattern="[\s\S]{0,50}"`, which counts characters as the server does. Wisp's rules are built in; the other stacks write them by hand. What is left differs only where a stack cannot do otherwise: Next.js server actions answer 200, not 422, and a missing field is a 500 there; Axum's form extractor answers a missing field with 422; Wisp also takes an email domain with non-ASCII letters or a label longer than 63 characters, as Firefox sends them, which the HTML spec's pattern refuses
 - a JSON endpoint of the list
 - a layout with a nav
 - a live search filtered in the browser
@@ -26,21 +26,21 @@ The Node apps: Nuxt is file routes, server routes in `server/api` and `useFetch`
 | Stack | list | form | api | layout | search | data | setup | total | chars / 4 | files |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | **Wisp** | 58 | 79 | 31 | 60 | 96 | 108 | 0 | **432** | 264 | 6 |
-| SvelteKit 2 | 128 | 425 | 57 | 83 | 192 | 72 | 0 | 957 | 620 | 9 |
-| Next.js 15 | 107 | 400 | 44 | 108 | 241 | 71 | 0 | 971 | 706 | 8 |
-| Nuxt 4 (Vue) | 96 | 429 | 22 | 96 | 158 | 71 | 0 | 872 | 596 | 8 |
-| React 19 (Vite + Express) | 108 | 520 | 32 | 268 | 191 | 161 | 102 | 1382 | 999 | 8 |
-| Express 5 + EJS | 128 | 423 | 34 | 116 | 291 | 69 | 95 | 1156 | 699 | 7 |
-| Axum 0.8 + askama | 145 | 553 | 29 | 104 | 217 | 123 | 285 | 1456 | 1021 | 7 |
-| Actix Web 4 + tera | 164 | 565 | 46 | 104 | 237 | 123 | 292 | 1531 | 1061 | 7 |
+| SvelteKit 2 | 128 | 602 | 57 | 83 | 192 | 72 | 0 | 1134 | 696 | 9 |
+| Next.js 15 | 107 | 575 | 44 | 108 | 241 | 71 | 0 | 1146 | 782 | 8 |
+| Nuxt 4 (Vue) | 96 | 600 | 22 | 96 | 158 | 71 | 0 | 1043 | 670 | 8 |
+| React 19 (Vite + Express) | 108 | 696 | 32 | 268 | 191 | 161 | 102 | 1558 | 1076 | 8 |
+| Express 5 + EJS | 128 | 602 | 34 | 116 | 291 | 69 | 95 | 1335 | 777 | 7 |
+| Axum 0.8 + askama | 145 | 894 | 29 | 104 | 217 | 123 | 291 | 1803 | 1239 | 7 |
+| Actix Web 4 + tera | 164 | 906 | 46 | 104 | 237 | 123 | 298 | 1878 | 1279 | 7 |
 
 </div>
 
-Wisp's `data` is longer than JavaScript's: a Rust type with its fields' types. Everything else is shorter, the form most of all. Against Wisp's total, Nuxt is 2.0 times, SvelteKit and Next.js 2.2, Express 2.7, React 3.2, Axum 3.4 and Actix 3.5. Of what is left, 60 tokens are file paths, 108 the Rust type and data, and the rest is markup every stack writes.
+Wisp's `data` is longer than JavaScript's: a Rust type with its fields' types. Everything else is shorter, the form most of all. Against Wisp's total, Nuxt is 2.4 times, SvelteKit 2.6, Next.js 2.7, Express 3.1, React 3.6, Axum 4.2 and Actix 4.3. Of what is left, 60 tokens are file paths, 108 the Rust type and data, and the rest is markup every stack writes.
 
 ## A Real App: Auth, CRUD, Upload, Live, a Component
 
-`bench/tokens/real` is sign up and in, a posts table with validation, edit, delete, pages and live refresh, an avatar upload and a toggle component: 10 files, **935** tokens in Wisp, 3.7x less than SvelteKit 2 and 3.6x less than Next.js 15. Its tests check every feature.
+`bench/tokens/real` is sign up and in, a posts table with validation, edit, delete, pages and live refresh, an avatar upload and a toggle component: 10 files, **958** tokens in Wisp, 3.6x less than SvelteKit 2 and 3.5x less than Next.js 15. Its tests check every feature.
 
 ## Method
 

@@ -55,7 +55,7 @@ The same app built for Node, Deno and Bun answers from the app's own HTTP parser
 
 ## Benchmarked Against Popular Frameworks
 
-TechEmpower's plaintext and JSON tests, run with their own load scripts against TechEmpower's source for each framework that has one (SvelteKit and Next.js have none, so theirs are two plain route handlers in a production build), on one 4-vCPU VM with the server pinned to 2 cores. Medians of 3 runs of 15 seconds each.
+TechEmpower's plaintext and JSON tests, run with their own load scripts against TechEmpower's source for each framework that has one (SvelteKit and Next.js have none, so theirs are two plain route handlers in a production build), on one shared 4-vCPU AMD EPYC VM with every server pinned to the same 2 cores, 2026-10-04. Medians of 3 runs of 15 seconds each; framework versions are listed in the full results.
 
 <div class="benches">
 <div class="bench"><table class="tally">
@@ -100,7 +100,7 @@ Source: [`bench/tfb`](https://github.com/wyziedevs/wisp/blob/main/bench/tfb/RESU
 <div class="wrap">
 <div class="claim wide">
 
-## Make the Same App with Half the Tokens
+## Make the Same App with Less Than Half the Tokens
 
 An AI is paid for by the token, in time and money, for what it reads and writes. Wisp keeps that count low with conventions instead of config, types the compiler infers, and forms that write themselves. The whole reference is one file, [llms.txt and AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md), and `wisp mcp` serves it to coding agents.
 
@@ -144,14 +144,17 @@ fn default(#[validate(len = 1..=50)] name: String, email: Email) {
 <div class="scroll pane pane-1" tabindex="0" aria-label="SvelteKit +page.server.js">
 
 ```js
-import { fail, redirect } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 
 export const actions = {
   default: async ({ request }) => {
     const form = Object.fromEntries(await request.formData());
+    if (typeof form.name != 'string' || typeof form.email != 'string') error(400, 'missing form field');
     const errors = {};
-    if (!form.name || form.name.length > 50) errors.name = 'must have 1 to 50 characters';
-    if (!/^\S+@\S+\.\S+$/.test(form.email)) errors.email = 'must be an email address';
+    const n = [...form.name].length;
+    if (n < 1) errors.name = 'must have at least 1 character';
+    if (n > 50) errors.name = 'must have at most 50 characters';
+    if (!/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(form.email)) errors.email = 'must be an email address';
     if (Object.keys(errors).length) return fail(422, { ...form, errors });
     console.log(`${form.name} <${form.email}>`);
     redirect(303, '/');
@@ -170,7 +173,7 @@ export const actions = {
 
 <svelte:head><title>Contact</title></svelte:head>
 <form method="POST" use:enhance>
-  <label>Name <input name="name" required minlength="1" maxlength="50" value={form?.name ?? ''} />
+  <label>Name <input name="name" required minlength="1" pattern="[\s\S]{0,50}" value={form?.name ?? ''} />
     {#if form?.errors?.name}<small class="problem">{form.errors.name}</small>{/if}</label>
   <label>Email <input name="email" type="email" required value={form?.email ?? ''} />
     {#if form?.errors?.email}<small class="problem">{form.errors.email}</small>{/if}</label>
@@ -185,21 +188,21 @@ export const actions = {
 
 <div class="claim wide">
 
-The same five features (a list page, a contact form, a JSON endpoint, a layout and a live search) written as a complete app in each stack. Every stack's form checks the same two rules and shows a message for each problem. Wisp's rules are built in, and the other stacks write them by hand, with their own wording for the messages:
+The same five features (a list page, a contact form, a JSON endpoint, a layout and a live search) written as a complete app in each stack. Every stack's form checks the same rules with the same messages, word for word: a name of 1 to 50 characters, counted as characters, and the HTML spec's email rule. Wisp's rules are built in, and the other stacks write them by hand. The one rule left apart: Wisp also takes an email domain with non-ASCII letters, as Firefox sends them. The [Tokens page](/docs/tokens/) lists what else a stack cannot match:
 
 <table class="tally">
 <thead><tr><th scope="col">Stack</th><th scope="col"><span class="sr">Relative size</span></th><th scope="col" class="num">Tokens</th><th scope="col" class="num">Files</th></tr></thead>
 <tbody>
-<tr class="us"><th scope="row">Wisp</th><td class="meter" aria-hidden="true"><span style="--v: 0.313"></span></td><td class="num">432</td><td class="num">6</td></tr>
-<tr><th scope="row">Nuxt (Vue)</th><td class="meter" aria-hidden="true"><span style="--v: 0.631"></span></td><td class="num">872</td><td class="num">8</td></tr>
-<tr><th scope="row">SvelteKit</th><td class="meter" aria-hidden="true"><span style="--v: 0.692"></span></td><td class="num">957</td><td class="num">9</td></tr>
-<tr><th scope="row">Next.js (React)</th><td class="meter" aria-hidden="true"><span style="--v: 0.703"></span></td><td class="num">971</td><td class="num">8</td></tr>
-<tr><th scope="row">Express (Node.js)</th><td class="meter" aria-hidden="true"><span style="--v: 0.836"></span></td><td class="num">1,156</td><td class="num">7</td></tr>
-<tr><th scope="row">React (Vite + Express)</th><td class="meter" aria-hidden="true"><span style="--v: 1.000"></span></td><td class="num">1,382</td><td class="num">8</td></tr>
+<tr class="us"><th scope="row">Wisp</th><td class="meter" aria-hidden="true"><span style="--v: 0.277"></span></td><td class="num">432</td><td class="num">6</td></tr>
+<tr><th scope="row">Nuxt (Vue)</th><td class="meter" aria-hidden="true"><span style="--v: 0.669"></span></td><td class="num">1,043</td><td class="num">8</td></tr>
+<tr><th scope="row">SvelteKit</th><td class="meter" aria-hidden="true"><span style="--v: 0.728"></span></td><td class="num">1,134</td><td class="num">9</td></tr>
+<tr><th scope="row">Next.js (React)</th><td class="meter" aria-hidden="true"><span style="--v: 0.736"></span></td><td class="num">1,146</td><td class="num">8</td></tr>
+<tr><th scope="row">Express (Node.js)</th><td class="meter" aria-hidden="true"><span style="--v: 0.857"></span></td><td class="num">1,335</td><td class="num">7</td></tr>
+<tr><th scope="row">React (Vite + Express)</th><td class="meter" aria-hidden="true"><span style="--v: 1.000"></span></td><td class="num">1,558</td><td class="num">8</td></tr>
 </tbody>
 </table>
 
-A bigger app, with sign up and in, a posts table, uploads, live refresh and a component, is 935 tokens in Wisp, 3,473 in SvelteKit and 3,331 in Next.js. The numbers come from `cargo run -p wisp-tokens`, which counts every hand-written file and its path with a byte-pair style estimate; the [Tokens page](/docs/tokens/) has the method and the apps.
+A bigger app, with sign up and in, a posts table, uploads, live refresh and a component, is 958 tokens in Wisp, 3,473 in SvelteKit and 3,331 in Next.js. The numbers come from `cargo run -p wisp-tokens`, which counts every hand-written file and its path with a byte-pair style estimate; the [Tokens page](/docs/tokens/) has the method and the apps.
 
 </div>
 </div>
