@@ -50,12 +50,16 @@ Serve `dist/` from any static host. `SITE_URL` makes the sitemap and the feed ab
 
 ## Deploy
 
-`.github/workflows/deploy.yml` builds with the sibling checkout and publishes `dist/` to Cloudflare Pages on every push to `main`. One-time setup, by hand:
+The site is deployed by hand from a checkout, with the Cloudflare login wrangler already has. From this folder:
 
-1. In Cloudflare, create a Pages project named `wisp-docs` (direct upload, no build settings) or set the repository variable `CLOUDFLARE_PAGES_PROJECT` to its name.
-2. Add the repository secrets `CLOUDFLARE_API_TOKEN` (Pages edit permission) and `CLOUDFLARE_ACCOUNT_ID`.
-3. Add the custom domain `wispweb.dev` to the Pages project; its DNS is a CNAME to `<project>.pages.dev` (Cloudflare adds it when the zone is on Cloudflare).
-4. Redirect the old name: for `wisp.wyzie.io`, either keep a proxied DNS record for it and add a Cloudflare Redirect Rule (hostname equals `wisp.wyzie.io`, dynamic redirect to `concat("https://wispweb.dev", http.request.uri.path)`, status 301, preserve the query string), or set a CNAME to the Pages project, add it as a second custom domain and use the same rule. The canonical `<link>` and the Open Graph tags already say `https://wispweb.dev`.
+```bash
+git pull
+export SITE_URL=https://wispweb.dev
+wisp build --static
+npx wrangler@4 pages deploy dist --project-name wisp-docs --branch main
+```
+
+The Pages project is `wisp-docs`, with the custom domain `wispweb.dev` (a CNAME to `wisp-docs.pages.dev`). The old name `wisp.wyzie.io` is redirected by a Cloudflare Redirect Rule (hostname equals `wisp.wyzie.io`, dynamic redirect to `concat("https://wispweb.dev", http.request.uri.path)`, status 301, preserve the query string). The canonical `<link>` and the Open Graph tags already say `https://wispweb.dev`.
 
 ## License
 
