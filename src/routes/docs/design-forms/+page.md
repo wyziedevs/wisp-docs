@@ -88,7 +88,7 @@ A textarea gets only `required` (line breaks are sent as two characters). The se
 
 - `cx.form()` reads urlencoded and multipart bodies (`enctype="multipart/form-data"` for files). Text fields read the same either way.
 - `cx.form().file("photo")` is the file of `<input type="file" name="photo">` (`None` when none): `name` as sent, `content_type`, `bytes`. `files("photo")` is every file of a `multiple` input.
-- File name and type are visitor input: the name is never a path, the type says nothing the bytes do not.
+- File name and type are visitor input: the name is never a path (a drive such as `C:` and an NTFS stream such as `:stream` are dropped too), the type says nothing the bytes do not.
 - Uploads are held in memory; a route taking large ones raises its own `BODY_LIMIT`.
 
 ### Images
@@ -110,7 +110,7 @@ async fn get(name: String) -> Result<Response> {
 }
 ```
 
-- `Response::file_in(dir, name)` reads without blocking, typed by extension. A name reaching outside the directory (`..`, absolute path, drive) is a 404, like a missing file. The name may come straight from the URL.
+- `Response::file_in(dir, name)` reads without blocking, typed by extension. A name reaching outside the directory (`..`, absolute path, drive, a Windows device such as `nul` or `CON.txt`, a name Windows trims such as `a.txt.` or `a.txt `) is a 404, like a missing file. Static files get the same rule. The name may come straight from the URL.
 - `Response::download("report.csv", bytes)` sends bytes the browser saves as that file name.
 
 ## Built-In UI

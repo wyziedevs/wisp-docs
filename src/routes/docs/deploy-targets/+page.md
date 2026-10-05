@@ -55,7 +55,7 @@ const RUNTIME: wisp::Runtime = wisp::Runtime::Edge; // default: Node
 - With no Edge route the output is unchanged.
 - It must be a literal, and a layout cannot set it.
 - Other hosts ignore it; `--edge` puts every route there.
-- The build stops, naming the route, if an Edge route uses what WebAssembly lacks (`std::fs`, `std::thread`, `std::process`, `std::net`, websockets).
+- The build stops, naming the route, if an Edge route uses what WebAssembly lacks (`std::fs`, `std::thread`, `std::process`, `std::net`, websockets; the Edge function of Vercel and Netlify has no sockets).
 
 ## Servers on Node, Bun and Local Deno
 
@@ -63,8 +63,11 @@ They read raw sockets and the app's own HTTP/1.1 parser answers (pipelining, kee
 
 - At startup a request over loopback must be answered as the app answers it (twice, on one connection). If not, or with `WISP_NODE_HTTP=1`, they serve with `node:http`, `Bun.serve` or `Deno.serve` (one stderr line says which).
 - Deno Deploy has no sockets and always uses `Deno.serve`.
-- WebSockets are not served on any edge build (501).
+- WebSockets are upgraded by the same parser; see the table below.
+- A request's head and body have the native deadlines on raw connections too: one trickled past them is refused 408 when its next bytes come.
 - Only the `node:http` path reads at most `WISP_BODY_LIMIT` (default 1 MB) of a body and answers 413 past it.
+- The bridges that read a body with the host's own `fetch` (Workers, Deno, Netlify, Vercel Edge, Bun's `fetch` path) stop reading one byte past the route's limit and the app answers 413, so an endless body is never held in memory.
+- Windows hosts pass environment names to the app upper-cased, so `wisp::env("PATH")` finds `Path`.
 
 ## AWS Lambda
 
@@ -78,7 +81,7 @@ aws lambda update-function-code --function-name my-app --zip-file fileb://dist/l
 ```
 
 - Any Wisp binary answers Lambda's runtime API when `AWS_LAMBDA_RUNTIME_API` is set.
-- Everything works except WebSockets and streaming (a stream is sent whole).
+- Everything works except WebSockets (501) and streaming (a stream is sent whole).
 - Saved tables go in `/tmp`, per instance: use `wisp::store` for lasting data.
 - The `tower` feature with `lambda_http` also works ([embed](/docs/embed/)).
 
@@ -94,11 +97,33 @@ No threads, sockets or files.
 | Background work | Cloudflare and Netlify keep the instance alive (`waitUntil`) for started timers and fetches; Deno and Node run on; Vercel may freeze after the response, so finish first. |
 | Secrets | `WISP_SECRET` as a host secret. Read others with `wisp::env("KEY")` (`std::env::var` sees nothing; no `.env`). |
 | Streaming | `Response::stream` and `Response::events` are live on Cloudflare, Deno, Netlify, Vercel, Node; a leaving client fails `send`. |
-| WebSockets | `Response::websocket` is 501 on every edge target (and `tower`); use SSE. |
+| WebSockets | `Response::websocket` works where the host can hold a socket (below); 501 on Vercel, Netlify, Lambda and `tower`: use SSE. |
 | Not in the edge build | `wisp::channel`, `wisp::every`, `RateLimit` (it won't compile with them): use the host's queues, cron, rate limiting. |
 | Panics | A panic fails only that request (500). No `Date` header from Wisp. |
 
 </div>
+
+### WebSockets
+
+The same code on every host that can hold a socket, and a 501 on the rest. `before` and the origin check run on the upgrade request as for any route. `examples/websocket` is an echo that runs on all of them.
+
+<div class="table-wrap">
+
+| Host | WebSockets | Made by |
+|---|---|---|
+| binary, Docker | yes | Wisp's server |
+| `node` | yes | Wisp's parser on the raw socket; with `node:http`, its `upgrade` event |
+| `bun` | yes | Wisp's parser on `Bun.listen`; with `Bun.serve`, `server.upgrade` |
+| `deno` | yes | Wisp's parser on `Deno.listen`; with `Deno.serve` and Deploy, `Deno.upgradeWebSocket` |
+| `cloudflare`, `pages` | yes | `WebSocketPair` |
+| `vercel`, `netlify`, `lambda`, `tower` | 501 | no sockets there |
+
+</div>
+
+- On raw sockets the codec is the native server's: handshake, fragments, pings, the idle ping and close (`WISP_WS_IDLE`), the `BODY_LIMIT` message limit and the protocol errors.
+- Where the host frames the messages (`Bun.serve`, `Deno.serve`, Deploy, Workers) it answers pings and fragments and keeps its own idle time. Wisp still refuses a message past the limit and closes with 1009. Deno's `close` takes only 1000 or codes from 3000, so there it is 4009.
+- A client's close is answered on workerd, so the client sees 1000, not a cancelled request.
+- A connection lives in one instance (on Cloudflare, one isolate): state shared by connections needs a Durable Object of your own or `WISP_STORE`. `wisp::channel` is native only.
 
 ### Saved Tables
 

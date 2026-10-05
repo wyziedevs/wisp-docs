@@ -35,7 +35,7 @@ Estimated tokens (files):
 
 Wisp is the shortest on every app, and in all 39% shorter than the next (Rails with its scaffold). The api is a type: Rails' scaffold is the only other that comes close, with a generator command, a model, a route and a controller to edit. Characters / 4 ranks them the same way (Wisp 346, Rails 726, SvelteKit 959).
 
-The apps are not equal in what they do, and the difference favors Wisp's api. Its 59 tokens keep the notes across restarts and crashes (a log file per table in `WISP_DATA`); of the others only Rails does (SQLite, through Active Record), and the rest keep them in memory, as the task allows. The same 59 tokens also answer filters by field, sorting, cursor pages, field selection, ETags with 304 and 412, bulk creates and idempotent retries, which no other version here has.
+The apps are not equal in what they do, and the difference favors Wisp's api. Its 59 tokens keep the notes across restarts and crashes (a log file per table in `WISP_DATA`); of the others only Rails does (SQLite, through Active Record), and the rest keep them in memory, as the task allows. The same 59 tokens also answer filters by field, sorting, cursor pages, field selection, ETags with 304 and 412, and bulk creates, which no other version here has.
 
 What a real API adds in Wisp:
 

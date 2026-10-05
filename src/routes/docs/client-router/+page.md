@@ -24,7 +24,7 @@ replaceState('', { tab: 3 })         // this entry's state ('' keeps the URL)
 - View transitions when available. `data-wisp-notransition` on a link, or on `<body>` for the app, skips them; reduced motion skips them too.
 - `data-wisp-reload` on a link or parent forces a full load. Links with `target`, `download`, `rel="external"` and `/_app/` are left alone.
 - `pushState(url, state)` (shallow routing, for tabs and modals) adds an entry at `url` (`''`: this one) and loads nothing; `page.value.state` is reactive (`{}` on other entries). Back/forward restores it with no request; a reload keeps it only at its URL.
-- `document` events: `wisp:navigate wisp:update wisp:goto wisp:refresh wisp:error wisp:push wisp:pop`; forms: `wisp:submit` (cancelable), `wisp:result`.
+- `document` events: `wisp:navigate wisp:update wisp:goto wisp:refresh wisp:stay wisp:error wisp:push wisp:pop` (`wisp:stay`: a navigation ended with the page staying, for a download or a `data-wisp-cut` slot, and `navigating.value` is `null` again); forms: `wisp:submit` (cancelable), `wisp:result`.
 
 ### Link and Navigation Options
 `data-wisp-noscroll`, `data-wisp-keepfocus`, `data-wisp-replacestate`, `data-wisp-notransition` (on or around a link) keep scroll, keep focus, replace history, skip the view transition. `goto(url, { noscroll, keepfocus, replace, novt })` does the same.

@@ -1,6 +1,6 @@
 ---
 title: Input, Output and Errors
-description: Learn how a Wisp API takes JSON input with FromJson and checks, returns output, reports errors as JSON, and handles webhooks, idempotent retries and big lists.
+description: Learn how a Wisp API takes JSON input with FromJson and checks, returns output, reports errors as JSON, and handles webhooks and big lists.
 group: APIs
 order: 41
 ---
@@ -99,9 +99,6 @@ fn post(cx: &mut Cx, body: Value) -> Result {
 - HMAC-SHA256 of the body with the secret in that variable, hex (with or without `sha256=`) or base64 (Shopify).
 - Stripe's `stripe-signature` (`t=…,v1=…`) signs the time too and is refused after five minutes.
 - Other schemes: `wisp::hex(&wisp::hmac_sha256(secret, message))`, `wisp::secure_eq`.
-
-## Idempotent Retries
-A POST with `Idempotency-Key` retried gets the first answer back with `idempotent-replayed: true`, kept a day per key, path and `authorization`. The same key with another body is 422, one still in progress 409. No header, nothing kept.
 
 ## Big Lists
 

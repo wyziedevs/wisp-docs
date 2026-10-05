@@ -14,7 +14,7 @@ order: 16
 - One worker per CPU (`WISP_THREADS`), each a single-threaded tokio runtime with its own I/O driver. The main thread accepts and hands out connections in turn. A connection lives on one thread, so the request path never wakes another.
 - Why: a multi-thread tokio runtime funnels every socket event through one driver, which left cores idle when measured (bench/README.md).
 - Tradeoff: no work stealing. A handler that blocks its thread stalls that thread's connections. Dev builds log any handler holding its thread 100 ms or more in one go, with what to use instead.
-- On SIGTERM (systemd, Docker, Kubernetes) or Ctrl+C: stop accepting, answer requests under way with `connection: close`, wait for responses the drivers are still sending, close idle connections (the client retries on a new one), return after at most 10 s or at a second signal.
+- On SIGTERM (systemd, Docker, Kubernetes) or Ctrl+C (both caught before the `listening` line, so a signal sent right after it is not the process's default death): stop accepting, answer requests under way with `connection: close`, wait for responses the drivers are still sending, close idle connections (the client retries on a new one), return after at most 10 s or at a second signal.
 - Under `wisp dev` the app holds a pipe from the CLI as stdin and exits when it closes, so a killed `wisp dev` never leaves an app on the port.
 - A panic in a handler becomes a 500 for that request; the connection survives. A log line that cannot be written (stderr's reader gone) is dropped, not a panic.
 - TLS and compression belong to the reverse proxy or CDN (Caddy, nginx, Cloudflare), keeping the binary small and the hot path simple. Or run Wisp as a tower service under hyper or axum: [embed](/docs/embed/).
@@ -28,7 +28,7 @@ All from the environment. Strict: one that is set but invalid stops the server w
 | Setting | What it does |
 |---|---|
 | `PORT`, `HOST` | Where to listen: 3000, on 127.0.0.1 in dev and 0.0.0.0 otherwise |
-| `WISP_DEV` | Dev mode: `on` in debug builds, `off` in release (5xx details, `static/` from disk, dev log) |
+| `WISP_DEV` | Dev mode: `on` in debug builds, `off` in release (5xx details, `static/` from disk, dev log). The dev 5xx page is for debug builds only, even with `on` in a release build |
 | `WISP_THREADS` | Worker threads, one per CPU by default |
 | `WISP_BODY_LIMIT` | Largest request body (`1048576`, `512KB`, `10MB`); 1 MB by default |
 | `WISP_SECRET` | Signs cookies; at least 32 characters |
@@ -88,6 +88,7 @@ The io_uring and epoll drivers are the `unsafe` modules of a native build (ring 
 
 </div>
 
+- A streamed answer still hears its client leave: past 64 KB sent behind it (a client that pipelined that much and left) the connection is closed instead of held until the stream writes again.
 - A refused request is answered, the sending side closed, and what the client still sends is read and dropped for up to 2 s (and 1 MB), so the close does not reset the connection before the client reads why.
 - On the wire: HTTP/1.1 without `Host`, or any request with two, is 400 (RFC 9112 section 3.2). An absolute-form target (`GET http://host/x`, as a proxy sends) is its path with its host as `Host` (3.2.2). `Expect: 100-continue` is answered only to HTTP/1.1.
 - These deadlines and buffer rules are one module of plain functions (`crates/wisp/src/policy.rs`) that tokio's sockets, epoll, the ring and the epoll driver's own answers all call, tested on a made-up clock.
@@ -98,9 +99,9 @@ The io_uring and epoll drivers are the `unsafe` modules of a native build (ring 
 Off by default; the `h2` feature compiles it (nothing of it otherwise). A connection opening with the HTTP/2 preface is served as h2c with prior knowledge (`src/h2.rs`): own HPACK (static and dynamic tables, Huffman), no new dependency.
 
 - Noticed only where the HTTP/1 parser already refused the bytes (`PRI * HTTP/2.0`), so HTTP/1 requests pay nothing, feature on or off.
-- Each stream's HEADERS and DATA become an HTTP/1.1 request through `Cx::from_request` and the same `decide`/`serialize`; the answer goes back as HEADERS and DATA. Streams are answered one at a time, in the order they end.
-- Limits: 100 concurrent streams (more refused), 16 KiB header lists and frames, 4 KiB HPACK table, the route's body limit (413). Flow control both ways, SETTINGS, PING, GOAWAY, RST_STREAM.
-- GOAWAY `ENHANCE_YOUR_CALM` ends the connection on: a reset flood (resets beyond answers + 200), a CONTINUATION flood (64 pieces or 16 KiB), 1000 frames asking no request, an HPACK bomb (decoded list over 16 KiB).
+- Each stream's HEADERS and DATA become an HTTP/1.1 request through `Cx::from_request` and the same `decide`/`serialize`; the answer goes back as HEADERS and DATA. Streams are answered at once: each request is a future polled beside the read, so WINDOW_UPDATE, PING, RST_STREAM and new HEADERS are taken during a long answer, DATA is interleaved within the windows, and a reset drops that stream's handler or body. SSE beside a GET works.
+- Limits: 100 concurrent streams (more refused), 16 KiB header lists and frames, 4 KiB HPACK table, the route's body limit (413). Flow control both ways, SETTINGS, PING, GOAWAY, RST_STREAM. A peer sending past the receive window gets FLOW_CONTROL_ERROR, and windows are given back after each read; past 1 MiB of incoming bodies only the oldest stream's window reopens.
+- GOAWAY `ENHANCE_YOUR_CALM` ends the connection on: a reset flood (resets beyond answers + 200; a reset the client makes us send, as MadeYouReset does, spends the same budget), a CONTINUATION flood (64 pieces or 16 KiB), 1000 frames asking no request, an HPACK bomb (decoded list over 16 KiB).
 - No `Upgrade: h2c`, no ALPN: the `tls` feature is the client's (`wisp::fetch`); the server has no TLS.
 
 ## One Request Entry Point

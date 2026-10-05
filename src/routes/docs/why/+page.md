@@ -17,7 +17,7 @@ Zero cost on the request hot path: a route pays only for the features it uses, a
 
 AI writes most code now, and every token costs time and money. Wisp uses conventions over configuration, types the compiler infers, and forms that write their own inputs and errors.
 
-- The same five features take 442 tokens in Wisp, 957 in SvelteKit and 971 in Next.js.
+- The same five features take 464 tokens in Wisp, 957 in SvelteKit and 971 in Next.js.
 - A larger app with sign up, uploads and live refresh takes 995, against 3473 and 3331.
 - `cargo run -p wisp-tokens` counts every hand-written file and its path with a byte-pair style estimate. See [Tokens](/docs/tokens/).
 

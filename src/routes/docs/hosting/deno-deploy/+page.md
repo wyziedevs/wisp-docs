@@ -36,7 +36,7 @@ deno run -A main.ts          # try it locally
 ## Limits
 
 - Deno Deploy has no sockets, so it always serves with `Deno.serve`. (Locally `deno run -A main.ts` reads raw sockets, and `WISP_NODE_HTTP=1` selects `Deno.serve`.)
-- WebSockets answer 501; use `Response::events` (SSE). `Response::stream` and `Response::events` are live.
+- WebSockets work through `Deno.upgradeWebSocket`; a message past the limit closes with 4009, as Deno's `close` takes no 1009. `Response::stream` and `Response::events` are live.
 - No threads or files: use `wisp::spawn` and `wisp::sleep`. See [What works on the edge](/docs/deploy-targets/).
 - `wisp::channel`, `wisp::every` and `RateLimit` are not in the edge build, and there is no cron trigger to write: the build says so and stops when the app uses `wisp::cron`.
 

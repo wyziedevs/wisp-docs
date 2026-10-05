@@ -36,7 +36,7 @@ wisp build --target node                     # dist/node
 ## Limits
 
 - A container build has no edge limits and runs the full feature set.
-- The Node build has the edge limits: WebSockets answer 501, and no `std::fs`, `std::thread`, `std::process` or `std::net`; use `wisp::spawn` and `wisp::sleep`. See [Host on Node](/docs/hosting/node/) and [What works on the edge](/docs/deploy-targets/).
+- The Node build has the edge limits (WebSockets work), and no `std::fs`, `std::thread`, `std::process` or `std::net`; use `wisp::spawn` and `wisp::sleep`. See [Host on Node](/docs/hosting/node/) and [What works on the edge](/docs/deploy-targets/).
 
 ## Files and Data
 

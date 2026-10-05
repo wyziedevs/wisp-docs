@@ -9,7 +9,7 @@ order: 43
 The build describes the app as OpenAPI 3.1 at `/_wisp/openapi.json`; `/_wisp/docs` lists it with a try-it form. On in dev, off in release; `WISP_API_DOCS=on|off` overrides. Nothing to annotate:
 
 - Every `+server.rs` endpoint, and a `#[derive(Rest)]` type's routes and its `/[id]`: path, query and header parameters, `body: T` (JSON) or form fields by name and type, what it returns (`Option` adds a 404, `()` a 204), and `default`, 400, 401, 422 error answers (`Error`, and RFC 9457 `Problem`).
-- A resource also has its `if-match`/`if-none-match`/`idempotency-key` headers, `etag`, `location` and `x-total-count`, a filter parameter per plain field, and a 201 for POST.
+- A resource also has its `if-match`/`if-none-match` headers, `etag`, `location` and `x-total-count`, a filter parameter per plain field, and a 201 for POST.
 - Every page as a GET of `text/html`, and each `#[action]` of its `+page.rs` as a POST: `/contact` for `fn default`, `/contact?/send` for the others (OpenAPI has no other place for `?/name`), a form body (`multipart/form-data` with an `Image` or `Upload`), checks from `#[validate]`, 200/303/422.
 - Types from the route file or `src/*.rs` by field: structs as objects (`Option` is also `null`, `#[validate]` limits become `minLength`, `maximum`, `format: email`...), an enum without fields as its variant names. Others are named and left open.
 - Security: `bearer` (HTTP bearer) and `session` (the cookie) are declared when used. Marked on a `#[rest(key|write|admin = "...")]` route as its keys need, and on a handler or action whose body calls `need_bearer`/`bearer()` or `signed_in`/`user`. A `fn before` in `src/hooks.rs` that does the same marks every operation (only changes, if it looks at `cx.writes()`). It is read from the code, not run: a check inside a helper is not seen.
@@ -47,7 +47,7 @@ fn notes() {
 ```
 
 - Also `get put_json patch_json delete post_form send_json(method, url, json)`, `send(Request)`, `next_chunk` (events as sent).
-- `header(name, value)` applies to the next request only (`if-match`, `idempotency-key`).
+- `header(name, value)` applies to the next request only (`if-match`).
 - Tables are in memory.
 
 ### In a Browser

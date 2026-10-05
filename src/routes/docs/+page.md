@@ -147,14 +147,14 @@ wisp build      # one release binary
 **APIs**
 
 - [APIs and platforms](/docs/api/): JSON endpoints, #[derive(Rest)] resources, queries and hooks
-- [Input, output and errors](/docs/api-requests/): Input, output, errors as JSON, webhooks, idempotent retries and big lists
+- [Input, output and errors](/docs/api-requests/): Input, output, errors as JSON, webhooks and big lists
 - [Auth, limits, jobs and config](/docs/api-production/): Auth, rate limits, live updates, background jobs and configuration
 - [OpenAPI and tests](/docs/api-openapi/): The generated OpenAPI document and docs page, and testing an API
 - [Where rows are kept](/docs/api-tables/): Table storage, WISP_DATA, custom stores, the edge and paging
 
 **Data and auth**
 
-- [Data, files and jobs](/docs/data/): Tables, relay, files, validation rules, jobs, cache and the admin page
+- [Data, files and jobs](/docs/data/): Tables, files, validation rules, jobs and cache
 - [Auth and integrations](/docs/auth/): Roles, signed tokens, two-factor codes, outbound HTTP, email and OAuth sign-in
 
 **Deploy and run**
@@ -174,3 +174,4 @@ wisp build      # one release binary
 
 - [Tokens](/docs/tokens/): What an app costs to write in AI tokens, measured against other stacks
 - [Tokens, app by app](/docs/tokens-apps/): Four small apps in Wisp and six other frameworks, with the Wisp versions
+- [Security and hardening](/docs/security/): What is hardened, how it is fuzzed and tested, and what is not claimed

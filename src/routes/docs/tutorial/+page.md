@@ -403,6 +403,6 @@ let note = ENTRIES.get(id).or_404()?;
 
 - [Quick Start](/docs/quick-start/): the same ideas on one page.
 - [Actions, forms and UI](/docs/design-forms/): more validation rules, uploads and the built-in UI.
-- [Data, files and jobs](/docs/data/): tables, relay, files and background jobs.
+- [Data, files and jobs](/docs/data/): tables, files and background jobs.
 - [Browser code](/docs/client/): runes, directives, islands and the router.
 - [Testing and mixing with Rust code](/docs/embed/): more on testing an app in process.

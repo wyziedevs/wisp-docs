@@ -60,7 +60,9 @@ pub static TODOS: Table<Todo> = Table::saved();
 
 A route pays only for the features it uses, and a change that touches the request path is checked by an instructions-per-request A/B before it lands. Wisp's first rule is that speed is never traded away for convenience.
 
-<p class="more"><a href="/docs/benchmarks/">How Speed Is Measured</a></p>
+The same app built for Node, Deno and Bun answers from the app's own HTTP parser over raw sockets and beat Hono on every route measured there. On workerd it is within 4 to 6% of Hono on small routes, 2.6 times ahead on a 1,000-item page, and slower to start (25 ms against 19). The wasm is 541 KB. The losses are listed with the numbers.
+
+<p class="more"><a href="/docs/benchmarks/">Results and How Speed Is Measured</a></p>
 
 </Claim>
 
@@ -190,12 +192,12 @@ export const actions = {
 
 <div class="claim wide">
 
-The same five features (a list page, a contact form, a JSON endpoint, a layout and a live search) written as a complete app in each stack:
+The same five features (a list page, a contact form, a JSON endpoint, a layout and a live search) written as a complete app in each stack. Every stack's form checks the same two rules with the same messages, and a stack with no built-in rule writes them by hand:
 
 <table class="tally">
 <thead><tr><th scope="col">Stack</th><th scope="col"><span class="sr">Relative size</span></th><th scope="col" class="num">Tokens</th><th scope="col" class="num">Files</th></tr></thead>
 <tbody>
-<tr class="us"><th scope="row">Wisp</th><td class="meter" aria-hidden="true"><span style="--v: 0.320"></span></td><td class="num">442</td><td class="num">6</td></tr>
+<tr class="us"><th scope="row">Wisp</th><td class="meter" aria-hidden="true"><span style="--v: 0.336"></span></td><td class="num">464</td><td class="num">6</td></tr>
 <tr><th scope="row">Nuxt (Vue)</th><td class="meter" aria-hidden="true"><span style="--v: 0.631"></span></td><td class="num">872</td><td class="num">8</td></tr>
 <tr><th scope="row">SvelteKit</th><td class="meter" aria-hidden="true"><span style="--v: 0.692"></span></td><td class="num">957</td><td class="num">9</td></tr>
 <tr><th scope="row">Next.js (React)</th><td class="meter" aria-hidden="true"><span style="--v: 0.703"></span></td><td class="num">971</td><td class="num">8</td></tr>
@@ -204,11 +206,21 @@ The same five features (a list page, a contact form, a JSON endpoint, a layout a
 </tbody>
 </table>
 
-A bigger app, with sign up and in, a posts table, uploads, live refresh and a component, is 995 tokens in Wisp, 3,473 in SvelteKit and 3,331 in Next.js. The numbers come from `cargo run -p wisp-tokens`, which counts every hand-written file and its path with a byte-pair style estimate; the [Tokens page](/docs/tokens/) has the method and the apps.
+A bigger app, with sign up and in, a posts table, uploads, live refresh and a component, is 1,001 tokens in Wisp, 3,473 in SvelteKit and 3,331 in Next.js. The numbers come from `cargo run -p wisp-tokens`, which counts every hand-written file and its path with a byte-pair style estimate; the [Tokens page](/docs/tokens/) has the method and the apps.
 
 </div>
 </div>
 </section>
+
+<Claim id="status">
+
+## Young, and Actively Hardened
+
+Wisp is new, and that is a fair worry. What backs it: over a thousand tests run on every change, seeded fuzzing of the HTTP, HTTP/2, template and formatter parsers, a table of request-smuggling shapes each refused on both HTTP versions, every fast path proven at startup with a fallback, and no `unsafe` outside the Linux I/O drivers and the edge exports. It is not audited, and it is not claimed to be unbreakable. Issues are welcome.
+
+<p class="more"><a href="/docs/security/">What Is Hardened, and What Is Not</a></p>
+
+</Claim>
 
 <Band id="forms" title="Forms That Work Without JavaScript" lead="A form posts to an action. A bad value is a 422 that shows each problem beside its input and keeps what was typed. With JavaScript on, the page morphs instead of reloading.">
 

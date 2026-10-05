@@ -44,7 +44,7 @@ For Workers, `wisp deploy init cloudflare` writes a GitHub Actions workflow that
 ## Limits
 
 - No threads, sockets or files: use `wisp::spawn` and `wisp::sleep`, not `tokio::spawn`. See [What works on the edge](/docs/deploy-targets/).
-- WebSockets answer 501; use `Response::events` (SSE). `Response::stream` and `Response::events` are live.
+- WebSockets work through `WebSocketPair`, one connection to one isolate ([Deploy targets](/docs/deploy-targets/)); `Response::events` (SSE) also works. `Response::stream` and `Response::events` are live.
 - `wisp::channel`, `wisp::every` and `RateLimit` are not in the edge build.
 - Started timers and fetches keep the instance alive (`waitUntil`).
 - Cron: `wisp::cron` becomes `[triggers] crons` in `wrangler.toml` (Workers); Pages has no trigger, so the build says so and stops.

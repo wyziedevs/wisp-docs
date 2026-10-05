@@ -38,7 +38,7 @@ A plain `wisp build` inside a host's CI picks the target from its variables and 
 
 `wisp build` makes one release binary with static files and styles inside. It listens on `$HOST:$PORT` (`0.0.0.0:3000` in release).
 
-HTTP/2 without a proxy: the `h2` feature serves h2c with prior knowledge on the same port (for a proxy that speaks h2c, or `curl --http2-prior-knowledge`). HTTP/1 is unchanged and pays nothing. There is no TLS in the server, so browsers still want the proxy.
+HTTP/2 without a proxy: the `h2` feature serves h2c with prior knowledge on the same port (for a proxy that speaks h2c, or `curl --http2-prior-knowledge`). HTTP/1 is unchanged and pays nothing. Streams are answered at once, within the flow-control windows. There is no TLS in the server, so browsers still want the proxy.
 
 ```toml
 # Cargo.toml
@@ -84,7 +84,7 @@ let post = db::post(&slug).await?;
 
 ## Service
 
-`wisp build`, then `wisp service install` (as root or administrator) runs the release binary from the app folder as an OS service that starts at boot. Then `start`, `stop`, `status`, `uninstall`.
+`wisp build`, then `wisp service install` (as root or administrator; it refuses an app folder with a quote, `%` or a control character in its path) runs the release binary from the app folder as an OS service that starts at boot. Then `start`, `stop`, `status`, `uninstall`.
 
 <div class="table-wrap">
 

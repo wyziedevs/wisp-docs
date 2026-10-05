@@ -37,6 +37,8 @@ Issues and pull requests are welcome; read the design rule at the top of [AGENTS
 
 ## Status
 
+Wisp is young and still being hardened: see [Security and hardening](/docs/security/) for the tests, the fuzzing and what is not claimed.
+
 Every feature passes four gates: fast (no cost for apps that don't use it), cheap (one line, file or attribute), durable (checked at build time, no new runtime panics) and done (tests, an AGENTS.md entry, a docs section). The roadmap runs in five phases.
 
 - Phase 1, the compiler: scoped styles, source maps, TypeScript in scripts, accessibility warnings, public and private environment variables (`env.PUBLIC_X`), Content Security Policy.

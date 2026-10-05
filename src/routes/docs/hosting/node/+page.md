@@ -35,7 +35,7 @@ It runs `node server.mjs` and listens on `$PORT`. The output's `hosts/` folder h
 ## Limits
 
 - The app's own HTTP/1.1 parser answers over raw sockets. At startup a request over loopback must be answered as the app answers it (twice, on one connection); if not, or with `WISP_NODE_HTTP=1`, it serves with `node:http` (one stderr line says which). Only that path reads at most `WISP_BODY_LIMIT` (default 1 MB) of a body and answers 413 past it.
-- WebSockets answer 501; use `Response::events` (SSE). Streaming is live.
+- WebSockets work: Wisp's parser on the raw socket, or the `upgrade` event with `WISP_NODE_HTTP=1`. Streaming is live.
 - No threads or files: use `wisp::spawn` and `wisp::sleep`. See [What works on the edge](/docs/deploy-targets/).
 - There is no cron trigger to write: the build says so and stops when the app uses `wisp::cron`.
 
