@@ -4,10 +4,10 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-wisp = { path = "../wisp/crates/wisp" }
+wisp = { package = "wisp-web-rt", path = "../wisp/crates/wisp" }
 
 [build-dependencies]
-wisp-build = { path = "../wisp/crates/wisp-build" }
+wisp-build = { package = "wisp-web-build", path = "../wisp/crates/wisp-build" }
 
 # `cargo test --features browser` runs the tests in a headless Chrome or Edge.
 [features]

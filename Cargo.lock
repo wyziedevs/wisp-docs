@@ -140,39 +140,39 @@ dependencies = [
 ]
 
 [[package]]
-name = "wisp"
+name = "wisp-docs"
+version = "0.1.0"
+dependencies = [
+ "wisp-web-build",
+ "wisp-web-rt",
+]
+
+[[package]]
+name = "wisp-web-build"
+version = "0.1.0"
+dependencies = [
+ "pulldown-cmark",
+ "wisp-web-shared",
+]
+
+[[package]]
+name = "wisp-web-macros"
+version = "0.1.0"
+dependencies = [
+ "wisp-web-shared",
+]
+
+[[package]]
+name = "wisp-web-rt"
 version = "0.1.0"
 dependencies = [
  "httparse",
  "libc",
  "tokio",
- "wisp-macros",
- "wisp-shared",
+ "wisp-web-macros",
+ "wisp-web-shared",
 ]
 
 [[package]]
-name = "wisp-build"
-version = "0.1.0"
-dependencies = [
- "pulldown-cmark",
- "wisp-shared",
-]
-
-[[package]]
-name = "wisp-docs"
-version = "0.1.0"
-dependencies = [
- "wisp",
- "wisp-build",
-]
-
-[[package]]
-name = "wisp-macros"
-version = "0.1.0"
-dependencies = [
- "wisp-shared",
-]
-
-[[package]]
-name = "wisp-shared"
+name = "wisp-web-shared"
 version = "0.1.0"
