@@ -18,7 +18,7 @@ pub static USERS: Table<User> = Table::saved("users")
 ```
 
 - `set(id, v) -> Option<()>` replaces a row; `clear()` takes every row out (ids are not given again).
-- `unique`: `by(&email)` finds the row without a scan. `try_add`, `try_set` and `try_update` return a 422 on the field (`email: is taken`), for an action to return with `?`. `add`, `set` and `update` panic (a 500) instead. Use `try_update` to change a unique field.
+- `unique`: `by(&email)` finds the row without a scan. `try_add`, `try_set` and `try_update` return a 422 on the field (`email: is taken`), for an action to return with `?`. `add`, `set` and `update` panic (a 500) instead. Use `try_update` to change a unique field. `#[derive(Rest)]` routes do the same: a taken value is a 422.
 - `#[model]` makes the struct and its fields `pub` and derives `Json`, `FromJson` and `Clone`. A model with a borrowed field (`name: &'static str`, for static data a page lists) derives no `FromJson`, since a body cannot fill it.
 - On a `#[model]` field: `#[unique]` is the same as `.unique(..)`; `#[json(default)]` or `#[json(default = expr)]` fills a field old rows lack; `#[json(was = "old")]` reads it under its old name.
 - `migrate(|v: &mut Value| ..)` runs on each stored row's JSON when it is read (at load, and by `WISP_STORE_POLL`), before it becomes the type.
