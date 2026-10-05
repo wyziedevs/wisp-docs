@@ -19,7 +19,7 @@ Run `wisp build`, copy the binary, run it. Pick the build for your host:
 
 </div>
 
-An app that signs cookies needs `WISP_SECRET` (32+ random characters) on every host. Logs, metrics and traces: [Observe](/docs/deploy-observe/). Step by step for each host: [Hosting](/docs/hosting/).
+An app that signs cookies needs `WISP_SECRET` (32+ random characters, for example `openssl rand -hex 32`) on every host. Without it the server logs one line at start, and a request that needs it answers 500 while the server keeps running. Logs, metrics and traces: [Observe](/docs/deploy-observe/). Step by step for each host: [Hosting](/docs/hosting/).
 
 A plain `wisp build` inside a host's CI picks the target from its variables and says so: `WORKERS_CI` or `CF_PAGES` (cloudflare), `VERCEL` (output in `.vercel/output`), `NETLIFY`, `DENO_DEPLOYMENT_ID` (deno), `AWS_APP_ID` (node). `--target native` forces the plain binary.
 

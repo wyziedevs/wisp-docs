@@ -42,7 +42,7 @@ let me = cx.user()?; // members' page: signed-in row or redirect
 
 - `cx.set_signed_cookie(name, value)` adds an HMAC-SHA256 signature of name and value (`value.signature`), keyed with `WISP_SECRET`.
 - `cx.signed_cookie(name)` returns the value only if the signature holds: a visitor can read it but not forge it, change it, or move it to another cookie name.
-- A release build without `WISP_SECRET` fails the request that signs or checks, saying to set it. Dev builds keep a secret in `.wisp/secret` so sessions survive restarts.
+- A release build without `WISP_SECRET` logs one line at start saying how to set it, and the request that signs or checks answers 500 (the server keeps running; on the edge builds there is no start line, only the 500). Dev builds keep a secret in `.wisp/secret` so sessions survive restarts.
 - Rotate without signing everyone out: move the old secret to `WISP_SECRET_OLD`. Signatures it made still hold (nothing new is signed with it) until removed; 30 days on for sign-ins.
 
 ## Signing In

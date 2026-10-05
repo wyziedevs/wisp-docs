@@ -28,7 +28,7 @@ Read once at start. Switches take `on`/`off` (also `1`/`0`, `true`/`false`). You
 | `WISP_PROBLEM_JSON` | `on`: errors as RFC 9457 problem JSON |
 | `WISP_REQUEST_ID` | `on`: every request gets an id (`cx.request_id()`), echoed as `x-request-id` |
 | `WISP_API_DOCS` | serve `/_wisp/openapi.json` and `/_wisp/docs` (on in dev; no `/_wisp/docs` on Cloudflare, Pages, Vercel, Netlify) |
-| `WISP_SECRET`, `WISP_SECRET_OLD` | key for signed cookies and tokens, and the one before (rotation) |
+| `WISP_SECRET`, `WISP_SECRET_OLD` | key for signed cookies and tokens, and the one before (rotation). Unset outside dev mode, the server logs one line at start naming it and how to set it (`openssl rand -hex 32`); a request that needs it answers 500 and the server keeps running (the edge builds log no start line, the 500 comes per request) |
 | `WISP_DATA` | folder for table files (`off` keeps tables in memory; blank is unset) |
 | `WISP_FSYNC` | `second` (default), `always`, `off` |
 | `WISP_STORE` | a store for tables: `d1:DB`, `deno-kv`, `libsql://…` |

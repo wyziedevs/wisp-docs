@@ -31,7 +31,7 @@ let t = wisp::token("reset", &user.id, Duration::from_secs(3600));
 let id: u64 = wisp::untoken("reset", &t)?; // 400 for any failure, the same one
 ```
 
-- HMAC-SHA256 under `WISP_SECRET` (and `WISP_SECRET_OLD`) over purpose, payload and expiry. A purpose of `""` is none.
+- HMAC-SHA256 under `WISP_SECRET` (and `WISP_SECRET_OLD`) over purpose, payload and expiry. A purpose of `""` is none. Without `WISP_SECRET` outside dev mode, a request that needs it answers 500 with a log line saying how to set it; the server keeps running.
 - The payload is readable, not forgeable; keep secrets out of it.
 - A token works until it expires: for a reset, put something in it that changes when it is used (the password hash's first bytes) and compare.
 
