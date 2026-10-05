@@ -9,7 +9,7 @@ description: Wisp is a fast, fun web framework for Rust with file routes, templa
 <div class="wrap">
 <div class="sec-head">
 <h2>A Page Is One File</h2>
-<p>The model, the table, the actions and the markup sit in one file. The form writes its own inputs and errors, JSON endpoints join the same file as a <code>mod server</code> block, and a model can move to <code>src/db.rs</code> once other pages need it.</p>
+<p>The model, the table, the actions and the markup live in one file. The form writes its own inputs and errors, and JSON endpoints go in the same file. When other pages need a model, move it to <code>src/db.rs</code>.</p>
 </div>
 
 <Demo todos={&demo_todos(cx)}>
@@ -43,7 +43,7 @@ struct Todo {
 
 ## Nothing Extra on the Hot Path
 
-A route pays only for the features it uses, and a change that touches the request path is checked by an instructions-per-request A/B before it lands. Wisp's first rule is that speed is never traded away for convenience.
+A route pays only for the features it uses, and every change to the request path is measured before it ships. Speed is never traded for convenience.
 
 <p class="more"><a href="/docs/benchmarks/">Results and How Speed Is Measured</a></p>
 
@@ -53,7 +53,7 @@ A route pays only for the features it uses, and a change that touches the reques
 
 ## Benchmarked Against Popular Frameworks
 
-TechEmpower's plaintext and JSON tests on one shared 4-vCPU VM, every server on the same 2 cores, medians of 3 runs.
+Requests per second on the TechEmpower plaintext and JSON tests. Every framework runs on the same machine with the same 2 CPU cores, and each number is the median of 3 runs.
 
 <Speed />
 
@@ -153,7 +153,7 @@ export const actions = {
 
 <div class="claim wide">
 
-The same five features (a list, a contact form, a JSON endpoint, a layout and a live search) as a complete app in each stack, every form checking the same rules with the same messages:
+One app built in each stack: a list, a contact form, a JSON endpoint, a layout and a live search. Every form checks the same rules and shows the same messages.
 
 <Tokens />
 
@@ -173,7 +173,7 @@ Wisp is new and not yet audited. Over a thousand tests run on every change, the 
 
 </Claim>
 
-<Band id="forms" title="Forms That Work Without JavaScript" lead="A form posts to an action. A bad value returns a 422 with the problem beside its input and the typed values kept. With JavaScript on, the page updates in place.">
+<Band id="forms" title="Forms That Work Without JavaScript" lead="A form posts to an action. A bad value sends the form back with the problem beside its input and what you typed kept. With JavaScript on, the page updates in place.">
 
 ```html
 ---
@@ -191,7 +191,7 @@ fn signup(email: Email, password: Password) {
 
 </Band>
 
-<Band id="reactive" flip title="Reactivity in the Same File" lead="The block is Rust that runs for each request, name is drawn on the server, and the count is JavaScript state in the browser. Turn JavaScript off and the server's HTML still works.">
+<Band id="reactive" flip title="Reactivity in the Same File" lead="The top block is Rust that runs on the server for each request. The count is JavaScript state in the browser. Turn JavaScript off and the server's HTML still works.">
 
 ```html
 ---
@@ -209,7 +209,7 @@ let name = cx.query_or("name", "world".to_string());
 
 </Band>
 
-<Band id="binary" title="One Binary, on Any Host" lead="Templates compile to Rust, and the app, styles and static files become one small binary. Build it as a container, static HTML, or for an edge or serverless host. This site is one, and works with JavaScript off.">
+<Band id="binary" title="One Binary, on Any Host" lead="Templates compile to Rust, and the app, styles and static files become one small binary. Build it as a container, static HTML, or for an edge or serverless host. This site is built that way, and works with JavaScript off.">
 
 ```bash
 wisp build

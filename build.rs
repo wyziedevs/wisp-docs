@@ -369,7 +369,7 @@ const CONTENDERS: &[(&str, &str, &str)] = &[
 
 /// The tables: workload, connections, caption.
 const SPEED: &[(&str, &str, &str)] = &[
-    ("plaintext", "256", "Plaintext, 256 connections, pipelined"),
+    ("plaintext", "256", "Plaintext, 256 connections"),
     ("json", "64", "JSON, 64 connections"),
 ];
 

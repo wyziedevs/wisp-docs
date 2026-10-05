@@ -11,7 +11,7 @@ A folder is a URL, and its `+page.wisp` is the page: a block of Rust that loads 
 
 ## Fast
 
-Zero cost on the request hot path: a route pays only for the features it uses, and a change that touches the path is checked by an instructions-per-request A/B before it lands. See [Benchmarks](/docs/benchmarks/).
+Nothing extra on the request path: a route pays only for the features it uses, and every change to that path is measured before it ships. See [Benchmarks](/docs/benchmarks/).
 
 ## Cheap to Write
 
@@ -19,7 +19,7 @@ An AI pays for every token it reads and writes, in time and money. Wisp uses con
 
 - The same five features take <Stat k="apps.wisp" /> tokens in Wisp, <Stat k="apps.sveltekit" /> in SvelteKit and <Stat k="apps.next" /> in Next.js.
 - A larger app with sign up, uploads and live refresh takes <Stat k="real.wisp" />, against <Stat k="real.sveltekit" /> and <Stat k="real.next" />.
-- `cargo run -p wisp-tokens` counts every hand-written file and its path with a byte-pair style estimate. See [Tokens](/docs/tokens/).
+- `cargo run -p wisp-tokens` counts every hand-written file and its path with a token estimate. See [Tokens](/docs/tokens/).
 
 For agents: [AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md) is the whole reference in one file, and `wisp mcp` serves the docs over MCP (`claude mcp add wisp -- wisp mcp`).
 
@@ -27,5 +27,5 @@ For agents: [AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.
 
 - A page is one `+page.wisp`: its models, tables, actions, markup and scoped style in a single file. Larger sites split into `src/db.rs`, `+page.rs`, `+server.rs` and components ([One file or several](/docs/design-pages/#one-file-or-several)).
 - One binary carries its styles and static files. It runs on a VPS, in a container, as static HTML or on an edge host ([Deploying](/docs/deploy/)).
-- Every fast path is proven at startup, falls back, and a panic in a handler is caught and answered as a 500.
+- Every fast path is tested at startup and falls back to a safe one if it fails. A panic in a handler is caught and answered with a 500.
 - Forms work without JavaScript, and reactivity lives in the same file as the markup ([Browser code](/docs/client/)).

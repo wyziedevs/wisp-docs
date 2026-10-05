@@ -5,7 +5,7 @@ group: Start
 order: 4
 ---
 
-Wisp's first rule is zero cost on the request hot path. This page is what is measured and how to run it. The numbers below are dated, with the machine they ran on, and the losses are listed with them. The native TechEmpower tables are on the [home page](/#measured) and in [`bench/tfb/RESULTS.md`](https://github.com/wyziedevs/wisp/blob/main/bench/tfb/RESULTS.md).
+Wisp's first rule is no extra cost on the request path. This page shows what is measured and how to run it. Each result has its date and machine, and the losses are listed too. The native TechEmpower tables are on the [home page](/#measured) and in [`bench/tfb/RESULTS.md`](https://github.com/wyziedevs/wisp/blob/main/bench/tfb/RESULTS.md).
 
 ```bash
 git clone https://github.com/wyziedevs/wisp
@@ -13,11 +13,11 @@ cd wisp
 cargo run -r -p bench-run -- --paths fortunes
 ```
 
-You need Rust. `bench/README.md` lists every option, the frameworks compared, and how each path is checked for identical output before it is measured. Results depend on the machine, so compare frameworks run on the same machine and treat the absolute numbers with care.
+You need Rust. `bench/README.md` lists every option, the frameworks compared, and how each path is checked for identical output before it is measured. Results depend on the machine, so compare frameworks only when they ran on the same one.
 
 ## Native, Linux (2026-10-04)
 
-Source: [`bench/tfb/RESULTS.md`](https://github.com/wyziedevs/wisp/blob/main/bench/tfb/RESULTS.md) (generated from `results.json`). TechEmpower's plaintext and JSON tests with their own wrk scripts, run 2026-10-04 on one shared 4-vCPU VM (AMD EPYC 7B13), the server on 2 pinned cores, medians of 3 runs of 15 s. Not an official TechEmpower result. Contenders are in a fixed order, not ranked; "Failed" means every run stalled or completed no request. The full results add min, max, latency and errors per row. The same Wisp binary moved between moments on this VM, so gaps inside the min-max ranges are ties.
+Source: [`bench/tfb/RESULTS.md`](https://github.com/wyziedevs/wisp/blob/main/bench/tfb/RESULTS.md) (generated from `results.json`). The TechEmpower plaintext and JSON tests with their own wrk scripts, run 2026-10-04 on one shared 4-CPU VM (AMD EPYC 7B13), with the server pinned to 2 cores. Each number is the median of 3 runs of 15 seconds. This is not an official TechEmpower result. Frameworks are listed in a fixed order, not ranked. "Failed" means every run stalled or finished no request. The full results add min, max, latency and errors per row. The same Wisp binary varied between runs on this VM, so gaps inside the min-max ranges count as ties.
 
 Plaintext, pipelined, requests per second (median of 3), by connections:
 
