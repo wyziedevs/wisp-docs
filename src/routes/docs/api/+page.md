@@ -5,7 +5,7 @@ group: APIs
 order: 40
 ---
 
-An API is a folder of `+server.rs` files beside pages, one binary. Start one: `wisp new my-api --api`, `wisp dev`, then `/_wisp/docs`. Template: [examples/api](https://github.com/wyziedevs/wisp/tree/main/examples/api).
+An API is a folder of `+server.rs` files beside pages, one binary. Start one: `wisp new my-api --api`, `wisp dev`, then `/_wisp/docs`. A page's endpoints may instead sit in its `---` block as `mod server { … }` ([Pages](/docs/design-pages/)). Template: [examples/api](https://github.com/wyziedevs/wisp/tree/main/examples/api).
 
 ## An Endpoint
 

@@ -35,7 +35,7 @@ Open `http://127.0.0.1:3000`. `wisp dev` rebuilds as you edit, and hot reload ke
 
 ## Creating a Page
 
-A page is a `.wisp` file. It may start with a block of Rust between two `---` lines, then comes markup. `src/routes/hello/+page.wisp` is served at `/hello`:
+A page is a `.wisp` file. It may start with a block of Rust between two `---` lines, then comes markup. The block can hold the whole route: its load, `#[action]` form handlers and `mod server { … }` endpoints ([Pages](/docs/design-pages/)). `src/routes/hello/+page.wisp` is served at `/hello`:
 
 ```html
 ---
