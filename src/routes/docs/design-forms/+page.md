@@ -50,11 +50,13 @@ fn remove(id: u64) {
 
 On that 422 page:
 
-- Each named `<input>`, `<textarea>`, `<select>` of the posting form shows what was sent (`wisp::rt::kept`) instead of its own value, then `<small class="problem">...</small>` (`wisp::rt::problem`). A checkbox or radio is ticked when its value was sent (`wisp::rt::ticked`; left out is unticked), and a `<select multiple>` selects every value sent (`wisp::rt::sent`). Ticks and choices come back only in the form whose action refused; another form on the page shows its own.
-- Own value forms: `value={post.title}`, or `value="text"` (same node, position in the tag does not matter). A hole inside, `value="a{b}"`, is a build error. Textarea content works; `<select value={post.kind}>` marks the matching option `selected`.
-- Passwords and files show the problem but are never sent back. Checkboxes, radios, hidden inputs and component inputs are left alone.
-- `{cx.problem("text")}` places that field's `<small>` yourself (nothing when none); none is added then.
-- A GET has neither; use an `if` on `cx`'s locals (none) so the page can still be baked.
+- Each named `<input>`, `<textarea>`, `<select>` of the form whose action refused shows what was sent (`wisp::rt::kept`) instead of its own value, then `<small class="problem">...</small>` (`wisp::rt::problem`), one per problem of the field. A checkbox or radio is ticked when its value was sent (`wisp::rt::ticked`; left out is unticked), and a `<select multiple>` selects every value sent (`wisp::rt::sent`). Only that form: another form on the page, even one sharing a field name, shows its own values and no problems.
+- A field with a problem says so: `aria-invalid="true"`, and when it has an `id`, `aria-describedby="{id}-problem"` naming its `<small>` (`wisp::rt::invalid`).
+- A checkbox or radio shows its problem too (a box that must be ticked: `return invalid("terms", "...")`), after the last input of its name in the form; a group written inside a block (`{#each}`) gets it once, before `</form>`.
+- Own value forms: `value={post.title}`, or `value="text"` (same node, position in the tag does not matter). A hole inside, `value="a{b}"`, is a build error. Textarea content works; `<select value={post.kind}>` marks the matching option `selected`; a checkbox's or radio's own state is `checked` or `checked={cond}`.
+- Passwords and files show the problem but are never sent back. Hidden inputs, component inputs and fields with `bind:value` or `bind:checked` are left alone.
+- `{cx.problem("text")}` places that field's `<small>` yourself (nothing when none); none is added then, and the field is not described by it.
+- A GET has neither; use an `if` on `cx`'s locals (none) so the page can still be baked. On a GET, or a post that passed, each of these is one inlined test of the refusal (`None`) per field: no lookup, no allocation.
 
 Browser-side checks come from the same rules (`wisp_build::rules::Native`). A field that an action of the page reads gets, as static text, only attributes the server also checks:
 
