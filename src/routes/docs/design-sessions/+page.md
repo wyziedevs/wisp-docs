@@ -52,7 +52,7 @@ let me = cx.user()?; // members' page: signed-in row or redirect
 | Call | What it does |
 |---|---|
 | `cx.signup(row).await?` | for a `#[model]` with a `hash` field and `email` or `name` (an `Account`): hashes the password in `row.hash`, refuses a taken name with a 422, signs in |
-| `cx.login(&email, &password).await?` | checks it, as slowly for a name no one has |
+| `cx.login(email, password).await?` | checks it, as slowly for a name no one has |
 | `wisp::signup`, `wisp::login` | same without a `Cx` |
 | `cx.sign_in(id)` | sets signed cookie `session` to the id and time, 30 days; always a new session, so a planted one never becomes the visitor's |
 | `cx.signed_in()?` | the id; signed out (or 30 days on) it is the error that sends to sign in: 303 to `/login`, or 401 for a JSON client |
