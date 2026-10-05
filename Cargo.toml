@@ -38,4 +38,5 @@ redirects = [
   "/docs/design-build /docs/design-runtime 301",
   "/docs/design-security /docs/design-cli 301",
   "/docs/plan /docs/overview 301",
+  "/docs/tokens-apps /docs/tokens 301",
 ]
