@@ -66,7 +66,7 @@ A route pays only for the features it uses, and a change that touches the reques
 
 <Claim id="measured">
 
-## Benchmarked Against Real Frameworks
+## Benchmarked Against Popular Frameworks
 
 TechEmpower's plaintext and JSON tests, run with their own load scripts against their reference sources of each framework, on one 4-vCPU VM with the server pinned to 2 cores. Medians of 3 runs of 15 seconds each.
 
