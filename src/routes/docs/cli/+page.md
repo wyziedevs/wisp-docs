@@ -44,6 +44,7 @@ order: 80
 | `wisp update-docs` | bring `AGENTS.md` up to this Wisp |
 | `wisp mcp` | docs, routes, components and checks for AI agents (MCP, stdio) |
 | `wisp --help` | this list (`-h`, `help`) |
+| `wisp --version` | the version (`-V`) |
 
 </div>
 
