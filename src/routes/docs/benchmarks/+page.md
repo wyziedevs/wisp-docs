@@ -17,7 +17,7 @@ You need Rust. `bench/README.md` lists every option, the frameworks compared, an
 
 ## Native, Linux (2026-10-04)
 
-Source: [`bench/tfb/RESULTS.md`](https://github.com/wyziedevs/wisp/blob/main/bench/tfb/RESULTS.md) (generated from `results.json`). TechEmpower's plaintext and JSON tests with their own wrk scripts, run 2026-10-04 on one shared 4-vCPU VM (AMD EPYC 7B13), the server on 2 pinned cores, medians of 3 runs of 15 s. Not an official TechEmpower result. Contenders are in a fixed order, not ranked; a `0` means no request completed. The full results add min, max, latency and errors per row. The same Wisp binary moved between moments on this VM, so gaps inside the min-max ranges are ties.
+Source: [`bench/tfb/RESULTS.md`](https://github.com/wyziedevs/wisp/blob/main/bench/tfb/RESULTS.md) (generated from `results.json`). TechEmpower's plaintext and JSON tests with their own wrk scripts, run 2026-10-04 on one shared 4-vCPU VM (AMD EPYC 7B13), the server on 2 pinned cores, medians of 3 runs of 15 s. Not an official TechEmpower result. Contenders are in a fixed order, not ranked; "Failed" means no run completed a request, and a `0` median means at least 2 of 3 runs completed none. The full results add min, max, latency and errors per row. The same Wisp binary moved between moments on this VM, so gaps inside the min-max ranges are ties.
 
 <div class="table-wrap">
 
@@ -33,7 +33,9 @@ Plaintext, pipelined, requests per second (median of 3), by connections:
 | Hono (Node) | 28,966 | 29,602 | 34,173 | 0 |
 | Hono (Bun) | 10,599 | 10,375 | 9,652 | 6,910 |
 | SvelteKit | 10,929 | 8,464 | 8,359 | 0 |
-| Next.js | 0 | 0 | 0 | n/a |
+| Next.js | Failed (out of memory) | Failed (out of memory) | Failed (out of memory) | Failed (out of memory) |
+
+Rows whose min-max ranges overlap are ties. 256: Fastify and Express; Hono (Node), SvelteKit and Hono (Bun). 1024: Axum and Actix Web; Express and Hono (Node). 4096: Hono (Node) and Express. 16384: Wisp's range (0 to 29,252) overlaps every row that answered, so no rank is drawn there.
 
 JSON, requests per second (median of 3), by connections:
 
@@ -48,6 +50,8 @@ JSON, requests per second (median of 3), by connections:
 | Hono (Bun) | 52,353 | 54,056 | 59,619 | 51,580 | 47,379 | 28,439 |
 | SvelteKit | 7,990 | 9,774 | 10,378 | 7,714 | 6,062 | 6,698 |
 | Next.js | 1,499 | 1,285 | 1,524 | 1,513 | 1,370 | 1,715 |
+
+Rows whose min-max ranges overlap are ties. 16: Actix Web and Axum, Axum and Wisp; Fastify, Hono (Node) and Express. 32: Wisp with Actix Web and with Axum; Express, Hono (Node) and SvelteKit. 64: Wisp, Actix Web and Axum; SvelteKit and Hono (Node). 128: Wisp and Actix Web. 256: Fastify and Express. 512: Wisp and Actix Web; Axum and Hono (Bun).
 
 </div>
 

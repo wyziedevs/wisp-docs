@@ -70,9 +70,10 @@ TechEmpower's plaintext and JSON tests, run with their own load scripts against 
 <tr><th scope="row">Hono (Node)</th><td class="stack">Node.js</td><td class="meter" aria-hidden="true"><span style="--v: 0.026"></span></td><td class="num">28,966</td></tr>
 <tr><th scope="row">SvelteKit</th><td class="stack">Svelte</td><td class="meter" aria-hidden="true"><span style="--v: 0.010"></span></td><td class="num">10,929</td></tr>
 <tr><th scope="row">Hono (Bun)</th><td class="stack">Bun</td><td class="meter" aria-hidden="true"><span style="--v: 0.009"></span></td><td class="num">10,599</td></tr>
-<tr><th scope="row">Next.js</th><td class="stack">React</td><td class="meter" aria-hidden="true"><span style="--v: 0.000"></span></td><td class="num">0</td></tr>
+<tr><th scope="row">Next.js</th><td class="stack">React</td><td class="meter" aria-hidden="true"></td><td class="num">Failed (out of memory)</td></tr>
 </tbody>
-</table></div>
+</table>
+<p>Rows whose min-max ranges overlap are ties: Fastify and Express; Hono (Node), SvelteKit and Hono (Bun).</p></div>
 <div class="bench"><table class="tally">
 <caption>JSON, 64 connections</caption>
 <thead><tr><th scope="col">Framework</th><th scope="col">Built On</th><th scope="col"><span class="sr">Relative speed</span></th><th scope="col" class="num">Req/s</th></tr></thead>
@@ -87,10 +88,11 @@ TechEmpower's plaintext and JSON tests, run with their own load scripts against 
 <tr><th scope="row">Hono (Node)</th><td class="stack">Node.js</td><td class="meter" aria-hidden="true"><span style="--v: 0.094"></span></td><td class="num">8,988</td></tr>
 <tr><th scope="row">Next.js</th><td class="stack">React</td><td class="meter" aria-hidden="true"><span style="--v: 0.016"></span></td><td class="num">1,524</td></tr>
 </tbody>
-</table></div>
+</table>
+<p>Rows whose min-max ranges overlap are ties: Wisp, Actix Web and Axum; SvelteKit and Hono (Node).</p></div>
 </div>
 
-Source: [`bench/tfb`](https://github.com/wyziedevs/wisp/blob/main/bench/tfb/RESULTS.md), run 2026-10-04 on a shared 4-vCPU AMD EPYC 7B13 VM, wrk, medians of 3 runs of 15 seconds, server on 2 pinned cores; sorted by requests per second. Every contender, both workloads and all connection levels are in the full results; this is not an official TechEmpower result, and the same binary moved between moments on this shared VM, so gaps inside the min-max ranges are ties.
+Source: [`bench/tfb`](https://github.com/wyziedevs/wisp/blob/main/bench/tfb/RESULTS.md), run 2026-10-04 on a shared 4-vCPU AMD EPYC 7B13 VM, wrk, medians of 3 runs of 15 seconds, server on 2 pinned cores; sorted by median requests per second, with a run that completed no request marked Failed and listed last. Every contender, both workloads and all connection levels are in the full results; this is not an official TechEmpower result, and the same binary moved between moments on this shared VM, so rows whose min-max ranges overlap are ties: on JSON at 64 connections Wisp is tied with Actix Web and Axum.
 
 <p class="more"><a href="https://github.com/wyziedevs/wisp/blob/main/bench/tfb/RESULTS.md">Full Results</a></p>
 
