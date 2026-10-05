@@ -59,6 +59,11 @@
     gap: 4rem;
   }
 
+  /* Flipped, the code still gets the wide column. */
+  .split.flip {
+    grid-template-columns: 7fr 5fr;
+  }
+
   .split.flip .claim {
     order: 2;
   }
@@ -203,6 +208,21 @@
 .cmp .scroll {
   max-height: 24rem;
   overflow: auto;
+}
+
+/* Code on the home page keeps its lines and indents whole, and scrolls sideways
+   when a line is long, instead of wrapping mid-statement. */
+:is(.demo, .cmp, .sample) pre {
+  white-space: pre;
+  overflow-wrap: normal;
+}
+
+/* Their scrollbars are thin and quiet; the page's own keeps the accent. */
+:is(.demo, .sample) pre,
+.cmp .scroll {
+  --sb-size: 6px;
+  --sb-thumb-color: var(--line-strong);
+  --sb-track-color: transparent;
 }
 
 /* Launch sections rise into place as they scroll in (CSS only, where supported), on the home page alone. */

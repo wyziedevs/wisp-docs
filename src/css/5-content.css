@@ -191,6 +191,7 @@ pre:focus-within .copy-code,
 .tally .meter span {
   display: block;
   width: calc(var(--v) * 100%);
+  min-width: 0.5rem; /* the shortest bar is still round: a dot */
   height: 0.5rem;
   border-radius: var(--pill);
   background: var(--line-strong);
