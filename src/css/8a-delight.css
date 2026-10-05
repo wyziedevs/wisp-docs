@@ -105,11 +105,6 @@
     animation: happy 500ms var(--ease);
   }
 
-  /* A copied code block washes once. */
-  pre:has(> .copy-code.done)::after {
-    animation: wash 400ms var(--ease);
-  }
-
   /* The copy button's check draws in with a tiny pop. */
   .copy-code.done::before {
     animation:
@@ -130,17 +125,6 @@
 /* The sidebar's current marker. */
 .side li a {
   position: relative;
-}
-
-/* The copy wash: a flat accent tint that fades out, over the block. */
-pre::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: color-mix(in oklch, var(--accent) 14%, transparent);
-  opacity: 0;
-  pointer-events: none;
 }
 
 .copy-code.done::before {
@@ -165,12 +149,6 @@ pre::after {
 @keyframes veil {
   from {
     opacity: 0;
-  }
-}
-
-@keyframes wash {
-  from {
-    opacity: 1;
   }
 }
 
