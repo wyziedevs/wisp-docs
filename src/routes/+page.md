@@ -70,7 +70,7 @@ TechEmpower's plaintext and JSON tests, run with their own load scripts against 
 <tr><th scope="row">Hono (Node)</th><td class="stack">Node.js</td><td class="meter" aria-hidden="true"><span style="--v: 0.026"></span></td><td class="num">28,966</td></tr>
 <tr><th scope="row">SvelteKit</th><td class="stack">Svelte</td><td class="meter" aria-hidden="true"><span style="--v: 0.010"></span></td><td class="num">10,929</td></tr>
 <tr><th scope="row">Hono (Bun)</th><td class="stack">Bun</td><td class="meter" aria-hidden="true"><span style="--v: 0.009"></span></td><td class="num">10,599</td></tr>
-<tr><th scope="row">Next.js</th><td class="stack">React</td><td class="meter" aria-hidden="true"></td><td class="num">Failed (out of memory)</td></tr>
+<tr><th scope="row">Next.js</th><td class="stack">React</td><td class="meter" aria-hidden="true"></td><td class="num">No valid result: no pipelined response completed (heap raised to 8 GB, still none)</td></tr>
 </tbody>
 </table>
 <p>Rows whose min-max ranges overlap are ties: Fastify and Express; Hono (Node), SvelteKit and Hono (Bun).</p></div>

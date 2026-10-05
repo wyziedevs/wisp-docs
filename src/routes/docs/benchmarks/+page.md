@@ -33,7 +33,7 @@ Plaintext, pipelined, requests per second (median of 3), by connections:
 | Hono (Node) | 28,966 | 29,602 | 34,173 | 0 |
 | Hono (Bun) | 10,599 | 10,375 | 9,652 | 6,910 |
 | SvelteKit | 10,929 | 8,464 | 8,359 | 0 |
-| Next.js | Failed (out of memory) | Failed (out of memory) | Failed (out of memory) | not run |
+| Next.js | No valid result: no pipelined response completed (heap raised to 8 GB, still none) | No valid result: no pipelined response completed (heap raised to 8 GB, still none) | No valid result: no pipelined response completed (heap raised to 8 GB, still none) | not run |
 
 Rows whose min-max ranges overlap are ties. 256: Fastify and Express; Hono (Node), SvelteKit and Hono (Bun). 1024: Axum and Actix Web; Express and Hono (Node). 4096: Hono (Node) and Express. 16384: Wisp's range (0 to 29,252) overlaps every row that answered, so no rank is drawn there.
 
