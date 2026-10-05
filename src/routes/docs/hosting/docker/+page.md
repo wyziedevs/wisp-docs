@@ -14,7 +14,7 @@ wisp build --docker      # --force replaces existing files
 docker build -t my-app .
 ```
 
-`wisp build --docker` writes a two-stage `Dockerfile` (`rust:slim`, then `debian:stable-slim`, `HOST=0.0.0.0`, `PORT=3000`, `WISP_DATA=/data`) and a `.dockerignore`. Files that exist are left alone unless you pass `--force`; the Dockerfile you have is the one that is built.
+`wisp build --docker` writes a two-stage `Dockerfile` (`rust:slim`, then `debian:stable-slim`, `HOST=0.0.0.0`, `PORT=3000`, `WISP_DATA=/data`) and a `.dockerignore` (it keeps `.env` and `.env.*` out of the image; `wisp new` also lists them in `.gitignore`). Files that exist are left alone unless you pass `--force`; the Dockerfile you have is the one that is built.
 
 ## Deploy
 
