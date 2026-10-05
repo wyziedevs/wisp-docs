@@ -112,7 +112,7 @@ claude mcp add wisp -- wisp mcp
 
 <div class="pair">
 <figure class="cmp">
-<figcaption>Wisp: a contact form that validates, 89 tokens</figcaption>
+<figcaption>Wisp: a contact form that validates, 79 tokens</figcaption>
 <div class="file">
 <div class="tabs"><span class="tab">+page.wisp</span></div>
 <div class="scroll" tabindex="0" aria-label="Wisp code">
@@ -126,7 +126,7 @@ fn default(#[validate(len = 1..=50)] name: String, email: Email) {
 ---
 
 <title>Contact</title>
-<form fields><button>Send</button></form>
+<form fields />
 ```
 
 </div>
@@ -185,7 +185,7 @@ export const actions = {
 
 <div class="claim wide">
 
-The same five features (a list page, a contact form, a JSON endpoint, a layout and a live search) written as a complete app in each stack. Every stack's form checks the same two rules with the same messages, and a stack with no built-in rule writes them by hand:
+The same five features (a list page, a contact form, a JSON endpoint, a layout and a live search) written as a complete app in each stack. Every stack's form checks the same two rules and shows a message for each problem. Wisp's rules are built in, and the other stacks write them by hand, with their own wording for the messages:
 
 <table class="tally">
 <thead><tr><th scope="col">Stack</th><th scope="col"><span class="sr">Relative size</span></th><th scope="col" class="num">Tokens</th><th scope="col" class="num">Files</th></tr></thead>

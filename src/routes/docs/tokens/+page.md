@@ -12,7 +12,7 @@ An AI reads and writes code by the token, so an app's cost is measured in tokens
 `bench/tokens/apps` holds the same five features as a complete app in each stack:
 
 - a list page loading its data
-- a contact form (name 1 to 50 characters, a valid email; a 422 that shows each problem and keeps what was typed, else a redirect). Every stack checks the same two rules with the same two messages, hand-written where the framework has no rule, and Wisp's are built in
+- a contact form (name 1 to 50 characters, a valid email; a 422 that shows each problem and keeps what was typed, else a redirect). Every stack checks the same two rules and shows a message for each problem. Wisp's rules are built in; the other stacks write them by hand, with their own wording and a simple email pattern (Wisp's check follows the browser's email rules)
 - a JSON endpoint of the list
 - a layout with a nav
 - a live search filtered in the browser
