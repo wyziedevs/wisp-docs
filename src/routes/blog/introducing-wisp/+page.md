@@ -116,7 +116,7 @@ Turn JavaScript off and the server's HTML still works. See [Browser code](/docs/
 You need Rust 1.88 or later:
 
 ```bash
-cargo install --git https://wisp.ar0.eu wisp-cli
+cargo install wisp-web
 wisp new my-app
 cd my-app
 wisp dev

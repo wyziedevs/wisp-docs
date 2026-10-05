@@ -8,7 +8,7 @@
       <a class="btn" href="/docs/design/">API Reference</a>
     </p>
     <div class="install">
-      <code id="install-cmd"><span class="prompt" aria-hidden="true">$</span> cargo install --git https://wisp.ar0.eu wisp-cli</code>
+      <code id="install-cmd"><span class="prompt" aria-hidden="true">$</span> cargo install wisp-web</code>
       <button
         class="copy-icon"
         type="button"

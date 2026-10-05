@@ -90,7 +90,7 @@ In debug builds every static HTML chunk of every template is read through a tabl
 When the installed `wisp` is older than the app's `wisp` crate (the CLI's stamp against the app's), app commands print a warning on stderr first. In a terminal it asks `Continue anyway? [y/N]`; the default N exits with 1. In CI or a pipe it warns and continues. `WISP_NO_UPDATE_CHECK=1` silences it. Without git, the stamp check stays silent.
 
 ```bash
-cargo install --git https://wisp.ar0.eu wisp-cli --force  # git install
+cargo install wisp-web --force  # crates.io install
 cargo install --path <checkout>/crates/wisp-cli --force  # path checkout
 ```
 

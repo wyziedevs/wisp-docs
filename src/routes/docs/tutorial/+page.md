@@ -25,7 +25,7 @@ You will build a guestbook: visitors sign it with a name and a message, and ever
 You need [Rust](https://rustup.rs) 1.88 or later. Install the `wisp` command and make the app:
 
 ```bash
-cargo install --git https://wisp.ar0.eu wisp-cli
+cargo install wisp-web
 wisp new guestbook --template minimal
 cd guestbook
 wisp dev
