@@ -9,7 +9,7 @@ description: Wisp is a fast, fun web framework for Rust with file routes, templa
 <div class="wrap">
 <div class="sec-head">
 <h2>A Page Is One File</h2>
-<p>One file holds the model, actions, markup and JSON endpoints. The form writes its own inputs and errors.</p>
+<p>The model, the table, the actions and the markup sit in one file. The form writes its own inputs and errors, JSON endpoints join the same file as a <code>mod server</code> block, and a model can move to <code>src/db.rs</code> once other pages need it.</p>
 </div>
 
 <Demo todos={&demo_todos(cx)}>
@@ -43,7 +43,7 @@ struct Todo {
 
 ## Nothing Extra on the Hot Path
 
-A route pays only for the features it uses. Every change to the request path is measured in instructions per request before it lands.
+A route pays only for the features it uses, and a change that touches the request path is checked by an instructions-per-request A/B before it lands. Wisp's first rule is that speed is never traded away for convenience.
 
 <p class="more"><a href="/docs/benchmarks/">Results and How Speed Is Measured</a></p>
 
@@ -167,7 +167,7 @@ The same five features (a list, a contact form, a JSON endpoint, a layout and a 
 
 ## Tested and Actively Hardened
 
-Wisp is new and not yet audited. Over a thousand tests run on every change, the parsers are fuzzed, request smuggling is refused on HTTP/1 and HTTP/2, and there is no `unsafe` outside the Linux I/O drivers and edge exports. Bugs likely remain; issues are welcome.
+Wisp is new and not yet audited. Over a thousand tests run on every change, the parsers are fuzzed, request smuggling is refused on HTTP/1 and HTTP/2, and there is no unsafe code outside the Linux I/O drivers and edge exports. Bugs likely remain; issues are welcome.
 
 <p class="more"><a href="/docs/security/">What Is Hardened, and What Is Not</a></p>
 
@@ -191,7 +191,7 @@ fn signup(email: Email, password: Password) {
 
 </Band>
 
-<Band id="reactive" flip title="Reactivity in the Same File" lead="The block runs on the server for each request; the count is state in the browser. With JavaScript off, the server's HTML still works.">
+<Band id="reactive" flip title="Reactivity in the Same File" lead="The block is Rust that runs for each request, name is drawn on the server, and the count is JavaScript state in the browser. Turn JavaScript off and the server's HTML still works.">
 
 ```html
 ---

@@ -64,7 +64,7 @@ Behind a proxy:
 
 Other systems accept on the main thread and hand connections out, on tokio's sockets.
 
-The io_uring and epoll drivers are the `unsafe` modules of a native build (ring setup, memory shared with the kernel, socket calls std lacks), each block with why it holds. An earlier io_uring prototype that waited in `io_uring_enter` with no deferred task work measured level with plain tokio (bench/README.md).
+The io_uring and epoll drivers are the unsafe modules of a native build (ring setup, memory shared with the kernel, socket calls std lacks), each block with why it holds. An earlier io_uring prototype that waited in `io_uring_enter` with no deferred task work measured level with plain tokio (bench/README.md).
 
 ### Connections and Limits
 

@@ -12,7 +12,7 @@ Wisp is young and has not been audited, and it can be broken. This page lists wh
 - More than 1,000 tests run on every change: the runtime, the compiler, the CLI, the edge bridges and an app that uses every feature, plus a test that compiles every code sample of the reference.
 - Parsers are fuzzed with a seeded generator that breaks inputs the way hostile clients do: the HTTP/1 parser, HTTP/2 frames and HPACK, JSON, forms, cookies, WebSocket frames and the signing code. The compiler's template and Rust scanners are fuzzed with malformed, deeply nested and huge input, and `wisp fmt` with a round trip that must be idempotent and keep every visible character. A failing seed repeats.
 - A table of request-smuggling shapes (conflicting lengths, doubled `Transfer-Encoding`, bad chunking) must each be refused.
-- Every fast path is proven at startup and falls back, and a panic in a handler is caught and answered as a 500 while the server keeps serving. No `unsafe` outside the Linux I/O drivers and the edge exports.
+- Every fast path is proven at startup and falls back, and a panic in a handler is caught and answered as a 500 while the server keeps serving. No unsafe code outside the Linux I/O drivers and the edge exports.
 - Each pass hunts for bugs in one area (HTTP, the app and browser script, the build, the CLI, the edge bridges) and each finding gets a test. The list below is what the latest passes changed.
 
 ## What the Latest Passes Hardened

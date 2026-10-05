@@ -399,29 +399,24 @@ const STACKS: &[(&str, &str)] = &[
     ("React (Vite + Express)", "React (Vite + Express)"),
 ];
 
-/// `$OUT_DIR/tokens.rs`: ([(stack, share of the largest, tokens, files)] fewest
-/// first, [(stack, tokens)] of the bigger app).
+/// `$OUT_DIR/tokens.rs`: [(stack, share of the largest, tokens, files)], fewest first.
 fn tokens(counts: Option<&Json>) {
-    let suite = |name: &str| -> Vec<(String, f64, usize)> {
-        let Some(list) = counts.and_then(|j| j.get(name)) else { return Vec::new() };
-        list.items()
-            .filter_map(|r| Some((r.str("stack")?.to_string(), num(r.get("tokens")), num(r.get("files")) as usize)))
-            .collect()
-    };
-    let mut apps: Vec<_> = suite("apps")
+    let mut apps: Vec<_> = counts
+        .and_then(|j| j.get("apps"))
+        .map(|list| list.items())
         .into_iter()
-        .filter_map(|(s, t, f)| Some((STACKS.iter().find(|(k, _)| *k == s)?.1, t, f)))
+        .flatten()
+        .filter_map(|r| {
+            let name = STACKS.iter().find(|(k, _)| Some(*k) == r.str("stack"))?.1;
+            Some((name, num(r.get("tokens")), num(r.get("files")) as usize))
+        })
         .collect();
     apps.sort_by(|a, b| a.1.total_cmp(&b.1));
     let top = apps.iter().map(|r| r.1).fold(0.0, f64::max);
-    let mut out = String::from("(&[");
+    let mut out = String::from("&[");
     for (name, t, files) in apps {
         let _ = write!(out, "({name:?}, {:.3}, {:?}, {files}),", t / top, commas(t as u64));
     }
-    out.push_str("], &[");
-    for (name, t, _) in suite("real") {
-        let _ = write!(out, "({name:?}, {:?}),", commas(t as u64));
-    }
-    out.push_str("])");
+    out.push(']');
     put(&out_dir().join("tokens.rs"), &out);
 }

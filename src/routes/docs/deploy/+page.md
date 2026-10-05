@@ -99,7 +99,7 @@ let post = db::post(&slug).await?;
 
 - Linux: `/etc/systemd/system/<name>.service` with `Restart=on-failure`, `EnvironmentFile=-/etc/<name>.env` (made 0600 if missing: put `WISP_SECRET` there), `WorkingDirectory`, `LimitNOFILE=1048576`, `User=` when given, and `AmbientCapabilities=CAP_NET_BIND_SERVICE` for `--port` below 1024. Then `daemon-reload`, `enable`, `start`. The `--user` must read the app folder.
 - macOS: `/Library/LaunchDaemons/wisp.<name>.plist`, loaded with `launchctl`.
-- Windows: a scheduled task at startup (`schtasks`, as SYSTEM). A true Windows service must answer the Service Control Manager, which needs `unsafe` FFI that Wisp does not have, so `stop` ends the process without draining.
+- Windows: a scheduled task at startup (`schtasks`, as SYSTEM). A true Windows service must answer the Service Control Manager, which needs unsafe FFI that Wisp does not have, so `stop` ends the process without draining.
 
 SIGTERM (systemd stop, launchd) and Ctrl+C make the runtime stop accepting and drain for up to 10 seconds.
 

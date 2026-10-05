@@ -78,7 +78,7 @@ A bad value is a 422 that shows each problem next to its input and keeps what wa
 
 ## Files
 
-```
+```tree
 src/main.rs                 wisp::main!();   (generated; leave it)
 src/app.html                shell with %wisp.head% %wisp.body% (optional)
 src/app.css | app.scss      served at /_app/app.css (Tailwind if it imports it; Sass, no Node)

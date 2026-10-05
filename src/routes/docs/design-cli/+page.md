@@ -110,7 +110,7 @@ cargo install --path <checkout>/crates/wisp-cli --force  # path checkout
 
 Every page and error page (rendered, baked or kept by `CACHE`) gets:
 
-```
+```http
 content-security-policy: default-src 'self'; script-src 'self' 'sha256-…';
   style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;
   connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'

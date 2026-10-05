@@ -23,7 +23,7 @@ Wisp is a fast, fun web framework for Rust: ultra fast to run, cheap in AI token
 
 ## Speed
 
-Zero cost on the request hot path is the first rule: see [Benchmarks](/docs/benchmarks/). Wisp has no `unsafe` code outside its Linux I/O drivers and the edge exports.
+Zero cost on the request hot path is the first rule: see [Benchmarks](/docs/benchmarks/). Wisp has no unsafe code outside its Linux I/O drivers and the edge exports.
 
 ## Docs
 

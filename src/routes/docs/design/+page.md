@@ -9,7 +9,7 @@ Wisp is a fast, fun web framework for Rust: server-rendered HTML, file routes, `
 
 ## An App
 
-```
+```tree
 my-app/
   Cargo.toml          deps: wisp; build-deps: wisp-build
   build.rs            fn main() { wisp_build::run() }
@@ -99,7 +99,7 @@ Text, and a component:
 - `layout` names a component in `src/components` showing the page as its children; it gets each field its `{@props}` declare (`&str`/`String`, `bool`, a number, `Option` of one). A required field the page lacks, or a wrong type, is a build error.
 - `noindex: true` adds `<meta name="robots" content="noindex">`.
 - `{`/`}` in text and code become `&#123;`/`&#125;`, so no hole comes from them; raw HTML (components) is the template's own.
-- Fenced code is highlighted at build time by `wisp-build` (rust, js/ts, html, wisp, css, json, bash; a `wisp` block, or an `html` one that opens with `---`, shows its Rust block and its `{expressions}` as Rust) as `<span class="hl-k|s|c|n|t|a">` (keyword, string, comment, number, type or tag, attribute) in `<pre><code class="language-x">`. Your CSS colors them; other languages keep the class, unhighlighted.
+- Fenced code is highlighted at build time by `wisp-build` (rust, js/ts, html, wisp, css, json, bash/sh, toml, markdown, http headers, and `tree` for a file tree; a `wisp` block, or an `html` one that opens with `---`, shows its Rust block and its `{expressions}` as Rust) as `<span class="hl-k|s|c|n|t|a">` (keyword, string, comment, number, type or tag, attribute) in `<pre><code class="language-x">`. Your CSS colors them; other languages keep the class, unhighlighted.
 - `wisp::pages("blog")` gives a folder's `MdPage`s (`path`, `title`, `get("date")`), newest `date` first: `{#each wisp::pages("blog") as p}<a href={p.path}>{p.title}</a>{/each}`. A `static` slice the build wrote: no I/O, no allocation.
 
 ## Config Rules
@@ -121,7 +121,7 @@ In order: ultra fast, cheap, durable, flexible; developer happiness last.
 3. **Durable**: every fast path is proven at startup and falls back; nothing after startup takes the process down.
 4. **Minimal dependencies.** Each new one needs a written reason here.
 5. **Boring code**: plain functions and data; abstractions only where they remove more code than they add; invariants asserted.
-6. **Safe**: no `unsafe` in the compiler, the CLI or an app's generated code (workspace lint `forbid`). The runtime has it only in the Linux I/O drivers and the edge exports, each block with its reason; the benchmark runner, which pins processes to CPUs through the OS, sets its own.
+6. **Safe**: no unsafe code in the compiler, the CLI or an app's generated code (workspace lint `forbid`). The runtime has it only in the Linux I/O drivers and the edge exports, each block with its reason; the benchmark runner, which pins processes to CPUs through the OS, sets its own.
 7. **Mistakes fail early, in the user's file**: the build checks what it can and says where and what to do (a private `load`, an `#[action]` in the wrong place, `page.wisp` without its `+`, a block leaving a tag open in one branch). rustc only points at code the user wrote.
 8. **Fast dev loop**: editing markup never waits for `cargo`; editing Rust rebuilds only the app crate.
 9. **Works without JavaScript**: forms and links are real; `wisp.js` enhances, never required.
@@ -145,7 +145,7 @@ The build crate and CLI depend on std and `pulldown-cmark` only.
 
 ## Workspace
 
-```
+```tree
 crates/wisp        runtime: HTTP server, Cx, escaping, assets, dev hooks
 crates/wisp-build  compiler: route scan, .wisp parser, codegen (from build.rs)
 crates/wisp-shared what runtime, compiler and browser agree on: contexts.rs, protocol.rs, client/*.js

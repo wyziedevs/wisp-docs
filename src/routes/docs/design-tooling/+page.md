@@ -11,7 +11,7 @@ A recipe is the app's own, in `add/<name>/`; Wisp ships none and has no runtime 
 
 `add/<name>/recipe` lines (`#` comments): `dep` (a `[dependencies]` line), `env` (a `.env.example` line), `file <path>` (copies `add/<name>/<path>` to `<path>`), `note` (printed after). Nothing runs, nothing downloads. Idempotent: an existing crate or key is skipped, an existing file stays unless `--force`, a path outside the app is refused, every file is checked before any is written.
 
-```text
+```sh
 # add/sqlite/recipe
 dep sqlx = { version = "0.8", default-features = false, features = ["runtime-tokio", "sqlite"] }
 env DATABASE_URL=sqlite://app.db?mode=rwc
@@ -43,7 +43,7 @@ async fn get() -> Result<Response> {
 
 Other recipes (`add/<name>/recipe`, files beside it):
 
-```text
+```sh
 # add/postgres: db.rs as above with sqlx::PgPool and `now()::text`
 dep sqlx = { version = "0.8", default-features = false, features = ["runtime-tokio", "tls-rustls", "postgres"] }
 env DATABASE_URL=postgres://user:pass@localhost/app
