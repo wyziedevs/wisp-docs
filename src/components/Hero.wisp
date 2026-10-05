@@ -3,10 +3,6 @@
     <div class="stage"><img class="logo" src="/favicon.svg" alt="" width="132" height="132"></div>
     <h1><span class="sr">Wisp</span><span class="word" aria-hidden="true"><span>W</span><span>i</span><span>s</span><span>p</span></span></h1>
     <p class="sub">A Fast, Fun Web Framework for <em>Rust<svg class="scribble" viewBox="0 0 120 21" aria-hidden="true" focusable="false"><path pathLength="1" d="M3 13.5C28 10.4 63 10.9 116 6.2C88 11.8 52 15.6 22 18.6"/></svg></em></p>
-    <p class="cta">
-      <a class="btn primary" href="/docs/quick-start/">Learn Wisp</a>
-      <a class="btn" href="/docs/design/">API Reference</a>
-    </p>
     <div class="install">
       <code id="install-cmd"><span class="prompt" aria-hidden="true">$</span> cargo install wisp-web</code>
       <button
@@ -20,6 +16,10 @@
       </button>
       <span class="sr" aria-live="polite">{:label}</span>
     </div>
+    <p class="cta">
+      <a class="btn primary" href="/docs/quick-start/">Learn Wisp</a>
+      <a class="btn" href="/docs/design/">API Reference</a>
+    </p>
   </div>
 </section>
 
@@ -69,13 +69,6 @@
     font-weight: 600;
     line-height: 1.3;
     letter-spacing: -0.02em;
-  }
-
-  .hero .lede {
-    margin: 0.75rem auto 2.25rem;
-    max-width: 36rem;
-    color: var(--slate);
-    font-size: var(--fs-lede);
   }
 
   .install {
@@ -207,11 +200,11 @@
     .hero .logo {
       animation:
         fade 500ms var(--ease) backwards,
-        hop 1.4s cubic-bezier(0.45, 0, 0.55, 1) 600ms infinite alternate;
+        bounce 1.4s cubic-bezier(0.45, 0, 0.55, 1) 600ms infinite alternate;
     }
 
     .hero .stage::after {
-      animation: shade 1.4s cubic-bezier(0.45, 0, 0.55, 1) 600ms infinite alternate;
+      animation: under 1.4s cubic-bezier(0.45, 0, 0.55, 1) 600ms infinite alternate;
     }
 
     /* Wisp's letters hop up one after another. */
@@ -233,13 +226,14 @@
     }
   }
 
-  @keyframes hop {
+  /* Named for the hero: keyframes are global, and hop and shade are the header ghost's and the error page's. */
+  @keyframes bounce {
     to {
       translate: 0 -0.875rem;
     }
   }
 
-  @keyframes shade {
+  @keyframes under {
     to {
       scale: 0.7 1;
       opacity: 0.08;
@@ -266,12 +260,18 @@
   let done = $state(false)
 
   async function copy() {
-    const text = document.getElementById('install-cmd').textContent.replace(/^\$\s*/, '').trim()
+    const cmd = document.getElementById('install-cmd')
+    const text = cmd.textContent.replace(/^\$\s*/, '').trim()
     try {
       await navigator.clipboard.writeText(text)
       label = 'Copied'
       done = true
     } catch (e) {
+      // No clipboard access (an insecure page, a denied permission): select the command to copy by hand.
+      const pick = document.createRange()
+      pick.selectNodeContents(cmd.lastChild)
+      getSelection()?.removeAllRanges()
+      getSelection()?.addRange(pick)
       label = 'Press Ctrl+C'
     }
     setTimeout(() => {

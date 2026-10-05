@@ -111,7 +111,9 @@
   }
 }
 
-.ghost.boo svg {
+/* Also under the pointer, where the brand's own hover hop would otherwise win. */
+.ghost.boo svg,
+.brand:is(:hover, :focus-visible) .ghost.boo svg {
   animation: boo 800ms var(--ease);
 }
 
@@ -142,15 +144,6 @@
 @keyframes draw {
   from {
     clip-path: inset(0 100% 0 0);
-  }
-}
-
-@keyframes bob {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(0, -0.5rem, 0);
   }
 }
 

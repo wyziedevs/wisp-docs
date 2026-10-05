@@ -1,8 +1,19 @@
 /* ---- Print and forced colors ------------------------------------------- */
 
 @media print {
-  :root {
+  :root,
+  :root[data-theme] {
     color-scheme: light;
+  }
+
+  /* A closed Deep Dive or Challenge prints its text, without the toggle pill. */
+  :is(.deep-dive, .challenge, .solution)::details-content {
+    display: block;
+    content-visibility: visible;
+  }
+
+  .deep-dive > summary::after {
+    content: none;
   }
 
   body {

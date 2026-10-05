@@ -108,7 +108,7 @@ export function motion() {
 
   // The host names pop in one by one.
   function hosts() {
-    const chips = document.querySelectorAll('.hosts > span')
+    const chips = document.querySelectorAll('.hosts > a')
     if (!chips.length) return
     // Their hover transition is off while GSAP runs, or the two would fight.
     gsap.set(chips, { opacity: 0, scale: 0.85, transition: 'none' })
@@ -148,9 +148,13 @@ export function motion() {
 
   // `again`: the same page drawn anew (a form posted and the page came back): what
   // already arrived stays as it is, nothing rises, counts or unrolls a second time.
+  // A scan that was waiting for GSAP when a newer one began gives way to it, so
+  // a fast navigation never builds the page's motion twice.
+  let latest = 0
   async function scan(again = false) {
+    const mine = ++latest
     stop()
-    if (calm.matches || !(await boot())) return
+    if (calm.matches || !(await boot()) || mine !== latest) return
     document.documentElement.classList.add('gsap')
     if (!again) {
       reveal()

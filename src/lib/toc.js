@@ -2,6 +2,16 @@
 // and the On This Page list that marks the section being read.
 export const path = (u) => u && new URL(u, location.href).pathname
 
+// The address's #fragment, decoded; a stray % in it is left as typed, not an error.
+export function hashId() {
+  const h = location.hash.slice(1)
+  try {
+    return decodeURIComponent(h)
+  } catch (e) {
+    return h
+  }
+}
+
 // Puts text on the clipboard; where the async API is missing or refused (an
 // insecure page, no focus), a hidden field and the old copy command do it.
 function copy(text) {
@@ -108,7 +118,7 @@ export function spy(toc) {
   }
 
   function hash() {
-    const id = decodeURIComponent(location.hash.slice(1))
+    const id = hashId()
     if (links.has(id)) {
       lock()
       mark(id)
@@ -153,7 +163,7 @@ export function spy(toc) {
     for (const [n, f] of on) removeEventListener(n, f)
   }
 
-  if (links.has(decodeURIComponent(location.hash.slice(1)))) hash()
+  if (links.has(hashId())) hash()
   else pick()
   return off
 }

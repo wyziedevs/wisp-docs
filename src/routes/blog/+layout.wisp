@@ -1,14 +1,29 @@
 ---
 const MONTHS: [&str; 12] = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
 ];
 // Each post's prose word count and headings, from build.rs: [(path, words, [(id, text, level)])].
-let facts: &[(&str, usize, &[(&str, &str, u8)])] = include!(concat!(env!("OUT_DIR"), "/blog.rs"));
+let facts: &[(&str, usize, &[(&str, &str, u8)])] =
+    include!(concat!(env!("OUT_DIR"), "/blog.rs"));
 // "2026-10-04" to "Oct 4, 2026" (short) or "October 4, 2026".
 let day = |d: &str, short: bool| {
     let mut it = d.splitn(3, '-');
-    let (y, m, n) = (it.next().unwrap_or(""), it.next().unwrap_or(""), it.next().unwrap_or(""));
+    let (y, m, n) = (
+        it.next().unwrap_or(""),
+        it.next().unwrap_or(""),
+        it.next().unwrap_or(""),
+    );
     match (m.parse::<usize>(), n.parse::<u32>()) {
         (Ok(m @ 1..=12), Ok(n)) => {
             let name = MONTHS[m - 1];
@@ -22,25 +37,42 @@ let read = |path: &str| {
     format!("{} min read", words.div_ceil(230).max(1))
 };
 let tags_of = |p: &wisp::MdPage| -> Vec<&'static str> {
-    p.get("tags").unwrap_or("").split(',').map(str::trim).filter(|t| !t.is_empty()).collect()
+    p.get("tags")
+        .unwrap_or("")
+        .split(',')
+        .map(str::trim)
+        .filter(|t| !t.is_empty())
+        .collect()
 };
 
 let path = site::bare(cx.path());
 let index = path == "/blog";
 let tags_page = path == "/blog/tags";
-let posts: Vec<&wisp::MdPage> = wisp::pages("blog").iter().filter(|p| p.get("date").is_some()).collect();
+let posts: Vec<&wisp::MdPage> = wisp::pages("blog")
+    .iter()
+    .filter(|p| p.get("date").is_some())
+    .collect();
 
 let q = cx.query_or("q", String::new());
 let tag = cx.query_or("tag", String::new());
-let needle = q.trim().to_lowercase();
+let words: Vec<String> = q
+    .to_lowercase()
+    .split_whitespace()
+    .map(str::to_string)
+    .collect();
 let shown: Vec<(&wisp::MdPage, String)> = posts
     .iter()
     .map(|p| {
-        let text = format!("{} {} {}", p.title, p.get("description").unwrap_or(""), p.get("tags").unwrap_or(""));
+        let text = format!(
+            "{} {} {}",
+            p.title,
+            p.get("description").unwrap_or(""),
+            p.get("tags").unwrap_or("")
+        );
         (*p, text.to_lowercase())
     })
     .filter(|(p, text)| {
-        (needle.is_empty() || text.contains(&needle))
+        words.iter().all(|w| text.contains(w.as_str()))
             && (tag.is_empty() || tags_of(p).iter().any(|t| t.eq_ignore_ascii_case(&tag)))
     })
     .collect();
@@ -63,13 +95,21 @@ let older = me.and_then(|i| posts.get(i + 1)).copied();
 let post = me.map(|i| posts[i]);
 let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
 ---
+
 <div class="page blog">
   {#if index}
     <header class="blog-head">
       <h1>Wisp Blog</h1>
       <form class="blog-bar" method="get" action="/blog/" role="search">
         <label class="sr" for="blog-q">Filter Posts</label>
-        <input id="blog-q" type="search" name="q" value={q} placeholder="Filter by word or tag" autocomplete="off" on:input="filter(event)">
+        <input
+          id="blog-q"
+          type="search"
+          name="q"
+          value={q}
+          placeholder="Filter by word or tag"
+          autocomplete="off"
+          on:input="filter(event)">
         {#if !tag.is_empty()}<input type="hidden" name="tag" value={tag}>{/if}
         <p class="blog-count" role="status" aria-live="polite">{count(shown.len())}</p>
         <a href="/blog/tags/">All Tags</a>
@@ -82,7 +122,11 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
         <li data-text={text} data-tags={tags_of(p).join(",").to_lowercase()}>
           <h2><a href={site::dir(p.path)}>{p.title}</a></h2>
           {#if let Some(d) = p.get("description")}<p>{d}</p>{/if}
-          <Meta iso={p.get("date").unwrap_or("")} when={day(p.get("date").unwrap_or(""), true)} author={p.get("author").unwrap_or("")} read={read(p.path)} />
+          <Meta
+            iso={p.get("date").unwrap_or("")}
+            when={day(p.get("date").unwrap_or(""), true)}
+            author={p.get("author").unwrap_or("")}
+            read={read(p.path)} />
         </li>
       {/each}
     </ul>
@@ -107,7 +151,11 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
           {#if let Some(p) = post}
             <h1 class="doc-title">{p.title}</h1>
             {#if let Some(d) = p.get("description")}<p class="lede">{d}</p>{/if}
-            <Meta iso={p.get("date").unwrap_or("")} when={day(p.get("date").unwrap_or(""), false)} author={p.get("author").unwrap_or("")} read={read(path)} />
+            <Meta
+              iso={p.get("date").unwrap_or("")}
+              when={day(p.get("date").unwrap_or(""), false)}
+              author={p.get("author").unwrap_or("")}
+              read={read(path)} />
             {#if !tags_of(p).is_empty()}
               <nav class="chips" aria-label="Tags">
                 {#each tags_of(p) as t}<a href={format!("/blog/?tag={t}")}>{t}</a>{/each}
@@ -134,10 +182,10 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
   // Shows the posts that hold every word of q and carry the tag. The server
   // filters the same way for a request; a static host cannot, so the page does.
   function show(q, tag) {
-    const words = q.trim().toLowerCase()
+    const words = q.toLowerCase().split(/\s+/).filter(Boolean)
     let n = 0
     for (const li of document.querySelectorAll('.posts li')) {
-      const hit = (!words || li.dataset.text.includes(words)) && (!tag || li.dataset.tags.split(',').includes(tag))
+      const hit = words.every((w) => li.dataset.text.includes(w)) && (!tag || li.dataset.tags.split(',').includes(tag))
       li.hidden = !hit
       if (hit) n++
     }

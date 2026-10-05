@@ -22,8 +22,7 @@
     transition: color var(--t), border-color var(--t);
   }
 
-  .hosts a:hover,
-  .hosts a:focus-visible {
+  .hosts a:hover, .hosts a:focus-visible {
     border-color: var(--accent);
     color: var(--ink);
   }

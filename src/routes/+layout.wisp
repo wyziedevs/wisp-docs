@@ -16,7 +16,11 @@ let about = me
     .and_then(|p| p.get("description"))
     .unwrap_or("Wisp is a fast, fun web framework for Rust: file routes, .wisp templates compiled to Rust, form actions and one binary to deploy.");
 let docs = path == "/docs" || path.starts_with("/docs/");
-let tab = if docs { me.map_or("learn", |p| site::section(p)) } else { "" };
+let tab = if docs {
+    me.map_or("learn", |p| site::section(p))
+} else {
+    ""
+};
 let reference = tab == "reference";
 let hosting = tab == "hosting";
 let learn = tab == "learn";
@@ -32,16 +36,30 @@ let links = [
 
 // The page's head: Open Graph, a canonical address and JSON-LD. An error page is not indexed.
 // Addresses end in `/`: the static host serves `dir/index.html` there and 308s the bare form.
-let url = if home { format!("{SITE}/") } else { format!("{SITE}{path}/") };
+let url = if home {
+    format!("{SITE}/")
+} else {
+    format!("{SITE}{path}/")
+};
 // Layouts cannot see the status, so a path no page or route answers (a 404) is the error case.
 let indexed = me.is_some();
 let dated = me.and_then(|p| p.get("date"));
-let json = |s: &str| format!("\"{}\"", s.replace('\\', "\\\\").replace('"', "\\\"").replace('\n', " ").replace('<', "\\u003c"));
+let json = |s: &str| {
+    format!(
+        "\"{}\"",
+        s.replace('\\', "\\\\")
+            .replace('"', "\\\"")
+            .replace('\n', " ")
+            .replace('<', "\\u003c")
+    )
+};
 let ld = match me {
     _ if !indexed => String::new(),
     _ if home => format!(
         "{{\"@context\":\"https://schema.org\",\"@graph\":[{},{{\"@type\":\"SoftwareSourceCode\",\"name\":\"Wisp\",\"description\":{},\"url\":\"{SITE}/\",\"codeRepository\":\"https://github.com/wyziedevs/wisp\",\"programmingLanguage\":\"Rust\",\"license\":\"https://github.com/wyziedevs/wisp/blob/main/LICENSE\",\"author\":{ORG}}}]}}",
-        SITE_LD.replace('~', SITE).replace("\"@context\":\"https://schema.org\",", ""),
+        SITE_LD
+            .replace('~', SITE)
+            .replace("\"@context\":\"https://schema.org\",", ""),
         json(about),
     ),
     Some(p) if blog && dated.is_some() => format!(
@@ -50,18 +68,30 @@ let ld = match me {
         json(about),
         json(&url),
         json(dated.unwrap_or("")),
-        p.get("author").map_or(ORG.to_string(), |a| format!("{{\"@type\":\"Person\",\"name\":{}}}", json(a))),
+        p.get("author").map_or(ORG.to_string(), |a| format!(
+            "{{\"@type\":\"Person\",\"name\":{}}}",
+            json(a)
+        )),
     ),
     Some(p) if docs => format!(
         "{{\"@context\":\"https://schema.org\",\"@graph\":[{{\"@type\":\"TechArticle\",\"headline\":{},\"description\":{},\"url\":{},\"image\":\"{SITE}/og.png?v=2\",\"inLanguage\":\"en\",\"author\":{ORG},\"publisher\":{ORG}}},{{\"@type\":\"BreadcrumbList\",\"itemListElement\":[{{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"{SITE}/\"}},{{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Docs\",\"item\":\"{SITE}/docs/\"}}{}]}}]}}",
         json(p.title),
         json(about),
         json(&url),
-        if path == "/docs" { String::new() } else { format!(",{{\"@type\":\"ListItem\",\"position\":3,\"name\":{},\"item\":{}}}", json(p.title), json(&url)) },
+        if path == "/docs" {
+            String::new()
+        } else {
+            format!(
+                ",{{\"@type\":\"ListItem\",\"position\":3,\"name\":{},\"item\":{}}}",
+                json(p.title),
+                json(&url)
+            )
+        },
     ),
     _ => String::new(),
 };
 ---
+
 <head>
   <title>{if home { title.to_string() } else { format!("{title} | Wisp Rust Web Framework") }}</title>
   <meta name="description" content={about}>
@@ -103,30 +133,41 @@ let ld = match me {
     <form class="search" action="/search/" role="search" bind:this="bar">
       <label class="sr" for="q">Search</label>
       <SearchIcon />
-      <input id="q" name="q" type="search" placeholder="Search" autocomplete="off" spellcheck="false" bind:this="q">
+      <input
+        id="q"
+        name="q"
+        type="search"
+        placeholder="Search"
+        autocomplete="off"
+        spellcheck="false"
+        bind:this="q">
       <kbd class="key" aria-hidden="true"><span bind:this="mod">Ctrl</span> K</kbd>
     </form>
 
     <div class="end">
-    <nav class="links" aria-label="Site">
-      <NavLinks links={links} />
-    </nav>
-
-    <button class="icon theme" type="button" on:click="flip()" aria-label="Switch light or dark theme">
-      <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
-      <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
-    </button>
-    <a class="icon gh" href="https://github.com/wyziedevs/wisp" aria-label="Wisp on GitHub">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path class="fill" d="M12 1.5a10.5 10.5 0 0 0-3.3 20.47c.52.1.72-.23.72-.5v-1.8c-2.92.63-3.54-1.4-3.54-1.4-.48-1.22-1.17-1.54-1.17-1.54-.95-.65.08-.64.08-.64 1.05.08 1.6 1.08 1.6 1.08.94 1.6 2.46 1.14 3.06.87.1-.68.37-1.14.66-1.4-2.33-.27-4.78-1.17-4.78-5.18 0-1.15.4-2.08 1.08-2.82-.1-.27-.47-1.34.1-2.78 0 0 .88-.29 2.89 1.07a10 10 0 0 1 5.26 0c2-1.36 2.88-1.07 2.88-1.07.58 1.44.21 2.51.1 2.78.68.74 1.08 1.67 1.08 2.82 0 4.02-2.45 4.9-4.79 5.16.38.33.71.97.71 1.95v2.9c0 .28.19.6.72.5A10.5 10.5 0 0 0 12 1.5z"/></svg>
-    </a>
-
-    <details class="mnav">
-      <summary aria-label="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></summary>
-      <nav aria-label="Site menu">
+      <nav class="links" aria-label="Site">
         <NavLinks links={links} />
-        <a href="https://github.com/wyziedevs/wisp">GitHub</a>
       </nav>
-    </details>
+
+      <button
+        class="icon theme"
+        type="button"
+        on:click="flip()"
+        aria-label="Switch light or dark theme">
+        <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+      <a class="icon gh" href="https://github.com/wyziedevs/wisp" aria-label="Wisp on GitHub">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path class="fill" d="M12 1.5a10.5 10.5 0 0 0-3.3 20.47c.52.1.72-.23.72-.5v-1.8c-2.92.63-3.54-1.4-3.54-1.4-.48-1.22-1.17-1.54-1.17-1.54-.95-.65.08-.64.08-.64 1.05.08 1.6 1.08 1.6 1.08.94 1.6 2.46 1.14 3.06.87.1-.68.37-1.14.66-1.4-2.33-.27-4.78-1.17-4.78-5.18 0-1.15.4-2.08 1.08-2.82-.1-.27-.47-1.34.1-2.78 0 0 .88-.29 2.89 1.07a10 10 0 0 1 5.26 0c2-1.36 2.88-1.07 2.88-1.07.58 1.44.21 2.51.1 2.78.68.74 1.08 1.67 1.08 2.82 0 4.02-2.45 4.9-4.79 5.16.38.33.71.97.71 1.95v2.9c0 .28.19.6.72.5A10.5 10.5 0 0 0 12 1.5z"/></svg>
+      </a>
+
+      <details class="mnav">
+        <summary aria-label="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></summary>
+        <nav aria-label="Site menu">
+          <NavLinks links={links} />
+          <a href="https://github.com/wyziedevs/wisp">GitHub</a>
+        </nav>
+      </details>
     </div>
   </div>
 </header>

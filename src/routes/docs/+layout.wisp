@@ -12,7 +12,10 @@ all.sort_by_key(|p| {
         "/docs/tutorial" => 1,
         _ => 2,
     };
-    let order = p.get("order").and_then(|o| o.parse::<u32>().ok()).unwrap_or(999);
+    let order = p
+        .get("order")
+        .and_then(|o| o.parse::<u32>().ok())
+        .unwrap_or(999);
     (lead, order)
 });
 let secs: Vec<&str> = all.iter().map(|p| site::section(p)).collect();
@@ -23,8 +26,18 @@ let kind = match tab {
     "hosting" => "Hosting",
     _ => "Learn",
 };
-let list: Vec<_> = all.iter().zip(&secs).filter(|(_, s)| **s == tab).map(|(p, _)| *p).collect();
-let home = |s: &str| all.iter().zip(&secs).find(|(_, t)| **t == s).map_or("/docs", |(p, _)| p.path);
+let list: Vec<_> = all
+    .iter()
+    .zip(&secs)
+    .filter(|(_, s)| **s == tab)
+    .map(|(p, _)| *p)
+    .collect();
+let home = |s: &str| {
+    all.iter()
+        .zip(&secs)
+        .find(|(_, t)| **t == s)
+        .map_or("/docs", |(p, _)| p.path)
+};
 let (learn_home, ref_home, host_home) = (home("learn"), home("reference"), home("hosting"));
 
 let mut groups: Vec<(&str, bool, Vec<_>)> = Vec::new();
@@ -58,14 +71,24 @@ let edit = match site::bare(cx.path()) {
     p => format!("src/routes{p}/+page.md"),
 };
 ---
+
 <div class="docs">
   <aside class="side" aria-label="Documentation">
     <details class="menu">
       <summary>{kind} Menu</summary>
       <div class="switch" role="list">
-        <a role="listitem" href={site::dir(learn_home)} aria-current={(tab == "learn").then_some("true")}>Learn</a>
-        <a role="listitem" href={site::dir(ref_home)} aria-current={(tab == "reference").then_some("true")}>Reference</a>
-        <a role="listitem" href={site::dir(host_home)} aria-current={(tab == "hosting").then_some("true")}>Hosting</a>
+        <a
+          role="listitem"
+          href={site::dir(learn_home)}
+          aria-current={(tab == "learn").then_some("true")}>Learn</a>
+        <a
+          role="listitem"
+          href={site::dir(ref_home)}
+          aria-current={(tab == "reference").then_some("true")}>Reference</a>
+        <a
+          role="listitem"
+          href={site::dir(host_home)}
+          aria-current={(tab == "hosting").then_some("true")}>Hosting</a>
       </div>
       <nav aria-label={format!("{kind} pages")}>
         {#each groups as (name, open, items)}
@@ -111,7 +134,7 @@ let edit = match site::bare(cx.path()) {
 
 <script>
   import { afterNavigate } from 'wisp'
-  import { reading, path } from '$lib/toc.js'
+  import { reading, path, hashId } from '$lib/toc.js'
 
   let doc, copied
   let off = null
@@ -125,6 +148,18 @@ let edit = match site::bare(cx.path()) {
     if (box && !box.dataset.live) {
       box.dataset.live = '1'
       box.addEventListener('click', feedback)
+    }
+    // The side list is long on a hosting page: bring the current page into view, and
+    // where a browser lacks ::details-content keep the menu open so the list shows.
+    const menu = document.querySelector('.menu')
+    const wide = matchMedia('(min-width: 48rem)').matches
+    if (wide && !CSS.supports('selector(::details-content)')) menu.open = true
+    const side = document.querySelector('.side')
+    const here = side.querySelector('[aria-current=page]')
+    if (wide && here && side.scrollHeight > side.clientHeight) {
+      const a = here.getBoundingClientRect()
+      const s = side.getBoundingClientRect()
+      if (a.top < s.top || a.bottom > s.bottom) side.scrollTop += a.top - s.top - (s.height - a.height) / 2
     }
   }
 
@@ -141,7 +176,7 @@ let edit = match site::bare(cx.path()) {
 
   onMount(() => {
     build()
-    if (location.hash) document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView()
+    if (location.hash) document.getElementById(hashId())?.scrollIntoView()
   })
   // A new page eases in; a hash jump or a form post on the same page does not.
   afterNavigate(({ from, to }) => {

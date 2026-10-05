@@ -9,10 +9,13 @@
   background: var(--bg);
 }
 
-/* The header: brand left, search centered, links right. */
+/* The header: brand left, search in the middle, links right. The search is
+   centered on the page where the screen has room for equal sides (under 62rem
+   the links fold into the menu, from 88rem both sides fit); in between it is
+   centered in the space the brand and the links leave. */
 .bar {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 1rem;
   height: 100%;
@@ -45,11 +48,33 @@
   color: var(--ink);
 }
 
-/* As wide as fits with room for the links on both sides, so it stays centered. */
 .search {
   position: relative;
-  width: clamp(16rem, 100vw - 2 * (var(--gutter) + 28.5rem), 34rem);
+  justify-self: center;
+  width: min(100%, 28rem);
   min-width: 0;
+}
+
+/* As wide as fits with room on both sides for the right side's icons (9rem)
+   or, with the links showing, for the icons and links (34rem). */
+@media (min-width: 40.01rem) and (max-width: 61.99rem) {
+  .bar {
+    grid-template-columns: 1fr auto 1fr;
+  }
+
+  .search {
+    width: clamp(16rem, 100vw - 2 * (var(--gutter) + 9rem), 34rem);
+  }
+}
+
+@media (min-width: 88rem) {
+  .bar {
+    grid-template-columns: 1fr auto 1fr;
+  }
+
+  .search {
+    width: clamp(16rem, 100vw - 2 * (var(--gutter) + 34rem), 34rem);
+  }
 }
 
 .search .i,
@@ -234,12 +259,11 @@
 
 @media (max-width: 40rem) {
   .bar {
-    grid-template-columns: auto 1fr auto;
     gap: 0.5rem;
   }
 
   .search {
-    width: auto;
+    width: 100%;
   }
 
   .gh,
@@ -383,7 +407,7 @@
 
 .cols {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
   gap: 2rem;
   padding-block: 3.5rem;
 }

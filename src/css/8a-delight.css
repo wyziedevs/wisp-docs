@@ -36,7 +36,7 @@
     .switch a,
     .grp > summary,
     .pager a,
-    .hosts span,
+    .hosts a,
     .find-bar .esc,
     .hits a,
     :is(.toc, .post-toc) a
@@ -47,7 +47,7 @@
   }
 
   :is(.icon, .mnav summary, .copy-icon, .copy-code, .links a, .mnav nav a, .tabs label, .side li a, .switch a,
-    .grp > summary, .pager a, .hosts span, .find-bar .esc, .hits a):active {
+    .grp > summary, .pager a, .hosts a, .find-bar .esc, .hits a):active {
     scale: 0.97;
     translate: 0 1px;
     transition-duration: 80ms;
@@ -60,7 +60,7 @@
   }
 
   @media (hover: hover) {
-    .hosts span:hover {
+    .hosts a:hover {
       border-color: var(--accent);
       color: var(--ink);
     }

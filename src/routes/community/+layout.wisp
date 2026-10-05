@@ -1,6 +1,9 @@
 ---
-let me = wisp::pages("").iter().find(|p| p.path == site::bare(cx.path()));
+let me = wisp::pages("")
+    .iter()
+    .find(|p| p.path == site::bare(cx.path()));
 ---
+
 <div class="page community doc">
   <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Wisp</a><span>Community</span></nav>
   <h1 class="doc-title">{me.map_or("Community", |p| p.title)}</h1>

@@ -34,6 +34,14 @@ const watch = new ResizeObserver((list) => list.forEach((e) => fit(e.target)))
 // Every code block gets a copy button and, if it overflows, a focus stop.
 export function blocks() {
   watch.disconnect()
+  // An article table scrolls inside its own wrapper rather than widening the page.
+  for (const t of document.querySelectorAll('.doc table:not(.tally)')) {
+    if (t.parentElement.classList.contains('table-wrap')) continue
+    const w = document.createElement('div')
+    w.className = 'table-wrap'
+    t.replaceWith(w)
+    w.append(t)
+  }
   for (const t of document.querySelectorAll('.table-wrap, .bench')) watch.observe(t)
   for (const p of document.querySelectorAll('pre')) {
     watch.observe(p)
@@ -49,6 +57,7 @@ export function blocks() {
         b.textContent = 'Copied'
         b.classList.add('done')
       } catch (e) {
+        getSelection()?.selectAllChildren(p.querySelector('code'))
         b.textContent = 'Press Ctrl+C'
       }
       setTimeout(() => {

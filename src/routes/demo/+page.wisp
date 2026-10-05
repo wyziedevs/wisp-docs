@@ -34,13 +34,18 @@ let problem = match cx.problem("text") {
     Some(_) => "text must be 1 to 100 characters",
     None => "",
 };
-let text = cx.form().get("text").map(|t| t.into_owned()).unwrap_or_default();
+let text = cx
+    .form()
+    .get("text")
+    .map(|t| t.into_owned())
+    .unwrap_or_default();
 ---
+
 <title>Todos Demo | Wisp Rust Web Framework</title>
 <section class="sec showcase">
-<div class="wrap">
-<h1 class="sr">Todos Demo</h1>
-<Demo todos={&todos} problem={&problem} text={&text}></Demo>
-<p><a href="/#demo">Back to the Home Page</a></p>
-</div>
+  <div class="wrap">
+    <h1 class="sr">Todos Demo</h1>
+    <Demo todos={&todos} problem={&problem} text={&text}></Demo>
+    <p><a href="/#demo">Back to the Home Page</a></p>
+  </div>
 </section>
