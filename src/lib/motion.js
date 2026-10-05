@@ -1,9 +1,8 @@
-// GSAP motion: sections, docs blocks and lists rise as they scroll in, table rows
+// GSAP motion, on the home page only: sections rise as they scroll in, table rows
 // follow one by one with their bars growing and numbers counting, code unrolls,
-// the hero drifts away as you scroll
-// and Rust is underlined again on hover. GSAP is vendored in /vendor, loaded after the page
-// is idle and only where motion is welcome. Without it (no JavaScript, reduced
-// motion, a failed load) the page is complete and CSS does the lighter version.
+// the hero drifts away as you scroll and Rust is underlined again on hover. GSAP is
+// vendored in /vendor, loaded after the page is idle and only where motion is welcome.
+// Without it (no JavaScript, reduced motion, a failed load) the page is complete.
 const REVEAL = [
   '.sec-head, .band .claim, .band .sample, .demo, .pair .cmp, .hosts, .bench, .foot .cols > *',
   '.posts li, .found li, .pager, .useful',
@@ -155,7 +154,8 @@ export function motion() {
   async function scan(again = false) {
     const mine = ++latest
     stop()
-    if (calm.matches || !(await boot()) || mine !== latest) return
+    // Scroll motion lives on the home page only; every other page is just its text.
+    if (location.pathname !== '/' || calm.matches || !(await boot()) || mine !== latest) return
     document.documentElement.classList.add('gsap')
     if (!again) {
       reveal()

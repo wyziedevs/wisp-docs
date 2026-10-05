@@ -6,23 +6,27 @@ order: 14
 ---
 
 ```html
-<form action="?/add">
-  <input name="text">
-  <button>Add</button>
-</form>
-<button action="?/remove&id={todo.id}">Delete</button>
-```
+---
+static TODOS: Table<String> = Table::new();
 
-```rust
 #[action]
 fn add(#[validate(len = 1..=100)] text: String) {
-    /* ... */
+    TODOS.add(text);
 }
 
 #[action]
 fn remove(id: u64) {
-    /* ... */
+    TODOS.remove(id);
 }
+---
+
+<form action="?/add">
+  <input name="text">
+  <button>Add</button>
+</form>
+{#each TODOS.all() as todo}
+  <p>{todo} <button action="?/remove&id={todo.id}">Delete</button></p>
+{/each}
 ```
 
 ## Actions

@@ -105,9 +105,10 @@ A write redraws only the parts of the page that read what changed. Without JavaS
 
 ## Handling a Form
 
-A form posts to an action. The action's parameters are the form's fields, and `fields` writes a labelled input for each one. Put the model in `src/db.rs`, where every route file can see it:
+A form posts to an action. The action's parameters are the form's fields, and `fields` writes a labelled input for each one. The model, its table and the action can all live in the page's `---` block:
 
-```rust
+```html
+---
 #[model]
 struct Entry {
     #[validate(len = 1..=40)]
@@ -115,12 +116,8 @@ struct Entry {
     #[validate(len = 1..=200)]
     message: String,
 }
-```
+static ENTRIES: Table<Entry> = Table::saved();
 
-Then handle the post in a page:
-
-```html
----
 #[action]
 fn sign(entry: Entry) {
     ENTRIES.add(entry);
@@ -145,16 +142,11 @@ A page file is named `+page.wisp`, with the `+`. In an action, `error()` already
 
 ## Saving Data in a Table
 
-A `Table` holds rows of a model. `Table::saved()` keeps them in a log file in the data folder, so they survive a restart, and `Table::new()` keeps them in memory. In `src/db.rs`:
-
-```rust
-pub static ENTRIES: Table<Entry> = Table::saved();
-```
-
-Read and change it from any page:
+A `Table` holds rows of a model. `Table::saved()` keeps them in a log file in the data folder, so they survive a restart, and `Table::new()` keeps them in memory. The page above reads it in the same block:
 
 ```html
 ---
+// ...the model, table and action from above...
 let entries = ENTRIES.all();
 ---
 
@@ -165,6 +157,8 @@ let entries = ENTRIES.all();
   <p>No notes yet. Be the first.</p>
 {/each}
 ```
+
+One `+page.wisp` is the preferred way to write a page. When a second page needs the same table, move the model and the `pub static` to `src/db.rs`: its `pub` items are visible in every route file with no `use` line. See [One file or several](/docs/design-pages/#one-file-or-several).
 
 `add`, `get`, `all`, `find`, `filter`, `update`, `set`, `remove` and `len` cover most needs. A row has an `id` and reads as the value you stored. See [Data, files and jobs](/docs/data/).
 

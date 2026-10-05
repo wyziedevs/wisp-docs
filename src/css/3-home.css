@@ -205,15 +205,10 @@
   overflow: auto;
 }
 
-/* Launch sections rise into place as they scroll in (CSS only, where supported). */
+/* Launch sections rise into place as they scroll in (CSS only, where supported), on the home page alone. */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .sec-head,
-    .band .claim,
-    .band .sample,
-    .demo,
-    .pair .cmp,
-    .hosts {
+    :root:has(.hero) :is(.sec-head, .band .claim, .band .sample, .demo, .pair .cmp, .hosts) {
       animation: rise var(--ease) both;
       animation-timeline: view();
       animation-range: entry 0% entry 60%;

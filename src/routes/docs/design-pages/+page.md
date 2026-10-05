@@ -52,6 +52,46 @@ async fn load(slug: String) -> Result<Data> {
 - `fn entries() -> Vec<…>` in a page under `[params]` lists the pages `wisp build --static` writes ([Deploying](/docs/deploy/)).
 - The build checks that `load` returns `Data` (plain or in a `Result`), that every parameter but `cx` has a plain name, and that `#[action]` (by any path, `wisp::action` too) marks only top-level functions of a page.
 
+## One File or Several
+
+One `+page.wisp` is the preferred way to build a page. Its `---` block can hold the models (`#[model]` structs), their `Table`s, the `#[action]`s, helper functions and the load, the markup follows, and scoped `<style>` and `<script>` tags close it. A `mod server { � }` in the same block adds the route's JSON endpoints.
+
+```html
+<!-- src/routes/todos/+page.wisp -->
+---
+#[model]
+struct Todo {
+    #[validate(len = 1..=100)]
+    text: String,
+}
+static TODOS: Table<Todo> = Table::saved(); // "todos"
+
+#[action]
+fn add(todo: Todo) {
+    TODOS.add(todo);
+}
+---
+
+<title>Todos ({TODOS.len()})</title>
+<form action="?/add" fields><button>Add</button></form>
+{#each TODOS.all() as todo}
+  <p>{todo.text}</p>
+{/each}
+
+<style>
+  p {
+    margin: 0;
+  }
+</style>
+```
+
+Items in a block belong to that page's module, so another page cannot see them. Splitting is supported and is the better fit for larger sites and complex needs:
+
+- `src/db.rs` (or any `src/NAME.rs`): models and tables more than one page uses. Its `pub` items are visible in every route file with no `use` line. The users table that `cx.user` and `login` find by itself is read from there ([Sessions](/docs/design-sessions/)), and so are `.live()` tables.
+- `+page.rs`: a load and actions that outgrow the block, or that you want to read and test as plain Rust.
+- `+server.rs`: endpoints shared by a whole folder, or more than a short `mod server` holds. A `mod server` is its own module, so what it shares with the page also goes in `src/*.rs`.
+- Components and layouts: markup that repeats across pages.
+
 ## Signatures and Inputs
 
 - `load`, actions and `+server.rs` endpoints may be `fn` or `async fn`; take `cx: &mut Cx`, `cx: &Cx` or none; return their value (`Data`, `()`, `Response`) plain or in a `Result` (`Result` alone is `Result<()>`). The build reads which from the signature; rustc checks types.

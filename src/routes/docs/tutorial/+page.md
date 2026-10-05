@@ -57,9 +57,10 @@ A folder under `src/routes` is a URL, and its `+page.wisp` is the page. This fil
 
 ## Describe the Data
 
-Create `src/db.rs`. It holds the models and tables, and its `pub` items are visible in every route file without a `use` line:
+The whole app fits in this one file. Add a block of Rust between two `---` lines at the top of `src/routes/+page.wisp`, above the markup:
 
-```rust
+```html
+---
 #[model]
 struct Entry {
     #[validate(len = 1..=40)]
@@ -67,11 +68,16 @@ struct Entry {
     #[validate(len = 1..=200)]
     message: String,
 }
+static ENTRIES: Table<Entry> = Table::saved();
+---
 
-pub static ENTRIES: Table<Entry> = Table::saved();
+<title>Guestbook</title>
+
+<h1>Guestbook</h1>
+<p>Leave a note for the next visitor.</p>
 ```
 
-`#[model]` makes `Entry` something a form can fill and a table can store, and makes it and its fields public. `#[validate]` states the rule once: a name has 1 to 40 characters and a message 1 to 200. `Table::saved()` keeps the rows in a log file, so they survive a restart.
+`#[model]` makes `Entry` something a form can fill and a table can store. `#[validate]` states the rule once: a name has 1 to 40 characters and a message 1 to 200. `Table::saved()` keeps the rows in a log file, so they survive a restart.
 
 ## Add the Form
 
@@ -79,6 +85,15 @@ A form posts to an action, which is a function in the page's block. Its paramete
 
 ```html
 ---
+#[model]
+struct Entry {
+    #[validate(len = 1..=40)]
+    name: String,
+    #[validate(len = 1..=200)]
+    message: String,
+}
+static ENTRIES: Table<Entry> = Table::saved();
+
 #[action]
 fn sign(entry: Entry) {
     ENTRIES.add(entry);
@@ -114,6 +129,7 @@ Rows come from the table. Add a load before the markup, and a list after the for
 
 ```html
 ---
+// Entry and ENTRIES as before
 #[action]
 fn sign(entry: Entry) {
     ENTRIES.add(entry);
@@ -288,6 +304,7 @@ You built a small app with Wisp. You learned that:
 - A folder under `src/routes` is a URL, and `+page.wisp` is the page.
 - A page has an optional block of Rust, then markup, and `{value}` is escaped.
 - A `#[model]` with `#[validate]` rules describes data once, and `Table::saved()` keeps it.
+- One `+page.wisp` can hold the model, the table, the actions and the markup. When several pages share a table, it moves to `src/db.rs`.
 - An `#[action]` handles a form, and `fields` writes the inputs. A bad value is a 422 that keeps what was typed.
 - A component in `src/components` takes `{@props}` and may carry its own style and script.
 - A `<script>` with `$state` adds browser behavior, and the page works without it.
@@ -347,6 +364,7 @@ Flash a message in the action, and show it with `{@flash}`. It shows once:
 
 ```html
 ---
+// Entry and ENTRIES as before
 #[action]
 fn sign(entry: Entry) {
     ENTRIES.add(entry);
@@ -376,7 +394,20 @@ Give each note its own page at `/notes/1`, `/notes/2` and so on, with a 404 for 
 <details class="solution">
 <summary>Show Solution</summary>
 
-Make the folder `src/routes/notes/[id=int]` and put a page in it. A folder named `[id=int]` matches digits, and the block gets `id` as a `u64`:
+Items in a page's block belong to that page, so a second page cannot see `ENTRIES` yet. Move `Entry` and the table out of the home page's block into `src/db.rs`, and make the table `pub`. The `pub` items of `src/db.rs` are visible in every route file without a `use` line:
+
+```rust
+#[model]
+struct Entry {
+    #[validate(len = 1..=40)]
+    name: String,
+    #[validate(len = 1..=200)]
+    message: String,
+}
+pub static ENTRIES: Table<Entry> = Table::saved();
+```
+
+`#[model]` makes the struct and its fields `pub` for you. Then make the folder `src/routes/notes/[id=int]` and put a page in it. A folder named `[id=int]` matches digits, and the block gets `id` as a `u64`:
 
 ```html
 ---

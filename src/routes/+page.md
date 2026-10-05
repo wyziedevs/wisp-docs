@@ -1,5 +1,5 @@
 ---
-title: Wisp, a Fast, Fun Web Framework for Rust
+title: "Wisp: A Fast, Fun Web Framework"
 description: Wisp is a fast, fun web framework for Rust with file routes, templates compiled to Rust and form actions. It ships as one binary and costs an AI few tokens.
 ---
 
@@ -9,7 +9,7 @@ description: Wisp is a fast, fun web framework for Rust with file routes, templa
 <div class="wrap">
 <div class="sec-head">
 <h2>A Page Is One File</h2>
-<p>The form writes its own inputs and errors, and a bad value is a 422 that keeps what was typed. The model in <code>src/db.rs</code> is in every route file with no <code>use</code> lines. JSON endpoints join the same file as a <code>mod server</code> block.</p>
+<p>The model, the table, the actions and the markup sit in one file. The form writes its own inputs and errors, and a bad value is a 422 that keeps what was typed. JSON endpoints join the same file as a <code>mod server</code> block, and a model can move to <code>src/db.rs</code> once other pages need it.</p>
 </div>
 
 <Demo todos={&demo_todos(cx)}>
@@ -18,6 +18,13 @@ description: Wisp is a fast, fun web framework for Rust with file routes, templa
 
 ```html
 ---
+#[model]
+struct Todo {
+    #[validate(len = 1..=100)]
+    text: String,
+}
+static TODOS: Table<Todo> = Table::saved();
+
 #[action]
 fn add(todo: Todo) {
     TODOS.add(todo);
@@ -33,18 +40,6 @@ fn remove(id: u64) {
 {#each TODOS.all() as todo}
   <p>{todo.text} <button action="?/remove&id={todo.id}">Remove</button></p>
 {/each}
-```
-
-</div>
-<div class="pane pane-2">
-
-```rust
-#[model]
-struct Todo {
-    #[validate(len = 1..=100)]
-    text: String,
-}
-pub static TODOS: Table<Todo> = Table::saved();
 ```
 
 </div>

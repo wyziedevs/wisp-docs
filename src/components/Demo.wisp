@@ -1,12 +1,7 @@
 {@props todos: &[String], problem: &str = "", text: &str = ""}
-<div class="demo tabbed" id="demo">
+<div class="demo" id="demo">
   <div class="code">
-    <div class="tabs" role="radiogroup" aria-label="Files">
-      <input class="sr" type="radio" name="demo-file" id="demo-page" checked>
-      <label for="demo-page">+page.wisp</label>
-      <input class="sr" type="radio" name="demo-file" id="demo-db">
-      <label for="demo-db">db.rs</label>
-    </div>
+    <div class="tabs"><span class="tab">src/routes/+page.wisp</span></div>
     <div class="panes">{@render children()}</div>
   </div>
 

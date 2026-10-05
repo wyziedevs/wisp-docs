@@ -1,4 +1,4 @@
-<title>{status} Error | Wisp Rust Web Framework</title>
+<title>{status} Error - Wisp</title>
 
 <div class="error">
   <img class="float" src="/favicon.svg" alt="" width="72" height="72">

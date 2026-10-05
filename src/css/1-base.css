@@ -387,8 +387,7 @@ pre {
 
 .side li a[aria-current],
 :is(.toc, .post-toc) a[aria-current],
-.hits [aria-selected="true"] a,
-.hits a:hover {
+.hits [aria-selected="true"] a {
   background: var(--accent-soft);
 }
 

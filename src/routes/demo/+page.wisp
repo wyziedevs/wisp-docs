@@ -41,7 +41,7 @@ let text = cx
     .unwrap_or_default();
 ---
 
-<title>Todos Demo | Wisp Rust Web Framework</title>
+<title>Todos Demo - Wisp</title>
 <section class="sec showcase">
   <div class="wrap">
     <h1 class="sr">Todos Demo</h1>

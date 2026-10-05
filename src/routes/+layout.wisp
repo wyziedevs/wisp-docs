@@ -93,7 +93,7 @@ let ld = match me {
 ---
 
 <head>
-  <title>{if home { title.to_string() } else { format!("{title} | Wisp Rust Web Framework") }}</title>
+  <title>{if home || title.ends_with("Wisp") { title.to_string() } else { format!("{title} - Wisp") }}</title>
   <meta name="description" content={about}>
   <meta name="author" content="Wyzie LLC">
   {@html wisp::og(title, about, &format!("{SITE}/og.png?v=2"))}

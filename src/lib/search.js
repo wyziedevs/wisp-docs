@@ -201,14 +201,21 @@ export function finder({ bar, q, dlg, fq: modalField, status, hits, tip }) {
     choose(0)
   }
 
-  function choose(i) {
+  function choose(i, scroll = true) {
     const items = hits.querySelectorAll('[role=option]')
     if (!items.length) return
     sel = (i + items.length) % items.length
     items.forEach((li, j) => li.setAttribute('aria-selected', String(j === sel)))
     fq.setAttribute('aria-activedescendant', items[sel].id)
-    items[sel].scrollIntoView({ block: 'nearest' })
+    if (scroll) items[sel].scrollIntoView({ block: 'nearest' })
   }
+
+  // The pointer moves the one highlight (no second hover highlight beside the keyboard's).
+  hits.addEventListener('pointermove', (e) => {
+    const li = e.target.closest('[role=option]')
+    const i = li ? [...hits.querySelectorAll('[role=option]')].indexOf(li) : -1
+    if (i >= 0 && i !== sel) choose(i, false)
+  })
 
   async function typed() {
     frame = 0
