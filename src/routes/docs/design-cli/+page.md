@@ -127,8 +127,8 @@ content-security-policy: default-src 'self'; script-src 'self' 'sha256-…';
 
 No homegrown auth, ORM or job system, now or later. Wisp gives the tools (cookies, sessions, the `Store` trait, hooks, `wisp::spawn` from `init`) and the app builds on them. Integrations wire in existing, maintained crates (a recipe in `add/`; `wisp add sqlite` scaffolds the glue). Also out: Windows services. (HTTP/2 in process is the opt-in `h2` feature: h2c only.)
 
-1. **Core**: routes, layouts, templates, load, actions, errors, static files, `wisp.js` morph, `wisp dev` with hot swap. (current)
-2. **Measure**: dev-loop timings; req/s and latency vs ASP.NET Core Minimal APIs on the same machine.
+1. **Core**: routes, layouts, templates, load, actions, errors, static files, `wisp.js` morph, `wisp dev` with hot swap. (done)
+2. **Measure**: req/s and latency against Rust and Node frameworks on the same machine ([Benchmarks](/docs/benchmarks/)). (in progress: more stacks and the dev-loop timings are still to come)
 3. **Flexible**: hooks, state, components, uploads, signed cookies, streaming, body limits, proxies. (done)
    **Reactive and everywhere**: client scripts, router, tower, static export, Docker, edge targets. (done)
-4. **v0.2**: behaviors, link boosting, docs site built with Wisp.
+4. **v0.2**: link boosting (the client router) and a docs site built with Wisp (this one). (done)
