@@ -28,7 +28,7 @@ Each param but `cx` is read by name: route param, then form field or JSON object
 - `Option` may be absent or `null`; `bool` absent is false; extra members are ignored.
 - A one-field tuple struct reads as that field; a fieldless enum from its variant name (`"Low"`).
 - Implemented for strings, numbers (`300` is not a `u8`), `bool`, `Option`, `Vec`, `Box`, string-key maps and `wisp::Value` (any JSON: `body.get("title")`).
-- `wisp::from_json::<T>(bytes)` reads JSON anywhere with the same errors; `wisp::json::parse` gives a `Value` (strict RFC 8259).
+- `wisp::from_json::<T>(bytes)` reads JSON anywhere with the same errors; `wisp::json::parse` gives a `Value` (strict RFC 8259): `get as_str as_bool as_i64 as_f64 as_array`; `as_f64` is `None` past `f64` range (`1e999`), never `inf`.
 
 ### Checks
 
