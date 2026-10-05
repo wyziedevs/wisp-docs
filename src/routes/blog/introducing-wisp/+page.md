@@ -52,7 +52,7 @@ When two goals pull apart, Wisp has an order for choosing:
 
 1. **Fast.** A route pays only for the features it uses. A change that touches the request path is checked by an instructions-per-request A/B before it lands, and a feature a route does not use must add none.
 2. **Cheap in tokens.** AI writes most code now, and every token it reads and writes costs time and money. Wisp uses conventions over configuration, types the compiler infers, and forms that write their own inputs and errors.
-3. **Durable.** Each fast path is proven when the server starts, falls back to the plain path if the proof fails, and nothing after startup panics.
+3. **Durable.** Each fast path is proven when the server starts, falls back to the plain path if the proof fails, and a panic in a handler is caught and answered as a 500.
 4. **Flexible.** Last in the order, and never at the cost of the first three.
 
 Speed is never traded away for convenience. How it is measured, and how to run the benchmark tools yourself, is on the [Benchmarks](/docs/benchmarks/) page.

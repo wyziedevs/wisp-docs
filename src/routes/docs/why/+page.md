@@ -27,5 +27,5 @@ For agents: [AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.
 
 - A page is one `+page.wisp`: its models, tables, actions, markup and scoped style in a single file. Larger sites split into `src/db.rs`, `+page.rs`, `+server.rs` and components ([One file or several](/docs/design-pages/#one-file-or-several)).
 - One binary carries its styles and static files. It runs on a VPS, in a container, as static HTML or on an edge host ([Deploying](/docs/deploy/)).
-- Every fast path is proven at startup, falls back, and never panics after startup.
+- Every fast path is proven at startup, falls back, and a panic in a handler is caught and answered as a 500.
 - Forms work without JavaScript, and reactivity lives in the same file as the markup ([Browser code](/docs/client/)).

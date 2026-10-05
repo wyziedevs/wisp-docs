@@ -33,7 +33,7 @@ Plaintext, pipelined, requests per second (median of 3), by connections:
 | Hono (Node) | 28,966 | 29,602 | 34,173 | 0 |
 | Hono (Bun) | 10,599 | 10,375 | 9,652 | 6,910 |
 | SvelteKit | 10,929 | 8,464 | 8,359 | 0 |
-| Next.js | Failed (out of memory) | Failed (out of memory) | Failed (out of memory) | Failed (out of memory) |
+| Next.js | Failed (out of memory) | Failed (out of memory) | Failed (out of memory) | not run |
 
 Rows whose min-max ranges overlap are ties. 256: Fastify and Express; Hono (Node), SvelteKit and Hono (Bun). 1024: Axum and Actix Web; Express and Hono (Node). 4096: Hono (Node) and Express. 16384: Wisp's range (0 to 29,252) overlaps every row that answered, so no rank is drawn there.
 
@@ -79,7 +79,7 @@ The same app built with `wisp build --target node|bun|deno|cloudflare`, against 
 
 </div>
 
-- On Node, Deno and Bun, Wisp's default path reads raw sockets and the app's own HTTP parser answers, about 1 microsecond a request inside the wasm. `WISP_NODE_HTTP=1` serves through the host's own server instead (Node -15%, Deno -21%, Bun -35% on `/`).
+- On Node, Deno and Bun, Wisp's default path reads raw sockets and the app's own HTTP parser answers, about 1 microsecond a request inside the wasm. `WISP_NODE_HTTP=1` serves through the host's own server instead, which on `/` trails Hono by 15% on Node, 21% on Deno and 35% on Bun (`bench/edge/README.md`).
 - On workerd, a quieter run alternating with Hono (median of 5): `/` 19,645 and 20,908 (-6%), `/json-big` 11,441 and 11,894 (-4%), `/params` 19,258 and 20,256 (-5%), `/list1000` 6,033 and 2,359 (2.6 times). The wasm's own work is a few microseconds a request; the gap on `/` is workerd's cost of entering wasm and of a response with a head, and on `/json-big` it is a serializer in wasm against V8's `JSON.stringify`.
 - Cold start on workerd: Wisp 25 ms against 19 ms for Hono in that run (39 and 24 to 27 ms in the busier one), about 7 ms of it the host loading the module and the rest the first request compiling. A warm-up request at load took the first request from about 17 ms to 5 ms in one run, with no app code run.
 - The wasm for the bench app is 541 KB (541,063 bytes) since the Cloudflare, Pages, Vercel and Netlify builds leave out the server loop for raw connections (`WISP_REQUEST_ONLY`, 584,353 before). `tests/wasm-size.sh` fails CI when a build grows past its budget.

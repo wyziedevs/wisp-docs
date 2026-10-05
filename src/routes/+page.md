@@ -135,7 +135,7 @@ fn default(#[validate(len = 1..=50)] name: String, email: Email) {
 </div>
 </figure>
 <figure class="cmp">
-<figcaption>SvelteKit: the same form, 425 tokens</figcaption>
+<figcaption>SvelteKit: the same form, 602 tokens</figcaption>
 <div class="file tabbed">
 <div class="tabs" role="radiogroup" aria-label="SvelteKit files">
 <input class="sr" type="radio" name="sk-file" id="sk-server" checked>
@@ -256,7 +256,7 @@ let name = cx.query_or("name", "world".to_string());
 
 </Band>
 
-<Band id="binary" title="One Binary, on Any Host" lead="Templates compile to plain Rust, and the whole app, styles and static files included, becomes one small binary. Every fast path is proven at startup and falls back, and nothing after startup panics. The same app builds as a container, static HTML, or for an edge or serverless host. This site is one too: server-rendered pages that work with JavaScript off, down to the demo and the search form.">
+<Band id="binary" title="One Binary, on Any Host" lead="Templates compile to plain Rust, and the whole app, styles and static files included, becomes one small binary. Every fast path is proven at startup and falls back, and a panic in a handler is caught and answered as a 500. The same app builds as a container, static HTML, or for an edge or serverless host. This site is one too: server-rendered pages that work with JavaScript off, down to the demo and the search form.">
 
 ```bash
 wisp build

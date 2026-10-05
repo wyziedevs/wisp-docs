@@ -16,6 +16,8 @@ Method and the five-feature table: [Tokens](/docs/tokens/).
 
 ## Results
 
+These counts predate the repository's `wisp-tokens` run: the program and the Rails, FastAPI and four-app sources are not in the repository, so the table cannot be reproduced and is unverified. The five-feature and real-app tables on the [Tokens page](/docs/tokens/) are the ones `cargo run -p wisp-tokens` prints.
+
 Estimated tokens (files):
 
 <div class="table-wrap">
