@@ -123,7 +123,7 @@ The parser lints each template. `wisp check`, `wisp dev` (each build and templat
 
 Name | Warns about
 ---|---
-`img-alt` | `<img>` without `alt` (`alt=""` is fine)
+`img-alt` | `<img>` without `alt` (`alt=""`, `aria-hidden="true"` and `role="presentation"` are fine)
 `click-events` | `on:click` on a non-interactive element (not a custom element like `<sl-button>`) without both a `role` and a key handler (`on:keydown`)
 `input-label` | `<input>`, `<select>`, `<textarea>` with no wrapping `<label>`, no `id` (for `<label for>`), no `aria-label`/`aria-labelledby`/`title` and no `placeholder` (hidden and button types exempt). A control named only by a plain `placeholder` gets it as its `aria-label`
 `link-name` | `<a href>` with no text, `<img alt>`, `aria-label` or `title`

@@ -56,7 +56,7 @@ fn matches(s: &str) -> bool {
 
 - Priority, left to right: static > param with matcher > param > optional with matcher > optional > rest. Two matchers in one place are tried in name order.
 - Two routes with the same pattern are a build error. `/about/` redirects (308) to `/about`.
-- Other build errors: a `.wisp`, `page.rs`, `layout.rs` or `server.rs` under `src/routes` without its `+`; a top-level `_app` or `_wisp` directory (Wisp's own); a `(group)` not exactly one name in parentheses; a route deeper than 32 segments. Editor swap and backup files are skipped.
+- Other build errors: a `.wisp`, `page.rs`, `layout.rs` or `server.rs` under `src/routes` without its `+`; a top-level `_app` or `_wisp` directory (Wisp's own); a `(group)` not exactly one name in parentheses; a route deeper than 32 segments; a parameter named `cx` or starting `__` (the generated code's own locals). Editor swap and backup files are skipped; a `.well-known` folder is a route (`/.well-known/webfinger`), other folders starting with `.` are not.
 
 ### Trailing Slash
 
