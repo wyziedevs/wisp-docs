@@ -304,7 +304,9 @@ const RAW: &str = "https://raw.githubusercontent.com/wyziedevs/wisp/main/";
 fn fetch(path: &str) -> Option<Json> {
     let local = Path::new("../wisp").join(path);
     println!("cargo:rerun-if-changed={}", local.display());
-    let url = format!("{RAW}{path}");
+    // A unique query skips raw.githubusercontent's few minutes of caching.
+    let stamp = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map_or(0, |d| d.as_secs());
+    let url = format!("{RAW}{path}?t={stamp}");
     let net = Command::new("curl")
         .args(["-fsSL", "--max-time", "10", &url])
         .output()
@@ -317,6 +319,16 @@ fn fetch(path: &str) -> Option<Json> {
     }
     println!("cargo:warning={path} not read: its home page table is empty");
     None
+}
+
+/// What a level that gave no number says: "No result" when the run notes call it
+/// "No valid result", else "Failed" (no run completed a request).
+fn failure(r: &Json) -> Option<&'static str> {
+    match r.get("failed") {
+        None | Some(Json::Null) => None,
+        Some(Json::Str(why)) if why.starts_with("No valid") => Some("No result"),
+        Some(_) => Some("Failed"),
+    }
 }
 
 fn num(j: Option<&Json>) -> f64 {
@@ -366,22 +378,21 @@ fn speed(tfb: Option<&Json>) {
     let mut out = String::from("&[");
     for (work, level, caption) in SPEED {
         let at = tfb.and_then(|j| j.get("summary")?.get(work)?.get(level));
-        let mut rows: Vec<(&str, &str, f64, bool)> = CONTENDERS
+        let mut rows: Vec<(&str, &str, f64, Option<&str>)> = CONTENDERS
             .iter()
             .filter_map(|(key, name, stack)| {
                 let r = at?.get(key)?;
-                let failed = !matches!(r.get("failed"), None | Some(Json::Null));
-                Some((*name, *stack, num(r.get("rps_median")), failed))
+                Some((*name, *stack, num(r.get("rps_median")), failure(r)))
             })
             .collect();
-        rows.sort_by(|a, b| a.3.cmp(&b.3).then(b.2.total_cmp(&a.2)));
+        rows.sort_by(|a, b| a.3.is_some().cmp(&b.3.is_some()).then(b.2.total_cmp(&a.2)));
         let top = rows.iter().map(|r| r.2).fold(0.0, f64::max);
         let _ = write!(out, "({caption:?}, &[");
         for (name, stack, rps, failed) in rows {
-            let (share, text) = if failed || rps <= 0.0 {
-                (0.0, "No result".to_string())
-            } else {
-                (rps / top, commas(rps.round() as u64))
+            let (share, text) = match failed {
+                Some(why) => (0.0, why.to_string()),
+                None if rps <= 0.0 => (0.0, "Failed".to_string()),
+                None => (rps / top, commas(rps.round() as u64)),
             };
             let _ = write!(out, "({name:?}, {stack:?}, {share:.3}, {text:?}),");
         }
@@ -416,8 +427,7 @@ fn levels(tfb: Option<&Json>) {
             for cell in cells {
                 let text = match cell {
                     None => "not run".to_string(),
-                    Some(r) if !matches!(r.get("failed"), None | Some(Json::Null)) => "No result".to_string(),
-                    Some(r) => commas(num(r.get("rps_median")).round() as u64),
+                    Some(r) => failure(r).map_or_else(|| commas(num(r.get("rps_median")).round() as u64), str::to_string),
                 };
                 let _ = write!(out, "{text:?},");
             }
