@@ -36,7 +36,7 @@ The Node apps: Nuxt is file routes, server routes in `server/api` and `useFetch`
 
 </div>
 
-Wisp's `data` is longer than JavaScript's: a Rust type with its fields' types. Everything else is shorter, the form most of all. Against Wisp's total, Nuxt is 1.9 times, SvelteKit and Next.js 2.1, Express 2.5, React 3.0, Axum 3.1 and Actix 3.3. Of what is left, 60 tokens are file paths, 115 the Rust type and data, and the rest is markup every stack writes.
+Wisp's `data` is longer than JavaScript's: a Rust type with its fields' types. Everything else is shorter, the form most of all. Against Wisp's total, Nuxt is 2.0 times, SvelteKit and Next.js 2.2, Express 2.7, React 3.2, Axum 3.4 and Actix 3.5. Of what is left, 60 tokens are file paths, 108 the Rust type and data, and the rest is markup every stack writes.
 
 ## A Real App: Auth, CRUD, Upload, Live, a Component
 

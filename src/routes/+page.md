@@ -206,7 +206,7 @@ The same five features (a list page, a contact form, a JSON endpoint, a layout a
 </tbody>
 </table>
 
-A bigger app, with sign up and in, a posts table, uploads, live refresh and a component, is 1,001 tokens in Wisp, 3,473 in SvelteKit and 3,331 in Next.js. The numbers come from `cargo run -p wisp-tokens`, which counts every hand-written file and its path with a byte-pair style estimate; the [Tokens page](/docs/tokens/) has the method and the apps.
+A bigger app, with sign up and in, a posts table, uploads, live refresh and a component, is 965 tokens in Wisp, 3,473 in SvelteKit and 3,331 in Next.js. The numbers come from `cargo run -p wisp-tokens`, which counts every hand-written file and its path with a byte-pair style estimate; the [Tokens page](/docs/tokens/) has the method and the apps.
 
 </div>
 </div>
