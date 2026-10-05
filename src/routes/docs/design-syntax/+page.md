@@ -38,6 +38,7 @@ Syntax | Compiles to
 `{expr}` | Escaped `Display`; an `Option` writes its value, nothing for `None`
 `attr={expr}` | `attr="…"`, quotes added, value escaped
 `disabled={cond}` | ` disabled` if `cond`, else nothing (all HTML boolean attributes)
+`<a href="/blog" active>` | `aria-current={wisp::current(cx.path(), "/blog")}`: `"page"` on `/blog` and below (`/` only itself), else left out; `href={x}` too; pages and layouts
 `{@html expr}` | Unescaped `Display` (you promise it is safe)
 `{@const x = expr}` | `let x = expr;`
 `{#if c}…{:else if c}…{:else}…{/if}` | `if`/`else`; `if let` works
