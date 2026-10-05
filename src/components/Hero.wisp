@@ -29,7 +29,7 @@
     text-align: center;
   }
 
-  /* The ghost with a soft shadow below it. */
+  /* The ghost stays put and bounces; a shadow below it shrinks as it rises. */
   .hero .stage {
     position: relative;
     width: clamp(5.5rem, 14vw, 8.25rem);
@@ -125,6 +125,10 @@
     margin-right: -1rem;
   }
 
+  .copy-icon:active {
+    scale: 0.85;
+  }
+
   .copy-icon svg {
     grid-area: 1 / 1;
     width: 1.125rem;
@@ -134,12 +138,15 @@
     stroke-width: 2;
     stroke-linecap: round;
     stroke-linejoin: round;
-    transition: opacity var(--t);
+    transition:
+      opacity var(--t),
+      scale 300ms var(--ease);
   }
 
   .copy-icon .i-done,
   .copy-icon.done .i-copy {
     opacity: 0;
+    scale: 0.5;
   }
 
   .copy-icon.done {
@@ -148,9 +155,16 @@
 
   .copy-icon.done .i-done {
     opacity: 1;
+    scale: 1;
   }
 
-  /* Rust gets a marker underline. */
+  .copy-icon.done .i-done path {
+    stroke-dasharray: 20;
+    animation: check 350ms var(--ease) 80ms backwards;
+  }
+
+  /* Rust gets a marker underline: one stroke across that flicks back beneath,
+     drawn like a pen (the path is pathLength 1, so the dash is the whole line). */
   .hero em {
     position: relative;
     font-style: normal;
@@ -176,6 +190,74 @@
 
   .hero .word > span {
     display: inline-block;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero .wrap > * {
+      animation: fade 500ms var(--ease) backwards;
+    }
+
+    .hero .wrap > :nth-child(2) { animation-delay: 60ms; }
+    .hero .wrap > :nth-child(3) { animation-delay: 120ms; }
+    .hero .wrap > :nth-child(4) { animation-delay: 180ms; }
+    .hero .wrap > :nth-child(5) { animation-delay: 240ms; }
+    .hero .wrap > :nth-child(6) { animation-delay: 300ms; }
+
+    /* The ghost hops, the shadow breathes with it. */
+    .hero .logo {
+      animation:
+        fade 500ms var(--ease) backwards,
+        hop 1.4s cubic-bezier(0.45, 0, 0.55, 1) 600ms infinite alternate;
+    }
+
+    .hero .stage::after {
+      animation: shade 1.4s cubic-bezier(0.45, 0, 0.55, 1) 600ms infinite alternate;
+    }
+
+    /* Wisp's letters hop up one after another. */
+    .hero h1 {
+      animation: none;
+    }
+
+    .hero .word > span {
+      animation: letter 600ms var(--ease) backwards;
+    }
+
+    .hero .word > :nth-child(2) { animation-delay: 50ms; }
+    .hero .word > :nth-child(3) { animation-delay: 100ms; }
+    .hero .word > :nth-child(4) { animation-delay: 150ms; }
+
+    /* The pen goes across, then flicks back underneath. */
+    .hero .scribble path {
+      animation: pen 900ms cubic-bezier(0.65, 0, 0.35, 1) 550ms backwards;
+    }
+  }
+
+  @keyframes hop {
+    to {
+      translate: 0 -0.875rem;
+    }
+  }
+
+  @keyframes shade {
+    to {
+      scale: 0.7 1;
+      opacity: 0.08;
+    }
+  }
+
+  @keyframes letter {
+    from {
+      opacity: 0;
+      translate: 0 0.4em;
+      rotate: -8deg;
+    }
+  }
+
+  @keyframes pen {
+    from {
+      stroke-dashoffset: 1;
+    }
   }
 </style>
 

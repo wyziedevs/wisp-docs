@@ -1,32 +1,129 @@
-/* ---- Small touches: color feedback and the copy confirmation ------------ */
-/* Flat and quiet: color and opacity only, 150ms at most. */
+/* ---- Delight: tactile presses, page fades, small touches ---------------- */
+/* Flat and quiet. Transform and opacity only, ease-out exponential, and none
+   of it under prefers-reduced-motion (8-ghost.css switches every animation and
+   transition off there too). */
 
-:is(
-  .icon,
-  .mnav summary,
-  .copy-icon,
-  .copy-code,
-  .links a,
-  .mnav nav a,
-  .tabs label,
-  .side li a,
-  .switch a,
-  .grp > summary,
-  .pager a,
-  .hosts span,
-  .find-bar .esc,
-  .hits a,
-  :is(.toc, .post-toc) a
-) {
-  transition-property: color, background-color, border-color, opacity;
-  transition-duration: 120ms;
-  transition-timing-function: ease;
-}
+@media (prefers-reduced-motion: no-preference) {
+  /* Page transitions: the header and the sidebar stay put, the page fades. */
+  @view-transition {
+    navigation: auto;
+  }
 
-@media (hover: hover) {
-  .hosts span:hover {
-    border-color: var(--accent);
-    color: var(--ink);
+  .top {
+    view-transition-name: top;
+  }
+
+  .side {
+    view-transition-name: side;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 150ms;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Presses: a quick lift on hover, a crisp press on :active. */
+  :is(
+    .icon,
+    .mnav summary,
+    .copy-icon,
+    .copy-code,
+    .links a,
+    .mnav nav a,
+    .tabs label,
+    .side li a,
+    .switch a,
+    .grp > summary,
+    .pager a,
+    .hosts span,
+    .find-bar .esc,
+    .hits a,
+    :is(.toc, .post-toc) a
+  ) {
+    transition-property: color, background-color, border-color, opacity, scale, translate;
+    transition-duration: 140ms;
+    transition-timing-function: var(--ease);
+  }
+
+  :is(.icon, .mnav summary, .copy-icon, .copy-code, .links a, .mnav nav a, .tabs label, .side li a, .switch a,
+    .grp > summary, .pager a, .hosts span, .find-bar .esc, .hits a):active {
+    scale: 0.97;
+    translate: 0 1px;
+    transition-duration: 80ms;
+  }
+
+  .icon:active,
+  .mnav summary:active {
+    scale: 0.92;
+    translate: 0;
+  }
+
+  @media (hover: hover) {
+    .hosts span:hover {
+      border-color: var(--accent);
+      color: var(--ink);
+    }
+  }
+
+  /* Heading links slide in. */
+  .doc .anchor {
+    translate: -0.25rem 0;
+    transition:
+      opacity var(--t),
+      translate 200ms var(--ease);
+  }
+
+  .doc :hover > .anchor,
+  .doc .anchor:focus-visible,
+  .doc .anchor.done {
+    translate: 0;
+  }
+
+  /* The search dialog opens from the search field, the backdrop fades. */
+  .finder[open] {
+    transform-origin: 50% 0;
+    animation: open 180ms var(--ease);
+  }
+
+  .finder[open]::backdrop {
+    animation: veil 180ms var(--ease);
+  }
+
+  /* The ghost's happy hop and the Konami spin. */
+  .brand .ghost.happy svg,
+  .brand:is(:hover, :focus-visible) .ghost.happy svg {
+    animation: happy 500ms var(--ease);
+  }
+
+  .brand .ghost.spin svg,
+  .brand:is(:hover, :focus-visible) .ghost.spin svg {
+    animation: spin 700ms var(--ease);
+  }
+
+  .hero .logo.happy {
+    animation: happy 500ms var(--ease);
+  }
+
+  /* A copied code block washes once. */
+  pre:has(> .copy-code.done)::after {
+    animation: wash 400ms var(--ease);
+  }
+
+  /* The copy button's check draws in with a tiny pop. */
+  .copy-code.done::before {
+    animation:
+      draw 260ms var(--ease),
+      pop 300ms var(--ease);
+  }
+
+  /* Callout icons tilt once as they scroll into view. */
+  @supports (animation-timeline: view()) {
+    .callout > p:first-child:has(> strong:only-child)::before {
+      animation: tilt linear both;
+      animation-timeline: view();
+      animation-range: entry 10% entry 90%;
+    }
   }
 }
 
@@ -55,4 +152,46 @@ pre::after {
   vertical-align: -0.14em;
   background: currentColor;
   mask: var(--i-check) center / contain no-repeat;
+}
+
+@keyframes open {
+  from {
+    opacity: 0;
+    scale: 0.97;
+    translate: 0 -0.5rem;
+  }
+}
+
+@keyframes veil {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes wash {
+  from {
+    opacity: 1;
+  }
+}
+
+@keyframes tilt {
+  from {
+    rotate: -18deg;
+    scale: 0.85;
+  }
+}
+
+@keyframes happy {
+  35% {
+    transform: translateY(-0.4rem) scale(0.94, 1.1) rotate(-6deg);
+  }
+  65% {
+    transform: translateY(0) scale(1.08, 0.9) rotate(3deg);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

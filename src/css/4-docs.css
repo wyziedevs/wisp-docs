@@ -59,6 +59,7 @@
   width: 1.125rem;
   height: 1.125rem;
   rotate: -90deg;
+  transition: rotate 200ms var(--ease);
 }
 
 .menu[open] > summary::after,
@@ -286,6 +287,7 @@
 .doc .anchor.done {
   --ico: var(--i-check);
   color: var(--good);
+  animation: pop 300ms var(--ease);
 }
 
 @media (min-width: 48rem) {

@@ -100,6 +100,7 @@
 
   .view input[aria-invalid="true"] {
     border-color: var(--warn);
+    animation: shake 340ms var(--ease);
   }
 
   .view form button,
@@ -142,10 +143,21 @@
     padding: 0.5rem 0.5rem 0.5rem 0.875rem;
     border: 1px solid var(--line);
     border-radius: var(--radius);
+    transition:
+      opacity 300ms var(--ease),
+      translate 300ms var(--ease);
   }
 
   .view li[data-leaving] {
     opacity: 0;
+    translate: 0 0.375rem;
+  }
+
+  @starting-style {
+    .view li {
+      opacity: 0;
+      translate: 0 -0.375rem;
+    }
   }
 </style>
 

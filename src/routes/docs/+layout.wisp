@@ -143,9 +143,15 @@ let edit = match site::bare(cx.path()) {
     build()
     if (location.hash) document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView()
   })
+  // A new page eases in; a hash jump or a form post on the same page does not.
   afterNavigate(({ from, to }) => {
     build()
     // On a phone the page menu folds away once a page is chosen.
     if (path(from) !== path(to) && !matchMedia('(min-width: 48rem)').matches) document.querySelector('.menu')?.removeAttribute('open')
+    if (path(from) === path(to) || matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    doc.animate(
+      [{ opacity: 0, translate: '0 6px' }, { opacity: 1, translate: '0 0' }],
+      { duration: 320, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' },
+    )
   })
 </script>

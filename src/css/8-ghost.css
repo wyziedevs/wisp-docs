@@ -1,4 +1,4 @@
-/* ---- Error page: the ghost over its shadow ------------------ */
+/* ---- Error page: the ghost floats over its own shadow ------------------ */
 
 .error {
   padding: clamp(4rem, 12vw, 8rem) var(--gutter);
@@ -28,7 +28,19 @@
   color: var(--slate);
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  .error .float {
+    animation: float 3.2s ease-in-out infinite;
+  }
+
+  .error .shade {
+    animation: shade 3.2s ease-in-out infinite;
+  }
+}
+
 /* ---- The ghost --------------------------------------------------------- */
+/* Eyes and body lean toward the pointer; a hover or focus wakes it, a page
+   arrival makes it hop, typing boo startles it. */
 
 .ghost {
   display: block;
@@ -41,6 +53,12 @@
   display: block;
   width: 100%;
   overflow: visible;
+  transform-origin: 50% 90%;
+  rotate: calc(var(--look-x, 0) * 6deg);
+  translate: calc(var(--look-x, 0) * 1.5px) 0;
+  transition:
+    rotate 300ms var(--ease),
+    translate 300ms var(--ease);
 }
 
 .ghost .shape {
@@ -51,10 +69,164 @@
 .ghost .eye,
 .ghost .mouth {
   fill: var(--bg);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.ghost .eye {
+  translate: calc(var(--look-x, 0) * 1.2px) calc(var(--look-y, 0) * 1.2px);
+  transition:
+    translate var(--t),
+    scale var(--t);
+}
+
+.ghost .mouth {
+  translate: calc(var(--look-x, 0) * 0.7px) calc(var(--look-y, 0) * 0.7px);
+  transition:
+    translate var(--t),
+    scale var(--t);
+}
+
+.brand:is(:hover, :focus-visible) .ghost svg,
+.ghost.hop svg {
+  animation: hop 450ms var(--ease);
 }
 
 .brand:is(:hover, :focus-visible) .ghost .shape {
   fill: var(--accent-hover);
+}
+
+.brand:is(:hover, :focus-visible) .ghost .eye {
+  scale: 1.2;
+}
+
+.brand:is(:hover, :focus-visible) .ghost .mouth {
+  scale: 1.5 1.9;
+}
+
+/* The eyes blink now and then. */
+@media (prefers-reduced-motion: no-preference) {
+  .ghost .eye {
+    animation: blink 5s infinite;
+  }
+}
+
+.ghost.boo svg {
+  animation: boo 800ms var(--ease);
+}
+
+.ghost.boo .eye {
+  animation: wide 800ms var(--ease);
+}
+
+.ghost.boo .mouth {
+  animation: gasp 800ms var(--ease);
+}
+
+/* ---- Motion ------------------------------------------------------------ */
+
+@keyframes fade {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    translate: 0 1.5rem;
+  }
+}
+
+@keyframes draw {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+@keyframes bob {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, -0.5rem, 0);
+  }
+}
+
+@keyframes check {
+  from {
+    stroke-dashoffset: 20;
+  }
+}
+
+@keyframes pop {
+  from {
+    scale: 0.6;
+  }
+}
+
+@keyframes shake {
+  20% { translate: -4px 0; }
+  40% { translate: 4px 0; }
+  60% { translate: -2px 0; }
+  80% { translate: 2px 0; }
+}
+
+@keyframes hop {
+  30% {
+    transform: translateY(-3px) scale(0.94, 1.08);
+  }
+  60% {
+    transform: translateY(0) scale(1.08, 0.9);
+  }
+}
+
+@keyframes blink {
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.1);
+  }
+}
+
+@keyframes boo {
+  25% {
+    transform: translateY(-4px) scale(1.3) rotate(-10deg);
+  }
+  55% {
+    transform: translateY(-3px) scale(1.25) rotate(8deg);
+  }
+}
+
+@keyframes wide {
+  20%,
+  70% {
+    transform: scale(1.45);
+  }
+}
+
+@keyframes gasp {
+  20%,
+  70% {
+    transform: scale(1.7, 2.3);
+  }
+}
+
+@keyframes float {
+  50% {
+    translate: 0 -0.625rem;
+  }
+}
+
+@keyframes shade {
+  50% {
+    scale: 0.7 1;
+    opacity: 0.6;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -63,5 +235,9 @@
   ::after {
     animation: none !important;
     transition: none !important;
+  }
+
+  @view-transition {
+    navigation: none;
   }
 }
