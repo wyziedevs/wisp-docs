@@ -29,13 +29,13 @@ Read once at start. Switches take `on`/`off` (also `1`/`0`, `true`/`false`). You
 | `WISP_REQUEST_ID` | `on`: every request gets an id (`cx.request_id()`), echoed as `x-request-id` |
 | `WISP_API_DOCS` | serve `/_wisp/openapi.json` and `/_wisp/docs` (on in dev) |
 | `WISP_SECRET`, `WISP_SECRET_OLD` | key for signed cookies and tokens, and the one before (rotation) |
-| `WISP_DATA` | folder for table files |
+| `WISP_DATA` | folder for table files (`off` keeps tables in memory; blank is unset) |
 | `WISP_FSYNC` | `second` (default), `always`, `off` |
 | `WISP_STORE` | a store for tables: `d1:DB`, `deno-kv`, `libsql://…` |
 | `WISP_STORE_TOKEN` | bearer token for a `libsql://` store |
-| `WISP_STORE_POLL` | seconds between store change polls (several servers) |
+| `WISP_STORE_POLL` | seconds between store change polls (several servers); not a number stops the server at start |
 | `WISP_BASE` | base path, set at build (`/app`) |
-| `SITE_URL` | site address for sitemaps, feeds and absolute links |
+| `SITE_URL` | site address for sitemaps, feeds and absolute links (also read from `.env`; blank is unset, a trailing `/` is dropped) |
 | `SITE_TITLE` | feed title |
 | `METRICS_KEY` | bearer key for `/_wisp/metrics` |
 | `CRON_SECRET` | bearer key hosts send to `/_wisp/cron/<schedule>` |
