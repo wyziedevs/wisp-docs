@@ -17,10 +17,31 @@
     view-transition-name: side;
   }
 
+  /* The old page fades out, then the new one fades in: opacity only, so the
+     two never blend into a bright or dim middle. */
   ::view-transition-old(root),
   ::view-transition-new(root) {
-    animation-duration: 150ms;
+    mix-blend-mode: normal;
     animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    animation-fill-mode: both;
+  }
+
+  ::view-transition-old(root) {
+    animation-name: leave;
+    animation-duration: 180ms;
+  }
+
+  ::view-transition-new(root) {
+    animation-name: enter;
+    animation-duration: 320ms;
+    animation-delay: 140ms;
+  }
+
+  /* Browsers without view transitions: a full page load still fades in. */
+  @supports not (view-transition-name: none) {
+    body {
+      animation: enter 320ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
   }
 
   /* Presses: a quick lift on hover, a crisp press on :active. */
@@ -136,6 +157,18 @@
   vertical-align: -0.14em;
   background: currentColor;
   mask: var(--i-check) center / contain no-repeat;
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes leave {
+  to {
+    opacity: 0;
+  }
 }
 
 @keyframes open {
