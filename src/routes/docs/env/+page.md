@@ -55,7 +55,7 @@ Not for you to set. `wisp build` and the host bridges set them for the app they 
 
 | Name | What it does |
 |---|---|
-| `WISP_REQUEST_ONLY` | `1` while `wisp build` builds for Cloudflare, Pages, Vercel or Netlify: leaves the server loop for raw connections out of the wasm (541 KB instead of 584 KB for the bench app). An older `wisp` ignores it |
+| `WISP_REQUEST_ONLY` | `1` while `wisp build` builds for Cloudflare, Pages, Vercel or Netlify: leaves the server loop for raw connections out of the wasm (about 43 KB smaller for the bench app when it was added). An older `wisp` ignores it |
 | `WISP_WARM_UP` | the Cloudflare worker's warm-up instance: it answers one request with the runtime alone (no `init`, hook or random) so the real first request runs compiled code (`WISP_WARM_UP=1`; first request faster than with no warm-up, not as fast as running the app) |
 
 </div>

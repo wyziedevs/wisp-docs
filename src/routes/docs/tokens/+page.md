@@ -40,18 +40,20 @@ Wisp's `data` is longer than JavaScript's: a Rust type with its fields' types. M
 
 ## A Real App: Auth, CRUD, Upload, Live, a Component
 
-`bench/tokens/real` is sign up and in, a posts table with validation, edit, delete, pages and live refresh, an avatar upload and a toggle component: 10 files, **958** tokens in Wisp, 3.6x less than SvelteKit 2 and 3.5x less than Next.js 15. Its tests check every feature.
+`bench/tokens/real` is sign up and in, a posts table with validation, edit, delete, pages and live refresh, an avatar upload and a toggle component: 10 files, **960** tokens in Wisp, 3.6x less than SvelteKit 2 and 3.5x less than Next.js 15. The Wisp app has tests for every feature (`bench/tokens/real/wisp/src/tests.rs`); the SvelteKit and Next.js apps have none, so their behavior is checked by reading, not by tests.
 
 ## Method
 
-Counted: every file a developer (or an agent) writes by hand, beyond what the framework's generator gives, plus each file's path (writing a file means naming it, so two files cost more than one). Manifests (`Cargo.toml`, `package.json`) are left out everywhere.
+Counted: every file a developer (or an agent) writes by hand, beyond what the framework's generator gives, plus each file's path (writing a file means naming it, so two files cost more than one). Generated manifests (`package.json`, the `[package]` table of `Cargo.toml`) are left out everywhere; the dependency lines a developer adds by hand are counted as `setup` (Axum's and Actix's `[dependencies]`, Express's server setup), while `wisp new` writes Wisp's one dependency, so Wisp's `setup` is 0.
+
+What this favors: Wisp ships the form rules, the validation messages and the form markup (`<form fields />`), so most of the gap in `form` is work the other stacks write by hand or take from a library. That is the point of a batteries-included design, but read the totals as "what an app author writes", not as equal work by each framework. Only the Wisp apps have tests (`src/tests.rs`); the other stacks' apps are written to the same behavior and reviewed by hand, not checked by a test.
 
 There is no tokenizer offline, so the count estimates a BPE code tokenizer (cl100k-like):
 
 - a newline with its indentation is 1 token; spaces join the word after them
 - identifiers split at `_` and camelCase humps, each part 1 token up to 8 letters and 1 per 6 after that
 - digits 1 per 3
-- common operators (`::` `->` `=>` `==` `</` `/>` `{{` `<%=` ...) 1; any other punctuation character 1
+- common operators (`::` `->` `=>` `==` `</` `/>` `{{` `{%` ...) 1; any other punctuation character 1
 
 Characters / 4, the usual rule of thumb, ranks the frameworks the same way.
 
