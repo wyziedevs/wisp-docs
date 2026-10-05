@@ -13,6 +13,7 @@ wisp = { package = "wisp-web-rt", path = "../wisp/crates/wisp" }
 
 [build-dependencies]
 wisp-build = { package = "wisp-web-build", path = "../wisp/crates/wisp-build" }
+wisp-shared = { package = "wisp-web-shared", path = "../wisp/crates/wisp-shared" }
 
 # `cargo test --features browser` runs the tests in a headless Chrome or Edge.
 [features]

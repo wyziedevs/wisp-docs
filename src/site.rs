@@ -29,3 +29,11 @@ pub fn dir(path: &str) -> String {
 pub fn bare(path: &str) -> &str {
     if path.len() > 1 { path.trim_end_matches('/') } else { path }
 }
+
+/// The home page's speed tables, from the Wisp repo's `bench/tfb/results.json`
+/// (build.rs): [(caption, [(name, built on, share of the fastest, req/s)])].
+pub const SPEED: &[(&str, &[(&str, &str, f64, &str)])] = include!(concat!(env!("OUT_DIR"), "/speed.rs"));
+
+/// The home page's token table and the bigger app, from `bench/tokens/results.json`:
+/// ([(stack, share of the largest, tokens, files)], [(stack, tokens)]).
+pub const TOKENS: (&[(&str, f64, &str, usize)], &[(&str, &str)]) = include!(concat!(env!("OUT_DIR"), "/tokens.rs"));

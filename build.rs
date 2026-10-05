@@ -1,10 +1,13 @@
-//! Writes static/search-index.json from the docs pages, then runs the Wisp build.
+//! Writes static/search-index.json from the docs pages and the home page's
+//! speed and token tables from the Wisp repo's results, then runs the Wisp build.
 //! Entries are `[path, page title, group, description, [[anchor, heading, text]..]]`.
 
 use std::collections::HashSet;
 use std::fmt::Write as _;
 use std::fs;
 use std::path::{Path, PathBuf};
+use std::process::Command;
+use wisp_shared::json::{self, Json};
 
 const TEXT_CAP: usize = 420;
 
@@ -16,6 +19,8 @@ fn main() {
     css();
     index();
     blog();
+    speed(fetch("bench/tfb/results.json").as_ref());
+    tokens(fetch("bench/tokens/results.json").as_ref());
     wisp_build::run();
 }
 
@@ -287,4 +292,136 @@ fn js(s: &str) -> String {
     }
     o.push('"');
     o
+}
+
+/// Where the Wisp repo's results are read: its `main` on GitHub, else the
+/// sibling checkout (offline).
+const RAW: &str = "https://raw.githubusercontent.com/wyziedevs/wisp/main/";
+
+/// A results file of the Wisp repo; none (and a warning) when neither copy reads.
+fn fetch(path: &str) -> Option<Json> {
+    let local = Path::new("../wisp").join(path);
+    println!("cargo:rerun-if-changed={}", local.display());
+    let url = format!("{RAW}{path}");
+    let net = Command::new("curl")
+        .args(["-fsSL", "--max-time", "10", &url])
+        .output()
+        .ok()
+        .filter(|o| o.status.success())
+        .and_then(|o| String::from_utf8(o.stdout).ok());
+    let parsed = net.or_else(|| fs::read_to_string(&local).ok()).map(|t| json::parse(&t));
+    if let Some(Ok(j)) = parsed {
+        return Some(j);
+    }
+    println!("cargo:warning={path} not read: its home page table is empty");
+    None
+}
+
+fn num(j: Option<&Json>) -> f64 {
+    match j {
+        Some(Json::Num(n)) => n.parse().unwrap_or(0.0),
+        _ => 0.0,
+    }
+}
+
+/// 1129577 as "1,129,577".
+fn commas(n: u64) -> String {
+    let s = n.to_string();
+    let mut out = String::new();
+    for (i, c) in s.chars().enumerate() {
+        if i > 0 && (s.len() - i) % 3 == 0 {
+            out.push(',');
+        }
+        out.push(c);
+    }
+    out
+}
+
+/// The contenders the speed tables show (key, name, built on), in no order;
+/// a supplementary run (`wisp-uncapped`) is not one.
+const CONTENDERS: &[(&str, &str, &str)] = &[
+    ("wisp", "Wisp", "Rust"),
+    ("actix", "Actix Web", "Rust"),
+    ("axum", "Axum", "Rust"),
+    ("fastify", "Fastify", "Node.js"),
+    ("express", "Express", "Node.js"),
+    ("hono-node", "Hono (Node)", "Node.js"),
+    ("hono-bun", "Hono (Bun)", "Bun"),
+    ("sveltekit", "SvelteKit", "Svelte"),
+    ("next", "Next.js", "React"),
+    ("nuxt", "Nuxt", "Vue"),
+];
+
+/// The tables: workload, connections, caption.
+const SPEED: &[(&str, &str, &str)] = &[
+    ("plaintext", "256", "Plaintext, 256 connections, pipelined"),
+    ("json", "64", "JSON, 64 connections"),
+];
+
+/// `$OUT_DIR/speed.rs`: [(caption, [(name, built on, share of the fastest, req/s)])],
+/// fastest first; a level with no valid run is last, as "No result".
+fn speed(tfb: Option<&Json>) {
+    let mut out = String::from("&[");
+    for (work, level, caption) in SPEED {
+        let at = tfb.and_then(|j| j.get("summary")?.get(work)?.get(level));
+        let mut rows: Vec<(&str, &str, f64, bool)> = CONTENDERS
+            .iter()
+            .filter_map(|(key, name, stack)| {
+                let r = at?.get(key)?;
+                let failed = !matches!(r.get("failed"), None | Some(Json::Null));
+                Some((*name, *stack, num(r.get("rps_median")), failed))
+            })
+            .collect();
+        rows.sort_by(|a, b| a.3.cmp(&b.3).then(b.2.total_cmp(&a.2)));
+        let top = rows.iter().map(|r| r.2).fold(0.0, f64::max);
+        let _ = write!(out, "({caption:?}, &[");
+        for (name, stack, rps, failed) in rows {
+            let (share, text) = if failed || rps <= 0.0 {
+                (0.0, "No result".to_string())
+            } else {
+                (rps / top, commas(rps.round() as u64))
+            };
+            let _ = write!(out, "({name:?}, {stack:?}, {share:.3}, {text:?}),");
+        }
+        out.push_str("]),");
+    }
+    out.push(']');
+    put(&out_dir().join("speed.rs"), &out);
+}
+
+/// The stacks the token table shows: the counter's name, the table's.
+const STACKS: &[(&str, &str)] = &[
+    ("Wisp", "Wisp"),
+    ("Nuxt (Vue)", "Nuxt (Vue)"),
+    ("SvelteKit", "SvelteKit"),
+    ("Next.js", "Next.js (React)"),
+    ("Express (Node.js)", "Express (Node.js)"),
+    ("React (Vite + Express)", "React (Vite + Express)"),
+];
+
+/// `$OUT_DIR/tokens.rs`: ([(stack, share of the largest, tokens, files)] fewest
+/// first, [(stack, tokens)] of the bigger app).
+fn tokens(counts: Option<&Json>) {
+    let suite = |name: &str| -> Vec<(String, f64, usize)> {
+        let Some(list) = counts.and_then(|j| j.get(name)) else { return Vec::new() };
+        list.items()
+            .filter_map(|r| Some((r.str("stack")?.to_string(), num(r.get("tokens")), num(r.get("files")) as usize)))
+            .collect()
+    };
+    let mut apps: Vec<_> = suite("apps")
+        .into_iter()
+        .filter_map(|(s, t, f)| Some((STACKS.iter().find(|(k, _)| *k == s)?.1, t, f)))
+        .collect();
+    apps.sort_by(|a, b| a.1.total_cmp(&b.1));
+    let top = apps.iter().map(|r| r.1).fold(0.0, f64::max);
+    let mut out = String::from("(&[");
+    for (name, t, files) in apps {
+        let _ = write!(out, "({name:?}, {:.3}, {:?}, {files}),", t / top, commas(t as u64));
+    }
+    out.push_str("], &[");
+    for (name, t, _) in suite("real") {
+        let _ = write!(out, "({name:?}, {:?}),", commas(t as u64));
+    }
+    out.push_str("])");
+    put(&out_dir().join("tokens.rs"), &out);
 }
