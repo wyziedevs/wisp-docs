@@ -170,7 +170,17 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
     off?.()
     off = null
     const art = document.querySelector('.post')
-    if (art) off = reading(art, '.post-toc ul')
+    if (!art) return
+    // The copy notice for screen readers, as the docs have beside their article.
+    let live = art.querySelector('.copied')
+    if (!live) {
+      live = document.createElement('p')
+      live.className = 'sr copied'
+      live.setAttribute('role', 'status')
+      live.setAttribute('aria-live', 'polite')
+      art.prepend(live)
+    }
+    off = reading(art, '.post-toc ul', (m) => (live.textContent = m))
   }
 
   onMount(() => {

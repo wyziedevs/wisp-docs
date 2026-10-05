@@ -2,6 +2,23 @@
 // and the On This Page list that marks the section being read.
 export const path = (u) => u && new URL(u, location.href).pathname
 
+// Puts text on the clipboard; where the async API is missing or refused (an
+// insecure page, no focus), a hidden field and the old copy command do it.
+function copy(text) {
+  const old = () => {
+    const f = document.createElement('textarea')
+    f.value = text
+    f.setAttribute('readonly', '')
+    f.style.cssText = 'position:fixed;top:0;opacity:0'
+    document.body.append(f)
+    f.select()
+    const ok = document.execCommand('copy')
+    f.remove()
+    return ok ? Promise.resolve() : Promise.reject(new Error('copy'))
+  }
+  return navigator.clipboard ? navigator.clipboard.writeText(text).catch(old) : old()
+}
+
 // Adds the link icon to every h2 and h3 with an id under root. With `say`, a
 // click copies the heading's link and says so through it.
 export function anchors(root, say) {
@@ -13,7 +30,7 @@ export function anchors(root, say) {
     a.setAttribute('aria-label', 'Link to this section')
     if (say) {
       a.addEventListener('click', () => {
-        navigator.clipboard?.writeText(location.origin + location.pathname + '#' + h.id).then(() => {
+        copy(location.origin + location.pathname + '#' + h.id).then(() => {
           a.classList.add('done')
           say('Link copied')
           setTimeout(() => {

@@ -23,7 +23,7 @@ AI writes most code now, and every token costs time and money. Wisp uses convent
 
 For agents: [AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md) is the whole reference in one file, and `wisp mcp` serves the docs over MCP (`claude mcp add wisp -- wisp mcp`).
 
-## And
+## And More
 
 - One binary carries its styles and static files. It runs on a VPS, in a container, as static HTML or on an edge host ([Deploying](/docs/deploy/)).
 - Every fast path is proven at startup, falls back, and never panics after startup.
