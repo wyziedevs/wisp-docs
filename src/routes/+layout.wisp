@@ -21,15 +21,13 @@ let tab = if docs {
 } else {
     ""
 };
-let reference = tab == "reference";
-let hosting = tab == "hosting";
 let learn = tab == "learn";
 let community = path == "/community";
+let faq = path == "/faq";
 let blog = path == "/blog" || path.starts_with("/blog/");
 let links = [
     ("/docs/", "Learn", learn),
-    ("/docs/design/", "Reference", reference),
-    ("/docs/deploy/", "Hosting", hosting),
+    ("/faq/", "FAQ", faq),
     ("/community/", "Community", community),
     ("/blog/", "Blog", blog),
 ];
@@ -214,7 +212,6 @@ let ld = match me {
       <a class="brand" href="/"><img src="/favicon.svg" alt="" width="28" height="28"> Wisp</a>
       <p>A fast, fun web framework for Rust.</p>
       <p class="maker">Made by <a href="https://wyzie.io">Wyzie LLC</a>.</p>
-      <p class="maker"><a href="https://github.com/wyziedevs/wisp/blob/main/LICENSE">MIT licensed</a>, open source.</p>
     </div>
     <nav aria-label="Learn">
       <h2>Learn</h2>
@@ -223,6 +220,7 @@ let ld = match me {
       <a href="/docs/overview/">Overview</a>
       <a href="/docs/tokens/">Tokens</a>
       <a href="/docs/benchmarks/">Benchmarks</a>
+      <a href="/faq/">FAQ</a>
     </nav>
     <nav aria-label="Reference">
       <h2>Reference</h2>
