@@ -6,7 +6,7 @@ order: 43
 ---
 
 ## OpenAPI and Docs Page
-The build describes the app as OpenAPI 3.1 at `/_wisp/openapi.json`; `/_wisp/docs` lists it with a try-it form. On in dev, off in release; `WISP_API_DOCS=on|off` overrides. Nothing to annotate:
+The build describes the app as OpenAPI 3.1 at `/_wisp/openapi.json`; `/_wisp/docs` lists it with a try-it form. On in dev, off in release; `WISP_API_DOCS=on|off` overrides. The Cloudflare, Pages, Vercel and Netlify builds serve `/_wisp/openapi.json` but not the `/_wisp/docs` page (404; left out of the wasm). Nothing to annotate:
 
 - Every `+server.rs` endpoint, and a `#[derive(Rest)]` type's routes and its `/[id]`: path, query and header parameters, `body: T` (JSON) or form fields by name and type, what it returns (`Option` adds a 404, `()` a 204), and `default`, 400, 401, 422 error answers (`Error`, and RFC 9457 `Problem`).
 - A resource also has its `if-match`/`if-none-match` headers, `etag`, `location` and `x-total-count`, a filter parameter per plain field, and a 201 for POST.

@@ -27,7 +27,7 @@ Read once at start. Switches take `on`/`off` (also `1`/`0`, `true`/`false`). You
 | `WISP_SERVER_TIMING` | `Server-Timing` on every answer (on in dev, off otherwise; off costs nothing): `total;dur=ms`, and in a debug build `before`, `handler`, `render` |
 | `WISP_PROBLEM_JSON` | `on`: errors as RFC 9457 problem JSON |
 | `WISP_REQUEST_ID` | `on`: every request gets an id (`cx.request_id()`), echoed as `x-request-id` |
-| `WISP_API_DOCS` | serve `/_wisp/openapi.json` and `/_wisp/docs` (on in dev) |
+| `WISP_API_DOCS` | serve `/_wisp/openapi.json` and `/_wisp/docs` (on in dev; no `/_wisp/docs` on Cloudflare, Pages, Vercel, Netlify) |
 | `WISP_SECRET`, `WISP_SECRET_OLD` | key for signed cookies and tokens, and the one before (rotation) |
 | `WISP_DATA` | folder for table files (`off` keeps tables in memory; blank is unset) |
 | `WISP_FSYNC` | `second` (default), `always`, `off` |
