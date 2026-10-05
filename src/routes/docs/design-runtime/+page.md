@@ -47,7 +47,7 @@ Behind a proxy:
 
 ### I/O Drivers
 
-**io_uring** (Linux 6.1+, `crates/wisp/src/uring.rs`):
+**io_uring** (Linux 6.1+, `crates/wisp/src/uring.rs`): implemented but not tested end to end, because the test VPS kernel refuses io_uring buffer rings. The tested default is epoll.
 
 - Each worker has its own ring and its own listener on the same port (`SO_REUSEPORT`: the kernel spreads connections).
 - One `io_uring_enter` per worker turn submits every queued response and runs completions that came in (`DEFER_TASKRUN`), instead of a `recv` and `send` per request.

@@ -55,6 +55,7 @@ Each param but `cx` is read by name: route param, then form field or JSON object
 |---|---|
 | a `Json` value (`#[derive(Json)]`, `Vec`, numbers, strings, maps) | 200 + JSON |
 | nothing, `Result<()>` | 204 |
+| a `Response` with status 205 | bodiless, `content-length: 0` |
 | `Response` | it |
 | `Option<Response>` | it, or 404 |
 | `Option<T>` | JSON, 204 for `Some(())`, 404 for `None` |

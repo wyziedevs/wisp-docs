@@ -60,6 +60,7 @@ Back, forward and reload restore each changed `<input>`, `<textarea>`, `<select>
 - Pages leave with `pagehide` (back/forward cache; scroll restored).
 - `<body data-wisp-revalidate="30">` refetches data when the tab or network returns (at most every N s, default 30; the morph keeps focus, scroll, typed text).
 - Offline, `<form data-wisp-queue>` (safe to send twice) waits in `sessionStorage`, is sent in order when back, then the page refreshes (`wisp:sent`). Only urlencoded forms queue.
+- `wisp:result` also fires when a download link is clicked, and for a post a later one superseded (the older request's result, whose page is not shown).
 - Other forms show "You are offline" and fire `wisp:result` with `error: "offline"`.
 - A navigation focuses the `<h1>` (else `<main>`) and announces the title; view transitions skip under `prefers-reduced-motion`.
 

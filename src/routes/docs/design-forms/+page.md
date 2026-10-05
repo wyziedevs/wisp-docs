@@ -65,7 +65,7 @@ Browser-side checks come from the same rules (`wisp_build::rules::Native`). A fi
 
 </div>
 
-A textarea gets only `required` (line breaks are sent as two characters). The server still checks everything.
+A textarea gets `required`, and `minlength` when `#[validate(min = N)]` has N above 1, never `maxlength` (the browser counts UTF-16 units and line breaks as two characters). The server still checks everything.
 
 ## Request Flow
 

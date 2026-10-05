@@ -21,7 +21,7 @@ Wisp is young and has not been audited, and it can be broken. This page lists wh
 
 - HTTP/2: a reset a client makes us send (the MadeYouReset shape) spends the same reset budget as one it sends. Past 1 MiB of incoming bodies only the oldest stream's window reopens. A peer sending past the receive window gets FLOW_CONTROL_ERROR. `content-length` is digits only, and repeats must agree.
 - A streamed answer still hears its client leave after 64 KB were sent behind it, so the connection and its `WISP_MAX_CONNS` slot are freed.
-- `WISP_CLIENT_IP_HEADER` reads the last line of the header, which the proxy appended, not a first line the client forged.
+- `WISP_CLIENT_IP_HEADER` takes the last address of the header's last line, which the trusted proxy added; a client can forge the first.
 - `Error::redirect` with a CR or LF in the location is a logged 500, and a non-3xx status is logged and sent as 303. Neither panics or splits a header.
 - A dev 5xx page never shows in a release build, even with `WISP_DEV=on`. Stop signals are caught before the `listening` line.
 

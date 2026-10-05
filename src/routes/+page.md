@@ -197,7 +197,7 @@ The same five features (a list page, a contact form, a JSON endpoint, a layout a
 <table class="tally">
 <thead><tr><th scope="col">Stack</th><th scope="col"><span class="sr">Relative size</span></th><th scope="col" class="num">Tokens</th><th scope="col" class="num">Files</th></tr></thead>
 <tbody>
-<tr class="us"><th scope="row">Wisp</th><td class="meter" aria-hidden="true"><span style="--v: 0.336"></span></td><td class="num">464</td><td class="num">6</td></tr>
+<tr class="us"><th scope="row">Wisp</th><td class="meter" aria-hidden="true"><span style="--v: 0.313"></span></td><td class="num">432</td><td class="num">6</td></tr>
 <tr><th scope="row">Nuxt (Vue)</th><td class="meter" aria-hidden="true"><span style="--v: 0.631"></span></td><td class="num">872</td><td class="num">8</td></tr>
 <tr><th scope="row">SvelteKit</th><td class="meter" aria-hidden="true"><span style="--v: 0.692"></span></td><td class="num">957</td><td class="num">9</td></tr>
 <tr><th scope="row">Next.js (React)</th><td class="meter" aria-hidden="true"><span style="--v: 0.703"></span></td><td class="num">971</td><td class="num">8</td></tr>

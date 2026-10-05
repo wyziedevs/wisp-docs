@@ -113,4 +113,4 @@ docker run -p 3000:3000 -e WISP_SECRET=... my-app
 
 - Writes a two-stage `Dockerfile` (`rust:slim` then `debian:stable-slim`, `HOST=0.0.0.0`, `WISP_DATA=/data`) and `.dockerignore`.
 - Saved tables live in `/data`: mount a volume (`-v my-app-data:/data`).
-- Docker's default seccomp refuses io_uring, so the server uses an epoll per worker. A profile allowing `io_uring_setup`, `io_uring_enter`, `io_uring_register` brings it back.
+- Docker's default seccomp refuses io_uring, so the server uses an epoll per worker. A profile allowing `io_uring_setup`, `io_uring_enter`, `io_uring_register` brings it back. The io_uring backend is implemented but untested end to end (the test VPS kernel refuses io_uring buffer rings); epoll is the tested default.
