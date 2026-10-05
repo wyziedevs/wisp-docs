@@ -87,7 +87,7 @@ let ld = match me {
 <header class="top">
   <div class="bar">
     <a class="brand" href="/" aria-label="Wisp home">
-      <span class="ghost" aria-hidden="true" bind:this="box">
+      <span class="ghost" aria-hidden="true">
         <svg viewBox="0 0 32 32">
           <path
             class="shape"
@@ -202,16 +202,12 @@ let ld = match me {
   import { afterNavigate } from 'wisp'
   import { path } from '$lib/toc.js'
   import { blocks, flip as swap } from '$lib/page.js'
-  import { ghost } from '$lib/ghost.js'
   import { finder } from '$lib/search.js'
   import { haptics } from '$lib/haptic.js'
-  import { motion } from '$lib/motion.js'
   import { demo } from '$lib/demo.js'
 
-  let box, bar, q, mod, dlg, fq, status, hits, tip
-  let spirit = null
+  let bar, q, mod, dlg, fq, status, hits, tip
   let find = null
-  const move = motion()
 
   const flip = () => swap()
 
@@ -228,18 +224,14 @@ let ld = match me {
     blocks()
     haptics()
     demo()
-    ;(window.requestIdleCallback || setTimeout)(() => move.scan())
     if (/Mac|iPhone|iPad/.test(navigator.platform)) mod.textContent = '⌘'
-    spirit = ghost(box)
     find = finder({ bar, q, dlg, fq, status, hits, tip })
-    console.log('%cwispweb.dev is a Wisp app, one Rust binary. Source: https://github.com/wyziedevs/wisp-docs\n%cTry typing boo.', 'color:#a17ff5;font-weight:600', 'color:inherit')
+    console.log('%cwispweb.dev is a Wisp app, one Rust binary. Source: https://github.com/wyziedevs/wisp-docs', 'color:#a17ff5;font-weight:600')
   })
   afterNavigate(({ from, to }) => {
     blocks()
     demo()
     find?.close()
-    move.scan(path(from) === path(to))
     document.querySelector('.mnav')?.removeAttribute('open')
-    if (path(from) !== path(to)) spirit?.play('hop')
   })
 </script>

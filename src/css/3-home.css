@@ -105,7 +105,7 @@
   outline-offset: -4px;
 }
 
-/* Tabs: the underline grows from the middle, a hover hints at it. */
+/* Tabs: a line under the tab; the chosen one takes the accent. */
 .tabs :is(label, .tab)::after {
   content: "";
   position: absolute;
@@ -115,19 +115,15 @@
   height: 2px;
   border-radius: 2px 2px 0 0;
   background: var(--line-strong);
-  scale: 0 1;
-  transition:
-    scale 250ms var(--ease),
-    background-color var(--t);
+  transition: background-color var(--t);
 }
 
 .tabs label:hover::after {
-  scale: 0.4 1;
+  background: var(--ash);
 }
 
 .tabs :is(.tab, input:checked + label)::after {
   background: var(--accent);
-  scale: 1 1;
 }
 
 .tabbed .pane-2,
@@ -183,32 +179,6 @@
 .cmp .scroll {
   max-height: 24rem;
   overflow: auto;
-}
-
-/* Launch sections rise into place as they scroll in (CSS only, where supported). */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .sec-head,
-    .band .claim,
-    .band .sample,
-    .demo,
-    .pair .cmp,
-    .hosts {
-      animation: rise var(--ease) both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 60%;
-    }
-
-    .pair .cmp + .cmp {
-      animation-range: entry 10% entry 70%;
-    }
-  }
-}
-
-
-/* GSAP (src/lib/motion.js) takes over the rise once it has loaded. */
-.gsap :is(.sec-head, .band .claim, .band .sample, .demo, .pair .cmp, .hosts) {
-  animation: none;
 }
 
 /* A code block after a claim's text has room above it. */

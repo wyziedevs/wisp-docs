@@ -1,6 +1,6 @@
 /* Wisp docs. A light near-white wash and a deep slate dark, both tinted
    toward the violet accent, following the system until a visitor picks one.
-   OKLCH throughout. Motion is a quick ease-out on transform and opacity,
+   OKLCH throughout. Motion is limited to short color and opacity changes,
    and off for prefers-reduced-motion.
 
    Breakpoints (rem; a media query cannot read a variable):
@@ -253,10 +253,6 @@ h4 {
   color: var(--on-accent);
 }
 
-.icon:active {
-  scale: 0.96;
-}
-
 .cta {
   display: flex;
   flex-wrap: wrap;
@@ -316,8 +312,7 @@ h4 {
   cursor: pointer;
   transition:
     color var(--t),
-    background-color var(--t),
-    scale 120ms var(--ease);
+    background-color var(--t);
 }
 
 .icon:hover,

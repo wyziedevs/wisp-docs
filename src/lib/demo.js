@@ -24,9 +24,8 @@ export function demo() {
   const input = root.querySelector('input[name=text]')
   const problem = root.querySelector('.problem')
   const add = root.querySelector('form[action*="?/add"]')
-  const calm = matchMedia('(prefers-reduced-motion: reduce)')
 
-  const rows = () => [...list.children].filter((li) => !('leaving' in li.dataset))
+  const rows = () => [...list.children]
   const recount = () => (count.textContent = `Todos (${list.children.length})`)
   const fail = (msg) => {
     problem.textContent = msg
@@ -56,8 +55,8 @@ export function demo() {
     const li = b.closest('li')
     const i = rows().indexOf(li)
     if (i < 0) return
-    li.dataset.leaving = ''
-    setTimeout(() => (li.remove(), recount()), calm.matches ? 0 : 300)
+    li.remove()
+    recount()
     await post(`${add.action.replace('?/add', '?/remove')}&i=${i}`, new URLSearchParams())
   })
 }

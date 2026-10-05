@@ -171,36 +171,25 @@
 /* Both icons share the button; the one for the other theme turns and fades in. */
 .theme svg {
   grid-area: 1 / 1;
-  transition:
-    opacity 250ms var(--ease),
-    rotate 400ms var(--ease),
-    scale 400ms var(--ease);
+  transition: opacity var(--t);
 }
 
 .theme .sun,
 :root[data-theme="dark"] .theme .moon {
   opacity: 0;
-  rotate: -90deg;
-  scale: 0.5;
 }
 
 :root[data-theme="dark"] .theme .sun {
   opacity: 1;
-  rotate: 0deg;
-  scale: 1;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) .theme .moon {
     opacity: 0;
-    rotate: 90deg;
-    scale: 0.5;
   }
 
   :root:not([data-theme="light"]) .theme .sun {
     opacity: 1;
-    rotate: 0deg;
-    scale: 1;
   }
 }
 

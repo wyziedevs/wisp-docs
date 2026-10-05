@@ -87,7 +87,6 @@ pre:focus-within .copy-code,
 .copy-code.done {
   border-color: var(--accent);
   color: var(--accent-ink);
-  animation: pop 300ms var(--ease);
 }
 
 @media (hover: none) {
@@ -247,7 +246,6 @@ td:last-child {
 
 .useful .thanks {
   color: var(--accent-ink);
-  animation: fade 300ms var(--ease);
 }
 
 .pager {
@@ -295,7 +293,6 @@ td:last-child {
 .pager .next small::after {
   width: 1em;
   height: 1em;
-  transition: translate 200ms var(--ease);
 }
 
 .pager .prev small::before {
@@ -304,14 +301,6 @@ td:last-child {
 
 .pager .next small::after {
   --ico: var(--i-right);
-}
-
-.pager .prev:hover small::before {
-  translate: -3px 0;
-}
-
-.pager .next:hover small::after {
-  translate: 3px 0;
 }
 
 @media (max-width: 36rem) {
@@ -380,12 +369,6 @@ td:last-child {
   background: var(--accent-soft);
   color: var(--accent-ink);
   font-weight: 600;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .doc {
-    animation: fade 400ms var(--ease) backwards;
-  }
 }
 
 
