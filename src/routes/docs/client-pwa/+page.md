@@ -12,7 +12,7 @@ order: 35
 { "name": "Notes", "theme_color": "#7c3aed", "offline": true }
 ```
 
-- Filled in: `short_name`/`name`, `start_url` `/`, `display` `standalone`, `icons` from `static/icon*.png` (size read) and `static/icon*.svg`.
+- Filled in: `short_name`/`name`, `start_url` `/` (`/app/` under a base path, as the manifest link, the worker and the icons are), `display` `standalone`, `icons` from `static/icon*.png` (size read) and `static/icon*.svg`.
 - One `static/icon.png` (512 px or more) suffices: `wisp build` also writes 192 and 512 px WebP into `/_app/img/` with cwebp (absent: a warning, the PNG alone).
 - At startup instead: `wisp::app_manifest(r#"{"name": "Notes"}"#)?;` in `init`.
 
