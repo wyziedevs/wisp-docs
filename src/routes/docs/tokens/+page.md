@@ -25,7 +25,7 @@ The Node apps: Nuxt is file routes, server routes in `server/api` and `useFetch`
 
 | Stack | list | form | api | layout | search | data | setup | total | chars / 4 | files |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| **Wisp** | 58 | 89 | 31 | 60 | 104 | 108 | 0 | **450** | 273 | 6 |
+| **Wisp** | 58 | 89 | 31 | 60 | 96 | 108 | 0 | **442** | 270 | 6 |
 | SvelteKit 2 | 128 | 425 | 57 | 83 | 192 | 72 | 0 | 957 | 620 | 9 |
 | Next.js 15 | 107 | 400 | 44 | 108 | 241 | 71 | 0 | 971 | 706 | 8 |
 | Nuxt 4 (Vue) | 96 | 429 | 22 | 96 | 158 | 71 | 0 | 872 | 596 | 8 |

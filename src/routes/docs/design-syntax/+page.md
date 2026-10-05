@@ -41,7 +41,7 @@ Syntax | Compiles to
 `{@html expr}` | Unescaped `Display` (you promise it is safe)
 `{@const x = expr}` | `let x = expr;`
 `{#if c}…{:else if c}…{:else}…{/if}` | `if`/`else`; `if let` works
-`{#each e as pat[, i]}…{:else}…{/each}` | `for`; a plain place like `data.posts` is borrowed
+`{#each e as pat[, i] [if cond]}…{:else}…{/each}` | `for`; `if cond` keeps matching items; a plain place like `data.posts` is borrowed
 `{#match e}{:case pat}…{/match}` | `match`; a plain place is borrowed
 `{#await f}…{:then v}…{:catch e}…{/await}` | Page streams `v` or `e` later ([Streaming a page](/docs/design-state/))
 `{@render children()}` or `<slot />` | Layout or component slot

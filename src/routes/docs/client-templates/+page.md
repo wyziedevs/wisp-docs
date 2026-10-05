@@ -21,10 +21,11 @@ Any Rust value client code mentions is sent, only the mentioned parts.
 - Sent as JSON via `wisp::Json`: numbers, strings, `bool`, `Option`, `Vec`, arrays, tuples, maps; own types `#[derive(Json)]`.
 - An unsendable value is a compile error naming `wisp::Json`; a prop that is also a script variable is a build error.
 - `matches(text, q)` (no import): case-insensitive contains; empty `q` matches all.
+- `{:#each list as x if cond}` (and `{#each}` on the server) keeps the items where `cond` holds; the index counts kept items.
 
 ```html
 <input bind:value="q">
-{:#each items.filter((i) => matches(i.name, q)) as item}<p>{:item.name}</p>{:/each}
+{:#each items as item if matches(item.name, q)}<p>{:item.name}</p>{/each}
 ```
 
 ## `{:expr}` Holes
