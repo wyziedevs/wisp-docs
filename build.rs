@@ -360,8 +360,8 @@ const CONTENDERS: &[(&str, &str, &str)] = &[
     ("axum", "Axum", "Rust"),
     ("fastify", "Fastify", "Node.js"),
     ("express", "Express", "Node.js"),
-    ("hono-node", "Hono (Node)", "Node.js"),
-    ("hono-bun", "Hono (Bun)", "Bun"),
+    ("hono-node", "Hono", "Node.js"),
+    ("hono-bun", "Hono", "Bun"),
     ("sveltekit", "SvelteKit", "Svelte"),
     ("next", "Next.js", "React"),
     ("nuxt", "Nuxt", "Vue"),
@@ -457,11 +457,11 @@ fn levels(tfb: Option<&Json>) -> Vec<(String, String)> {
 /// The stacks the token table shows: the counter's name, the table's.
 const STACKS: &[(&str, &str)] = &[
     ("Wisp", "Wisp"),
-    ("Nuxt (Vue)", "Nuxt (Vue)"),
+    ("Nuxt (Vue)", "Nuxt"),
     ("SvelteKit", "SvelteKit"),
-    ("Next.js", "Next.js (React)"),
-    ("Express (Node.js)", "Express (Node.js)"),
-    ("React (Vite + Express)", "React (Vite + Express)"),
+    ("Next.js", "Next.js"),
+    ("Express (Node.js)", "Express"),
+    ("React (Vite + Express)", "React"),
 ];
 
 /// `$OUT_DIR/tokens.rs`, two tables of the same counts. TOKENS: [(stack, share of the
@@ -496,7 +496,7 @@ fn tokens(counts: Option<&Json>) -> Vec<(String, String)> {
         let _ = write!(
             out,
             "({:?}, &[{}], {:?}, {:?}, {}),",
-            r.str("stack").unwrap_or(""),
+            STACKS.iter().find(|(k, _)| Some(*k) == r.str("stack")).map_or(r.str("stack").unwrap_or(""), |s| s.1),
             by.join(","),
             commas(num(r.get("tokens")) as u64),
             commas(num(r.get("chars")) as u64),
