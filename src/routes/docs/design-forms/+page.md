@@ -35,6 +35,7 @@ fn remove(id: u64) {
 - A form that posts to `?/name` needs `#[action] fn name` in the same page: the build says so when it is missing (a layout or component may post to the page that uses it, so only a page's own markup is checked).
 - A form with no `action` (and `method="post"`) posts to `default`.
 - `<button action="?/remove&id={todo.id}">` outside a form becomes its own `<form method="post"><button formaction="...">`. Works without JS.
+- `#[model(saved, crud)]` on a model in the page's block writes the page's `add`, `remove` and `update` actions ([Data](/docs/data/)); the page then only names them: `<form action="?/add" fields />`, `<button action="?/remove&id={todo.id}">`.
 - `<form fields>` writes a labelled input per parameter of the action (`fields={post}` starts them from `post`); text with `#[validate(one_of = "draft live")]` is a `<select>` of those. A `fields` form with no button gets one: `Send` for `fn default`, `Save` with `{post}`, else the action's name; `<form fields />` is the whole form and `<form fields="Log in" />` names its button.
 - Query parameters in an action URL are read like form fields (`id` above is `id: u64`).
 - A body with `.await` makes the action `async` (`#[action]` adds it); never write `async` there.
@@ -42,7 +43,7 @@ fn remove(id: u64) {
 
 ## Validation
 
-- Parameter rules: `#[validate(...)]` with `len`, `min`, `max`, `min_len`, `max_len`, `email`. Same as a `FromJson` field.
+- Parameter rules: `#[validate(...)]` with `len`, `min`, `max`, `min_len`, `max_len`, `email`. Same as a `FromJson` field. A `Password` (a parameter, a remote argument or a field) with no `min_len` or `len` of its own is held to 8 characters, on the server and as the input's `minlength`; `#[validate(min_len = 12)]` changes it.
 - Every parameter is read and checked first, so one 422 lists each failure by field (`wisp::rt::input::read`), from a form or a JSON body.
 - A parameter may be a struct with `#[derive(FromJson)]` or `Rest` (`fn default(post: Post)`). Fields are read by name (text by the field's type, blank field = missing) or from JSON, and checked by their own `#[validate]` (`wisp::rt::input::whole`).
 - A failure, or `return invalid("text", "...")`, shows the page again as a 422.

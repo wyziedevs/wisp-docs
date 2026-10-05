@@ -64,6 +64,7 @@ let me = cx.user()?; // members' page: signed-in row or redirect
 
 - `user`, `login` and `signup` take the users table for you: the lone `Table` of a model with a `Password` field in `src/db.rs`, else the one `wisp::users(&db::USERS)` names in `init` (the build adds it; `&USERS` first still works, and is how a second table is used).
 - The page at `/login` is the convention; `wisp::sign_in_page("/enter")` in `init` names another.
+- A typed `Password` is at least 8 characters unless its `#[validate(min_len = …)]` or `len` says otherwise (a 422 on the field before any hashing); log in with a `String`, so an old shorter password is still checked, not refused.
 
 ### Sign Out Everywhere
 

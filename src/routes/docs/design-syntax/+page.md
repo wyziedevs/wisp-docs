@@ -42,7 +42,7 @@ Syntax | Compiles to
 `{@html expr}` | Unescaped `Display` (you promise it is safe)
 `{@const x = expr}` | `let x = expr;`
 `{#if c}…{:else if c}…{:else}…{/if}` | `if`/`else`; `if let` works; a bare place, `{#if user.avatar}`, tests `Some`, non-empty or `true`
-`{#each e as pat[, i] [if cond]}…{:else}…{/each}` | `for`; `if cond` keeps matching items; a plain place like `data.posts` is borrowed
+`{#each e as pat[, i] [if cond]}…{:else}…{/each}` | `for`; `if cond` keeps matching items; a plain place like `data.posts`, a local or a `STATIC` is borrowed, so `{#each TODOS as todo}` walks a table's rows (`TODOS.all()`)
 `{#match e}{:case pat}…{/match}` | `match`; a plain place is borrowed
 `{#await f}…{:then v}…{:catch e}…{/await}` | Page streams `v` or `e` later ([Streaming a page](/docs/design-state/))
 `{@render children()}` or `<slot />` | Layout or component slot
