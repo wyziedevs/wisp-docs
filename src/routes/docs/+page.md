@@ -179,5 +179,4 @@ wisp build      # one release binary
 **Project**
 
 - [Tokens](/docs/tokens/): What an app costs to write in AI tokens, measured against other stacks
-- [Tokens, app by app](/docs/tokens-apps/): Four small apps in Wisp and six other frameworks, with the Wisp versions
 - [Security and hardening](/docs/security/): What is hardened, how it is fuzzed and tested, and what is not claimed

@@ -195,16 +195,16 @@ The same five features (a list page, a contact form, a JSON endpoint, a layout a
 <table class="tally">
 <thead><tr><th scope="col">Stack</th><th scope="col"><span class="sr">Relative size</span></th><th scope="col" class="num">Tokens</th><th scope="col" class="num">Files</th></tr></thead>
 <tbody>
-<tr class="us"><th scope="row">Wisp</th><td class="meter" aria-hidden="true"><span style="--v: 0.277"></span></td><td class="num">432</td><td class="num">6</td></tr>
-<tr><th scope="row">Nuxt (Vue)</th><td class="meter" aria-hidden="true"><span style="--v: 0.669"></span></td><td class="num">1,043</td><td class="num">8</td></tr>
-<tr><th scope="row">SvelteKit</th><td class="meter" aria-hidden="true"><span style="--v: 0.728"></span></td><td class="num">1,134</td><td class="num">9</td></tr>
-<tr><th scope="row">Next.js (React)</th><td class="meter" aria-hidden="true"><span style="--v: 0.736"></span></td><td class="num">1,146</td><td class="num">8</td></tr>
-<tr><th scope="row">Express (Node.js)</th><td class="meter" aria-hidden="true"><span style="--v: 0.857"></span></td><td class="num">1,335</td><td class="num">7</td></tr>
-<tr><th scope="row">React (Vite + Express)</th><td class="meter" aria-hidden="true"><span style="--v: 1.000"></span></td><td class="num">1,558</td><td class="num">8</td></tr>
+<tr class="us"><th scope="row">Wisp</th><td class="meter" aria-hidden="true"><span style="--v: 0.296"></span></td><td class="num">476</td><td class="num">7</td></tr>
+<tr><th scope="row">Nuxt (Vue)</th><td class="meter" aria-hidden="true"><span style="--v: 0.649"></span></td><td class="num">1,043</td><td class="num">8</td></tr>
+<tr><th scope="row">SvelteKit</th><td class="meter" aria-hidden="true"><span style="--v: 0.706"></span></td><td class="num">1,134</td><td class="num">9</td></tr>
+<tr><th scope="row">Next.js (React)</th><td class="meter" aria-hidden="true"><span style="--v: 0.714"></span></td><td class="num">1,146</td><td class="num">8</td></tr>
+<tr><th scope="row">Express (Node.js)</th><td class="meter" aria-hidden="true"><span style="--v: 0.868"></span></td><td class="num">1,394</td><td class="num">8</td></tr>
+<tr><th scope="row">React (Vite + Express)</th><td class="meter" aria-hidden="true"><span style="--v: 1.000"></span></td><td class="num">1,606</td><td class="num">10</td></tr>
 </tbody>
 </table>
 
-A bigger app, with sign up and in, a posts table, uploads, live refresh and a component, is 960 tokens in Wisp, 3,473 in SvelteKit and 3,331 in Next.js. The numbers come from `cargo run -p wisp-tokens`, which counts every hand-written file and its path with a byte-pair style estimate; the [Tokens page](/docs/tokens/) has the method and the apps.
+A bigger app, with sign up and in, a posts table, uploads, live refresh and a component, is 1,014 tokens in Wisp, 3,497 in SvelteKit and 3,349 in Next.js. The numbers come from `cargo run -p wisp-tokens`, which counts every hand-written file and its path with a byte-pair style estimate; the [Tokens page](/docs/tokens/) has the method and the apps.
 
 </div>
 </div>

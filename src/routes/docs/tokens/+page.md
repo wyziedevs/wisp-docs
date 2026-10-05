@@ -5,7 +5,7 @@ group: Project
 order: 90
 ---
 
-An AI reads and writes code by the token, so an app's cost is measured in tokens, and keeping it low is a Wisp principle ([Design and files](/docs/design/)). Run `cargo run -q -p wisp-tokens --release` for the numbers. The four-app comparison against six frameworks: [Tokens, app by app](/docs/tokens-apps/).
+An AI reads and writes code by the token, so an app's cost is measured in tokens, and keeping it low is a Wisp principle ([Design and files](/docs/design/)). Run `cargo run -q -p wisp-tokens --release` for the numbers.
 
 ## Five Features, Counted by `wisp-tokens`
 
@@ -25,26 +25,26 @@ The Node apps: Nuxt is file routes, server routes in `server/api` and `useFetch`
 
 | Stack | list | form | api | layout | search | data | setup | total | chars / 4 | files |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| **Wisp** | 58 | 79 | 31 | 60 | 96 | 108 | 0 | **432** | 264 | 6 |
+| **Wisp** | 58 | 79 | 31 | 60 | 96 | 108 | 44 | **476** | 299 | 7 |
 | SvelteKit 2 | 128 | 602 | 57 | 83 | 192 | 72 | 0 | 1134 | 696 | 9 |
 | Next.js 15 | 107 | 575 | 44 | 108 | 241 | 71 | 0 | 1146 | 782 | 8 |
 | Nuxt 4 (Vue) | 96 | 600 | 22 | 96 | 158 | 71 | 0 | 1043 | 670 | 8 |
-| React 19 (Vite + Express) | 108 | 696 | 32 | 268 | 191 | 161 | 102 | 1558 | 1076 | 8 |
-| Express 5 + EJS | 128 | 602 | 34 | 116 | 291 | 69 | 95 | 1335 | 777 | 7 |
+| React 19 (Vite + Express) | 108 | 696 | 32 | 268 | 191 | 161 | 150 | 1606 | 1103 | 10 |
+| Express 5 + EJS | 128 | 602 | 34 | 116 | 291 | 69 | 154 | 1394 | 807 | 8 |
 | Axum 0.8 + askama | 145 | 894 | 29 | 104 | 217 | 123 | 291 | 1803 | 1239 | 7 |
 | Actix Web 4 + tera | 164 | 906 | 46 | 104 | 237 | 123 | 298 | 1878 | 1279 | 7 |
 
 </div>
 
-Wisp's `data` is longer than JavaScript's: a Rust type with its fields' types. Most of the rest is shorter, the form most of all; the exception is `api`, where Nuxt (22) and Axum (29) are shorter than Wisp (31). Against Wisp's total, Nuxt is 2.4 times, SvelteKit 2.6, Next.js 2.7, Express 3.1, React 3.6, Axum 4.2 and Actix 4.3. Of what is left, 108 tokens are the Rust type and data, and the rest is markup every stack writes.
+Wisp's `data` is longer than JavaScript's: a Rust type with its fields' types. Most of the rest is shorter, the form most of all; the exception is `api`, where Nuxt (22) and Axum (29) are shorter than Wisp (31). Against Wisp's total, Nuxt is 2.2 times, SvelteKit 2.4, Next.js 2.4, Express 2.9, React 3.4, Axum 3.8 and Actix 3.9. Of what is left, 108 tokens are the Rust type and data, and the rest is markup every stack writes.
 
 ## A Real App: Auth, CRUD, Upload, Live, a Component
 
-`bench/tokens/real` is sign up and in, a posts table with validation, edit, delete, pages and live refresh, an avatar upload and a toggle component: 10 files, **960** tokens in Wisp, 3.6x less than SvelteKit 2 and 3.5x less than Next.js 15. The Wisp app has tests for every feature (`bench/tokens/real/wisp/src/tests.rs`); the SvelteKit and Next.js apps have none, so their behavior is checked by reading, not by tests.
+`bench/tokens/real` is sign up and in, a posts table with validation, edit, delete, pages and live refresh, an avatar upload and a toggle component: 11 files, **1,014** tokens in Wisp, 3.4x less than SvelteKit 2 and 3.3x less than Next.js 15. The Wisp app has tests for every feature (`bench/tokens/real/wisp/src/tests.rs`); the SvelteKit and Next.js apps have none, so their behavior is checked by reading, not by tests.
 
 ## Method
 
-Counted: every file a developer (or an agent) writes by hand, beyond what the framework's generator gives, plus each file's path (writing a file means naming it, so two files cost more than one). Generated manifests (`package.json`, the `[package]` table of `Cargo.toml`) are left out everywhere; the dependency lines a developer adds by hand are counted as `setup` (Axum's and Actix's `[dependencies]`, Express's server setup), while `wisp new` writes Wisp's one dependency, so Wisp's `setup` is 0.
+Counted: every file a developer (or an agent) writes by hand, beyond what the framework's generator gives, plus each file's path (writing a file means naming it, so two files cost more than one). Manifests and configs count as `setup` for every stack, by the lines a developer adds beyond what the stack's generator writes (Wisp 44 for its `Cargo.toml`, Axum's and Actix's `[dependencies]`, Express's and React's `package.json` and server setup); the generated parts are left out. `cargo run -p wisp-tokens` lists each stack's counted and skipped files.
 
 What this favors: Wisp ships the form rules, the validation messages and the form markup (`<form fields />`), so most of the gap in `form` is work the other stacks write by hand or take from a library. That is the point of a batteries-included design, but read the totals as "what an app author writes", not as equal work by each framework. Only the Wisp apps have tests (`src/tests.rs`); the other stacks' apps are written to the same behavior and reviewed by hand, not checked by a test.
 
