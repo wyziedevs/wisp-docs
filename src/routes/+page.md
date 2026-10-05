@@ -55,7 +55,7 @@ fn remove(id: u64) {
 
 A route pays only for the features it uses, and a change that touches the request path is checked by an instructions-per-request A/B before it lands. Wisp's first rule is that speed is never traded away for convenience.
 
-The same app built for Node, Deno and Bun answers from the app's own HTTP parser over raw sockets and beat Hono on every route measured there. On workerd it is within 4 to 6% of Hono on small routes, 2.6 times ahead on a 1,000-item page, and slower to start (25 ms against 19). The wasm is 541 KB. The losses are listed with the numbers.
+The same app built for Node, Deno and Bun answers from the app's own HTTP parser over raw sockets. The measured tables against Hono on each host, with the machine and date, are on the benchmarks page. Rank tables against more frameworks are pending a valid run.
 
 <p class="more"><a href="/docs/benchmarks/">Results and How Speed Is Measured</a></p>
 
@@ -73,10 +73,14 @@ TechEmpower's plaintext and JSON tests, run with their own load scripts against 
 <thead><tr><th scope="col">Framework</th><th scope="col">Built On</th><th scope="col"><span class="sr">Relative speed</span></th><th scope="col" class="num">Req/s</th></tr></thead>
 <tbody>
 <tr class="us"><th scope="row">Wisp</th><td class="stack">Rust</td><td class="meter" aria-hidden="true"><span style="--v: 1.000"></span></td><td class="num">1,129,577</td></tr>
+<tr><th scope="row">Actix Web</th><td class="stack">Rust</td><td class="meter" aria-hidden="true"><span style="--v: 0.534"></span></td><td class="num">603,163</td></tr>
+<tr><th scope="row">Axum</th><td class="stack">Rust</td><td class="meter" aria-hidden="true"><span style="--v: 0.245"></span></td><td class="num">276,948</td></tr>
 <tr><th scope="row">Fastify</th><td class="stack">Node.js</td><td class="meter" aria-hidden="true"><span style="--v: 0.046"></span></td><td class="num">51,713</td></tr>
 <tr><th scope="row">Express</th><td class="stack">Node.js</td><td class="meter" aria-hidden="true"><span style="--v: 0.036"></span></td><td class="num">40,421</td></tr>
+<tr><th scope="row">Hono (Node)</th><td class="stack">Node.js</td><td class="meter" aria-hidden="true"><span style="--v: 0.026"></span></td><td class="num">28,966</td></tr>
 <tr><th scope="row">SvelteKit</th><td class="stack">Svelte</td><td class="meter" aria-hidden="true"><span style="--v: 0.010"></span></td><td class="num">10,929</td></tr>
-<tr><th scope="row">Next.js</th><td class="stack">React</td><td class="meter" aria-hidden="true"></td><td class="num">Out of memory</td></tr>
+<tr><th scope="row">Hono (Bun)</th><td class="stack">Bun</td><td class="meter" aria-hidden="true"><span style="--v: 0.009"></span></td><td class="num">10,599</td></tr>
+<tr><th scope="row">Next.js</th><td class="stack">React</td><td class="meter" aria-hidden="true"><span style="--v: 0.000"></span></td><td class="num">0</td></tr>
 </tbody>
 </table></div>
 <div class="bench"><table class="tally">
@@ -84,15 +88,19 @@ TechEmpower's plaintext and JSON tests, run with their own load scripts against 
 <thead><tr><th scope="col">Framework</th><th scope="col">Built On</th><th scope="col"><span class="sr">Relative speed</span></th><th scope="col" class="num">Req/s</th></tr></thead>
 <tbody>
 <tr class="us"><th scope="row">Wisp</th><td class="stack">Rust</td><td class="meter" aria-hidden="true"><span style="--v: 1.000"></span></td><td class="num">96,089</td></tr>
+<tr><th scope="row">Actix Web</th><td class="stack">Rust</td><td class="meter" aria-hidden="true"><span style="--v: 0.933"></span></td><td class="num">89,648</td></tr>
+<tr><th scope="row">Axum</th><td class="stack">Rust</td><td class="meter" aria-hidden="true"><span style="--v: 0.816"></span></td><td class="num">78,427</td></tr>
+<tr><th scope="row">Hono (Bun)</th><td class="stack">Bun</td><td class="meter" aria-hidden="true"><span style="--v: 0.620"></span></td><td class="num">59,619</td></tr>
 <tr><th scope="row">Fastify</th><td class="stack">Node.js</td><td class="meter" aria-hidden="true"><span style="--v: 0.229"></span></td><td class="num">21,965</td></tr>
 <tr><th scope="row">Express</th><td class="stack">Node.js</td><td class="meter" aria-hidden="true"><span style="--v: 0.153"></span></td><td class="num">14,746</td></tr>
 <tr><th scope="row">SvelteKit</th><td class="stack">Svelte</td><td class="meter" aria-hidden="true"><span style="--v: 0.108"></span></td><td class="num">10,378</td></tr>
+<tr><th scope="row">Hono (Node)</th><td class="stack">Node.js</td><td class="meter" aria-hidden="true"><span style="--v: 0.094"></span></td><td class="num">8,988</td></tr>
 <tr><th scope="row">Next.js</th><td class="stack">React</td><td class="meter" aria-hidden="true"><span style="--v: 0.016"></span></td><td class="num">1,524</td></tr>
 </tbody>
 </table></div>
 </div>
 
-Wisp is first on plaintext at 256, 1,024 and 4,096 connections, and first on JSON at 3 of 6 levels. The tables show the stacks most people know; the full results also include two other Rust servers, Actix Web and Axum, which are close to Wisp on JSON, and Actix Web is ahead at 16 and 256 connections. Next.js ran out of memory on the pipelined plaintext test, so it has no number there. At 16,384 connections Wisp's default limit of 10,000 refuses the overflow, and most servers collapse there too. This is not an official TechEmpower result: the VM is shared, and the gaps between the Rust servers are about the size of its noise.
+Source: [`bench/tfb`](https://github.com/wyziedevs/wisp/blob/main/bench/tfb/RESULTS.md), run 2026-10-04 on a shared 4-vCPU AMD EPYC 7B13 VM, wrk, medians of 3 runs of 15 seconds, server on 2 pinned cores; sorted by requests per second. Every contender, both workloads and all connection levels are in the full results; this is not an official TechEmpower result, and the same binary moved between moments on this shared VM, so gaps inside the min-max ranges are ties.
 
 <p class="more"><a href="https://github.com/wyziedevs/wisp/blob/main/bench/tfb/RESULTS.md">Full Results</a></p>
 

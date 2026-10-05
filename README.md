@@ -63,4 +63,4 @@ The Pages project is `wisp-docs`, with the custom domain `wispweb.dev` (a CNAME 
 
 ## License
 
-[MIT](LICENSE)
+[MIT](LICENSE). Made by [Wyzie LLC](https://wyzie.io) for the community.
