@@ -81,10 +81,11 @@
   .install {
     display: inline-flex;
     align-items: center;
-    gap: 0.25rem;
-    max-width: 100%;
+    justify-content: space-between;
+    gap: 1.5rem;
+    width: min(100%, 26rem);
     margin-top: 2rem;
-    padding: 0.5rem 1.5rem;
+    padding: 0.5rem 0.5rem 0.5rem 1.5rem;
     border: 1px solid var(--line);
     border-radius: var(--pill);
     background: var(--panel);
@@ -95,7 +96,7 @@
     padding: 0;
     background: none;
     overflow-x: auto;
-    font: 0.875rem/1.6 var(--mono);
+    font: 1rem/1.6 var(--mono);
     white-space: nowrap;
     scrollbar-width: none;
   }
@@ -108,7 +109,7 @@
   @media (max-width: 30rem) {
     .install {
       border-radius: var(--radius-lg);
-      padding-inline: 1rem;
+      padding-inline: 1rem 0.5rem;
     }
 
     .install code {
@@ -117,12 +118,11 @@
     }
   }
 
-  /* The copy button (round, see 1-base.css) sits nearer the edge than the text does. */
+  /* The copy button (round, see 1-base.css) sits at the right end of the field. */
   .copy-icon {
     --size: 2.25rem;
     position: relative;
     --fg: var(--ash);
-    margin-right: -1rem;
   }
 
   .copy-icon:active {
