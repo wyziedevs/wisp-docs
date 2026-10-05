@@ -26,7 +26,7 @@ my-app/
   static/...          served as-is at /
 ```
 
-Each `src/NAME.rs` (not `main.rs`, `lib.rs`, `hooks.rs`) is the module `crate::NAME` with no `mod` line, prelude in scope like a route file. Routes, `---` blocks, templates and `hooks.rs` reach it as `NAME` (`db::find(id)`). A file that `main.rs` or `lib.rs` declares (`mod db;`) is left to them.
+Each `src/NAME.rs` (not `main.rs`, `lib.rs`, `hooks.rs`) is the module `crate::NAME` with no `mod` line, prelude in scope like a route file. Routes, `---` blocks, templates and `hooks.rs` reach it as `NAME` (`db::find(id)`), and its `pub` items by name alone (`find(id)`): see auto-imports in [Pages](/docs/design-pages/). A file that `main.rs` or `lib.rs` declares (`mod db;`) is left to them; its `pub` items are auto-imported too.
 
 ## Routes
 

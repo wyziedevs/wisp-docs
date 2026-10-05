@@ -343,7 +343,7 @@ After a visitor signs, show "Thanks for signing" once on the next page.
 <details class="solution">
 <summary>Show Solution</summary>
 
-Flash a message in the action, and read it in the block. Reading it deletes it, so it shows once:
+Flash a message in the action, and show it with `{@flash}`. It shows once:
 
 ```html
 ---
@@ -355,15 +355,12 @@ fn sign(entry: Entry) {
 }
 
 let entries = ENTRIES.all();
-let thanks = cx.flashed();
 ---
+
+{@flash}
 ```
 
-```html
-{#if let Some(message) = thanks}
-  <p role="status">{message}</p>
-{/if}
-```
+`{@flash}` writes `<p class="flash" role="status">Thanks for signing</p>`, or nothing; in a layout it shows on every page below it. `cx.flashed()` reads it in a block instead.
 
 Wisp adds `cx` to the action when its body uses it. The message waits in a cookie until the next page reads it.
 

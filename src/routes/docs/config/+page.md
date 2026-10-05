@@ -44,6 +44,7 @@ Lists of strings in `Cargo.toml`, checked and baked at build.
 | `headers = [...]` | headers by path |
 | `i18n = [...]` | locale routing: `default`, `prefix`, `domain`, `missing` ([Tooling, images and translations](/docs/design-tooling/)) |
 | `use = [...]` | plugin crates the build loads |
+| `auto = [...]` | items of dependencies every file may use with no `use` line, only where named: `"chrono::{Utc, DateTime}"`, `"uuid::Uuid"`, `"x::Y as Z"` ([Pages](/docs/design-pages/)) |
 | `extends = ["../base"]` | layers: an app's layout, components and static files under yours |
 
 </div>

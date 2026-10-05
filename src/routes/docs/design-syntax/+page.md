@@ -50,6 +50,8 @@ Syntax | Compiles to
 `{@render row(x, 0)}` | Renders a snippet
 `<head>…</head>` or `<wisp:head>…</wisp:head>` | Appended to the document head
 `<title>…</title>` at top level | Same as in `<head>` (not an `<svg>`'s). One per page: of a page and its layouts the innermost that writes a `<title>` wins, decided at build time
+`<title description="…" image="/og.png">T</title>` | The title, and in the head `<meta name="description">`, `og:title`, `og:description`, `og:image` and a large `twitter:card` (each when given; text, holes or `{expr}`)
+`{@flash}` | `<p class="flash" role="status">` with the message `cx.flash(..)` left, once (the page's server takes it first), or nothing; in a page or layout
 `{cx.path()}` | `cx`, the request (`&Cx`), in pages, layouts, error pages
 
 - Expressions are Rust passed to `rustc` verbatim, so type errors are real. Inside `<script>`, `<style>` and HTML comments there are no holes, so CSS and JS braces need no escaping. Comments are stripped.

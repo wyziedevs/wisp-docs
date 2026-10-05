@@ -52,7 +52,7 @@ fn before(cx: &mut Cx) -> Result<()> {
 | `cx.bearer()` | token of an `Authorization: Bearer` header |
 | `cx.host()` | the `Host` |
 | `cx.delete_cookie(name)` | removes a cookie |
-| `cx.flash("Saved")` | message for the next page (after a `redirect`, say); its `load` reads it once with `cx.flashed()` |
+| `cx.flash("Saved")` | message for the next page (after a `redirect`, say); `{@flash}` in a page or layout shows it once (`cx.flashed()` in a block reads it) |
 | `cx.after(\|\| ...)` | runs once the handler is through, on the connection's thread when next free (`wisp::spawn`, then a yield): a log line, a `revalidate_tag`. Costs nothing on a request that does not call it. At the edge it is `wisp::spawn`, so the host keeps the instance alive (`waitUntil` on Cloudflare) |
 
 </div>

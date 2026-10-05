@@ -25,13 +25,16 @@ order: 80
 | `wisp build --client ts [--out client.ts]` | a typed TypeScript client of the `+server.rs` endpoints |
 | `wisp openapi [-o\|--out openapi.json]` | print the OpenAPI 3.1 document, or write it |
 | `wisp openapi --check` | fail if the committed file is stale (CI) |
-| `wisp check [--types]` | check routes and templates without compiling; `--types` runs `tsc` too |
+| `wisp check [--types] [--rust] [--explain-imports]` | check routes and templates without compiling; `--types` runs `tsc` too; `--rust` type-checks the Rust with `cargo check` (no codegen, no link: the fastest full check); `--explain-imports` lists the names each file uses with no `use` line and where each comes from |
 | `wisp test [--browser] [args]` | `cargo test` with its args; `--browser` runs browser tests too |
 | `wisp fmt [paths]` | format `.wisp` files (markup, the `---` block, scripts, styles) |
 | `wisp fmt --check` | name unformatted files and fail if any |
 | `wisp fmt --stdin [path]` | format stdin to stdout, as the file at path (editors) |
 | `wisp routes` | each route's methods, URL and file |
-| `wisp new-route <path> [page\|server\|rest]` | write a page, endpoint or REST resource |
+| `wisp new-route <path> [page\|form\|layout\|server\|rest]` | write a page, form page, layout, endpoint or REST resource |
+| `wisp add page\|form\|layout\|server\|rest\|api <path>` | the same as `new-route` (the path has a `/`, so it is not an npm package) |
+| `wisp add crud <path>` | a list (delete, pages), a new form and an edit form for a table; its `#[model]` and `Table::saved()` go into `src/db.rs` when missing |
+| `wisp add component <Name>` | `src/components/Name.wisp` with a prop and a slot |
 | `wisp deploy init <host> [--force]` | a GitHub Actions workflow that deploys on push |
 | `wisp deploy init fly\|render\|railway [--force]` | that host's config (and a `Dockerfile`) |
 | `wisp add <pkg>[@version]` | add an npm package to `package.json`; no Node needed |

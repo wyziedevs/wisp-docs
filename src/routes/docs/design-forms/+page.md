@@ -31,6 +31,7 @@ fn remove(id: u64) {
 - A form that posts to `?/name` needs `#[action] fn name` in the same page: the build says so when it is missing (a layout or component may post to the page that uses it, so only a page's own markup is checked).
 - A form with no `action` (and `method="post"`) posts to `default`.
 - `<button action="?/remove&id={todo.id}">` outside a form becomes its own `<form method="post"><button formaction="...">`. Works without JS.
+- `<form fields>` writes a labelled input per parameter of the action (`fields={post}` starts them from `post`); text with `#[validate(one_of = "draft live")]` is a `<select>` of those. A `fields` form with no button gets one: `Send` for `fn default`, `Save` with `{post}`, else the action's name; `<form fields />` is the whole form and `<form fields="Log in" />` names its button.
 - Query parameters in an action URL are read like form fields (`id` above is `id: u64`).
 - A body with `.await` makes the action `async` (`#[action]` adds it); never write `async` there.
 - Cookies, sessions and sign-in: [Cookies and sign-in](/docs/design-sessions/).

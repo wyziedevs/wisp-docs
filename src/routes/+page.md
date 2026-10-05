@@ -214,7 +214,7 @@ A bigger app, with sign up and in, a posts table, uploads, live refresh and a co
 
 <Claim id="status">
 
-## Young, and Actively Hardened
+## Tested and Actively Hardened
 
 Wisp is new, and that is a fair worry. What backs it: over a thousand tests run on every change, seeded fuzzing of the HTTP, HTTP/2, template and formatter parsers, a table of request-smuggling shapes each refused on both HTTP versions, every fast path proven at startup with a fallback, and no `unsafe` outside the Linux I/O drivers and the edge exports. It is not audited, and it is not claimed to be unbreakable. Issues are welcome.
 
