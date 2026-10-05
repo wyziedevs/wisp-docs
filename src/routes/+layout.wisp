@@ -214,6 +214,7 @@ let ld = match me {
       <a class="brand" href="/"><img src="/favicon.svg" alt="" width="28" height="28"> Wisp</a>
       <p>A fast, fun web framework for Rust.</p>
       <p class="maker">Made by <a href="https://wyzie.io">Wyzie LLC</a> for the community. <a href="https://github.com/wyziedevs/wisp/blob/main/LICENSE">MIT licensed</a>, open source.</p>
+      <p class="bye">Boo. Thanks for stopping by.</p>
     </div>
     <nav aria-label="Learn">
       <h2>Learn</h2>

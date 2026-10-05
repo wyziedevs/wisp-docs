@@ -1,0 +1,147 @@
+/* ---- Touch: presses, nudges and the ghost's small reactions ------------ */
+/* Header, footer and controls only, never docs prose. Transform, opacity and
+   color only, ease-out quart and expo, no bounce. Reduced motion keeps the
+   color changes and drops every movement (8-ghost.css turns motion off too). */
+
+::selection {
+  background: color-mix(in oklch, var(--accent) 28%, transparent);
+}
+
+:root {
+  --quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Designed focus: the ring sits off the edge in the accent. */
+:is(a, button, summary, input, [role=tab]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Footer links tint on hover everywhere; the sign-off is quiet. */
+.foot nav a,
+.foot .maker a {
+  transition: color 160ms var(--quart);
+}
+
+.foot .bye {
+  margin-top: 0.75rem;
+  color: var(--muted, currentColor);
+  font-size: 0.85em;
+  opacity: 0.8;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* The header ghost leans in on hover and squishes on press. */
+  .top .brand .ghost {
+    display: inline-block;
+    transition: transform 220ms var(--ease);
+  }
+
+  .top .brand:hover .ghost {
+    transform: translateY(-2px) rotate(-6deg);
+  }
+
+  .top .brand:active .ghost {
+    transform: scale(1.08, 0.88);
+    transition-duration: 90ms;
+  }
+
+  /* Its eyes blink when the logo is pressed. */
+  .top .brand .eye {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 120ms var(--quart);
+  }
+
+  .top .brand:active .eye {
+    transform: scaleY(0.15);
+  }
+
+  /* Nav links: an underline slides in from the left. */
+  .links a {
+    position: relative;
+  }
+
+  .links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    transition: transform 220ms var(--ease);
+  }
+
+  .links a:is(:hover, :focus-visible)::after {
+    transform: scaleX(1);
+  }
+
+  /* The search field eases its ring in. */
+  .search input {
+    transition: border-color 200ms var(--quart), background-color 200ms var(--quart);
+  }
+
+  /* Theme switch: the icon turns a quarter on press, settling with expo. */
+  .theme svg {
+    transition: transform 360ms var(--ease);
+  }
+
+  .theme:active svg {
+    transform: rotate(-30deg) scale(0.9);
+    transition-duration: 90ms;
+  }
+
+  .mnav[open] summary svg {
+    transform: rotate(90deg);
+  }
+
+  .mnav summary svg {
+    transition: transform 280ms var(--ease);
+  }
+
+  /* Footer: links nudge right, the ghost mark hops. */
+  .foot nav a {
+    display: inline-block;
+    transition: color 160ms var(--quart), transform 200ms var(--ease);
+  }
+
+  .foot nav a:hover {
+    transform: translateX(3px);
+  }
+
+  .foot .brand img {
+    transition: transform 260ms var(--ease);
+  }
+
+  .foot .brand:hover img {
+    transform: translateY(-3px) rotate(-8deg);
+  }
+
+  .foot .brand:active img {
+    transform: scale(1.1, 0.9);
+    transition-duration: 90ms;
+  }
+
+  /* Buttons outside docs prose: press down to 0.97, release with expo. */
+  :is(button, .btn, [type=submit]):not(.content *) {
+    transition: transform 200ms var(--ease), color 160ms var(--quart), background-color 160ms var(--quart), opacity 160ms var(--quart);
+  }
+
+  :is(button, .btn, [type=submit]):not(.content *):active {
+    transform: scale(0.97);
+    transition-duration: 80ms;
+  }
+
+  /* Search hits slide a touch toward the pointer. */
+  .hits a {
+    transition: transform 180ms var(--ease), background-color 140ms var(--quart), color 140ms var(--quart);
+  }
+
+  .hits a:hover,
+  .hits [aria-selected=true] a {
+    transform: translateX(2px);
+  }
+}

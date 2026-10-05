@@ -174,55 +174,60 @@
   font: inherit;
 }
 
-/* The token comparison. */
-.pair {
-  display: grid;
-  gap: 1.5rem;
-  margin-bottom: 3rem;
-}
-
-@media (min-width: 60rem) {
-  .pair {
-    grid-template-columns: 1fr 1fr;
-    align-items: start;
-  }
-}
-
-.cmp {
-  min-width: 0;
+/* The benefit list: one line each, a link to the proof. */
+.points {
   margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.cmp figcaption {
-  margin-bottom: 0.625rem;
+.points li {
+  padding: 0.875rem 0;
+  border-top: 1px solid var(--line);
   color: var(--slate);
-  font-size: var(--fs-sm);
-  font-weight: 500;
+  font-size: var(--fs-lede);
 }
 
-.cmp .scroll {
-  max-height: 24rem;
-  overflow: auto;
+.points li:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.points strong {
+  color: var(--ink);
+}
+
+.points a {
+  white-space: nowrap;
+}
+
+.claim p.source {
+  margin-top: 1.25rem;
+  font-size: var(--fs-sm);
+}
+
+.start .sec-head {
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.start .cta {
+  justify-content: center;
 }
 
 /* Launch sections rise into place as they scroll in (CSS only, where supported), on the home page alone. */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    :root:has(.hero) :is(.sec-head, .band .claim, .band .sample, .demo, .pair .cmp, .hosts) {
+    :root:has(.hero) :is(.sec-head, .band .claim, .band .sample, .demo, .points, .hosts) {
       animation: rise var(--ease) both;
       animation-timeline: view();
       animation-range: entry 0% entry 60%;
     }
 
-    .pair .cmp + .cmp {
-      animation-range: entry 10% entry 70%;
-    }
-  }
 }
 
 
 /* GSAP (src/lib/motion.js) takes over the rise once it has loaded. */
-.gsap :is(.sec-head, .band .claim, .band .sample, .demo, .pair .cmp, .hosts) {
+.gsap :is(.sec-head, .band .claim, .band .sample, .demo, .points, .hosts) {
   animation: none;
 }
 
