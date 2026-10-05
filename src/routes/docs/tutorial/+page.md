@@ -60,7 +60,7 @@ Create `src/db.rs`. It holds the models and tables, and its `pub` items are visi
 
 ```rust
 #[model]
-pub struct Entry {
+struct Entry {
     #[validate(len = 1..=40)]
     name: String,
     #[validate(len = 1..=200)]
@@ -70,7 +70,7 @@ pub struct Entry {
 pub static ENTRIES: Table<Entry> = Table::saved();
 ```
 
-`#[model]` makes `Entry` something a form can fill and a table can store, and its fields public. `#[validate]` states the rule once: a name has 1 to 40 characters and a message 1 to 200. `Table::saved()` keeps the rows in a log file, so they survive a restart.
+`#[model]` makes `Entry` something a form can fill and a table can store, and it and its fields public. `#[validate]` states the rule once: a name has 1 to 40 characters and a message 1 to 200. `Table::saved()` keeps the rows in a log file, so they survive a restart.
 
 ## Add the Form
 

@@ -46,7 +46,7 @@ A model lives in `src/db.rs`; its `pub` items are in every route file:
 
 ```rust
 #[model]
-pub struct Todo {
+struct Todo {
     #[validate(len = 1..=100)]
     text: String,
 }

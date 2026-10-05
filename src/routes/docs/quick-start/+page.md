@@ -109,7 +109,7 @@ A form posts to an action. The action's parameters are the form's fields, and `f
 
 ```rust
 #[model]
-pub struct Entry {
+struct Entry {
     #[validate(len = 1..=40)]
     name: String,
     #[validate(len = 1..=200)]

@@ -16,7 +16,7 @@ Here is a todo list that validates its input, keeps its rows across restarts and
 
 ```rust
 #[model]
-pub struct Todo {
+struct Todo {
     #[validate(len = 1..=100)]
     text: String,
 }
