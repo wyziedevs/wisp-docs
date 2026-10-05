@@ -20,6 +20,8 @@ Saved before memory changes, read at first use: a log file per table (`note.log`
 
 Tables hold every row in memory; for larger data or database-side queries write the handlers.
 
+Never a panic at load: a torn last line of a log (a crash mid-write) is dropped, a corrupt line in the middle is skipped with one logged warning giving the count and file, and a row that no longer reads as its type is skipped with a warning naming it (its id stays taken and its line stays in the store, to fix or migrate).
+
 ## Any Database
 `wisp::store(Db)` in `init`: implement `wisp::Store`:
 

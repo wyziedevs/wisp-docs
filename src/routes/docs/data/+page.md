@@ -44,7 +44,7 @@ wisp::cron("0 3 * * *", || async { purge().await }); // UTC
 wisp::queue("mail").push(&Mail { to, body }); // .later(secs, &job)
 ```
 
-- Jobs live in the saved table `queue-mail`. A failure (`Err` or a panic) is tried again after 4, 8, 16... seconds (an hour at most), five tries; then it stays `dead` with its last error (`queue.dead()`, `queue.retry(id)`).
+- Jobs live in the saved table `queue-mail` (a name past 58 characters, or with other than letters, digits, `_` and `-`, gets a table named by its hash). `later(secs)` past the end of time waits, never wraps. A failure (`Err` or a panic) is tried again after 4, 8, 16... seconds (an hour at most), five tries; then it stays `dead` with its last error (`queue.dead()`, `queue.retry(id)`).
 - At least once: a job running when the process died runs again a minute later. One at a time per queue, in order.
 - `cron` takes five fields (`*`, `n`, `a-b`, `*/n`, lists; Sunday is 0 or 7), in UTC only. As in Vixie cron, a day field starting with `*` (`*/2`) is not a restriction on the day.
 - A minute already run never runs again, so a clock stepped back does not repeat it. A run missed while the machine slept runs once on waking. Near the end of time the next run is `None` and the task stops.
