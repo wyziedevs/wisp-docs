@@ -17,17 +17,10 @@
   outline-offset: 2px;
 }
 
-/* Footer links tint on hover everywhere; the sign-off is quiet. */
+/* Footer links tint on hover everywhere. */
 .foot nav a,
 .foot .maker a {
   transition: color 160ms var(--quart);
-}
-
-.foot .bye {
-  margin-top: 0.75rem;
-  color: var(--muted, currentColor);
-  font-size: 0.85em;
-  opacity: 0.8;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -55,28 +48,6 @@
 
   .top .brand:active .eye {
     transform: scaleY(0.15);
-  }
-
-  /* Nav links: an underline slides in from the left. */
-  .links a {
-    position: relative;
-  }
-
-  .links a::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 1px;
-    background: currentColor;
-    transform: scaleX(0);
-    transform-origin: 0 50%;
-    transition: transform 220ms var(--ease);
-  }
-
-  .links a:is(:hover, :focus-visible)::after {
-    transform: scaleX(1);
   }
 
   /* The search field eases its ring in. */

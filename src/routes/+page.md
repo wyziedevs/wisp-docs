@@ -9,7 +9,7 @@ description: Wisp is a fast, fun web framework for Rust with file routes, templa
 <div class="wrap">
 <div class="sec-head">
 <h2>A Page Is One File</h2>
-<p>The model, the actions and the markup of a whole page, with a form that validates itself.</p>
+<p>The model, the table, the actions and the markup sit in one file. The form writes its own inputs and errors, and a bad value is a 422 that keeps what was typed. JSON endpoints join the same file as a <code>mod server</code> block, and a model can move to <code>src/db.rs</code> once other pages need it.</p>
 </div>
 
 <Demo todos={&demo_todos(cx)}>
@@ -39,48 +39,23 @@ struct Todo {
 </div>
 </section>
 
-<section class="sec" id="why">
-<div class="wrap">
-<div class="claim wide">
-<h2>Why Wisp</h2>
-<ul class="points">
-<li><strong>Fast.</strong> Nothing extra on the request path. <a href="/docs/benchmarks/">Benchmarks</a></li>
-<li><strong>Cheap in tokens.</strong> The same app in less than half the tokens. <a href="/docs/tokens/">Tokens</a></li>
-<li><strong>Works without JavaScript.</strong> Forms post, validate and keep what was typed. <a href="/docs/design-forms/">Forms</a></li>
-<li><strong>One binary.</strong> Templates compile to Rust; styles and static files ship inside. <a href="/docs/design/">Design</a></li>
-<li><strong>Host anywhere.</strong> A VPS, a container, static HTML, edge or serverless. <a href="/docs/hosting/">Hosting</a></li>
-</ul>
-</div>
-</div>
-</section>
+<Claim id="fast">
 
-<Claim id="cheap">
+## Nothing Extra on the Hot Path
 
-## Less Than Half the Tokens
+A route pays only for the features it uses, and a change that touches the request path is checked by an instructions-per-request A/B before it lands. Wisp's first rule is that speed is never traded away for convenience.
 
-The same five features in each stack: a list, a contact form, a JSON endpoint, a layout and a live search.
+The same app built for Node, Deno and Bun answers from the app's own HTTP parser over raw sockets. The raw tables against Hono on each host, with the machine and date, are on the benchmarks page (run validity not recorded, no steal data; no ranking is drawn from them). Rank tables against more frameworks are pending a valid run.
 
-<table class="tally">
-<thead><tr><th scope="col">Stack</th><th scope="col"><span class="sr">Relative size</span></th><th scope="col" class="num">Tokens</th><th scope="col" class="num">Files</th></tr></thead>
-<tbody>
-<tr class="us"><th scope="row">Wisp</th><td class="meter" aria-hidden="true"><span style="--v: 0.298"></span></td><td class="num">476</td><td class="num">7</td></tr>
-<tr><th scope="row">Nuxt (Vue)</th><td class="meter" aria-hidden="true"><span style="--v: 0.652"></span></td><td class="num">1,043</td><td class="num">8</td></tr>
-<tr><th scope="row">SvelteKit</th><td class="meter" aria-hidden="true"><span style="--v: 0.709"></span></td><td class="num">1,134</td><td class="num">9</td></tr>
-<tr><th scope="row">Next.js (React)</th><td class="meter" aria-hidden="true"><span style="--v: 0.717"></span></td><td class="num">1,146</td><td class="num">8</td></tr>
-<tr><th scope="row">Express (Node.js)</th><td class="meter" aria-hidden="true"><span style="--v: 0.868"></span></td><td class="num">1,388</td><td class="num">8</td></tr>
-<tr><th scope="row">React (Vite + Express)</th><td class="meter" aria-hidden="true"><span style="--v: 1.000"></span></td><td class="num">1,599</td><td class="num">9</td></tr>
-</tbody>
-</table>
-
-<p class="more"><a href="/docs/tokens/">How It Is Counted</a></p>
+<p class="more"><a href="/docs/benchmarks/">Results and How Speed Is Measured</a></p>
 
 </Claim>
 
-<Claim id="fast">
+<Claim id="measured">
 
 ## Benchmarked Against Popular Frameworks
 
-TechEmpower's plaintext and JSON tests, every server on the same 2 cores.
+TechEmpower's plaintext and JSON tests, run with their own load scripts against TechEmpower's source for each framework that has one (SvelteKit and Next.js have none, so theirs are two plain route handlers in a production build), on one shared 4-vCPU AMD EPYC VM with every server pinned to the same 2 cores, 2026-10-04. Medians of 3 runs of 15 seconds each; framework versions are listed in the full results.
 
 <div class="benches">
 <div class="bench"><table class="tally">
@@ -117,36 +92,183 @@ TechEmpower's plaintext and JSON tests, every server on the same 2 cores.
 </div>
 </div>
 
-<p class="source">Source: <a href="https://github.com/wyziedevs/wisp/blob/main/bench/tfb/RESULTS.md">bench/tfb</a>, shared 4-vCPU VM, 2026-10-04, medians of 3 runs; not an official TechEmpower result.</p>
+Source: [`bench/tfb`](https://github.com/wyziedevs/wisp/blob/main/bench/tfb/RESULTS.md), 2026-10-04, shared 4-vCPU VM, medians of 3 runs. Not an official TechEmpower result. Close results are ties; the full results have the ranges.
 
-<p class="more"><a href="/docs/benchmarks/">Results and How Speed Is Measured</a></p>
-
-</Claim>
-
-<Claim id="hosts">
-
-## Builds for Your Host
-
-<Hosts />
+<p class="more"><a href="https://github.com/wyziedevs/wisp/blob/main/bench/tfb/RESULTS.md">Full Results</a></p>
 
 </Claim>
 
-<Claim id="status">
-
-## Status
-
-Wisp is new and not audited: over a thousand tests run on every change, and bugs are likely to remain. <a href="/docs/security/">What is hardened</a>
-
-</Claim>
-
-<section class="sec start" id="start">
+<section class="sec cheap" id="cheap">
 <div class="wrap">
-<div class="sec-head">
-<h2>Start Building</h2>
-<p class="cta">
-<a class="btn primary" href="/docs/quick-start/">Learn Wisp</a>
-<a class="btn" href="https://github.com/wyziedevs/wisp">GitHub</a>
-</p>
+<div class="claim wide">
+
+## Make the Same App with Less Than Half the Tokens
+
+An AI is paid for by the token, in time and money, for what it reads and writes. Wisp keeps that count low with conventions instead of config, types the compiler infers, and forms that write themselves. The whole reference is one file, [llms.txt and AGENTS.md](https://github.com/wyziedevs/wisp/blob/main/llms/AGENTS.md), and `wisp mcp` serves it to coding agents.
+
+```bash
+claude mcp add wisp -- wisp mcp
+```
+
+</div>
+
+<div class="pair">
+<figure class="cmp">
+<figcaption>Wisp: a contact form that validates, 79 tokens</figcaption>
+<div class="file">
+<div class="tabs"><span class="tab">+page.wisp</span></div>
+<div class="scroll" tabindex="0" aria-label="Wisp code">
+
+```html
+---
+fn default(#[validate(len = 1..=50)] name: String, email: Email) {
+    eprintln!("{name} <{email}>");
+    redirect("/")
+}
+---
+
+<title>Contact</title>
+<form fields />
+```
+
+</div>
+</div>
+</figure>
+<figure class="cmp">
+<figcaption>SvelteKit: the same form, 602 tokens</figcaption>
+<div class="file tabbed">
+<div class="tabs" role="radiogroup" aria-label="SvelteKit files">
+<input class="sr" type="radio" name="sk-file" id="sk-server" checked>
+<label for="sk-server">+page.server.js</label>
+<input class="sr" type="radio" name="sk-file" id="sk-page">
+<label for="sk-page">+page.svelte</label>
+</div>
+<div class="scroll pane pane-1" tabindex="0" aria-label="SvelteKit +page.server.js">
+
+```js
+import { error, fail, redirect } from '@sveltejs/kit';
+
+export const actions = {
+  default: async ({ request }) => {
+    const form = Object.fromEntries(await request.formData());
+    if (typeof form.name != 'string' || typeof form.email != 'string') error(400, 'missing form field');
+    const errors = {};
+    const n = [...form.name].length;
+    if (n < 1) errors.name = 'must have at least 1 character';
+    if (n > 50) errors.name = 'must have at most 50 characters';
+    if (!/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(form.email)) errors.email = 'must be an email address';
+    if (Object.keys(errors).length) return fail(422, { ...form, errors });
+    console.log(`${form.name} <${form.email}>`);
+    redirect(303, '/');
+  }
+};
+```
+
+</div>
+<div class="scroll pane pane-2" tabindex="0" aria-label="SvelteKit +page.svelte">
+
+```html
+<script>
+  import { enhance } from '$app/forms';
+  let { form } = $props();
+</script>
+
+<svelte:head><title>Contact</title></svelte:head>
+<form method="POST" use:enhance>
+  <label>Name <input name="name" required minlength="1" pattern="[\s\S]{0,50}" value={form?.name ?? ''} />
+    {#if form?.errors?.name}<small class="problem">{form.errors.name}</small>{/if}</label>
+  <label>Email <input name="email" type="email" required value={form?.email ?? ''} />
+    {#if form?.errors?.email}<small class="problem">{form.errors.email}</small>{/if}</label>
+  <button>Send</button>
+</form>
+```
+
+</div>
+</div>
+</figure>
+</div>
+
+<div class="claim wide">
+
+The same five features (a list page, a contact form, a JSON endpoint, a layout and a live search) written as a complete app in each stack. Every stack's form checks the same rules with the same messages, word for word: a name of 1 to 50 characters, counted as characters, and the HTML spec's email rule. Wisp's rules are built in, and the other stacks write them by hand. The one rule left apart: Wisp also takes an email domain with non-ASCII letters, as Firefox sends them. The [Tokens page](/docs/tokens/) lists what else a stack cannot match:
+
+<table class="tally">
+<thead><tr><th scope="col">Stack</th><th scope="col"><span class="sr">Relative size</span></th><th scope="col" class="num">Tokens</th><th scope="col" class="num">Files</th></tr></thead>
+<tbody>
+<tr class="us"><th scope="row">Wisp</th><td class="meter" aria-hidden="true"><span style="--v: 0.298"></span></td><td class="num">476</td><td class="num">7</td></tr>
+<tr><th scope="row">Nuxt (Vue)</th><td class="meter" aria-hidden="true"><span style="--v: 0.652"></span></td><td class="num">1,043</td><td class="num">8</td></tr>
+<tr><th scope="row">SvelteKit</th><td class="meter" aria-hidden="true"><span style="--v: 0.709"></span></td><td class="num">1,134</td><td class="num">9</td></tr>
+<tr><th scope="row">Next.js (React)</th><td class="meter" aria-hidden="true"><span style="--v: 0.717"></span></td><td class="num">1,146</td><td class="num">8</td></tr>
+<tr><th scope="row">Express (Node.js)</th><td class="meter" aria-hidden="true"><span style="--v: 0.868"></span></td><td class="num">1,388</td><td class="num">8</td></tr>
+<tr><th scope="row">React (Vite + Express)</th><td class="meter" aria-hidden="true"><span style="--v: 1.000"></span></td><td class="num">1,599</td><td class="num">9</td></tr>
+</tbody>
+</table>
+
+A bigger app, with sign up and in, a posts table, uploads, live refresh and a component, is 1,016 tokens in Wisp, 3,666 in SvelteKit and 3,458 in Next.js. The numbers come from `cargo run -p wisp-tokens`, which counts every hand-written file and its path with a byte-pair style estimate; the [Tokens page](/docs/tokens/) has the method and the apps.
+
 </div>
 </div>
 </section>
+
+<Claim id="status">
+
+## Tested and Actively Hardened
+
+Wisp is new and has not been audited. Over a thousand tests run on every change. The HTTP, HTTP/2, template and formatter parsers are fuzzed with seeded inputs, a table of request-smuggling shapes is refused on both HTTP versions, every fast path is proven at startup with a fallback, and there is no `unsafe` outside the Linux I/O drivers and the edge exports. Bugs are likely to remain, and issues are welcome.
+
+<p class="more"><a href="/docs/security/">What Is Hardened, and What Is Not</a></p>
+
+</Claim>
+
+<Band id="forms" title="Forms That Work Without JavaScript" lead="A form posts to an action. A bad value is a 422 that shows each problem beside its input and keeps what was typed. With JavaScript on, the page morphs instead of reloading.">
+
+```html
+---
+#[action]
+fn signup(email: Email, password: Password) {
+    cx.signup(User { email, password }).await?;
+    redirect("/me")
+}
+---
+
+<form action="?/signup" fields>
+  <button>Sign up</button>
+</form>
+```
+
+</Band>
+
+<Band id="reactive" flip title="Reactivity in the Same File" lead="The block is Rust that runs for each request, name is drawn on the server, and the count is JavaScript state in the browser. Turn JavaScript off and the server's HTML still works.">
+
+```html
+---
+let name = cx.query_or("name", "world".to_string());
+---
+
+<h1>Hello, {name}!</h1>
+
+<button on:click="count++">Clicked {:count} times</button>
+
+<script>
+  let count = $state(0)
+</script>
+```
+
+</Band>
+
+<Band id="binary" title="One Binary, on Any Host" lead="Templates compile to plain Rust, and the whole app, styles and static files included, becomes one small binary. Every fast path is proven at startup and falls back, and a panic in a handler is caught and answered as a 500. The same app builds as a container, static HTML, or for an edge or serverless host. This site is one too: server-rendered pages that work with JavaScript off, down to the demo and the search form.">
+
+```bash
+wisp build
+wisp build --static
+wisp build --docker
+wisp build --target cloudflare
+wisp deploy init cloudflare
+```
+
+<h3 class="hosts-title">Builds for Your Host</h3>
+
+<Hosts />
+
+</Band>
+
