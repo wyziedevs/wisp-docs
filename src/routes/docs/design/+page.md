@@ -45,6 +45,8 @@ File | Meaning
 
 Segments: `blog` (static), `[slug]` (param), `[[lang]]` (optional), `[...rest]` (rest, may be empty), `(group)` (not in the URL).
 
+A literal `cx.param("name")` in a route's own `+page.rs` or `+server.rs` that names a parameter the route does not have is a build error that lists the route's parameters.
+
 A param may name a matcher, `[id=int]`, `[[lang=locale]]`: `src/params/<name>.rs` with `fn matches(s: &str) -> bool`, given the decoded segment. `int` (ASCII digits fitting a `u64`) is built in. A refused segment goes on to the next route, so `/[id=int]` and `/[slug]` coexist. An unknown matcher is a build error.
 
 ```rust
