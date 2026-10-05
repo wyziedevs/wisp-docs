@@ -360,7 +360,7 @@ let entries = ENTRIES.all();
 {@flash}
 ```
 
-`{@flash}` writes `<p class="flash" role="status">Thanks for signing</p>`, or nothing; in a layout it shows on every page below it. `cx.flashed()` reads it in a block instead.
+`{@flash}` writes `<p class="flash" role="status">Thanks for signing</p>`, or nothing; in a layout it shows on every page below it. `cx.flashed()` reads it in a block instead. In markup, `{#if let Some(m) = cx.flash_message()}` reads the same message through `&Cx` (what `{@flash}` expands to).
 
 Wisp adds `cx` to the action when its body uses it. The message waits in a cookie until the next page reads it.
 
