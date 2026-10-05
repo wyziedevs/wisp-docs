@@ -95,7 +95,7 @@ A textarea gets `required`, and `minlength` when `#[validate(min = N)]` has N ab
 ## Forms and Files
 
 - `cx.form()` reads urlencoded and multipart bodies (`enctype="multipart/form-data"` for files). Text fields read the same either way.
-- `cx.form().file("photo")` is the file of `<input type="file" name="photo">` (`None` when none): `name` as sent, `content_type`, `bytes`. `files("photo")` is every file of a `multiple` input.
+- `cx.form().file("photo")` is the file of `<input type="file" name="photo">` (`None` when none): `name` as sent without folders or trailing dots and spaces (a Windows device name such as `CON` gets a `_` in front), `content_type`, `bytes`. `files("photo")` is every file of a `multiple` input.
 - File name and type are visitor input: the name is never a path (a drive such as `C:` and an NTFS stream such as `:stream` are dropped too), the type says nothing the bytes do not.
 - Uploads are held in memory; a route taking large ones raises its own `BODY_LIMIT`.
 

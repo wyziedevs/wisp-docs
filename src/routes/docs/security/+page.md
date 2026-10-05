@@ -38,7 +38,8 @@ Wisp is young and has not been audited, and it can be broken. This page lists wh
 
 **Files and uploads**
 
-- Upload file names lose a drive (`C:`) and an NTFS stream (`:stream`), as well as paths.
+- Upload file names lose a drive (`C:`) and an NTFS stream (`:stream`), as well as paths, and trailing dots and spaces; a Windows device name (`CON`, `nul.txt`, `COM1.png`) gets a `_` in front.
+- `Response::file_in` sends `x-content-type-options: nosniff`, and an HTML, XHTML, SVG or XML file with `content-security-policy: default-src 'none'; style-src 'unsafe-inline'; img-src data:; sandbox`, so an uploaded page or image runs no script on the site.
 - Static files and `Response::file_in` answer 404 for Windows device names (`nul`, `CON.txt`, `COM1`) and for names Windows trims (`a.txt.`, `a.txt `).
 
 **Browser script and dev mode**
