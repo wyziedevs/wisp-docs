@@ -40,7 +40,7 @@ Wisp's `data` is longer than JavaScript's: a Rust type with its fields' types. E
 
 ## A Real App: Auth, CRUD, Upload, Live, a Component
 
-`bench/tokens/real` is sign up and in, a posts table with validation, edit, delete, pages and live refresh, an avatar upload and a toggle component: 10 files, **960** tokens in Wisp, 3.6x less than SvelteKit 3 and 3.5x less than Next.js 15. Its tests check every feature.
+`bench/tokens/real` is sign up and in, a posts table with validation, edit, delete, pages and live refresh, an avatar upload and a toggle component: 10 files, **958** tokens in Wisp, 3.6x less than SvelteKit 3 and 3.5x less than Next.js 15. Its tests check every feature.
 
 ## Method
 
