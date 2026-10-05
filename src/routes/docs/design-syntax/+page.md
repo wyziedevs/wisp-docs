@@ -56,6 +56,7 @@ Syntax | Compiles to
 
 - Expressions are Rust passed to `rustc` verbatim, so type errors are real. Inside `<script>`, `<style>` and HTML comments there are no holes, so CSS and JS braces need no escaping. Comments are stripped.
 - A bare `<script>` (no attributes) is the file's client script: compiled with the file's directives into an ES module, top-level names are its state, no collisions across files ([Browser code](/docs/client/)). A `<script>` with `type` or `src` is copied through.
+- Build errors with the fix: a format spec in a hole (`{page:?}`, `{n:>5}`) is refused, write `{format!("{:?}", page)}`; an `{#each}` item or index named `cx` is refused, since `cx` is the request.
 - Whitespace runs containing a newline collapse to one newline, except in `<pre>`/`<textarea>`. A block tag (`{#…}`, `{:…}`, `{/…}`, `{@const}`) alone on a line leaves no line behind.
 - Boolean attributes (`disabled`, `checked`, `selected`, `hidden`, `open`, `required`...) are on when present whatever the value, so `disabled="false"` disables. `name={cond}` takes a `bool` and prints the bare name or nothing; a hole in a quoted value is an error.
 - Braces are Rust on the server; a quoted directive value or `{:expr}` is JavaScript in the browser. No Rust expression goes inside `<script>`: use the Rust name or `data.x` (sent as JSON) there, or `data-*` attributes.
@@ -97,6 +98,7 @@ A `.wisp` file in `src/components` (any depth) is a component named by its file:
 - Props are Rust types, each a parameter of the render function, so rustc checks every use. A reference type gets a borrow (`title={post.title}` gives a `String` to a `&str`). `name="text"` is a string; bare `name` is `true`. A prop with a default may be left out. `impl Display` works.
 - `{@render children()}` shows what the tag wraps. Children compile in the using page, so they see its `data`, loop variables and `{@const}`s.
 - Build checks: the component exists (the ones that do are listed if not), every given prop is declared, every prop without a default is given, a flag only goes to a `bool`, children only to a component that shows them.
+- A prop cannot be named `self`, `Self`, `crate`, `super`, `_` or `children`: the `{@props}` line is the build error.
 - The name starts with a capital and has a lowercase letter (`<DIV>` is HTML). Components cannot go in `<wisp:head>`; only components take `{@props}`. Component files hot-swap like templates.
 - The browser can draw components too (client blocks, `{:…}` props, `bind:`, `on:`): [Browser code](/docs/client/).
 
