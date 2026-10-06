@@ -147,7 +147,7 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
       </header>
       <ul class="tag-list">
         {#each all_tags as (t, n)}
-          <li><a href={format!("/blog/?tag={t}")}>{t}</a> <span>{count(*n)}</span></li>
+          <li><a href={format!("/blog/?tag={}", site::query(t))}>{t}</a> <span>{count(*n)}</span></li>
         {/each}
       </ul>
     {:else}
@@ -165,7 +165,7 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
               read={read(path)} />
             {#if !tags_of(p).is_empty()}
               <nav class="chips" aria-label="Tags">
-                {#each tags_of(p) as t}<a href={format!("/blog/?tag={t}")}>{t}</a>{/each}
+                {#each tags_of(p) as t}<a href={format!("/blog/?tag={}", site::query(t))}>{t}</a>{/each}
               </nav>
             {/if}
           {/if}

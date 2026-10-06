@@ -25,6 +25,19 @@ pub fn dir(path: &str) -> String {
     if path.ends_with('/') { path.to_string() } else { format!("{path}/") }
 }
 
+/// `s` as a query-string value: everything but letters, digits and `-._~` as %XX.
+pub fn query(s: &str) -> String {
+    let mut out = String::new();
+    for b in s.bytes() {
+        if b.is_ascii_alphanumeric() || b"-._~".contains(&b) {
+            out.push(b as char);
+        } else {
+            out.push_str(&format!("%{b:02X}"));
+        }
+    }
+    out
+}
+
 /// The request path without its trailing slash (`/docs/cli/` is `/docs/cli`), the form pages are keyed by.
 pub fn bare(path: &str) -> &str {
     if path.len() > 1 { path.trim_end_matches('/') } else { path }
