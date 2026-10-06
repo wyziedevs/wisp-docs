@@ -121,7 +121,7 @@ A write redraws only the bindings that read what changed (no virtual DOM); the s
 | `use:outside="() => open = false"` | Calls it at a press outside the element (menus, popovers). |
 | `use:inview="(v) => seen = v"` | `true` as the element comes into view, `false` as it leaves. |
 | `use:shortcut="'mod+k'"` | The keys click the element (a field: focus it); `ctrl shift alt meta`, `mod` is ⌘ on a Mac, else Ctrl. A bare key typed in a field stays typed. |
-| `use:modal="open"` | A `<dialog>` shown as a modal while `open` is true; `on:close="open = false"` for Escape. |
+| `use:modal="open"` | A `<dialog>` shown as a modal while `open` is true; any close (Escape, a `method=dialog` form, `close()`) sets `open` false. |
 | `use:preload` | On a link or around links: each is fetched ahead once in view; not with data saver on or under `data-wisp-preload="off"`. |
 | `use:keepscroll` | Back and forward put this element's scroll back (give it an `id` when there are several). |
 | `animate:flip` | Animate moves in a keyed `{:#each}`. |
