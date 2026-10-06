@@ -35,7 +35,7 @@ fn remove(id: u64) {
 - A form that posts to `?/name` needs `#[action] fn name` in the same page: the build says so when it is missing (a layout or component may post to the page that uses it, so only a page's own markup is checked).
 - A form with no `action` (and `method="post"`) posts to `default`.
 - `<button action="?/remove&id={todo.id}">` outside a form becomes its own `<form method="post"><button formaction="...">`. Works without JS.
-- `#[model(saved, crud)]` on a model in the page's block writes the page's `add`, `remove` and `update` actions ([Data](/docs/data/)); the page then only names them: `<form action="?/add" fields />`, `<button action="?/remove&id={todo.id}">`.
+- A page writes the actions its markup names: `#[action] fn add(todo: Todo) { TODOS.add(todo); }` and `#[action] fn remove(id: u64) { TODOS.remove(id); }` serve `<form action="?/add" fields />` and `<button action="?/remove&id={todo.id}">`.
 - `<form fields>` writes a labelled input per parameter of the action (`fields={post}` starts them from `post`); text with `#[validate(one_of = "draft live")]` is a `<select>` of those. A `fields` form with no button gets one: `Send` for `fn default`, `Save` with `{post}`, else the action's name; `<form fields />` is the whole form and `<form fields="Log in" />` names its button.
 - Query parameters in an action URL are read like form fields (`id` above is `id: u64`).
 - A body with `.await` makes the action `async` (`#[action]` adds it); never write `async` there.

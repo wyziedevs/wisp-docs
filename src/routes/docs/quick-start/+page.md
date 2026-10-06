@@ -143,7 +143,7 @@ A page file is named `+page.wisp`, with the `+`. In an action, `error()` already
 
 ## Saving Data in a Table
 
-A `Table` holds rows of a model. `Table::saved()` keeps them in a log file in the data folder, so they survive a restart, and `Table::new()` keeps them in memory. `#[model(saved)]` on the struct writes that `static` for you, named for it (`Entry` → `ENTRIES`), and `{#each ENTRIES as e}` walks it. The page above reads it in the same block:
+A `Table` holds rows of a model. `Table::saved()` keeps them in a log file in the data folder, so they survive a restart, and `Table::new()` keeps them in memory. The page above reads it in the same block:
 
 ```html
 ---
