@@ -67,6 +67,7 @@ export function blocks() {
     b.className = 'copy-code'
     b.textContent = 'Copy'
     b.setAttribute('aria-label', 'Copy code')
+    let timer = 0
     b.addEventListener('click', async () => {
       try {
         await navigator.clipboard.writeText(p.querySelector('code').textContent)
@@ -78,7 +79,8 @@ export function blocks() {
         b.textContent = 'Press Ctrl+C'
         say('Press Ctrl+C to copy')
       }
-      setTimeout(() => {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
         b.textContent = 'Copy'
         b.classList.remove('done')
       }, 1500)
