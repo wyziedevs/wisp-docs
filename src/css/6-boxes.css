@@ -208,6 +208,11 @@
   background: var(--wash);
 }
 
+/* The box clips its edges, so the ring sits inside the row. */
+.challenge > summary:focus-visible {
+  outline-offset: -2px;
+}
+
 .challenge[open] {
   padding-bottom: 1.25rem;
   background: var(--wash);
