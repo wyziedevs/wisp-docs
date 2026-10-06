@@ -5,6 +5,24 @@ description: Wisp is a fast, fun web framework for Rust with file routes, templa
 
 <Hero />
 
+<section class="sec" id="abstraction">
+<div class="wrap">
+<div class="claim wide">
+
+## All the Abstraction, Without Losing Speed
+
+Pages, forms and validation take a few lines, and all of it compiles to plain Rust. The work of each abstraction happens once, when you build, so a request only runs the result: fixed text, a few function calls and nothing to parse or look up. A route pays only for the features it uses.
+
+</div>
+
+<ol class="flow">
+<li><b>You Write</b><span>Pages, forms, validation and logic in a few lines</span></li>
+<li><b>The Build Compiles</b><span>Templates and routes become plain Rust</span></li>
+<li class="us"><b>A Request Runs</b><span>Compiled code answers it directly, with nothing left to parse</span></li>
+</ol>
+</div>
+</section>
+
 <section class="sec showcase">
 <div class="wrap">
 <div class="sec-head">

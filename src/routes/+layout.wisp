@@ -246,6 +246,10 @@ let ld = match me {
   </div>
 </footer>
 
+<a class="to-top" href="#" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5"/></svg>
+</a>
+
 <script>
   import { afterNavigate } from 'wisp'
   import { path } from '$lib/toc.js'
