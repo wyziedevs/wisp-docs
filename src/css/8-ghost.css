@@ -233,4 +233,14 @@
   @view-transition {
     navigation: none;
   }
+
+  /* Back to the top shows after a tenth of the page: a scroll position, not motion,
+     so without this it would sit over the top of every page. */
+  @supports (animation-timeline: scroll()) {
+    .to-top {
+      animation: to-top linear both !important;
+      animation-timeline: scroll(root) !important;
+      animation-range: 10% 12% !important;
+    }
+  }
 }
