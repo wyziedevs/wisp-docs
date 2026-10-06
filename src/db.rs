@@ -3,6 +3,7 @@
 
 const COOKIE: &str = "todos";
 const MAX: usize = 20;
+const BYTES: usize = 3800;
 
 /// The list: items joined by `|`, each with `%XX` for `|`, `%` and what a
 /// cookie cannot hold. Missing or bad: the default list.
@@ -15,21 +16,26 @@ pub fn demo_todos(cx: &Cx) -> Vec<String> {
 }
 
 pub fn demo_save(cx: &mut Cx, todos: &[String]) {
-    let mut out = String::new();
     let skip = todos.len().saturating_sub(MAX);
-    for (n, t) in todos[skip..].iter().enumerate() {
-        if n > 0 {
-            out.push('|');
-        }
-        for b in t.bytes() {
-            match b {
-                b'A'..=b'Z' | b'a'..=b'z' | b'0'..=b'9' | b'-' | b'_' | b'.' | b'~' => out.push(b as char),
-                _ => out.push_str(&format!("%{b:02X}")),
-            }
-        }
+    let mut parts: Vec<String> = todos[skip..].iter().map(|t| encode(t)).collect();
+    // A cookie over 4096 bytes is dropped by the browser, so the oldest items go first.
+    while parts.len() > 1 && parts.iter().map(|p| p.len() + 1).sum::<usize>() > BYTES {
+        parts.remove(0);
     }
+    let out = parts.join("|");
     // An empty list is one empty item, so it stays empty, not the default.
     cx.set_cookie(COOKIE, if out.is_empty() { "|" } else { &out });
+}
+
+fn encode(t: &str) -> String {
+    let mut out = String::new();
+    for b in t.bytes() {
+        match b {
+            b'A'..=b'Z' | b'a'..=b'z' | b'0'..=b'9' | b'-' | b'_' | b'.' | b'~' => out.push(b as char),
+            _ => out.push_str(&format!("%{b:02X}")),
+        }
+    }
+    out
 }
 
 fn decode(s: &str) -> Option<String> {
