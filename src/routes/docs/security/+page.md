@@ -20,7 +20,7 @@ Wisp is young and has not been audited, and it can be broken. This page lists wh
 **Auth**
 
 - `redirect` keeps a path on the site: `//evil.example` and `/\evil.example` (another site to a browser, tabs dropped) go out as `/evil.example`, so `redirect(next)` with a `?next=` checked to start with `/` is no open redirect. Another site needs its scheme (`https://…`).
-- `cx.set_cookie`, `cx.set_header` and `Response::with_header` with a value they cannot hold (CR/LF, `;`, a space or non-ASCII in a cookie) drop it and log one line, and `Error::with_header` becomes a logged 500: never a panic, never an injected header or cookie attribute.
+- `cx.set_cookie`, `cx.set_header` and `Response::with_header` with a value they cannot hold (CR/LF, `;`, a space or non-ASCII in a cookie) drop it and log one line (the name, cut to 64 bytes, and the value's length, never the value, which may be a session token), and `Error::with_header` becomes a logged 500: never a panic, never an injected header or cookie attribute.
 - Form posts and WebSocket upgrades without `ORIGIN` set check the scheme too: an `http://` page cannot post to a site whose proxy sends `X-Forwarded-Proto: https`, and an `Origin` that is not `http(s)://` is refused. A proxy that sends no scheme leaves `https://` pages allowed, as Rails and Django do; set `ORIGIN` for an exact match.
 
 **Servers**
