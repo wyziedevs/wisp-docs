@@ -76,17 +76,14 @@ let edit = match site::bare(cx.path()) {
   <aside class="side" aria-label="Documentation">
     <details class="menu">
       <summary>{kind} Menu</summary>
-      <div class="switch" role="list">
+      <div class="switch">
         <a
-          role="listitem"
           href={site::dir(learn_home)}
           aria-current={(tab == "learn").then_some("true")}>Learn</a>
         <a
-          role="listitem"
           href={site::dir(ref_home)}
           aria-current={(tab == "reference").then_some("true")}>Reference</a>
         <a
-          role="listitem"
           href={site::dir(host_home)}
           aria-current={(tab == "hosting").then_some("true")}>Hosting</a>
       </div>
