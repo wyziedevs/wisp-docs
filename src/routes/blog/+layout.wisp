@@ -238,6 +238,8 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
     off = reading(art, '.post-toc ul', (m) => (live.textContent = m))
   }
 
+  // Leaving a post stops the marker's window listeners.
+  onDestroy(() => off?.())
   onMount(() => {
     post()
     query()

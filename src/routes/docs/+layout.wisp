@@ -174,6 +174,8 @@ let edit = match site::bare(cx.path()) {
     e.currentTarget.replaceChildren(p)
   }
 
+  // Leaving the docs stops the marker's window listeners.
+  onDestroy(() => off?.())
   onMount(() => {
     build()
     if (location.hash) document.getElementById(hashId())?.scrollIntoView()
