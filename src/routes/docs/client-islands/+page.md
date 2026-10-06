@@ -28,14 +28,14 @@ A page ships JS only for files with client code; a component can wait:
 `wisp add react react-dom react-switch` (framework first), then:
 
 ```html
----
-let on = false;
----
 <Island
   of="react:react-switch"
   client:visible
   props={:{ checked: on, onChange: (v) => (on = v) }} />
 <p>{:on ? 'On' : 'Off'}</p>
+<script>
+  let on = false
+</script>
 ```
 
 - `of="framework:module"` (`react preact vue svelte`); the default export is the component, `#Name` a named one (`react:recharts#LineChart`); `$lib` works (`react:$lib/Chart.js#Chart`).
