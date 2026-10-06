@@ -120,7 +120,7 @@ let ld = match me {
   {/if}
 </head>
 <a class="skip" href="#main">Skip to Content</a>
-<span id="top"></span>
+<span id="top" tabindex="-1"></span>
 <header class="top">
   <div class="bar">
     <a class="brand" href="/" aria-label="Wisp home">
@@ -272,6 +272,8 @@ let ld = match me {
   const up = (e) => {
     e.preventDefault()
     scrollTo({ top: 0 })
+    // Like the no-JS jump, the next Tab starts from the top, not from this button.
+    document.getElementById('top').focus({ preventScroll: true })
   }
 
   // The phone menu closes on a press outside it and on Escape.
