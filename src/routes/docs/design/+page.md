@@ -123,7 +123,7 @@ In order: ultra fast, cheap, durable, flexible; developer happiness last.
 5. **Boring code**: plain functions and data; abstractions only where they remove more code than they add; invariants asserted.
 6. **Safe**: no unsafe code in the compiler, the CLI or an app's generated code (workspace lint `forbid`). The runtime has it only in the Linux I/O drivers and the edge exports, each block with its reason; the benchmark runner, which pins processes to CPUs through the OS, sets its own.
 7. **Mistakes fail early, in the user's file**: the build checks what it can and says where and what to do (a private `load`, an `#[action]` in the wrong place, `page.wisp` without its `+`, a block leaving a tag open in one branch). rustc only points at code the user wrote.
-8. **Fast dev loop**: editing markup never waits for `cargo`; editing Rust rebuilds only the app crate.
+8. **Fast dev loop**: editing markup never waits for `cargo`; editing Rust compiles only the app crate, with `rustc` run directly (`wisp dev`: [design](/docs/design-cli/)); a save that changes no code builds nothing.
 9. **Works without JavaScript**: forms and links are real; `wisp.js` enhances, never required.
 
 ## Dependency Budget

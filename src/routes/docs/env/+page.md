@@ -84,6 +84,7 @@ Not for you to set. `wisp build` and the host bridges set them for the app they 
 |---|---|
 | `WISP_NO_UPDATE_CHECK` | `1` silences the CLI-older-than-app warning |
 | `WISP_PORT_TRIES` | how many next ports `wisp dev` tries when one is taken (20) |
+| `WISP_DEV_CARGO` | any value: `wisp dev` builds every change with `cargo`, none with `rustc` directly |
 | `WISP_CWEBP` | the `cwebp` `wisp build` uses for images |
 | `WISP_SASS` | the Dart Sass for `src/app.scss` |
 | `WISP_TSC` | the `tsc` for `wisp check --types` |
