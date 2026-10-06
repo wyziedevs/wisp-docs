@@ -42,7 +42,7 @@ order: 80
 | `wisp remove <pkg>` | take an npm package out |
 | `wisp ui add <name…> [--force]` | copy components (button, dialog, tabs…) into `src/components` |
 | `wisp ui list` | the components `wisp ui add` has |
-| `wisp service install\|uninstall\|start\|stop\|status` | run the release binary as a systemd, launchd or Windows service; `--name`, `--user`, `--port`, `--dry-run`; an app folder with a quote, `%` or a control character in its path is refused |
+| `wisp service install\|uninstall\|start\|stop\|status` | run the release binary as a systemd unit, a launchd daemon or (Windows) a startup scheduled task; `--name`, `--user`, `--port`, `--dry-run`; an app folder with a quote, `%` or a control character in its path is refused |
 | `wisp lsp` | the language server, over stdio |
 | `wisp update-docs` | bring `AGENTS.md` up to this Wisp |
 | `wisp mcp` | docs, routes, components and checks for AI agents (MCP, stdio); a message line is capped at 16 MiB |
