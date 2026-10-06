@@ -10,6 +10,7 @@ order: 34
 
 ```html
 ---
+let name = "";
 #[remote]
 fn user(id: u64) -> Result<User> {
     USERS.get(id).map(|r| r.value).or_404()
@@ -18,9 +19,6 @@ fn user(id: u64) -> Result<User> {
 
 <button on:click="user(5).then((u) => (name = u.name))">Load</button>
 <p>{:name}</p>
-<script>
-  let name = ''
-</script>
 ```
 
 - POST `/_app/r/<hash>`, arguments a JSON object by name (`{"id":5}`), read with `FromJson`; a wrong type or failed `#[validate]` is a 422 by field.

@@ -201,7 +201,7 @@ Props are checked when the app builds. Misspell `message` and `wisp check` fails
 
 ## Add State in the Browser
 
-Let a visitor mark a note as liked. This is browser code, so it goes in a `<script>` in the same file. Update `src/components/Note.wisp`:
+Let a visitor mark a note as liked. This is browser state, and a handler that toggles a name nothing declares starts it at `false`, so it needs no declaration. Update `src/components/Note.wisp`:
 
 ```html
 {@props name, message}
@@ -218,10 +218,6 @@ Let a visitor mark a note as liked. This is browser code, so it goes in a `<scri
     margin: 1rem 0;
   }
 </style>
-
-<script>
-  let liked = $state(false)
-</script>
 ```
 
 `{name}` is Rust, drawn once on the server. `{:liked ? "Liked" : "Like"}` and the quoted value of `on:click` are JavaScript, and a click redraws only that button. Each note gets its own `liked`.

@@ -8,11 +8,10 @@ order: 30
 Pages work without JavaScript; a script and directives in the same `.wisp` file add behavior. No bundler. `{…}` is Rust (server); a quoted directive value and `{:…}` are JavaScript (browser).
 
 ```html
----
-let count = 0;
----
 <button on:click="count++">Clicked {:count} times</button>
 ```
+
+A handler that counts (`n++`) or toggles (`open = !open`) a name nothing declares starts it at 0 or `false`; another start is `let count = 5;` in the `---` block. A `<script>` is only for real browser logic.
 
 ## State in the `---` Block
 The cheapest browser state is a literal `let` in the page's `---` block: a number, `true`/`false`, `None` (null), a string, or `[..]`/`vec![..]` of those, alone on its line (a trailing comment is fine). The build moves it into the page's client code exactly as a `<script>` `let` would be: no per-request server cost, and `{:count}` and directives read it. A computed value, or one the server also renders, stays a Rust `let` and is sent with the page.

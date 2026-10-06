@@ -82,7 +82,7 @@ wisp build --target cloudflare
 
 ## Reactivity in the Same File
 
-Pages work without JavaScript, and behavior lives in the same file as the markup. A `<script>` with `$state` adds it, and a write redraws only what read the value:
+Pages work without JavaScript, and behavior lives in the same file as the markup. A directive adds it, and a write redraws only what read the value:
 
 ```html
 ---
@@ -92,11 +92,9 @@ let name: String = cx.query_or("name", "world".to_string());
 <h1>Hello, {name}!</h1>
 
 <button on:click="count++">Clicked {:count} times</button>
-
-<script>
-  let count = $state(0)
-</script>
 ```
+
+`count++` on a name nothing declares starts it at 0 (`let count = 5;` in the `---` block starts it elsewhere). A `<script>` is for real browser logic: the DOM, `$effect`, lifecycle, imports.
 
 Turn JavaScript off and the server's HTML still works. See [Browser code](/docs/client/).
 

@@ -201,11 +201,9 @@ let name = cx.query_or("name", "world".to_string());
 <h1>Hello, {name}!</h1>
 
 <button on:click="count++">Clicked {:count} times</button>
-
-<script>
-  let count = $state(0)
-</script>
 ```
+
+`count++` on a name nothing declares starts it at 0; `let count = 5;` in the `---` block starts it elsewhere. A `<script>` is only for real browser logic: the DOM, `$effect`, lifecycle, imports.
 
 </Band>
 
