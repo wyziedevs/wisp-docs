@@ -296,15 +296,6 @@
   background: color-mix(in oklab, var(--accent) 7%, var(--panel));
 }
 
-.flow small {
-  color: var(--ash);
-  font: 0.8125rem var(--mono);
-}
-
-.flow li.us small {
-  color: var(--accent-ink);
-}
-
 .flow b {
   font-size: 1.0625rem;
 }
