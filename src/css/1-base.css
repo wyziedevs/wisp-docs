@@ -181,8 +181,9 @@ h4 {
   top: 0.75rem;
 }
 
-/* With JavaScript off: what is hidden, and how to get it back. */
-.nojs {
+/* With JavaScript off: what is hidden, and how to get it back. The pre-release notice shares its look. */
+.nojs,
+.pre {
   margin: 0;
   padding: 0.625rem var(--gutter);
   border-bottom: 1px solid var(--line);

@@ -203,7 +203,7 @@ One app built in each stack: a list, a contact form, a JSON endpoint, a layout a
 
 ## Tested and Actively Hardened
 
-Wisp is new and not yet audited. Over a thousand tests run on every change, the parsers are fuzzed, request smuggling is refused on HTTP/1 and HTTP/2, and there is no unsafe code outside the Linux I/O drivers and edge exports. Bugs likely remain; issues are welcome.
+Wisp is in development, has not been released and has not been audited. Over a thousand tests run on every change, the parsers are fuzzed, request smuggling is refused on HTTP/1 and HTTP/2, and there is no unsafe code outside the Linux I/O drivers and edge exports. Bugs likely remain; issues are welcome.
 
 <p class="more"><a href="/docs/security/">What Is Hardened, and What Is Not</a></p>
 

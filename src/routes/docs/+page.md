@@ -18,6 +18,8 @@ cd my-app
 wisp dev               # http://127.0.0.1:3000
 ```
 
+`wisp-web` is not on crates.io yet; the first line works once Wisp is released.
+
 `wisp new` asks a few questions: press Enter for the defaults, or add `-y`.
 
 `wisp dev` rebuilds as you edit, hot reload keeps your `$state`, and `Alt+Shift+W` opens the devtools with the routes table.

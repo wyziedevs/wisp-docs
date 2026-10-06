@@ -31,6 +31,8 @@ cd guestbook
 wisp dev
 ```
 
+`wisp-web` is not on crates.io yet; the first line works once Wisp is released.
+
 `wisp new` asks a few questions (press Enter for the defaults, or add `-y`). Open `http://127.0.0.1:3000`. Leave `wisp dev` running: it rebuilds when you save a file and reloads the page. The app has these files, and you will add a few more:
 
 ```tree

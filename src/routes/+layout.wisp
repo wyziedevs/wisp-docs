@@ -178,6 +178,7 @@ let ld = match me {
     </div>
   </div>
 </header>
+<p class="pre">Wisp is in development and has not been released. Expect changes until 1.0.0.</p>
 <noscript>
   <p class="nojs">JavaScript is off, so copy buttons, the theme switch and page ratings are hidden. Enable JavaScript for this site to use them.</p>
 </noscript>

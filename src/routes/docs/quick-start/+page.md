@@ -31,6 +31,8 @@ cd guestbook
 wisp dev
 ```
 
+`wisp-web` is not on crates.io yet; the first line works once Wisp is released.
+
 Open `http://127.0.0.1:3000`. `wisp dev` rebuilds as you edit, and hot reload keeps your browser state. A folder under `src/routes` is a URL, and the `+page.wisp` inside it is the page.
 
 ## Creating a Page
