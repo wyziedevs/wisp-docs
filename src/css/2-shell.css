@@ -456,7 +456,7 @@
   color: var(--accent-ink);
 }
 
-/* Back to the top, bottom right. It fades in once the page has scrolled (CSS only, where supported). */
+/* Back to the top, bottom right. It fades in after a tenth of the page has scrolled (CSS only, where supported), and phones and tablets do not get it. */
 .to-top {
   position: fixed;
   right: max(1rem, env(safe-area-inset-right));
@@ -496,11 +496,17 @@
   stroke-linejoin: round;
 }
 
+@media (hover: none), (pointer: coarse) {
+  .to-top {
+    display: none;
+  }
+}
+
 @supports (animation-timeline: scroll()) {
   .to-top {
     animation: to-top linear both;
     animation-timeline: scroll(root);
-    animation-range: 300px 600px;
+    animation-range: 10% 12%;
   }
 
   @keyframes to-top {

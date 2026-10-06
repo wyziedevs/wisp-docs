@@ -247,7 +247,7 @@ let ld = match me {
   </div>
 </footer>
 
-<a class="to-top" href="#top" aria-label="Back to top">
+<a class="to-top" href="#top" on:click="up(event)" aria-label="Back to top">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5"/></svg>
 </a>
 
@@ -267,6 +267,12 @@ let ld = match me {
   const move = motion()
 
   const flip = () => swap()
+
+  // Every press scrolls to the top (smooth, as the page's CSS sets), also when the address already says #top.
+  const up = (e) => {
+    e.preventDefault()
+    scrollTo({ top: 0 })
+  }
 
   // The phone menu closes on a press outside it and on Escape.
   const mnav = () => document.querySelector('.mnav')
