@@ -54,7 +54,7 @@ async fn load(slug: String) -> Result<Data> {
 
 ## One File or Several
 
-One `+page.wisp` is the preferred way to build a page. Its `---` block can hold the models (`#[model]` structs), their `Table`s, the `#[action]`s, helper functions and the load, the markup follows, and scoped `<style>` and `<script>` tags close it. A `mod server { � }` in the same block adds the route's JSON endpoints.
+One `+page.wisp` is the preferred way to build a page. Its `---` block can hold the models (`#[model]` structs), their `Table`s, the `#[action]`s, helper functions and the load, the markup follows, and scoped `<style>` and `<script>` tags close it. A `mod server { … }` in the same block adds the route's JSON endpoints.
 
 ```html
 <!-- src/routes/todos/+page.wisp -->
