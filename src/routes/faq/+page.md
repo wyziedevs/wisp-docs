@@ -38,7 +38,7 @@ description: Short answers to common questions about Wisp.
 </details>
 <details name="faq">
 <summary>Which Editors Work?</summary>
-<p><code>wisp lsp</code> powers a VS Code extension, and there is support for Zed, tree-sitter and Prettier. See <a href="/docs/design-tooling/">Design Tooling</a>.</p>
+<p><code>wisp lsp</code> powers a VS Code extension, and there is support for Zed, tree-sitter and Prettier. See <a href="/docs/design-editors/">AI Agents and Editors</a>.</p>
 </details>
 <details name="faq">
 <summary>How Do I Use It With an AI Agent?</summary>
