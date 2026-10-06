@@ -57,7 +57,8 @@ A write redraws only the bindings that read what changed (no virtual DOM); the s
 | `$effect.tracking()` | Whether the running code tracks what it reads (inside an effect or a binding). |
 | `let { a, b = 1, c: d, ...rest } = $props()` | Component props with browser defaults (absent or `null`); needs no `{@props}`. |
 | `$bindable(default)` | A prop a parent may `bind:`; with `$props()` only these bind. |
-| `$inspect(a, b)` | Logs on change; gone in release. |
+| `$inspect(a, b)` | Logs on change (`.with(f)`: `f('update', a, b)` instead); gone in release. |
+| `$props.id()` | An id of the instance's own, for `for` and `aria-*`. |
 | `$cart` | Store `cart`'s `.value`, tracked; `$cart = x` sets it. |
 
 </div>
