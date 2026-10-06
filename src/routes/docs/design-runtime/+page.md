@@ -136,7 +136,6 @@ pub trait App: 'static {
         cx: &mut Cx,
         out: &mut Out,
     ) -> impl Future<Output = Result<()>> + Send;
-    fn body_limit(route: usize) -> Option<usize>;
     // + static tables: shell, assets, templates (dev)
 }
 ```
