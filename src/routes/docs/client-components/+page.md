@@ -68,6 +68,13 @@ onError((e) => report(e))                          // each uncaught error and re
 const w = tweened(0, { duration: 400 })            // w.value = 5 runs there; numbers, arrays, objects of numbers
 const s = spring({ x: 0, y: 0 })                   // s.set({ x: 9, y: 4 }) with momentum; { hard: true } jumps
 const [send, receive] = crossfade({ duration: 400 })   // out:send={{ key: id }} in:receive={{ key: id }}
+announce('Saved')                                  // screen readers say it (the page's polite live region)
+```
+
+Optimistic lists: `optimistic(list, item)` puts `item` in the `$state` list now and returns the function `use:enhance` calls with the result; a failed action (a 422, a 500, offline) takes it out again:
+
+```html
+<form method="post" action="?/add" use:enhance="() => optimistic(todos, text)">…</form>
 ```
 
 ### Shared State
