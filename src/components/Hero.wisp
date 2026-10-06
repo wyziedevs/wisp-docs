@@ -258,6 +258,7 @@
 <script>
   let label = $state('')
   let done = $state(false)
+  let timer = 0
 
   async function copy() {
     const cmd = document.getElementById('install-cmd')
@@ -275,7 +276,8 @@
       getSelection()?.addRange(pick)
       label = 'Press Ctrl+C'
     }
-    setTimeout(() => {
+    clearTimeout(timer)
+    timer = setTimeout(() => {
       label = ''
       done = false
     }, 1800)
