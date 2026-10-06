@@ -36,10 +36,22 @@ Pages, forms and validation take a few lines, and all of it compiles to plain Ru
 
 ```html
 ---
-#[model(saved, crud)]
+#[model]
 struct Todo {
   #[validate(len = 1..=100)]
   text: String,
+}
+
+static TODOS: Table<Todo> = Table::saved();
+
+#[action]
+fn add(todo: Todo) {
+  TODOS.add(todo);
+}
+
+#[action]
+fn remove(id: u64) {
+  TODOS.remove(id);
 }
 ---
 
@@ -47,7 +59,7 @@ struct Todo {
 
 <form action="?/add" fields />
 
-{#each TODOS as todo}
+{#each TODOS.all() as todo}
   <p> {todo.text}
     <button action="?/remove&id={todo.id}">
       Remove
