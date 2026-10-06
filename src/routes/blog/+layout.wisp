@@ -106,7 +106,7 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
           <p>The first one is on its way. Until then, follow along on <a href="https://github.com/wyziedevs/wisp">GitHub</a> or join the <a href="/community/">community</a>.</p>
         </div>
       {:else}
-      <form class="blog-bar" method="get" action="/blog/" role="search">
+      <form class="blog-bar" method="get" action="/blog/" role="search" on:submit="keep(event)">
         <label class="sr" for="blog-q">Filter Posts</label>
         <input
           id="blog-q"
@@ -206,6 +206,10 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
     show(e.target.value, tagOf())
   }
 
+  // Typing filters in place, so Enter has nothing to submit. Bound on the form itself,
+  // which a client navigation draws anew.
+  const keep = (e) => e.preventDefault()
+
   // The address's ?q= and ?tag= on the list page.
   function query() {
     const field = document.getElementById('blog-q')
@@ -243,8 +247,6 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
   onMount(() => {
     post()
     query()
-    // Typing filters in place, so Enter has nothing to submit.
-    document.querySelector('.blog-bar')?.addEventListener('submit', (e) => e.preventDefault())
   })
   afterNavigate(() => {
     post()
