@@ -20,15 +20,21 @@ description: Wisp is a fast, fun web framework for Rust with file routes, templa
 ---
 #[model(saved, crud)]
 struct Todo {
-    #[validate(len = 1..=100)]
-    text: String,
+  #[validate(len = 1..=100)]
+  text: String,
 }
 ---
 
 <title>Todos ({TODOS.len()})</title>
+
 <form action="?/add" fields />
+
 {#each TODOS as todo}
-  <p>{todo.text} <button action="?/remove&id={todo.id}">Remove</button></p>
+  <p> {todo.text}
+    <button action="?/remove&id={todo.id}">
+      Remove
+    </button>
+  </p>
 {/each}
 ```
 
@@ -203,7 +209,7 @@ let name = cx.query_or("name", "world".to_string());
 <button on:click="count++">Clicked {:count} times</button>
 ```
 
-`count++` on a name nothing declares starts it at 0; `let count = 5;` in the `---` block starts it elsewhere. A `<script>` is only for real browser logic: the DOM, `$effect`, lifecycle, imports.
+A name nothing declares starts at 0, so `count++` just works. Use a `<script>` only for real browser code.
 
 </Band>
 

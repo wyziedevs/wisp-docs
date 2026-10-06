@@ -210,6 +210,12 @@
   overflow: auto;
 }
 
+.sample > p {
+  margin: 1rem 0 0;
+  color: var(--slate);
+  font-size: var(--fs-sm);
+}
+
 /* Code on the home page keeps its indents and wraps a long line, so it never scrolls sideways. */
 :is(.demo, .cmp, .sample) pre {
   white-space: pre-wrap;
