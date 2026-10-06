@@ -336,6 +336,32 @@ fn failure(r: &Json) -> Option<&'static str> {
     }
 }
 
+/// What a cell shows instead of a number: its failure, or "Not published" when a run had
+/// steal over the bar (`bench/tfb/RESULTS.md` neither shows nor ranks such a cell).
+fn withheld(r: &Json) -> Option<&'static str> {
+    failure(r).or_else(|| matches!(r.get("disturbed"), Some(Json::Bool(true))).then_some("Not published"))
+}
+
+/// " (2 runs)" when fewer runs than were made gave a number (the others stalled), else "".
+fn few_runs(r: &Json) -> String {
+    let (n, of) = (num(r.get("runs")) as u64, num(r.get("runs_total")) as u64);
+    if n < of { format!(" ({n} run{})", if n == 1 { "" } else { "s" }) } else { String::new() }
+}
+
+/// A contender as the prose names it.
+fn label(key: &str) -> &'static str {
+    match key {
+        "hono-node" => "Hono on Node.js",
+        "hono-bun" => "Hono on Bun",
+        _ => CONTENDERS.iter().find(|(k, _, _)| *k == key).map_or("", |c| c.1),
+    }
+}
+
+/// " tie" when the cell's min-max range overlaps another ranked row's, else "".
+fn tie(r: &Json) -> &'static str {
+    if matches!(r.get("tied_with"), Some(Json::Arr(a)) if !a.is_empty()) { " (tie)" } else { "" }
+}
+
 fn num(j: Option<&Json>) -> f64 {
     match j {
         Some(Json::Num(n)) => n.parse().unwrap_or(0.0),
@@ -383,21 +409,21 @@ fn speed(tfb: Option<&Json>) {
     let mut out = String::from("&[");
     for (work, level, caption) in SPEED {
         let at = tfb.and_then(|j| j.get("summary")?.get(work)?.get(level));
-        let mut rows: Vec<(&str, &str, f64, Option<&str>)> = CONTENDERS
+        let mut rows: Vec<(&str, &str, f64, Option<&str>, &str)> = CONTENDERS
             .iter()
             .filter_map(|(key, name, stack)| {
                 let r = at?.get(key)?;
-                Some((*name, *stack, num(r.get("rps_median")), failure(r)))
+                Some((*name, *stack, num(r.get("rps_median")), withheld(r), tie(r)))
             })
             .collect();
         rows.sort_by(|a, b| a.3.is_some().cmp(&b.3.is_some()).then(b.2.total_cmp(&a.2)));
-        let top = rows.iter().map(|r| r.2).fold(0.0, f64::max);
+        let top = rows.iter().filter(|r| r.3.is_none()).map(|r| r.2).fold(0.0, f64::max);
         let _ = write!(out, "({caption:?}, &[");
-        for (name, stack, rps, failed) in rows {
+        for (name, stack, rps, failed, tied) in rows {
             let (share, text) = match failed {
                 Some(why) => (0.0, why.to_string()),
                 None if rps <= 0.0 => (0.0, "Failed".to_string()),
-                None => (rps / top, commas(rps.round() as u64)),
+                None => (rps / top, format!("{}{tied}", commas(rps.round() as u64))),
             };
             let _ = write!(out, "({name:?}, {stack:?}, {share:.3}, {text:?}),");
         }
@@ -435,8 +461,31 @@ fn levels(tfb: Option<&Json>) -> Vec<(String, String)> {
                 stats.push((format!("failed.{work}.{c}"), list));
             }
         }
+        // The ties of each level, for prose: "256: Express with Fastify; ...", one pair
+        // once (an earlier row in `ORDER` names the later ones).
+        let mut ties = Vec::new();
+        for c in &conns {
+            let mut pairs = Vec::new();
+            for (i, key) in ORDER.iter().enumerate() {
+                let with: Vec<&str> = match at.and_then(|a| a.get(&c.to_string())?.get(key)?.get("tied_with")) {
+                    Some(Json::Arr(a)) => ORDER[i + 1..].iter().filter(|o| a.iter().any(|t| matches!(t, Json::Str(s) if s == *o))).map(|o| label(o)).collect(),
+                    _ => Vec::new(),
+                };
+                if let Some((last, rest)) = with.split_last() {
+                    let list = if rest.is_empty() { last.to_string() } else { format!("{} and {last}", rest.join(", ")) };
+                    pairs.push(format!("{} with {list}", label(key)));
+                }
+            }
+            if !pairs.is_empty() {
+                ties.push(format!("{c}: {}", pairs.join("; ")));
+            }
+        }
+        stats.push((format!("ties.{work}"), ties.join(". ")));
         for key in ORDER {
-            let Some((_, name, _)) = CONTENDERS.iter().find(|(k, _, _)| k == key) else { continue };
+            let name = label(key);
+            if name.is_empty() {
+                continue;
+            }
             let cells: Vec<Option<&Json>> = conns.iter().map(|c| at.and_then(|a| a.get(&c.to_string())?.get(key))).collect();
             if cells.iter().all(Option::is_none) {
                 continue;
@@ -445,7 +494,7 @@ fn levels(tfb: Option<&Json>) -> Vec<(String, String)> {
             for cell in cells {
                 let text = match cell {
                     None => "not run".to_string(),
-                    Some(r) => failure(r).map_or_else(|| commas(num(r.get("rps_median")).round() as u64), str::to_string),
+                    Some(r) => withheld(r).map_or_else(|| format!("{}{}", commas(num(r.get("rps_median")).round() as u64), few_runs(r)), str::to_string),
                 };
                 let _ = write!(out, "{text:?},");
             }

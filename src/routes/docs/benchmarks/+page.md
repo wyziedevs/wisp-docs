@@ -17,21 +17,21 @@ You need Rust. `bench/README.md` lists every option, the frameworks compared, an
 
 ## Native, Linux (2026-10-04)
 
-Source: [`bench/tfb/RESULTS.md`](https://github.com/wyziedevs/wisp/blob/main/bench/tfb/RESULTS.md) (generated from `results.json`). The TechEmpower plaintext and JSON tests with their own wrk scripts, run 2026-10-04 on one shared 4-CPU VM (AMD EPYC 7B13), with the server pinned to 2 cores. Each number is the median of 3 runs of 15 seconds. This is not an official TechEmpower result. Frameworks are listed in a fixed order, not ranked. "Failed" means every run stalled or finished no request. The full results add min, max, latency and errors per row. The same Wisp binary varied between runs on this VM, so gaps inside the min-max ranges count as ties.
+Source: [`bench/tfb/RESULTS.md`](https://github.com/wyziedevs/wisp/blob/main/bench/tfb/RESULTS.md) (generated from `results.json`). The TechEmpower plaintext and JSON tests with their own wrk scripts, run 2026-10-04 on one shared 4-CPU VM (AMD EPYC 7B13), with the server pinned to 2 cores. Each number is the median of 3 runs of 15 seconds, unless its cell says otherwise. This is not an official TechEmpower result. Frameworks are listed in a fixed order, not ranked. "Failed" means every run stalled or finished no request. "Not published" means a run had hypervisor steal over 10% of CPU, so the cell is neither shown nor ranked. A number followed by a run count, such as "(2 runs)", is the median of only the runs that did not stall: it is not ranked and is indicative only. The full results add min, max, latency and errors per row. The same Wisp binary varied between runs on this VM, so gaps inside the min-max ranges count as ties.
 
 Plaintext, pipelined, requests per second (median of 3), by connections:
 
 <Levels work="plaintext" />
 
-Rows whose min-max ranges overlap are ties. 256: Fastify and Express; Hono on Node.js, SvelteKit and Hono on Bun. 1024: Axum and Actix Web; Express and Hono on Node.js. 4096: Hono on Node.js and Express. 16384: <Stat k="failed.plaintext.16384" /> failed, and Wisp's three stalled runs are under investigation, so no Wisp rank is drawn there.
+Rows whose min-max ranges overlap are ties. <Stat k="ties.plaintext" />. 16384: <Stat k="failed.plaintext.16384" /> failed (every run stalled; the load generator's local port range limited this level, a measurement caveat of this setup that `bench/tfb/RESULTS.md` does not count as a server failure), so no rank is drawn there for them.
 
-Next.js completed no pipelined plaintext response at any level, and raising its heap to 8 GB changed nothing, so the cause is not memory; the runs were indicative only.
+An earlier round measured Next.js at 0 requests a second on pipelined plaintext at every level. Node kept running the requests already pipelined on sockets wrk had closed, which starved the timed runs, and raising the heap to 8 GB changed nothing. `run.sh` now waits for each server to go idle before every run. Next.js's cells above were measured that way and most other contenders' cells were not (`pre_drain` in `results.json`), so a comparison with Next.js is not like for like until a full re-run.
 
 JSON, requests per second (median of 3), by connections:
 
 <Levels work="json" />
 
-Rows whose min-max ranges overlap are ties. 16: Actix Web and Axum, Axum and Wisp; Fastify, Hono on Node.js and Express. 32: Wisp with Actix Web and with Axum; Express, Hono on Node.js and SvelteKit. 64: Wisp, Actix Web and Axum; SvelteKit and Hono on Node.js. 128: Wisp and Actix Web. 256: Fastify and Express. 512: Wisp and Actix Web; Axum and Hono on Bun.
+Rows whose min-max ranges overlap are ties: <Stat k="ties.json" />.
 
 Earlier run (2026-09-28, other Linux VPS, 64 connections, plaintext and fortunes, CPU per request): [`bench/README.md`](https://github.com/wyziedevs/wisp/blob/main/bench/README.md). A later rerun on a CPU-capped VPS (about 75% steal) was invalid and is not published, so this site claims no current Linux ranking; rank tables are pending a valid run. Instructions per request (callgrind, valid on any host load): `GET /` 1572, `GET /user/0` 2310, `POST /user` 1773 at d72eee5; 1585, 2323 and 1789 after the chunked fix.
 

@@ -89,7 +89,7 @@ A route pays only for the features it uses, and every change to the request path
 
 ## Benchmarked Against Popular Frameworks
 
-Requests per second on the TechEmpower plaintext and JSON tests. Every framework runs on the same machine with the same 2 CPU cores, and each number is the median of 3 runs.
+Requests per second on the TechEmpower plaintext and JSON tests. Every framework runs on the same machine with the same 2 CPU cores, and each number is the median of 3 runs. Rows marked tie have a min-max range that overlaps another row's, so no rank is drawn between them. "Not published" means a run was disturbed by hypervisor steal.
 
 <Speed />
 
