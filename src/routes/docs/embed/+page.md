@@ -74,7 +74,7 @@ fn get() -> Response {
 - A page on another site is 403 as for a cross-site form (`Origin` must name the host, or `ORIGIN` when set). A non-upgrade request gets 426.
 - Only the built-in server upgrades; `tower`, edge targets and the test client answer 501.
 
-Browser side: `new WebSocket(`${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/ws`)` with `onmessage`, `onopen`, `onclose`.
+Browser side: ``new WebSocket(`${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}/ws`)`` with `onmessage`, `onopen`, `onclose`.
 
 ## The `tower` Feature
 

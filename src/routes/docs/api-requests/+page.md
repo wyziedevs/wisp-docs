@@ -15,7 +15,7 @@ Each param but `cx` is read by name: route param, then form field or JSON object
 | Sent | Answer |
 |---|---|
 | JSON that is a `T` and passes | handler runs |
-| not JSON | 400 with where: `Invalid JSON: expected `:` at line 1, column 9` |
+| not JSON | 400 with where: ``Invalid JSON: expected `:` at line 1, column 9`` |
 | JSON not a `T`, or failing a check | 422, every problem by field |
 | non-JSON `Content-Type` | 415 |
 | no body, `body: Option<T>` | `None` |
