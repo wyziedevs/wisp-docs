@@ -1,6 +1,6 @@
 ---
 title: Host on Fly.io
-description: Deploy a Wisp app to Fly.io from its Dockerfile, with wisp deploy init fly writing fly.toml and an optional GitHub Actions workflow.
+description: Deploy a Wisp app to Fly.io from its Dockerfile, with wisp deploy init fly writing fly.toml and a Dockerfile if there is none.
 group: Hosting
 order: 73
 ---
