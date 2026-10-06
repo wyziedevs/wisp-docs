@@ -100,6 +100,12 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
   {#if index}
     <header class="blog-head">
       <h1>Wisp Blog</h1>
+      {#if posts.is_empty()}
+        <div class="blog-empty">
+          <h2>No Posts Yet</h2>
+          <p>The first one is on its way. Until then, follow along on <a href="https://github.com/wyziedevs/wisp">GitHub</a> or join the <a href="/community/">community</a>.</p>
+        </div>
+      {:else}
       <form class="blog-bar" method="get" action="/blog/" role="search">
         <label class="sr" for="blog-q">Filter Posts</label>
         <input
@@ -116,6 +122,7 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
         <a href="/feed.xml">RSS</a>
       </form>
       <p class="blog-tag" hidden={tag.is_empty()}>Tagged <strong>{tag}</strong> · <a href="/blog/">Show All</a></p>
+      {/if}
     </header>
     <ul class="posts">
       {#each shown as (p, text)}
@@ -130,7 +137,7 @@ let heads = facts.iter().find(|f| f.0 == path).map_or(&[][..], |f| f.2);
         </li>
       {/each}
     </ul>
-    <p class="blog-none" hidden={!shown.is_empty()}>No posts match. <a href="/blog/">Show All</a></p>
+    <p class="blog-none" hidden={!shown.is_empty() || posts.is_empty()}>No posts match. <a href="/blog/">Show All</a></p>
   {:else}
     {#if tags_page}
       <header class="blog-head">

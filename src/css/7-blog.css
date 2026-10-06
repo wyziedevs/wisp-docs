@@ -45,6 +45,26 @@
   margin-top: 1rem;
 }
 
+.blog-empty {
+  margin-top: 2rem;
+  padding: 2.5rem 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  text-align: center;
+}
+
+.blog-empty h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+}
+
+.blog-empty p {
+  margin: 0;
+  color: var(--slate);
+}
+
+
 .posts {
   margin: 1rem 0 0;
   padding: 0;
