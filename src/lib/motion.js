@@ -16,8 +16,10 @@ const load = (src) =>
   new Promise((ok, no) => {
     const s = document.createElement('script')
     s.src = src
-    s.onload = ok
-    s.onerror = no
+    // Gone once it has run: a client navigation re-runs any script element it did not
+    // serve, and a second GSAP would replace the first without the ScrollTrigger plugin.
+    s.onload = () => (s.remove(), ok())
+    s.onerror = () => (s.remove(), no())
     document.head.append(s)
   })
 
