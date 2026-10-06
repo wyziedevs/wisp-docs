@@ -85,7 +85,7 @@ In debug builds every static HTML chunk of every template is read through a tabl
 - Text, holes, `<pre>` and `<textarea>` are never touched.
 - Markup that does not balance, or would not parse to the same template, is left as written. Formatting twice equals formatting once.
 
-## CLI Older than the App
+## CLI Older Than the App
 
 When the installed `wisp` is older than the app's `wisp` crate (the CLI's stamp against the app's), app commands print a warning on stderr first. In a terminal it asks `Continue anyway? [y/N]`; the default N exits with 1. In CI or a pipe it warns and continues. `WISP_NO_UPDATE_CHECK=1` silences it. Without git, the stamp check stays silent.
 
