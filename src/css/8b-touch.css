@@ -102,7 +102,8 @@
 
   /* Buttons outside docs prose: press down to 0.97, release with expo. */
   :is(button, .btn, [type=submit]):not(.content *) {
-    transition: transform 200ms var(--ease), color 160ms var(--quart), background-color 160ms var(--quart), opacity 160ms var(--quart);
+    transition: transform 200ms var(--ease), color 160ms var(--quart), background-color 160ms var(--quart), opacity 160ms var(--quart),
+      border-color 160ms var(--quart), box-shadow 120ms var(--ease), scale 120ms var(--ease), translate 120ms var(--ease);
   }
 
   :is(button, .btn, [type=submit]):not(.content *):active {
