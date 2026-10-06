@@ -120,7 +120,7 @@ let ld = match me {
   {/if}
 </head>
 <a class="skip" href="#main">Skip to Content</a>
-<header class="top">
+<header class="top" id="top">
   <div class="bar">
     <a class="brand" href="/" aria-label="Wisp home">
       <span class="ghost" aria-hidden="true" bind:this="box">
@@ -246,7 +246,7 @@ let ld = match me {
   </div>
 </footer>
 
-<a class="to-top" href="#" aria-label="Back to top">
+<a class="to-top" href="#top" aria-label="Back to top">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5"/></svg>
 </a>
 
