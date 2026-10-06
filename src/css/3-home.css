@@ -168,16 +168,6 @@
   min-width: 0;
 }
 
-.tabbed .panes > .pane-2,
-.tabbed:has(.tabs input:nth-of-type(2):checked) .panes > .pane-1 {
-  display: block;
-  visibility: hidden;
-}
-
-.tabbed:has(.tabs input:nth-of-type(2):checked) .panes > .pane-2 {
-  visibility: visible;
-}
-
 /* Shared by the demo form, the search page and the blog filter. */
 .view input,
 .plain-find input,
