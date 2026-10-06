@@ -53,10 +53,18 @@
   min-width: 0;
 }
 
-/* The reactivity example is a little narrower than its column. */
-#reactive .sample {
-  width: calc(100% - 45px);
-  justify-self: center;
+/* The reactivity example is a little narrower than its column, and gives its text the wider half beside it. */
+@media (max-width: 59.99rem) {
+  #reactive .sample {
+    width: calc(100% - 45px);
+    justify-self: center;
+  }
+}
+
+@media (min-width: 60rem) {
+  #reactive .split.flip {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 @media (min-width: 60rem) {
