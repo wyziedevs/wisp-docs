@@ -13,7 +13,14 @@ Everything here is opt-in: an app that uses none of it pays nothing.
 // src/db.rs
 pub static USERS: Table<User> = Table::saved("users")
     .unique("email", |u: &User| &u.email) // no two rows share it
-    .migrate(|row| rename(row, "mail", "email")) // old rows, as they are read
+    .migrate(|row| {
+        // old rows, as they are read
+        if let Value::Object(m) = row {
+            for (k, _) in m.iter_mut().filter(|(k, _)| k == "mail") {
+                *k = "email".into();
+            }
+        }
+    })
     .live(); // each change is sent on channel "users"
 ```
 
