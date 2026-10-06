@@ -8,7 +8,7 @@ const MAX: usize = 20;
 /// cookie cannot hold. Missing or bad: the default list.
 pub fn demo_todos(cx: &Cx) -> Vec<String> {
     let Some(raw) = cx.cookie(COOKIE) else {
-        return vec!["Buy milk".into(), "Write the docs".into()];
+        return vec!["Buy milk".into(), "Write the docs".into(), "Learn to code".into()];
     };
     let todos: Vec<String> = raw.split('|').filter(|s| !s.is_empty()).filter_map(decode).collect();
     todos.into_iter().filter(|t| (1..=100).contains(&t.chars().count())).take(MAX).collect()
