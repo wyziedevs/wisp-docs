@@ -43,7 +43,7 @@ fn remove(id: u64) {
 
 ## Validation
 
-- Parameter rules: `#[validate(...)]` with `len`, `min`, `max`, `min_len`, `max_len`, `email`. Same as a `FromJson` field. A `Password` (a parameter, a remote argument or a field) with no `min_len` or `len` of its own is held to 8 characters, on the server and as the input's `minlength`; `#[validate(min_len = 12)]` changes it.
+- Parameter rules: `#[validate(...)]` with `len`, `min`, `max`, `min_len`, `max_len`, `email`. Same as a `FromJson` field. A `Password` has no length rule of its own: add `#[validate(min_len = 8)]` (the input gets `required minlength="8"`).
 - Every parameter is read and checked first, so one 422 lists each failure by field (`wisp::rt::input::read`), from a form or a JSON body.
 - A parameter may be a struct with `#[derive(FromJson)]` or `Rest` (`fn default(post: Post)`). Fields are read by name (text by the field's type, blank field = missing) or from JSON, and checked by their own `#[validate]` (`wisp::rt::input::whole`).
 - A failure, or `return invalid("text", "...")`, shows the page again as a 422.
