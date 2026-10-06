@@ -230,6 +230,11 @@
   overflow-x: hidden;
 }
 
+/* The scroller fills its clipping frame, so the ring sits inside it. */
+.cmp .scroll:focus-visible {
+  outline-offset: -2px;
+}
+
 /* Their scrollbars are thin and quiet; the page's own keeps the accent. */
 :is(.demo, .sample) pre,
 .cmp .scroll {
