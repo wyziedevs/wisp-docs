@@ -53,6 +53,12 @@
   min-width: 0;
 }
 
+/* The reactivity example is a little narrower than its column. */
+#reactive .sample {
+  width: calc(100% - 45px);
+  justify-self: center;
+}
+
 @media (min-width: 60rem) {
   .split {
     grid-template-columns: 5fr 7fr;
