@@ -57,7 +57,11 @@
 
   /* Theme switch: the icon turns a quarter on press, settling with expo. */
   .theme svg {
-    transition: transform 360ms var(--ease);
+    transition:
+      opacity 250ms var(--ease),
+      rotate 400ms var(--ease),
+      scale 400ms var(--ease),
+      transform 360ms var(--ease);
   }
 
   .theme:active svg {
