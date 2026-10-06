@@ -142,6 +142,10 @@ let edit = match site::bare(cx.path()) {
   // Heading link icons and the On This Page marker, again for each page.
   function build() {
     off?.()
+    off = null
+    // Leaving the docs for another page runs this too: there is nothing here to wire.
+    const side = document.querySelector('.side')
+    if (!side) return
     off = reading(doc, '.toc ul', (m) => (copied.textContent = m))
     // A page change can swap the node for a fresh one, so each page's box is wired once.
     const box = document.querySelector('.useful')
@@ -154,7 +158,6 @@ let edit = match site::bare(cx.path()) {
     const menu = document.querySelector('.menu')
     const wide = matchMedia('(min-width: 48rem)').matches
     if (wide && !CSS.supports('selector(::details-content)')) menu.open = true
-    const side = document.querySelector('.side')
     const here = side.querySelector('[aria-current=page]')
     if (wide && here && side.scrollHeight > side.clientHeight) {
       const a = here.getBoundingClientRect()
