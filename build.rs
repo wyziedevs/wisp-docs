@@ -317,8 +317,9 @@ fn fetch(path: &str) -> Option<Json> {
         .ok()
         .filter(|o| o.status.success())
         .and_then(|o| String::from_utf8(o.stdout).ok());
-    let parsed = net.or_else(|| fs::read_to_string(&local).ok()).map(|t| json::parse(&t));
-    if let Some(Ok(j)) = parsed {
+    // A body that does not parse (a proxy's page, a cut transfer) falls back to the checkout.
+    let from = |t: Option<String>| t.and_then(|t| json::parse(&t).ok());
+    if let Some(j) = from(net).or_else(|| from(fs::read_to_string(&local).ok())) {
         return Some(j);
     }
     println!("cargo:warning={path} not read: its home page table is empty");
