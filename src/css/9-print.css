@@ -76,11 +76,6 @@
     --mask-ink: CanvasText;
   }
 
-  .top:has(~ main .docs)::after {
-    forced-color-adjust: none;
-    background: Highlight;
-  }
-
   .ghost .shape {
     fill: CanvasText;
   }
