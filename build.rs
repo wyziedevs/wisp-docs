@@ -186,7 +186,10 @@ fn page(src: &str) -> Page {
         front
             .lines()
             .find_map(|l| l.strip_prefix(name)?.strip_prefix(':'))
-            .map(|v| v.trim().to_string())
+            .map(|v| {
+                let v = v.trim();
+                v.strip_prefix('"').and_then(|v| v.strip_suffix('"')).unwrap_or(v).to_string()
+            })
             .unwrap_or_default()
     };
 
