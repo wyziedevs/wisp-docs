@@ -17,7 +17,7 @@ Every app is written with `AGENTS.md`, the whole reference in one short page, an
 - The app's AGENTS.md is the repository's (embedded at build time via the vendor copy, so it never drifts) less its part for work on Wisp, and ends with a line after which the app's own notes go.
 - `wisp update-docs` brings it up to the installed Wisp, keeping those notes, and writes any pointer file that is missing (an existing one is the app's).
 - Every Rust and HTML snippet in AGENTS.md is in `tests/agents`, an app in the workspace, so building the workspace compiles them; its test fails when one is missing there.
-- `llms.txt` (llmstxt.org) links the docs. `llms-full.txt` is AGENTS.md and the client, api, deploy and embed docs in one file, written by a wisp-cli test that fails when it was stale.
+- `llms.txt` (llmstxt.org) links the docs. `llms-full.txt` is AGENTS.md and the docs site's pages in one file, written by a wisp-cli test that fails when it was stale.
 
 ### `wisp mcp`
 
